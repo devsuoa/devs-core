@@ -1,0 +1,69 @@
+p{
+    font-family: "Rethink Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.25rem;
+}
+
+.sponsor-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem;
+    max-width: 100vw;
+    background-color: #EFEFEF;
+}
+
+.sponsors-header{
+    font-family: "Press Start 2P", system-ui;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 5rem;
+}
+
+.sponsors-header.gold{
+    color: #D09424;
+}
+
+.sponsors-header.silver{
+    color: #7E7E7E;
+}
+
+.gold-sponsors-images{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 7.5rem;
+}
+
+.gold-sponsors-images img{
+    max-width: 15rem;
+}
+
+.silver-sponsors-images{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    max-width: 47.5rem; /* 3 images × 12.5rem + 2 gaps × 5rem */
+}
+
+.silver-sponsors-images img{
+    width: 12.5rem;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.gold-sponsors-images,
+.silver-sponsors-images{
+    margin-bottom: 5rem;
+}

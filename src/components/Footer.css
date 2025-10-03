@@ -1,0 +1,22 @@
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #040A25;
+    padding: 2rem;
+}
+
+.footer-media {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-media a {
+    color: #fff;
+    font-size: 1.75rem;
+    transition: color 0.3s ease;
+}
+
+.footer-media a:hover {
+    color: #b4b4b4;
+}
