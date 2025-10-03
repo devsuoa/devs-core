@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.title {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.87);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #213547;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+}
