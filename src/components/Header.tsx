@@ -1,13 +1,11 @@
-import './Header.css'
+import React from 'react';
 
-function Header() {
-    return (
-      <div className="hero">
-        <img src="/icon_logo.png" alt="Developer's Society" />
-        <p>DEVELOPER'S <br />SOCIETY</p>
-      </div>
-    )
-  }
+const Header: React.FC = () => {
+  return (
+    <header>
+      <h1>Header</h1>
+    </header>
+  );
+};
 
-export default Header
-  
+export default Header;
