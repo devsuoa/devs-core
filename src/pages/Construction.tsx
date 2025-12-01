@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from '../assets/logo.png';
-import constructionWorker from '../assets/construction_worker.png';
-import instagram from '../assets/Instagram.png';
-import facebook from '../assets/Facebook.png';
-import linkedin from '../assets/LinkedIn.png';
+import logo from '../../public/construction/logo.png';
+import constructionWorker from '../../public/construction/construction_worker.png';
+import instagram from '../../public/construction/Instagram.png';
+import facebook from '../../public/construction/Facebook.png';
+import linkedin from '../../public/construction/LinkedIn.png';
 
 const Construction: React.FC = () => {
   return (
@@ -29,8 +29,7 @@ const Construction: React.FC = () => {
               Send us an email at{' '}
               <a 
                 href="mailto:contact@devsuoa.com"
-                className="no-underline transition-all duration-300 ease-in-out hover:text-[#b1b1b1]"
-                style={{ color: '#ffffff' }}
+                className="no-underline text-[#ffffff] transition-all duration-300 ease-in-out hover:text-[#b1b1b1]"
               >
                 contact@devsuoa.com
               </a>
@@ -38,26 +37,26 @@ const Construction: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex gap-8 items-center">
+        <div className="flex gap-16 items-center social-media">
           <a href="https://www.instagram.com/devsuoa/" target="_blank" rel="noopener noreferrer">
             <img 
               src={instagram} 
               alt="Instagram" 
-              className="w-8 h-8 m-0 transition-all duration-300 ease-in-out hover:scale-110 pixelated"
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
             />
           </a>
           <a href="https://www.facebook.com/devsuoa/" target="_blank" rel="noopener noreferrer">
             <img 
               src={facebook} 
               alt="Facebook" 
-              className="w-8 h-8 m-0 transition-all duration-300 ease-in-out hover:scale-110 pixelated"
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
             />
           </a>
           <a href="https://www.linkedin.com/company/devsuoa/" target="_blank" rel="noopener noreferrer">
             <img 
               src={linkedin} 
               alt="LinkedIn" 
-              className="w-8 h-8 m-0 transition-all duration-300 ease-in-out hover:scale-110 pixelated"
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
             />
           </a>
         </div>

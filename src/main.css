@@ -40,6 +40,15 @@ body {
   image-rendering: crisp-edges;
 }
 
+.social-media {
+  gap: 1rem;
+}
+
+.social-media img{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .pushable {
   position: relative;
   border: none;
