@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Silkscreen:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,8 +13,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(circle at center, #4c1d95, #161435, #040409);
+  background: radial-gradient(ellipse at center, #0A1234 0%, #04060F 100%);
   min-height: 100vh;
+  color: #ffffff;
 }
 
 * {
@@ -20,6 +24,20 @@ body {
 
 .font-pixel {
   font-family: "Press Start 2P", system-ui;
+}
+
+.font-silkscreen {
+  font-family: "Silkscreen", sans-serif;
+}
+
+.font-pixelify {
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .pushable {
