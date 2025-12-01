@@ -1,18 +1,10 @@
-import './App.css'
-import Header from './components/Header'
-import About from './components/About'
-import Sponsors from './components/Sponsors'
-import Footer from './components/Footer'
+import React from 'react';
+import Construction from './pages/Construction';
 
 function App() {
   return (
-    <>
-    <Header />
-    <About /> 
-    <Sponsors />
-    <Footer />
-    </>
-  )
+    <Construction />
+  );
 }
 
-export default App
+export default App;
