@@ -49,6 +49,21 @@ body {
   height: 1.5rem;
 }
 
+
+.mobile .social-media img,
+.mobile img[alt="Instagram"],
+.mobile img[alt="Facebook"],
+.mobile img[alt="LinkedIn"] {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+@media (max-width: 768px) {
+  .mobile {
+    padding: 2rem !important;
+  }
+}
+
 .pushable {
   position: relative;
   border: none;
