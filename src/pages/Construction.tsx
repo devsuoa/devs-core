@@ -9,8 +9,9 @@ const linkedin = '/construction/LinkedIn.png';
 
 const Construction: React.FC = () => {
   return (
-    <div className="flex items-center justify-center h-screen w-screen px-16 py-12 box-border max-[1024px]:flex-col max-[1024px]:justify-center max-[1024px]:p-8">
-      <div className="flex flex-col gap-8 w-full max-w-[55%] max-[1024px]:max-w-full max-[1024px]:gap-8">
+    <div className="flex items-center justify-center h-screen w-screen px-16 py-12 box-border max-[768px]:flex-col max-[768px]:justify-start max-[768px]:px-4 max-[768px]:py-8">
+      {/* Desktop Layout */}
+      <div className="flex flex-col gap-8 w-full max-w-[55%] max-[768px]:hidden">
         <div>
           <img 
             src={logo} 
@@ -21,7 +22,7 @@ const Construction: React.FC = () => {
         
         <div className="max-w-[85%]">
           <div>
-            <p className="font-silkscreen text-[2.5rem] leading-tight m-0 max-[1024px]:text-2xl">
+            <p className="font-silkscreen text-[2.5rem] leading-tight m-0">
               This website is currently under development!
             </p>
           </div>
@@ -64,12 +65,78 @@ const Construction: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-end m-0 p-0 max-[1024px]:max-w-[80%] max-[1024px]:mt-8">
+        {/* Mobile Layout */}
+      <div className="flex items-end m-0 p-0 max-[768px]:hidden">
         <img 
           src={constructionWorker} 
           alt="Developer's Society" 
-          className="w-[20vw] h-auto pixelated max-[1024px]:w-[40vw]"
+          className="w-[20vw] h-auto pixelated"
         />
+      </div>
+
+      <div className="hidden mobile max-[768px]:flex max-[768px]:flex-col max-[768px]:items-center max-[768px]:w-full max-[768px]:gap-4 max-[768px]:p-8 max-[768px]:h-screen max-[768px]:justify-between">
+        <div className="flex justify-center w-full">
+          <img 
+            src={logo} 
+            alt="DEVS" 
+            className="w-[100px] pixelated"
+          />
+        </div>
+
+        <div className="flex flex-col items-start justify-center w-full">
+          <div className="flex justify-start">
+            <img 
+              src={constructionWorker} 
+              alt="Construction Worker" 
+              className="w-[140px] h-auto pixelated scale-x-[-1]"
+            />
+          </div>
+
+          <div className="flex flex-col items-start">
+            <p className="font-silkscreen text-[2rem] leading-tight m-0 text-left uppercase">
+              THIS WEBSITE IS<br />
+              CURRENTLY UNDER<br />
+              DEVELOPMENT!
+            </p>
+          </div>
+
+          <div className="font-pixelify text-xs text-left -mt-2">
+            <p className="m-0 lowercase">
+              need to reach out?<br />
+              send us an email at{' '}
+              <a 
+                href="mailto:contact@devsuoa.com"
+                className="no-underline text-[#ffffff] transition-all duration-300 ease-in-out"
+              >
+                contact@devsuoa.com
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div className="social-media flex items-center justify-center w-full">
+          <a href="https://www.instagram.com/devsuoa/" target="_blank" rel="noopener noreferrer">
+            <img 
+              src={instagram} 
+              alt="Instagram" 
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
+            />
+          </a>
+          <a href="https://www.facebook.com/devsuoa/" target="_blank" rel="noopener noreferrer">
+            <img 
+              src={facebook} 
+              alt="Facebook" 
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
+            />
+          </a>
+          <a href="https://www.linkedin.com/company/devsuoa/" target="_blank" rel="noopener noreferrer">
+            <img 
+              src={linkedin} 
+              alt="LinkedIn" 
+              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
+            />
+          </a>
+        </div>
       </div>
     </div>
   );
