@@ -1,8 +1,11 @@
-import Construction from './pages/Construction';
+import Construction from "./pages/Construction";
+import Header from "./components/Header";
 
 function App() {
   return (
-    <Construction />
+    <main className="min-h-screen bg-black">
+      <Header />
+    </main>
   );
 }
 
