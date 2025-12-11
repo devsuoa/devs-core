@@ -4,28 +4,44 @@ const logo = "/construction/logo.png";
 const Header = () => {
   return (
     <>
-      <nav className="flex items-center mt-[30px] ml-[40px] gap-[100px]">
-        <img className=" max-w-[7vw] pixelated" src={logo} alt="Logo" />
+      <nav className="flex items-center justify-between mt-[30px] px-[40px]">
+        {/* Logo Section */}
+        <div className="flex-0.5">
+          <img className="max-w-[8vw] pixelated" src={logo} alt="Logo" />
+        </div>
 
-        <ul className="">
-          <li className="flex gap-[200px] items-center justify-center list-none ml-[60px] text-white font-pixelify text-[20px]">
-            <a href="#" className="">
-              Our Team
-            </a>
-            <a href="#" className="">
-              Events
-            </a>
-            <a href="#" className="">
-              Sponsors
-            </a>
-            <a href="#" className="">
-              Contact Us
-            </a>
-          </li>
-        </ul>
-        <button className="flex ml-auto mr-[100px] bg-[#FF5733] hover:bg-[#e04e2d] text-white font-pixelify text-[18px] py-2 px-4 rounded-lg transition-colors duration-300">
-          Join Us
-        </button>
+        {/* Links Section */}
+        <div className="flex-0.5 flex justify-center items-center">
+          <ul className="flex gap-[175px] items-center list-none font-pixelify text-[25px] whitespace-nowrap">
+            <li>
+              <a href="#" className="link-white">
+                Our Team
+              </a>
+            </li>
+            <li>
+              <a href="#" className="link-white">
+                Events
+              </a>
+            </li>
+            <li>
+              <a href="#" className="link-white">
+                Sponsors
+              </a>
+            </li>
+            <li>
+              <a href="#" className="link-white">
+                Contact Us
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Button Section */}
+        <div className="flex-0.5 flex justify-end">
+          <button className="font-pixelify text-[25px] bg-transparent link-white rounded-[8px] border-[2px] border-white px-[20px] py-[10px] hover:bg-white hover:text-black transition-all duration-300 ease-in-out">
+            Join Us
+          </button>
+        </div>
       </nav>
     </>
   );
