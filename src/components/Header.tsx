@@ -12,25 +12,25 @@ const Header = () => {
 
         {/* Links Section */}
         <div className="flex-0.5 flex justify-center items-center">
-          <ul className="flex gap-[175px] items-center list-none font-pixelify text-[25px] whitespace-nowrap">
+          <ul className="flex gap-[10vw] items-center list-none font-silkscreen text-[20px] whitespace-nowrap">
             <li>
               <a href="#" className="link-white">
-                Our Team
+                OUR TEAM
               </a>
             </li>
             <li>
               <a href="#" className="link-white">
-                Events
+                EVENTS
               </a>
             </li>
             <li>
               <a href="#" className="link-white">
-                Sponsors
+                SPONSORS
               </a>
             </li>
             <li>
               <a href="#" className="link-white">
-                Contact Us
+                CONTACT US
               </a>
             </li>
           </ul>
@@ -38,7 +38,7 @@ const Header = () => {
 
         {/* Button Section */}
         <div className="flex-0.5 flex justify-end">
-          <button className="font-pixelify text-[25px] bg-transparent link-white rounded-[8px] border-[2px] border-white px-[20px] py-[10px] hover:bg-white hover:text-black transition-all duration-300 ease-in-out">
+          <button className="font-silkscreen text-[25px] bg-transparent link-white">
             Join Us
           </button>
         </div>
