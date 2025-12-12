@@ -8,7 +8,6 @@ function App() {
       <main className="min-h-screen bg-black">
         <Routes>
           <Route path="/" element={<Construction />} />
-          <Route path="/header" element={<Header />} />
         </Routes>
       </main>
     </BrowserRouter>
