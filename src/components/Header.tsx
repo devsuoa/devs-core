@@ -1,5 +1,3 @@
-import React from "react";
-
 const logo = "/construction/logo.png";
 const Header = () => {
   return (
