@@ -40,6 +40,98 @@ body {
   image-rendering: crisp-edges;
 }
 
+.pixel-text {
+  font-family: "Press Start 2P", monospace;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+}
+
+.pixel-input {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+  background: transparent;
+  border: 2px solid white !important;
+  border-radius: 12px !important;
+  color: white;
+  padding: 16px 20px;
+  outline: none;
+  margin-bottom: 0;
+}
+
+.pixel-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.pixel-input:focus {
+  border-color: white;
+  box-shadow: none;
+}
+
+.pixel-label {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+  color: white;
+  text-transform: lowercase;
+}
+
+.pixel-button {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 12px 24px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.1s;
+}
+
+.pixel-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pixel-button:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pixel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pixel-panel {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 32px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 .social-media {
   gap: 1rem;
 }

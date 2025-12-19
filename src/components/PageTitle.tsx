@@ -42,7 +42,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
 }) => {
     return (
         <div
-            className={`flex flex-col justify-center min-h-screen px-[10vw] py-12 max-w-4xl mx-auto ${className}`}
+            className={`flex flex-col justify-center px-[10vw] py-12 max-w-4xl mx-auto ${className}`}
         >
             <div className="flex items-center gap-4 mb-16">
                 <img

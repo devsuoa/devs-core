@@ -13,3 +13,6 @@ This is to help understand components and guidelines to ensure everyone is on th
 - [Header Component](header.md)
 - [Page Title Component](pagetitle.md)
 - [Footer Component](footer.md)
+
+### Pages
+- [Auth](auth.md)
