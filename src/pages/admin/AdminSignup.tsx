@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { handleSignupSubmit } from '../lib/signup';
-import Header from '../components/Header';
-import { PageTitle } from '../components/PageTitle';
+import { handleSignupSubmit } from '../../lib/signup';
+import Header from '../../components/Header';
+import { PageTitle } from '../../components/PageTitle';
 
 const AdminSignup: React.FC = () => {
   const [username, setUsername] = useState('');

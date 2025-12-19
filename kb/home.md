@@ -16,3 +16,4 @@ This is to help understand components and guidelines to ensure everyone is on th
 
 ### Pages
 - [Auth](auth.md)
+- [Marketing Portal](marketingPortal.md)

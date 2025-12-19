@@ -48,18 +48,18 @@ export const PageTitle: React.FC<PageTitleProps> = ({
                 <img
                     src={image}
                     alt={imageAlt}
-                    className="max-h-[150px] max-w-[150px] shrink-0 object-contain pixelated"
+                    className="max-h-[100px] max-w-[100px] shrink-0 object-contain pixelated"
                 />
 
                 <div className="flex items-center ml-[5rem]">
-                    <p className="text-[3rem] font-normal text-white font-silkscreen">
+                    <p className="text-[2rem] font-normal text-white font-silkscreen">
                         {"> " + title.toUpperCase()}
                     </p>
                 </div>
             </div>
 
             {subtext && (
-                <p className="text-[1.25rem] text-gray-300">
+                <p className="text-[1.05rem] text-gray-300">
                     {subtext}
                 </p>
             )}

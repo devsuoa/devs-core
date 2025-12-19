@@ -150,6 +150,19 @@ body {
   .link-white:hover {
     color: #d1d1d1;
   }
+
+  .dashboard-link {
+    color: white;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .dashboard-link:hover {
+    color: #d1d1d1;
+    text-decoration: underline;
+  }
 }
 
 .mobile .social-media img,

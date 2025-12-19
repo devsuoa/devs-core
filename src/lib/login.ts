@@ -87,7 +87,7 @@ export async function handleLoginSubmit(
     setEmail('');
     setPassword('');
 
-    // TODO: redirect to admin dashboard
+    window.location.href = '/admin/dashboard';
     console.log('Admin login successful');
   } catch (err) {
     if (err instanceof Error) {

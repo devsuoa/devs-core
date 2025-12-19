@@ -112,7 +112,7 @@ Success: Clear form, redirect to dashboard (TODO)
 
 **Route:** `/admin/signup`
 
-**Component:** `src/pages/AdminSignup.tsx`
+**Component:** `src/pages/admin/AdminSignup.tsx`
 
 **Features:**
 - Two-column form layout (name/email, password/confirm password)
@@ -125,7 +125,7 @@ Success: Clear form, redirect to dashboard (TODO)
 
 **Route:** `/admin/login`
 
-**Component:** `src/pages/AdminLogin.tsx`
+**Component:** `src/pages/admin/AdminLogin.tsx`
 
 **Features:**
 - Role-based access control (admin only)

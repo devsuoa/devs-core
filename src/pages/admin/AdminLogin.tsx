@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { handleLoginSubmit } from '../lib/login';
-import Header from '../components/Header';
-import { PageTitle } from '../components/PageTitle';
+import { handleLoginSubmit } from '../../lib/login';
+import Header from '../../components/Header';
+import { PageTitle } from '../../components/PageTitle';
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
