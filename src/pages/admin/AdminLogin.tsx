@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { handleLoginSubmit } from '../../lib/login';
 import Header from '../../components/Header';
 import { PageTitle } from '../../components/PageTitle';
@@ -8,6 +9,7 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     handleLoginSubmit(e, {
@@ -17,6 +19,7 @@ const AdminLogin: React.FC = () => {
       setLoading,
       setEmail,
       setPassword,
+      navigate,
     });
   };
 

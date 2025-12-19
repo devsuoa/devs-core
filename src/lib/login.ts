@@ -7,6 +7,7 @@ type LoginParams = {
   setLoading: (loading: boolean) => void;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
+  navigate: (path: string) => void;
 };
 
 export async function handleLoginSubmit(
@@ -18,6 +19,7 @@ export async function handleLoginSubmit(
     setLoading,
     setEmail,
     setPassword,
+    navigate,
   }: LoginParams
 ): Promise<void> {
   e.preventDefault();
@@ -87,7 +89,7 @@ export async function handleLoginSubmit(
     setEmail('');
     setPassword('');
 
-    window.location.href = '/admin/dashboard';
+    navigate('/admin/dashboard');
     console.log('Admin login successful');
   } catch (err) {
     if (err instanceof Error) {

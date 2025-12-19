@@ -2,10 +2,11 @@ import React from 'react';
 import { useAdminDashboard } from '../../lib/adminDashboardController';
 import Header from '../../components/Header';
 import { PageTitle } from '../../components/PageTitle';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard: React.FC = () => {
     const { loading, authorized, onLogout } = useAdminDashboard();
-
+    const navigate = useNavigate();
     if (loading) {
         return (
             <>
@@ -34,7 +35,7 @@ const AdminDashboard: React.FC = () => {
                     <div className="relative bg-transparent border-none px-10 py-12">
                         <div className="flex flex-col gap-6">
                             <button
-                                onClick={() => { }}
+                                onClick={() => {navigate('/admin/marketing-request')}}
                                 className="text-left w-full pixel-text dashboard-link py-[12px] px-0"
                             >
                                 Marketing Portal
