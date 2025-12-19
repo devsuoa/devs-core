@@ -11,6 +11,7 @@ export function useAdminDashboard() {
     const checkAuth = async () => {
       const isAuthorized = await checkAdminAuthorization();
       if (!isAuthorized) {
+        setLoading(false);
         navigate('/admin/login');
         return;
       }

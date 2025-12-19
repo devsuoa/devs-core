@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../../components/Header';
 import { PageTitle } from '../../components/PageTitle';
 import { useMarketingPortal } from '../../lib/marketingPortalController';
+import { useAdminDashboard } from '../../lib/adminDashboardController';
 
 
 /**
@@ -11,6 +12,7 @@ import { useMarketingPortal } from '../../lib/marketingPortalController';
  * @returns The Marketing Portal page
  */
 const MarketingPortal: React.FC = () => {
+  const { loading, authorized } = useAdminDashboard();
   const {
     postType,
     showDialog,
@@ -45,6 +47,21 @@ const MarketingPortal: React.FC = () => {
     setPreWrittenCaptions,
     handleSubmit,
   } = useMarketingPortal();
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center mt-[20vh]">
+          <p className="pixel-text text-white">Loading...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (!authorized) {
+    return null;
+  }
 
   return (
     <>
