@@ -51,7 +51,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
                     className="max-h-[100px] max-w-[100px] shrink-0 object-contain"
                 />
 
-                <div className="flex items-center ml-[5rem]">
+                <div className="flex items-center ml-[1rem]">
                     <p className="text-[2rem] font-normal text-white font-silkscreen">
                         {"> " + title.toUpperCase()}
                     </p>
@@ -59,7 +59,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
             </div>
 
             {subtext && (
-                <p className="text-[1.05rem] text-gray-300">
+                <p className="text-[1.05rem] text-gray-300 font-rethink">
                     {subtext}
                 </p>
             )}

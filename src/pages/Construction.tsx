@@ -1,11 +1,8 @@
 import React from 'react';
-
+import { SocialLinks } from '../components/SocialLinks';
 // Public assets are served at the root path
 const logo = '/branding/text_logo.png';
 const constructionWorker = '/construction/construction_worker.png';
-const instagram = '/socials/Instagram.png';
-const facebook = '/socials/Facebook.png';
-const linkedin = '/socials/LinkedIn.png';
 
 const Construction: React.FC = () => {
   return (
@@ -40,29 +37,7 @@ const Construction: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex gap-16 items-center social-media">
-          <a href="https://www.instagram.com/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={instagram} 
-              alt="Instagram" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
-            />
-          </a>
-          <a href="https://www.facebook.com/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={facebook} 
-              alt="Facebook" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
-            />
-          </a>
-          <a href="https://www.linkedin.com/company/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={linkedin} 
-              alt="LinkedIn" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated"
-            />
-          </a>
-        </div>
+        <SocialLinks/>
       </div>
 
         {/* Mobile Layout */}
@@ -115,27 +90,7 @@ const Construction: React.FC = () => {
         </div>
 
         <div className="social-media flex items-center justify-center w-full">
-          <a href="https://www.instagram.com/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={instagram} 
-              alt="Instagram" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
-            />
-          </a>
-          <a href="https://www.facebook.com/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={facebook} 
-              alt="Facebook" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
-            />
-          </a>
-          <a href="https://www.linkedin.com/company/devsuoa/" target="_blank" rel="noopener noreferrer">
-            <img 
-              src={linkedin} 
-              alt="LinkedIn" 
-              className="transition-all duration-300 ease-in-out hover:scale-110 pixelated !w-16 !h-16"
-            />
-          </a>
+        <SocialLinks/>
         </div>
       </div>
     </div>

@@ -53,7 +53,7 @@ const MarketingPortal: React.FC = () => {
       <>
         <Header />
         <div className="flex items-center justify-center mt-[20vh]">
-          <p className="pixel-text text-white">Loading...</p>
+          <p className="font-pixelify text-white">Loading...</p>
         </div>
       </>
     );
@@ -77,7 +77,7 @@ const MarketingPortal: React.FC = () => {
           <div className="pixel-panel relative" style={{ padding: '48px 40px' }}>
             {showDialog ? (
               <div className="flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
-                <h2 className="pixel-text text-white text-center mb-4" style={{ fontSize: '12px' }}>
+                <h2 className="font-pixelify text-white text-center mb-4" style={{ fontSize: '12px' }}>
                   Request submitted!
                 </h2>
               </div>
@@ -85,7 +85,7 @@ const MarketingPortal: React.FC = () => {
               <form onSubmit={handleSubmit}>
               {/* Post Type Selection */}
               <div style={{ marginBottom: '40px' }}>
-                <label className="pixel-label block" style={{ marginBottom: '16px' }}>
+                <label className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                   Is this for an event or sponsorship post?<span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4">
@@ -99,7 +99,7 @@ const MarketingPortal: React.FC = () => {
                       className="mr-2"
                       required
                     />
-                    <span className="pixel-text text-xs">Event</span>
+                    <span className="font-pixelify text-xs">Event</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -111,7 +111,7 @@ const MarketingPortal: React.FC = () => {
                       className="mr-2"
                       required
                     />
-                    <span className="pixel-text text-xs">Sponsorship</span>
+                    <span className="font-pixelify text-xs">Sponsorship</span>
                   </label>
                 </div>
               </div>
@@ -120,7 +120,7 @@ const MarketingPortal: React.FC = () => {
               {postType === 'event' && (
                 <>
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventName" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventName" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Name of the Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -128,14 +128,14 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       placeholder="Example: DEVS x SESA Kpop Dance Workshop or Leetcode Workshop"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventDate" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventDate" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Date of Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -143,13 +143,13 @@ const MarketingPortal: React.FC = () => {
                       type="date"
                       value={eventDate}
                       onChange={(e) => setEventDate(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventTime" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventTime" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Time of Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -157,14 +157,14 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={eventTime}
                       onChange={(e) => setEventTime(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       placeholder="Example: 6pm - 8pm"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventLocation" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventLocation" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Location of Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -172,14 +172,14 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={eventLocation}
                       onChange={(e) => setEventLocation(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       placeholder="Example: 201-311 (new arts)"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventDescription" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventDescription" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Description of Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -187,13 +187,13 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={eventDescription}
                       onChange={(e) => setEventDescription(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="eventSuggestions" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="eventSuggestions" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Any suggestions?
                     </label>
                     <input
@@ -201,7 +201,7 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={eventSuggestions}
                       onChange={(e) => setEventSuggestions(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                     />
                   </div>
                 </>
@@ -211,7 +211,7 @@ const MarketingPortal: React.FC = () => {
               {postType === 'sponsorship' && (
                 <>
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorName" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorName" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Name of the Sponsor<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -219,14 +219,14 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={sponsorName}
                       onChange={(e) => setSponsorName(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       placeholder="Example: IMC, Optiver, Visa..."
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorshipEmailDate" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorshipEmailDate" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Sponsorship Email Request Received On<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -234,13 +234,13 @@ const MarketingPortal: React.FC = () => {
                       type="date"
                       value={sponsorshipEmailDate}
                       onChange={(e) => setSponsorshipEmailDate(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorshipPostDate" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorshipPostDate" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Date it needs to be posted by?
                     </label>
                     <input
@@ -248,12 +248,12 @@ const MarketingPortal: React.FC = () => {
                       type="date"
                       value={sponsorshipPostDate}
                       onChange={(e) => setSponsorshipPostDate(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorshipEventName" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorshipEventName" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Name of the Sponsorship Event<span className="text-red-400">*</span>
                     </label>
                     <input
@@ -261,20 +261,20 @@ const MarketingPortal: React.FC = () => {
                       type="text"
                       value={sponsorshipEventName}
                       onChange={(e) => setSponsorshipEventName(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       required
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorshipLinks" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorshipLinks" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Related Hyperlinks<span className="text-red-400">*</span>
                     </label>
                     <textarea
                       id="sponsorshipLinks"
                       value={sponsorshipLinks}
                       onChange={(e) => setSponsorshipLinks(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       style={{ minHeight: '100px', resize: 'vertical' }}
                       placeholder="Links they want us to include on our social media"
                       required
@@ -282,14 +282,14 @@ const MarketingPortal: React.FC = () => {
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="sponsorshipDescription" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="sponsorshipDescription" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Description of the Sponsorship<span className="text-red-400">*</span>
                     </label>
                     <textarea
                       id="sponsorshipDescription"
                       value={sponsorshipDescription}
                       onChange={(e) => setSponsorshipDescription(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       style={{ minHeight: '100px', resize: 'vertical' }}
                       required
                     />
@@ -301,27 +301,27 @@ const MarketingPortal: React.FC = () => {
               {postType && (
                 <>
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="marketingDescription" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="marketingDescription" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Description/Purpose of Marketing
                     </label>
                     <textarea
                       id="marketingDescription"
                       value={marketingDescription}
                       onChange={(e) => setMarketingDescription(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       style={{ minHeight: '100px', resize: 'vertical' }}
                     />
                   </div>
 
                   <div style={{ marginBottom: '40px' }}>
-                    <label htmlFor="preWrittenCaptions" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                    <label htmlFor="preWrittenCaptions" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                       Pre written captions by sponsors : (if any)
                     </label>
                     <textarea
                       id="preWrittenCaptions"
                       value={preWrittenCaptions}
                       onChange={(e) => setPreWrittenCaptions(e.target.value)}
-                      className="pixel-input w-full"
+                      className="pixel-input font-pixelify w-full"
                       style={{ minHeight: '100px', resize: 'vertical' }}
                     />
                   </div>
@@ -332,7 +332,7 @@ const MarketingPortal: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!postType}
-                  className="pixel-button"
+                  className="pixel-button font-silkscreen"
                 >
                   Submit
                 </button>

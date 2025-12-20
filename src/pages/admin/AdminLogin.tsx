@@ -33,9 +33,9 @@ const AdminLogin: React.FC = () => {
       />
       <div className="flex items-center justify-center mt-[10vh] px-4 py-12">
         <div className="w-[50vw] max-w-[900px] min-w-[650px]">
-          <div className="pixel-panel relative" style={{ padding: '48px 40px' }}>
+          <div className="pixel-panel font-pixelify relative" style={{ padding: '48px 40px' }}>
             {error && (
-              <div className="mb-[5vh] p-4 pixel-text text-red-400 text-xs">
+              <div className="mb-[5vh] p-4 font-pixelify text-red-400 text-xs">
                 {error}
               </div>
             )}
@@ -43,7 +43,7 @@ const AdminLogin: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2" style={{ columnGap: '80px', marginBottom: '56px' }}>
                 <div>
-                  <label htmlFor="email" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="email" className="font-pixelify block" style={{ marginBottom: '16px' }}>
                     email address<span className="text-red-400">*</span>
                   </label>
                   <input
@@ -51,7 +51,7 @@ const AdminLogin: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pixel-input w-full"
+                    className="pixel-input font-pixelify w-full"
                     placeholder="admin@devsuoa.com"
                     required
                     disabled={loading}
@@ -59,7 +59,7 @@ const AdminLogin: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="pixel-label block" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="password" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
                     password<span className="text-red-400">*</span>
                   </label>
                   <input
@@ -67,7 +67,7 @@ const AdminLogin: React.FC = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pixel-input w-full"
+                    className="pixel-input font-pixelify w-full"
                     placeholder="Enter password"
                     required
                     disabled={loading}
@@ -80,7 +80,7 @@ const AdminLogin: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="pixel-button"
+                  className="pixel-button font-silkscreen"
                 >
                   {loading ? 'Logging in...' : 'Submit'}
                 </button>

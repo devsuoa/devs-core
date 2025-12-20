@@ -11,8 +11,9 @@ This is to help understand components and guidelines to ensure everyone is on th
 
 ### Components
 - [Header Component](header.md)
-- [Page Title Component](pagetitle.md)
+- [Page Title Component](pageTitle.md)
 - [Footer Component](footer.md)
+- [Social Links Component](socialLinks.md)
 
 ### Pages
 - [Auth](auth.md)

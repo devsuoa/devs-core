@@ -12,7 +12,7 @@ const AdminDashboard: React.FC = () => {
             <>
                 <Header />
                 <div className="flex items-center justify-center mt-[20vh]">
-                    <p className="pixel-text text-white">Loading...</p>
+                    <p className="font-silkscreen text-[1.25rem] text-white">Loading...</p>
                 </div>
             </>
         );
@@ -36,28 +36,28 @@ const AdminDashboard: React.FC = () => {
                         <div className="flex flex-col gap-6">
                             <button
                                 onClick={() => {navigate('/admin/marketing-request')}}
-                                className="text-left w-full pixel-text dashboard-link py-[12px] px-0"
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
                                 Marketing Portal
                             </button>
 
                             <button
                                 onClick={() => { }}
-                                className="text-left w-full pixel-text dashboard-link py-[12px] px-0"
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
                                 Events Page CMS
                             </button>
 
                             <button
-                                onClick={() => { }}
-                                className="text-left w-full pixel-text dashboard-link py-[12px] px-0"
+                                onClick={() => {navigate('/admin/manage-links')}}
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
                                 Links
                             </button>
 
                             <button
                                 onClick={onLogout}
-                                className="text-left w-full pixel-text dashboard-link py-[12px] px-0"
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
                                 Logout
                             </button>
