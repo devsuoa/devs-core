@@ -12,9 +12,9 @@ function PageViewTracker() {
 
   useEffect(() => {
     if (isInitialized) {
-      posthog.capture('$pageview', {
+      posthog.capture("$pageview", {
         $current_url: window.location.href,
-        $pathname: location.pathname
+        $pathname: location.pathname,
       });
     }
   }, [location]);
@@ -26,7 +26,7 @@ function App() {
   return (
     <BrowserRouter>
       <PageViewTracker />
-      <main className="min-h-screen bg-black">
+      <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<Construction />} />
           <Route path="/admin/signup" element={<AdminSignup />} />
