@@ -10,7 +10,6 @@ const Links: React.FC = () => {
   if (loading) {
     return (
       <>
-        <Header />
         <div className="flex items-center justify-center mt-[20vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
