@@ -45,7 +45,10 @@ function App() {
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/marketing-request" element={<MarketingPortal />} />
+          <Route
+            path="/admin/marketing-request"
+            element={<MarketingPortal />}
+          />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/404" element={<PageNotFound />} />
