@@ -1,8 +1,17 @@
 import React from 'react';
 import { PageTitle } from '../components/PageTitle';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import { isFeatureEnabled } from '../lib/featureFlags';
+import { onPageNotFound } from '../lib/pageNotFoundController';
 
 const PrivacyPolicy: React.FC = () => {
+    const navigate = useNavigate();
+    if (!isFeatureEnabled('privacy_policy_page_is_enabled')) {
+        onPageNotFound(navigate);
+        return null;
+    }
+    
     return (
         <>
             <Header />

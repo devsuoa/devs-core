@@ -1,10 +1,19 @@
 import React from 'react';
 import { SocialLinks } from '../components/SocialLinks';
+import { useNavigate } from 'react-router-dom';
+import { isFeatureEnabled } from '../lib/featureFlags';
+import { onPageNotFound } from '../lib/pageNotFoundController';
 // Public assets are served at the root path
 const logo = '/branding/text_logo.png';
 const constructionWorker = '/construction/construction_worker.png';
 
 const Construction: React.FC = () => {
+  const navigate = useNavigate();
+  if (!isFeatureEnabled('construction_page_is_enabled')) {
+    onPageNotFound(navigate);
+    return null;
+  }
+
   return (
     <div className="flex items-center justify-center h-screen w-screen px-16 py-12 box-border max-[768px]:flex-col max-[768px]:justify-start max-[768px]:px-4 max-[768px]:py-8">
       {/* Desktop Layout */}
@@ -75,7 +84,7 @@ const Construction: React.FC = () => {
             </p>
           </div>
 
-          <div className="font-pixelify text-xs text-left -mt-2">
+          <div className="font-pixelify text-xs text-left mt-2">
             <p className="m-0 lowercase">
               need to reach out?<br />
               send us an email at{' '}

@@ -1,11 +1,20 @@
 import posthog from 'posthog-js';
 import React from 'react';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
 import { useActiveLinks, getFaviconUrl } from '../lib/linksController';
 import { SocialLinks } from '../components/SocialLinks';
 import { Link } from 'react-router-dom';
+import { isFeatureEnabled } from '../lib/featureFlags';
+import { onPageNotFound } from '../lib/pageNotFoundController';
 
 const Links: React.FC = () => {
+  const navigate = useNavigate();
+  if (!isFeatureEnabled('links_page_is_enabled')) {
+    onPageNotFound(navigate);
+    return null;
+  }
+
   const { links, loading, error } = useActiveLinks();
 
   if (loading) {

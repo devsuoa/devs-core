@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { isFeatureEnabled } from "../lib/featureFlags";
 
 const logo = "/branding/text_logo.png";
 const Header = () => {
@@ -15,34 +16,47 @@ const Header = () => {
         {/* Links Section */}
         <div className="flex-0.5 flex justify-center items-center">
           <ul className="flex gap-[10vw] items-center list-none font-silkscreen text-[20px] whitespace-nowrap">
-            <li>
-              <Link to="#" className="link-white">
-                OUR TEAM
-              </Link>
-            </li>
-            <li>
-              <Link to="#" className="link-white">
-                EVENTS
-              </Link>
-            </li>
-            <li>
-              <Link to="#" className="link-white">
-                SPONSORS
-              </Link>
-            </li>
-            <li>
-              <Link to="#" className="link-white">
-                CONTACT US
-              </Link>
-            </li>
+            {isFeatureEnabled('team_page_is_enabled') && (
+              <li>
+                <Link to="/team" className="link-white">
+                  OUR TEAM
+                </Link>
+              </li>
+            )}
+
+            {isFeatureEnabled('events_page_is_enabled') && (
+              <li>
+                <Link to="/events" className="link-white">
+                  EVENTS
+                </Link>
+              </li>
+            )}
+
+            {isFeatureEnabled('sponsors_page_is_enabled') && (
+              <li>
+                <Link to="/sponsors" className="link-white">
+                  SPONSORS
+                </Link>
+              </li>
+            )}
+
+            {isFeatureEnabled('contact_page_is_enabled') && (
+              <li>
+                <Link to="/contact" className="link-white">
+                  CONTACT US
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
 
         {/* Button Section */}
         <div className="flex-0.5 flex justify-end">
-          <Link to="#" className="font-silkscreen text-[25px] bg-transparent link-white">
-            Join Us
-          </Link>
+          {isFeatureEnabled('join_us_page_is_enabled') && (
+            <Link to="#" className="font-silkscreen text-[25px] bg-transparent link-white">
+              Join Us
+            </Link>
+          )}
         </div>
       </nav>
     </>

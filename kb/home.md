@@ -8,6 +8,7 @@ This is to help understand components and guidelines to ensure everyone is on th
 - [Commit & Branching Guidelines](commit_guidelines.md)
 - [Universal Design Guidelines](universal_design_guidelines.md)
 - [Setup Guidelines](setup.md)
+- [Feature Flags](feature_flags.md)
 
 ### Components
 - [Header Component](header.md)

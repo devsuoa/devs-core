@@ -9,6 +9,7 @@ import MarketingPortal from "./pages/admin/MarketingPortal";
 import ManageLinks from "./pages/admin/ManageLinks";
 import { posthog, isInitialized } from "./lib/posthog";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PageNotFound from "./pages/PageNotFound";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -39,6 +40,8 @@ function App() {
           <Route path="/admin/marketing-request" element={<MarketingPortal />} />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/404" element={<PageNotFound />} />
         </Routes>
       </main>
     </BrowserRouter>
