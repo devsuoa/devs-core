@@ -13,7 +13,7 @@ Feature flags are defined in:
 src/config/feature-flags.json
 ```
 
-Each flag controls whether a feature, page, or section of the site is accessible.
+Each flag controls whether a feature, page, or section of the site is accessible at runtime.
 
 
 ## When to use a feature flag
@@ -28,11 +28,11 @@ Use a feature flag when:
 
 
 ## How to use a feature flag
+Navigation is a side effect and must run inside `useEffect`.
 
 ### 1. Import the required helpers
 
 ```tsx
-import { useNavigate } from 'react-router-dom';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
 ```
@@ -42,9 +42,13 @@ import { onPageNotFound } from '../lib/pageNotFoundController';
 ### 2. Gate the feature at the very start of the component
 
 ```tsx
-  const navigate = useNavigate();
-  if (!isFeatureEnabled('your_feature_flag')) {
-    onPageNotFound();
+  React.useEffect(() => {
+    if (!isFeatureEnabled('links_page_is_enabled')) {
+      onPageNotFound();
+    }
+  }, []);
+
+  if (!isFeatureEnabled('links_page_is_enabled')) {
     return null;
   }
 ```
@@ -53,11 +57,11 @@ import { onPageNotFound } from '../lib/pageNotFoundController';
 
 ## Important rules ⚠️
 
-* **This check must be the first thing inside your component**
-* Do **not** place it:
-  * After hooks
-  * Inside conditionals
-  * Inside TSX
+* **This logic must appear before any rendering logic**
+* Do **not**:
+  * Trigger navigation during render
+  * Call `onPageNotFound()` outside `useEffect`
+  * Render UI when the flag is disabled
 * Always return `null` after calling `onPageNotFound()`
 
 Failing to do this can cause:
@@ -72,12 +76,15 @@ Failing to do this can cause:
 
 ```tsx
 const Links: React.FC = () => {
-  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!isFeatureEnabled('links_page_is_enabled')) {
+      onPageNotFound();
+    }
+  }, []);
+
   if (!isFeatureEnabled('links_page_is_enabled')) {
-    onPageNotFound();
     return null;
   }
-
   // normal component logic below
 };
 ```

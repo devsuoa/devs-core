@@ -1,12 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './main.css'
-import App from './App'
-import './lib/posthog'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+
+import './main.css';
+import App from './App';
+import './lib/posthog';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
-
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
