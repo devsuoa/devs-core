@@ -58,7 +58,7 @@ const Links: React.FC = () => {
                   return (
                     <div
                       key={link.id}
-                          className="relative flex text-white items-center justify-center px-4 py-4 sm:px-7 sm:py-6 min-h-8 my-6"
+                      className="relative flex text-white items-center justify-center px-4 py-4 sm:px-7 sm:py-6 min-h-8 my-6"
                     >
                       {link.title && (
                         <span className="font-pixelify text-white opacity-90 text-center text-[1rem]">
@@ -80,20 +80,20 @@ const Links: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => {
-                        posthog.capture('link_clicked', {
-                          link_id: link.id,
-                          title: link.title,
-                          url: link.url,
-                          position: index + 1,
-                          has_custom_icon: Boolean(link.custom_icon),
-                          source: 'links_page',
-                        },
+                      posthog.capture('link_clicked', {
+                        link_id: link.id,
+                        title: link.title,
+                        url: link.url,
+                        position: index + 1,
+                        has_custom_icon: Boolean(link.custom_icon),
+                        source: 'links_page',
+                      },
                         {
                           send_instantly: true,
                         });
-                      }}
+                    }}
                     className="link-panel pixel-panel relative flex items-center gap-4 text-white transition-all px-4 py-4 sm:px-7 sm:py-6 no-underline max-w-full break-words min-h-[56px] mb-4"
-                    style={{marginBottom: '1rem', gap: '1rem'}}
+                    style={{ marginBottom: '1rem', gap: '1rem' }}
                   >
                     <img
                       src={iconSrc}
@@ -114,6 +114,11 @@ const Links: React.FC = () => {
           )}
         </div>
       </div>
+      <p className="text-white text-center text-[1rem] mb-12">
+        <a href="/privacy-policy" className="text-white font-rethink hover:text-gray-300 hover:underline transition-all duration-300 ease-in-out">
+          Privacy Policy
+        </a>
+      </p>
     </>
   );
 };
