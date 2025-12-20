@@ -1,11 +1,11 @@
 import React from 'react';
 
 // Public assets are served at the root path
-const logo = '/construction/logo.png';
+const logo = '/branding/text_logo.png';
 const constructionWorker = '/construction/construction_worker.png';
-const instagram = '/construction/Instagram.png';
-const facebook = '/construction/Facebook.png';
-const linkedin = '/construction/LinkedIn.png';
+const instagram = '/socials/Instagram.png';
+const facebook = '/socials/Facebook.png';
+const linkedin = '/socials/LinkedIn.png';
 
 const Construction: React.FC = () => {
   return (

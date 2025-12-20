@@ -27,7 +27,7 @@ const AdminLogin: React.FC = () => {
     <>
       <Header />
       <PageTitle
-        image="/icon_logo.png"
+        image="/theme/title_icon.png"
         title="Admin Login"
         className='mt-[5vh]'
       />

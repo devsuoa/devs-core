@@ -67,7 +67,7 @@ const MarketingPortal: React.FC = () => {
     <>
       <Header />
       <PageTitle
-        image="/icon_logo.png"
+        image="/theme/title_icon.png"
         title="Marketing Requests"
         subtext="Submit a marketing request for an event or sponsorship post. Please fill out the form as early as possible."
         className='mt-[5vh]'

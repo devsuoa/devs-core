@@ -32,7 +32,7 @@ const AdminSignup: React.FC = () => {
     <>
       <Header />
       <PageTitle
-        image="/icon_logo.png" // TODO: Change to the proper icon from Figma
+        image="/theme/title_icon.png"
         title="Admin Signup"
         className='mt-[5vh]'
       />

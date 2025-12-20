@@ -1,4 +1,4 @@
-const logo = "/construction/logo.png";
+const logo = "/branding/text_logo.png";
 const Header = () => {
   return (
     <>

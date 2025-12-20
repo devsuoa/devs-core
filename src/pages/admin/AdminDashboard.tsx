@@ -26,7 +26,7 @@ const AdminDashboard: React.FC = () => {
         <>
             <Header />
             <PageTitle
-                image="/icon_logo.png"
+                image="/theme/title_icon.png"
                 title="Admin Dashboard"
                 className='mt-[5vh]'
             />

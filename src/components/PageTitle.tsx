@@ -48,7 +48,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
                 <img
                     src={image}
                     alt={imageAlt}
-                    className="max-h-[100px] max-w-[100px] shrink-0 object-contain pixelated"
+                    className="max-h-[100px] max-w-[100px] shrink-0 object-contain"
                 />
 
                 <div className="flex items-center ml-[5rem]">
