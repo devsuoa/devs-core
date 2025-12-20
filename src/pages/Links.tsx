@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import { useActiveLinks, getFaviconUrl } from '../lib/linksController';
 import { SocialLinks } from '../components/SocialLinks';
+import { Link } from 'react-router-dom';
 
 const Links: React.FC = () => {
   const { links, loading, error } = useActiveLinks();
@@ -115,9 +116,9 @@ const Links: React.FC = () => {
         </div>
       </div>
       <p className="text-white text-center text-[1rem] mb-12">
-        <a href="/privacy-policy" className="text-white font-rethink hover:text-gray-300 hover:underline transition-all duration-300 ease-in-out">
+        <Link to="/privacy-policy" className="text-white font-rethink hover:text-gray-300 hover:underline transition-all duration-300 ease-in-out">
           Privacy Policy
-        </a>
+        </Link>
       </p>
     </>
   );

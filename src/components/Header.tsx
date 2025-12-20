@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const logo = "/branding/text_logo.png";
 const Header = () => {
   return (
@@ -5,40 +7,42 @@ const Header = () => {
       <nav className="flex items-center justify-between mt-[30px] px-[40px]">
         {/* Logo Section */}
         <div className="flex-0.5">
+          <Link to="/">
           <img className="max-w-[8vw] pixelated" src={logo} alt="Logo" />
+          </Link>
         </div>
 
         {/* Links Section */}
         <div className="flex-0.5 flex justify-center items-center">
           <ul className="flex gap-[10vw] items-center list-none font-silkscreen text-[20px] whitespace-nowrap">
             <li>
-              <a href="#" className="link-white">
+              <Link to="#" className="link-white">
                 OUR TEAM
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="link-white">
+              <Link to="#" className="link-white">
                 EVENTS
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="link-white">
+              <Link to="#" className="link-white">
                 SPONSORS
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="link-white">
+              <Link to="#" className="link-white">
                 CONTACT US
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
 
         {/* Button Section */}
         <div className="flex-0.5 flex justify-end">
-          <button className="font-silkscreen text-[25px] bg-transparent link-white">
+          <Link to="#" className="font-silkscreen text-[25px] bg-transparent link-white">
             Join Us
-          </button>
+          </Link>
         </div>
       </nav>
     </>
