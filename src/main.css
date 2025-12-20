@@ -10,8 +10,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: radial-gradient(ellipse at center, #0a1234 0%, #04060f 100%);
-  min-height: 100vh;
   color: #ffffff;
+}
+
+html {
+  overscroll-behavior: none;
 }
 
 * {
