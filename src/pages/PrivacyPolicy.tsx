@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageTitle } from '../components/PageTitle';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
 
@@ -198,6 +199,7 @@ const PrivacyPolicy: React.FC = () => {
                     </section>
                 </div>
             </main>
+            <Footer/>
         </>
     );
 };

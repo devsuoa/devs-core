@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
 import { useMarketingPortal } from '../../lib/marketingPortalController';
 import { useAdminDashboard } from '../../lib/adminDashboardController';
@@ -72,7 +73,7 @@ const MarketingPortal: React.FC = () => {
         subtext="Submit a marketing request for an event or sponsorship post. Please fill out the form as early as possible."
         className='mt-[5vh]'
       />
-      <div className="flex items-center justify-center mt-[10vh] mb-[10vh] px-4 py-12">
+      <div className="flex items-center justify-center mb-[10vh] px-4 py-12">
         <div className="w-[50vw] max-w-[900px] min-w-[650px]">
           <div className="pixel-panel relative" style={{ padding: '48px 40px' }}>
             {showDialog ? (
@@ -342,6 +343,7 @@ const MarketingPortal: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

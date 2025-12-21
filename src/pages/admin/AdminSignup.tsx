@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { handleSignupSubmit } from '../../lib/signup';
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
 
 const AdminSignup: React.FC = () => {
@@ -36,7 +37,7 @@ const AdminSignup: React.FC = () => {
         title="Admin Signup"
         className='mt-[5vh]'
       />
-      <div className="flex items-center justify-center mt-[10vh] px-4 py-12">
+      <div className="flex items-center justify-center px-4 py-12">
       <div className="w-[50vw] max-w-[900px] min-w-[650px]">
         <div className="pixel-panel font-pixelify relative" style={{ padding: '48px 40px' }}>
           {success && (
@@ -138,6 +139,7 @@ const AdminSignup: React.FC = () => {
         </div>
       </div>
       </div>
+      <Footer />
     </>
   );
 };

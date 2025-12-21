@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
 import { useAdminDashboard } from '../../lib/adminDashboardController';
 import { useLinksManagement, Link, LinkFormData, getFaviconUrl } from '../../lib/linksController';
@@ -139,7 +140,7 @@ const ManageLinks: React.FC = () => {
         subtext="Add, edit, and manage active links"
         className="mt-[5vh]"
       />
-      <div className="flex items-center justify-center mt-[10vh] mb-[10vh] px-4 py-12">
+      <div className="flex items-center justify-center mb-[10vh] px-4 py-12">
         <div className="w-[50vw] max-w-[900px] min-w-[650px]">
           {error && (
             <div className="pixel-panel font-pixelify mb-4" style={{ padding: '16px 20px' }}>
@@ -526,6 +527,7 @@ const ManageLinks: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

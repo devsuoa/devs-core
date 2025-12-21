@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import { useActiveLinks, getFaviconUrl } from '../lib/linksController';
 import { SocialLinks } from '../components/SocialLinks';
+// import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
@@ -133,6 +134,7 @@ const Links: React.FC = () => {
           Privacy Policy
         </Link>
       </p>
+      {/* <Footer /> */}
     </>
   );
 };

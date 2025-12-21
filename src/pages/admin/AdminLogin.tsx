@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { handleLoginSubmit } from '../../lib/login';
 import Header from '../../components/Header';
 import { PageTitle } from '../../components/PageTitle';
+import Footer from '../../components/Footer';
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ const AdminLogin: React.FC = () => {
         title="Admin Login"
         className='mt-[5vh]'
       />
-      <div className="flex items-center justify-center mt-[10vh] px-4 py-12">
+      <div className="flex items-center justify-center px-4 py-12">
         <div className="w-[50vw] max-w-[900px] min-w-[650px]">
           <div className="pixel-panel font-pixelify relative" style={{ padding: '48px 40px' }}>
             {error && (
@@ -89,6 +90,7 @@ const AdminLogin: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
