@@ -8,22 +8,25 @@ import { onPageNotFound } from '../lib/pageNotFoundController';
 const PrivacyPolicy: React.FC = () => {
     React.useEffect(() => {
         if (!isFeatureEnabled('privacy_policy_page_is_enabled')) {
-          onPageNotFound();
+            onPageNotFound();
         }
-      }, []);
-    
-      if (!isFeatureEnabled('privacy_policy_page_is_enabled')) {
+    }, []);
+
+    if (!isFeatureEnabled('privacy_policy_page_is_enabled')) {
         return null;
-      }
-    
+    }
+
     return (
         <>
-            <Header />
+            <div className="hidden md:block">
+                <Header />
+            </div>
+
             <PageTitle
                 image="/theme/title_icon.png"
                 title="Privacy Policy"
                 subtext='Last updated: 2025-12-20'
-                className='max-w-6xl !px-0'
+                className='max-w-6xl !px-4'
             />
             <main className="min-h-screen text-white px-6 py-12">
                 <div className="max-w-6xl mx-auto space-y-6">
@@ -132,9 +135,9 @@ const PrivacyPolicy: React.FC = () => {
                             5. Data Storage & Security
                         </h2>
                         <p>
-                            We take reasonable steps to protect your information from loss, 
-                            misuse, or unauthorised access. However, no online system is completely secure. 
-                            In the event of a data breach, DEVS UoA will take all steps required under New Zealand law, 
+                            We take reasonable steps to protect your information from loss,
+                            misuse, or unauthorised access. However, no online system is completely secure.
+                            In the event of a data breach, DEVS UoA will take all steps required under New Zealand law,
                             including notifying affected individuals and relevant authorities where required.
                         </p>
                     </section>
@@ -199,7 +202,9 @@ const PrivacyPolicy: React.FC = () => {
                     </section>
                 </div>
             </main>
-            <Footer/>
+            <div className="hidden md:block">
+                <Footer />
+            </div>
         </>
     );
 };
