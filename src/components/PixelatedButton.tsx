@@ -2,11 +2,36 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type PixelatedButtonProps = {
+  /**
+   * Button Link
+   * @example "/events"
+   */
   to: string;
+
+  /**
+   * Inactive Image
+   */
   inactive: string;
+
+  /**
+   * Hover Image
+   */
   hover: string;
+
+  /**
+   * Clicked Image
+   */
   clicked: string;
+
+  /**
+   * Additional CSS Classes
+   * @example "w-[140px]"
+   */
   className?: string;
+
+  /**
+   * Image Alt Text
+   */
   alt?: string;
 };
 

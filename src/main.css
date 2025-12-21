@@ -198,3 +198,30 @@ html {
     padding: 2rem !important;
   }
 }
+
+.perspective {
+  perspective: 1200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.pixel-frame {
+  border: 2px solid white;
+  padding: 6px;
+}
+
+.pixel-frame-inner {
+  border: 2px solid white;
+  height: 100%;
+  width: 100%;
+}

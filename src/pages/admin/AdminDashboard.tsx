@@ -43,10 +43,10 @@ const AdminDashboard: React.FC = () => {
                             </button>
 
                             <button
-                                onClick={() => { }}
+                                onClick={() => {navigate('/admin/manage-events')}}
                                 className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
-                                Events Page CMS
+                                Manage Events
                             </button>
 
                             <button
