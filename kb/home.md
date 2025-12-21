@@ -12,10 +12,11 @@ This is to help understand components and guidelines to ensure everyone is on th
 
 ### Components
 - [Header Component](header.md)
-- [Page Title Component](pageTitle.md)
+- [Page Title Component](pagetitle.md)
 - [Footer Component](footer.md)
 - [Social Links Component](socialLinks.md)
 - [Pixelated Button Component](pixelatedButton.md)
+- [Member Icon Component](memberIcon.md)
 
 ### Pages
 - [Auth](auth.md)

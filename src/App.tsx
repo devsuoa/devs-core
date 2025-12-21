@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/admin/ManageEvents";
+import Team from "./pages/Team";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -47,6 +48,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/links" element={<Links />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/team" element={<Team />} />
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />

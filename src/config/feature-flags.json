@@ -1,7 +1,7 @@
 [
     {
         "name": "home_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "privacy_policy_page_is_enabled",
