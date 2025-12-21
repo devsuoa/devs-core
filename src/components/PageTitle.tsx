@@ -6,7 +6,7 @@ type PageTitleProps = {
     * Image to display next to the title
     * @example "icon_logo.png"
     */
-    image: string
+    image?: string | undefined
 
     /**
      * Title to display on a page
@@ -47,7 +47,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
             <div className="flex items-center gap-4 mb-16">
                 <img
                     src={image}
-                    alt={imageAlt}
+                    alt={image ? imageAlt : undefined}
                     className="max-h-[100px] max-w-[100px] shrink-0 object-contain"
                 />
 

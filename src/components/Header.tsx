@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { isFeatureEnabled } from "../lib/featureFlags";
+import PixelatedButton from "./PixelatedButton";
 
 const logo = "/branding/text_logo.png";
 const Header = () => {
@@ -53,9 +54,13 @@ const Header = () => {
         {/* Button Section */}
         <div className="flex-0.5 flex justify-end">
           {isFeatureEnabled('join_us_page_is_enabled') && (
-            <Link to="#" className="font-silkscreen text-[25px] bg-transparent link-white">
-              Join Us
-            </Link>
+            <PixelatedButton 
+            to="/join-us"
+            inactive="./buttons/join/join_us_inactive.png"
+            hover="./buttons/join/join_us_hover.png"
+            clicked="./buttons/join/join_us_click.png"
+            className="w-[120px]"
+          />
           )}
         </div>
       </nav>

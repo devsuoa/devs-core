@@ -12,6 +12,7 @@ import MarketingPortal from "./pages/admin/MarketingPortal";
 import ManageLinks from "./pages/admin/ManageLinks";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PageNotFound from "./pages/PageNotFound";
+import Home from "./pages/Home";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
       <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<Construction />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/links" element={<Links />} />
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />

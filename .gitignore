@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+#Template for landing page slideshow
+public/home/slideshow/template.psd
