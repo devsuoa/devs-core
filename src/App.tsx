@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/admin/ManageEvents";
 import Team from "./pages/Team";
+import TaskTracker from "./pages/admin/TaskTracker";
 import Pb from "./pages/hidden/Pb";
 
 function PageViewTracker() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="/admin/marketing-request" element={<MarketingPortal />} />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/admin/manage-events" element={<ManageEvents />} />
+          <Route path="/admin/tasks" element={<TaskTracker />} />
 
           {/* Utility pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

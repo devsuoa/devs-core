@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from './supabase';
 
 // Apps Script URL which handles the form submission to Google Sheets
-// A Zapier automation automatically assigns asana tasks using the sheets
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2__ivp8VWFCQZg5WaB-b3QDmxO5fWavFvmodkk7kstYzmKaCEymmIhzlKXF_ofxM3/exec';
+// Google sheets handles email automations, everything else goes to tasks
+const APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbz2__ivp8VWFCQZg5WaB-b3QDmxO5fWavFvmodkk7kstYzmKaCEymmIhzlKXF_ofxM3/exec';
 
 export interface MarketingFormData {
   postType: 'event' | 'sponsorship' | '';
@@ -87,6 +89,80 @@ async function submitToGoogle(formData: MarketingFormData): Promise<void> {
   }
 }
 
+async function submitToSupabase(formData: MarketingFormData): Promise<void> {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError) throw authError;
+    if (!user) throw new Error('Not authenticated');
+
+    if (!formData.postType) {
+      throw new Error('postType is required');
+    }
+
+    const { error } = await supabase.from('marketing_requests').insert({
+      post_type: formData.postType,
+
+      // Event fields
+      event_name: formData.eventName ?? null,
+      event_date: formData.eventDate ? formData.eventDate : null,
+      event_time: formData.eventTime ?? null,
+      event_location: formData.eventLocation ?? null,
+      event_description: formData.eventDescription ?? null,
+      event_suggestions: formData.eventSuggestions ?? null,
+
+      // Sponsorship fields
+      sponsor_name: formData.sponsorName ?? null,
+      sponsorship_email_date: formData.sponsorshipEmailDate
+        ? formData.sponsorshipEmailDate
+        : null,
+      sponsorship_post_date: formData.sponsorshipPostDate
+        ? formData.sponsorshipPostDate
+        : null,
+      sponsorship_event_name: formData.sponsorshipEventName ?? null,
+      sponsorship_links: formData.sponsorshipLinks ?? null,
+      sponsorship_description: formData.sponsorshipDescription ?? null,
+
+      // Common fields
+      marketing_description: formData.marketingDescription ?? null,
+      pre_written_captions: formData.preWrittenCaptions ?? null,
+
+      // Metadata
+      created_by: user.id,
+    });
+
+    if (error) throw error;
+
+    console.log('Form submitted to Supabase successfully');
+
+    const functionResponse = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-marketing-task`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${
+            (await supabase.auth.getSession()).data.session?.access_token
+          }`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!functionResponse.ok) {
+        const errorText = await functionResponse.text();
+        throw new Error(`Failed to create task: ${errorText}`);
+      }
+
+  } catch (error) {
+    console.error('Error submitting to Supabase:', error);
+    throw error;
+  }  
+}
+
 export async function handleMarketingSubmit(
   e: React.FormEvent,
   state: MarketingFormState,
@@ -119,7 +195,8 @@ export async function handleMarketingSubmit(
   console.log('Marketing Request Data:', formData);
 
   try {
-    await submitToGoogle(formData);
+    // Submit to both supabase and google sheets
+    await Promise.all([submitToGoogle(formData), submitToSupabase(formData)]);
 
     // Show dialog and reset form on submit
     setters.setShowDialog(true);
@@ -138,8 +215,15 @@ export async function handleMarketingSubmit(
     setters.setSponsorshipDescription('');
     setters.setMarketingDescription('');
     setters.setPreWrittenCaptions('');
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to submit form:', error);
+
+    // If user somehow reaches page without admin role
+    if (error?.code === '42501') {
+      alert('You do not have permission to submit marketing requests.');
+      return;
+    }
+
     alert('Failed to submit form. Please try again.');
   }
 }
@@ -264,4 +348,3 @@ export function useMarketingPortal() {
     closeDialog,
   };
 }
-

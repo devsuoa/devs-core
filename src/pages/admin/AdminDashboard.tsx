@@ -31,7 +31,7 @@ const AdminDashboard: React.FC = () => {
                 title="Admin Dashboard"
                 className='mt-[5vh]'
             />
-            <div className="flex items-center justify-center px-4 py-12">
+            <div className="flex items-center justify-center px-4 pb-12">
                 <div className="w-[50vw] max-w-[900px] min-w-[650px]">
                     <div className="relative bg-transparent border-none px-10 py-12">
                         <div className="flex flex-col gap-6">
@@ -40,6 +40,13 @@ const AdminDashboard: React.FC = () => {
                                 className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >
                                 Marketing Portal
+                            </button>
+
+                            <button
+                                onClick={() => {navigate('/admin/tasks')}}
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
+                            >
+                                Task Tracker
                             </button>
 
                             <button
