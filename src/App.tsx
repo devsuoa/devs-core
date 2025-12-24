@@ -18,6 +18,7 @@ import ManageEvents from "./pages/admin/ManageEvents";
 import Team from "./pages/Team";
 import TaskTracker from "./pages/admin/TaskTracker";
 import Pb from "./pages/hidden/Pb";
+import About from "./pages/About";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
           <Route path="/links" element={<Links />} />
           <Route path="/events" element={<Events />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/about" element={<About />} />
 
           {/* Admin pages */}
           <Route path="/admin/signup" element={<AdminSignup />} />
