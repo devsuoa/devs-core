@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { SocialLinks } from "./SocialLinks";
 import { isFeatureEnabled } from "../lib/featureFlags";
+import { useState } from "react";
+import Credits from "./Credits"
+
 
 const Footer = () => {
+  const [creditsOpen, setCreditsOpen] = useState(false);
+
   return (
+    <>
     <footer className="bg-gradient-to-t from-black/50 to-transparent text-white py-8">
       <div className="mx-auto grid grid-cols-3 gap-1 px-20 max-[768px]:grid-cols-1">
         {/* Left Section - Navigation Links */}
@@ -102,6 +108,13 @@ const Footer = () => {
           >
             contact@devsuoa.com
           </a>
+          <br/>
+          <button
+            onClick={() => setCreditsOpen(true)}
+            className="tracking-wide cursor-pointer font-silkscreen text-xs tracking-wide hover:opacity-80 text-left"
+          >
+            website credits
+          </button>
 
           {/* TODO: Implement newsletter subscription system */}
           {/* <div className="mt-10">
@@ -162,6 +175,12 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    <Credits isOpen={creditsOpen} onClose={() => setCreditsOpen(false)} />
+    </>
+  
+            
+
+
   );
 };
 

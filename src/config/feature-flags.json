@@ -1,7 +1,7 @@
 [
     {
         "name": "home_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "privacy_policy_page_is_enabled",
@@ -9,31 +9,31 @@
     },
     {
         "name": "resources_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "about_us_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "team_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "events_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "sponsors_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "contact_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "join_us_page_is_enabled",
-        "value": false
+        "value": true
     },
     {
         "name": "links_page_is_enabled",
