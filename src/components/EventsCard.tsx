@@ -1,10 +1,17 @@
 import { useState } from "react";
 import PixelatedButton from "./PixelatedButton";
+import GenericRSVPDialog from "./GenericRSVPDialog";
+import { rsvpToEvent } from "../lib/eventsRSVPController";
+import { NotMemberError } from "../lib/eventsRSVPController";
+import { useNavigate } from "react-router-dom";
 
 type EventsCardProps = {
+  /** Event ID */
+  id: string;
+
   /** Event Title */
   title: string;
-  
+
   /**
    * Event Image
    * MUST BE THE SAME AS INSTAGRAM IMAGE
@@ -64,6 +71,7 @@ type EventsCardProps = {
 };
 
 const EventsCard = ({
+  id,
   title,
   image,
   imageAlt,
@@ -76,32 +84,33 @@ const EventsCard = ({
   className,
 }: EventsCardProps) => {
   const [flipped, setFlipped] = useState(false);
-
+  const [rsvpOpen, setRsvpOpen] = useState(false);
+  const navigate = useNavigate();
   const isTouchDevice =
     typeof window !== "undefined" &&
     ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
-    const eventDate = new Date(date);
-    eventDate.setHours(0, 0, 0, 0);
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const isPastEvent = eventDate < today;
-    
+  const eventDate = new Date(date);
+  eventDate.setHours(0, 0, 0, 0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isPastEvent = eventDate < today;
+
   return (
     <div
       className={`relative w-[320px] h-[460px] perspective ${className || ""}`}
       onClick={() => {
-        if (isTouchDevice) setFlipped(!flipped);
+        if (isTouchDevice && !rsvpOpen) setFlipped(!flipped);
       }}
       onMouseEnter={() => {
-        if (!isTouchDevice) setFlipped(true);
+        if (!isTouchDevice && !rsvpOpen) setFlipped(true);
       }}
       onMouseLeave={() => {
-        if (!isTouchDevice) setFlipped(false);
+        if (!isTouchDevice && !rsvpOpen) setFlipped(false);
       }}
-      >
+    >
 
       <div
         className={`relative w-full h-full transition-transform duration-500 preserve-3d
@@ -151,19 +160,41 @@ const EventsCard = ({
 
             {/* Register button */}
             <div className="p-6">
-            {registerUrl && !isPastEvent && (
+              {registerUrl && !isPastEvent && (
                 <PixelatedButton
-                    to={registerUrl}
-                    inactive="/buttons/register/register_inactive.png"
-                    hover="/buttons/register/register_hover.png"
-                    clicked="/buttons/register/register_click.png"
-                    className="w-[140px]"
+                  inactive="/buttons/register/register_inactive.png"
+                  hover="/buttons/register/register_hover.png"
+                  clicked="/buttons/register/register_click.png"
+                  className="w-[140px]"
+                  onClick={() => {
+                    setFlipped(true);
+                    setRsvpOpen(true);
+                  }}
                 />
-            )}
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      <GenericRSVPDialog
+        open={rsvpOpen}
+        onClose={() => {
+          setRsvpOpen(false);
+          setFlipped(false);
+        }}
+        onConfirm={async (email) => {
+          try {
+            await rsvpToEvent(id, email);
+          } catch (error) {
+            if (error instanceof NotMemberError) {
+              navigate("/join");
+              throw error;
+            }
+            throw error;
+          }
+        }}
+      />
     </div>
   );
 };

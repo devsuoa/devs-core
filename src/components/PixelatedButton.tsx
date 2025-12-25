@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 type PixelatedButtonProps = {
   /**
    * Button Link
+   * If omitted, button behaves like a normal button and onClick is required
    * @example "/events"
    */
-  to: string;
+  to?: string;
 
   /**
    * Inactive Image
@@ -33,6 +34,12 @@ type PixelatedButtonProps = {
    * Image Alt Text
    */
   alt?: string;
+
+  /**
+   * Click handler (used when no `to` is provided)
+   * @example () => { console.log("Button clicked"); }
+   */
+  onClick?: () => void;
 };
 
 const PixelatedButton: React.FC<PixelatedButtonProps> = ({
@@ -42,14 +49,18 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
   clicked,
   className = 'w-1/4',
   alt = '',
+  onClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
+  const Wrapper: any = to ? Link : "div";
+
   return (
-    <Link
-      to={to}
-      className={`relative block ${className}`}
+    <Wrapper
+      {...(to ? { to } : {})}
+      className={`relative block cursor-pointer select-none ${className}`}
+      onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
@@ -63,9 +74,9 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
         src={inactive}
         alt={alt}
         className={`
-          absolute inset-0 w-full h-auto pixelated select-none
+          absolute inset-0 w-full h-auto pixelated
           transition-opacity duration-300 ease-out
-          ${!isHovered && !isActive ? 'opacity-100' : 'opacity-0'}
+          ${!isHovered && !isActive ? "opacity-100" : "opacity-0"}
         `}
         draggable={false}
       />
@@ -75,9 +86,9 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
         src={hover}
         alt={alt}
         className={`
-          absolute inset-0 w-full h-auto pixelated select-none
+          absolute inset-0 w-full h-auto pixelated
           transition-opacity duration-300 ease-out
-          ${isHovered && !isActive ? 'opacity-100' : 'opacity-0'}
+          ${isHovered && !isActive ? "opacity-100" : "opacity-0"}
         `}
         draggable={false}
       />
@@ -87,9 +98,9 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
         src={clicked}
         alt={alt}
         className={`
-          absolute inset-0 w-full h-auto pixelated select-none
+          absolute inset-0 w-full h-auto pixelated
           transition-opacity duration-300 ease-out
-          ${isActive ? 'opacity-100' : 'opacity-0'}
+          ${isActive ? "opacity-100" : "opacity-0"}
         `}
         draggable={false}
       />
@@ -97,11 +108,11 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
       {/* Spacer (locks layout height) */}
       <img
         src={inactive}
-        alt={alt}
+        alt=""
         className="w-full h-auto opacity-0 pointer-events-none"
         draggable={false}
       />
-    </Link>
+    </Wrapper>
   );
 };
 

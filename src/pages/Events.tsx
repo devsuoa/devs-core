@@ -24,9 +24,11 @@ const Events = () => {
     return (
       <>
         <Header />
+        <section className="min-h-[80vh]">
         <div className="flex justify-center mt-[20vh]">
           <p className="font-pixelify text-white">Loading events...</p>
         </div>
+        </section>
         <Footer />
       </>
     );
@@ -36,7 +38,7 @@ const Events = () => {
     return (
       <>
         <Header />
-        <div className="flex justify-center mt-[20vh]">
+        <div className="flex justify-center mt-[20vh] min-h-[80vh]">
           <p className="font-pixelify text-red-400">{error}</p>
         </div>
         <Footer />
@@ -60,6 +62,7 @@ const Events = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
             {upcomingEvents.map((event) => (
               <EventsCard
+                id={event.id}
                 key={event.id}
                 title={event.title}
                 image={event.image_url || "/events/placeholder_event.png"}
@@ -85,6 +88,7 @@ const Events = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center opacity-70">
               {pastEvents.map((event) => (
                 <EventsCard
+                  id={event.id}
                   key={event.id}
                   title={event.title}
                   image={event.image_url || "/events/placeholder_event.png"}
