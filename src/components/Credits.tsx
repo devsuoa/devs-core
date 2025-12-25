@@ -41,8 +41,6 @@ const Credits = ({ isOpen, onClose }: Props) => {
           <br /><br />
           Additional assets by:
           <br />- Ava Lee, Bryanna Yeo, Tyler Young
-          <br /><br />
-          Built with React + Tailwind
         </p>
       </div>
     </div>,
