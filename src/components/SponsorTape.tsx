@@ -9,7 +9,7 @@ const sponsors = [
   
   export default function SponsorTape() {
     return (
-      <div className="relative w-full overflow-hidden py-6 opacity-70 grayscale">
+      <div className="relative w-full overflow-hidden py-6 opacity-70">
         <div className="sponsor-track flex w-max items-center gap-16">
           {sponsors.map((logo, i) => (
             <img

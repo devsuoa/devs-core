@@ -32,15 +32,14 @@ const About: React.FC = () => {
                 trackRef.current!
             );
         };
-    
+
         window.addEventListener("resize", onResize);
-    
+
         return () => {
             window.removeEventListener("resize", onResize);
             cleanupRef.current?.();
         };
     }, []);
-    
 
     return (
         <>
@@ -55,7 +54,7 @@ const About: React.FC = () => {
                     </h1>
                     <p>
                         Our 2025 Co-President, Kartik Malik, is one of the greatest people to ever exist.
-                        Like, pure legendary status, the glaze makes so much sense. You genuinely cannot find a better person. 
+                        Like, pure legendary status, the glaze makes so much sense. You genuinely cannot find a better person.
                         No one truly understands until they meet Kartik, and once they do they understand the glaze, and they themselves start glazing.
                     </p>
                 </section>
@@ -142,7 +141,15 @@ const About: React.FC = () => {
                     <div className="flex flex-row items-center justify-center gap-x-16 my-24">
                         <div className="flex flex-col items-center justify-center">
                             <img src="/team/execs/team.png" alt="2025/26 DEVS Exec Photo" className="w-[70%] h-auto" />
-                            <p className="text-white text-sm italic font-rethink p-0">2025/26 DEVS Exec Photo</p>
+                            <p className="text-white text-sm italic font-rethink p-0">2025/26 DEVS Exec Team</p>
+                            {/* TODO: REPLACE WITH MEET THE TEAM BUTTON */}
+                            <PixelatedButton
+                                to="/sponsors"
+                                inactive="/buttons/join/join_us_inactive.png"
+                                hover="/buttons/join/join_us_hover.png"
+                                clicked="/buttons/join/join_us_click.png"
+                                className="mt-8"
+                            />
                         </div>
                     </div>
                 </section>
@@ -175,7 +182,7 @@ const About: React.FC = () => {
                         </div>
 
                         <div className="flex flex-row items-center justify-center gap-x-4 my-12">
-                        <PixelatedButton
+                            <PixelatedButton
                                 to="/join-us"
                                 inactive="/buttons/join/join_us_inactive.png"
                                 hover="/buttons/join/join_us_hover.png"
