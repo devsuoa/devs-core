@@ -19,6 +19,7 @@ import Team from "./pages/Team";
 import TaskTracker from "./pages/admin/TaskTracker";
 import Pb from "./pages/hidden/Pb";
 import About from "./pages/About";
+import EventsDashboard from "./pages/admin/EventsDashboard";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -63,21 +64,15 @@ function App() {
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/admin/manage-events" element={<ManageEvents />} />
           <Route path="/admin/tasks" element={<TaskTracker />} />
+          <Route path="/admin/event-attendees" element={<EventsDashboard />} />
 
           {/* Utility pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/404" element={<PageNotFound />} />
           <Route path="*" element={<PageNotFound />} />
-
-          <Route path="/admin/manage-events" element={<ManageEvents />} />
 
           {/* Hidden page for jokes & glazing */}
           <Route path="/p/b/6/7" element={<Pb />} />
-
-          {/* Utility pages */}
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/404" element={<PageNotFound />} />
-          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
     </>

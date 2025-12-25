@@ -14,7 +14,7 @@ export class AlreadyRSVPedError extends Error {
     }
 }
 
-export async function rsvpToEvent(eventId: string, email: string) {
+export async function rsvpToEvent(eventId: string, email: string, dietaryRequirements: string | null) {
   const { data: member, error: memberError } = await supabase
     .from("members")
     .select("email")
@@ -31,6 +31,7 @@ export async function rsvpToEvent(eventId: string, email: string) {
     .insert({
       event_id: eventId,
       email,
+      dietary_requirements: dietaryRequirements || null,
     });
 
   if (error) {

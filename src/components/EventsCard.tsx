@@ -160,13 +160,18 @@ const EventsCard = ({
 
             {/* Register button */}
             <div className="p-6">
-              {registerUrl && !isPastEvent && (
+              {!isPastEvent && (
                 <PixelatedButton
                   inactive="/buttons/register/register_inactive.png"
                   hover="/buttons/register/register_hover.png"
                   clicked="/buttons/register/register_click.png"
                   className="w-[140px]"
                   onClick={() => {
+                    if (registerUrl) {
+                      window.open(registerUrl, "_blank", "noopener,noreferrer");
+                      return;
+                    }
+                  
                     setFlipped(true);
                     setRsvpOpen(true);
                   }}
@@ -183,9 +188,9 @@ const EventsCard = ({
           setRsvpOpen(false);
           setFlipped(false);
         }}
-        onConfirm={async (email) => {
+        onConfirm={async (email, dietaryRequirements) => {
           try {
-            await rsvpToEvent(id, email);
+            await rsvpToEvent(id, email, dietaryRequirements || null);
           } catch (error) {
             if (error instanceof NotMemberError) {
               navigate("/join");

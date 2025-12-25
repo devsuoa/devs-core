@@ -4,7 +4,7 @@ import { AlreadyRSVPedError } from "../lib/eventsRSVPController";
 type GenericRSVPDialogProps = {
     open: boolean;
     onClose: () => void;
-    onConfirm: (email: string) => Promise<void> | void;
+    onConfirm: (email: string, dietaryRequirements: string | null) => Promise<void> | void;
 };
 
 const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
@@ -16,6 +16,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [dietaryRequirements, setDietaryRequirements] = useState("");
 
     const handleConfirm = async () => {
         if (!email) {
@@ -29,7 +30,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         setLoading(true);
 
         try {
-            await onConfirm(email);
+            await onConfirm(email, dietaryRequirements);
 
             setLoading(false);
             setSubmitted(true);
@@ -37,6 +38,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
             setTimeout(() => {
                 setSubmitted(false);
                 setEmail("");
+                setDietaryRequirements("");
                 onClose();
             }, 3000);
         } catch (err) {
@@ -70,7 +72,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [open, submitted, loading, email]);
+    }, [open, submitted, loading, email, dietaryRequirements]);
 
     if (!open) return null;
 
@@ -95,10 +97,24 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="pixel-input font-pixelify w-full"
+                                className="pixel-input font-rethink w-full"
                                 placeholder="admin@devsuoa.com"
                                 required
                                 disabled={loading}
+                            />
+
+                            <label
+                                htmlFor="dietaryRequirements"
+                                className="font-pixelify block my-4"
+                            >
+                                dietary requirements
+                            </label>
+                            <textarea
+                                id="dietaryRequirements"
+                                className="pixel-input w-full mb-12 font-rethink"
+                                placeholder="Dietary requirements (e.g. vegetarian, halal, allergies)"
+                                value={dietaryRequirements}
+                                onChange={(e) => setDietaryRequirements(e.target.value)}
                             />
                         </div>
 

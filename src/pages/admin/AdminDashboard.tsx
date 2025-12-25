@@ -57,6 +57,15 @@ const AdminDashboard: React.FC = () => {
                             </button>
 
                             <button
+                                onClick={() => {
+                                    navigate('/admin/event-attendees');
+                                }}
+                                className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
+                            >
+                                Event Attendees
+                            </button>
+
+                            <button
                                 onClick={() => {navigate('/admin/manage-links')}}
                                 className="text-left w-full font-silkscreen text-[1.25rem] dashboard-link py-[12px] px-0"
                             >

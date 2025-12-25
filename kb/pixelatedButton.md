@@ -48,13 +48,27 @@ import PixelatedButton from "./components/PixelatedButton";
 />
 ````
 
+### Button (Action) Example
 
+Use `PixelatedButton` without `to` when you want custom click behavior.
+
+```tsx
+<PixelatedButton
+  inactive="/buttons/register/inactive.png"
+  hover="/buttons/register/hover.png"
+  clicked="/buttons/register/click.png"
+  onClick={() => {
+    console.log("Button clicked");
+  }}
+/>
+```
 
 ## Props
 
 | Prop        | Type     | Required | Description                                          |
 | ----------- | -------- | -------- | ---------------------------------------------------- |
-| `to`        | `string` | Yes      | Route path the button navigates to                   |
+| `to`        | `string` | No       | Route path the button navigates to (internal navigation via React Router) |
+| `onClick`   | `() => void` | No  | Click handler when no `to` prop is provided |
 | `inactive`  | `string` | Yes      | Image shown in the default (inactive) state          |
 | `hover`     | `string` | Yes      | Image shown when the button is hovered               |
 | `clicked`   | `string` | Yes      | Image shown while the button is actively clicked     |
@@ -114,6 +128,18 @@ Avoid using this component when:
 
 ## Accessibility Notes
 
-* Uses a semantic `<Link>` for navigation
+* If `to` is provided, the button renders as a React Router `<Link>`
+* If `to` is omitted, the button renders as a non-semantic wrapper and requires `onClick`
 * Provide a meaningful `alt` value when the button conveys important action
 * Keyboard focus styles are not included by default and should be added if needed
+
+## Important Notes
+
+* Either `to` **or** `onClick` should be provided — not both
+* External URLs should be handled manually (e.g. `window.open`) via `onClick`
+* All images must have identical dimensions to avoid visual artifacts
+
+## Known Limitations
+
+* Keyboard activation (Enter / Space) is not handled by default
+* Screen reader semantics are limited when used without `to`
