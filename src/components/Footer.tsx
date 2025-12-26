@@ -80,6 +80,15 @@ const Footer = () => {
             </Link>
           )}
 
+          {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
+            <Link
+              to="/terms"
+              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
+            >
+              TERMS AND CONDITIONS
+            </Link>
+          )}
+
           {/* Social Icons */}
           <SocialLinks className="gap-4 mt-12" />
 

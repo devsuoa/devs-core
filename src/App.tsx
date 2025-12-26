@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import MarketingPortal from "./pages/admin/MarketingPortal";
 import ManageLinks from "./pages/admin/ManageLinks";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
@@ -68,6 +69,7 @@ function App() {
 
           {/* Utility pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/404" element={<PageNotFound />} />
           <Route path="*" element={<PageNotFound />} />
 

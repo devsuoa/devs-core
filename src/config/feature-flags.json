@@ -8,6 +8,10 @@
         "value": true
     },
     {
+        "name": "terms_and_conditions_page_is_enabled",
+        "value": true
+    },
+    {
         "name": "resources_page_is_enabled",
         "value": false
     },
