@@ -40,7 +40,7 @@ const Home: React.FC = () => {
               She also has a knack for not knowing how to drive, with a record of 4 flat tires in the past year.
             </p>
             <PixelatedButton
-              to="/join-us"
+              to="/join"
               inactive="./buttons/join/join_us_inactive.png"
               hover="./buttons/join/join_us_hover.png"
               clicked="./buttons/join/join_us_click.png"
@@ -190,7 +190,7 @@ const Home: React.FC = () => {
             {/* Button */}
             <div className="mt-10">
               <PixelatedButton
-                to="/join-us"
+                to="/join"
                 inactive="/buttons/join/join_us_inactive.png"
                 hover="/buttons/join/join_us_hover.png"
                 clicked="/buttons/join/join_us_click.png"

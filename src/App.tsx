@@ -13,14 +13,16 @@ import ManageLinks from "./pages/admin/ManageLinks";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PageNotFound from "./pages/PageNotFound";
+import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/admin/ManageEvents";
 import Team from "./pages/Team";
-import TaskTracker from "./pages/admin/TaskTracker";
 import Pb from "./pages/hidden/Pb";
+import MemberRegistry from "./pages/admin/MemberRegistry";
 import About from "./pages/About";
 import EventsDashboard from "./pages/admin/EventsDashboard";
+import TaskTracker from "./pages/admin/TaskTracker";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -51,6 +53,7 @@ function App() {
         <Routes>
           {/* Main pages */}
           <Route path="/" element={<Construction />} />
+          <Route path="/join" element={<Signup />} />
           <Route path="/home" element={<Home />} />
           <Route path="/links" element={<Links />} />
           <Route path="/events" element={<Events />} />
@@ -64,6 +67,7 @@ function App() {
           <Route path="/admin/marketing-request" element={<MarketingPortal />} />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/admin/manage-events" element={<ManageEvents />} />
+          <Route path="/admin/members" element={<MemberRegistry />} />
           <Route path="/admin/tasks" element={<TaskTracker />} />
           <Route path="/admin/event-attendees" element={<EventsDashboard />} />
 

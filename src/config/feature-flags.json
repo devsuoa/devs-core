@@ -48,6 +48,10 @@
         "value": true
     },
     {
+        "name": "sign_up_page_is_enabled",
+        "value": true
+    },
+    {
         "name": "pb_page_is_enabled",
         "value": true
     }

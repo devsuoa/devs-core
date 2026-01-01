@@ -205,6 +205,102 @@ html {
   }
 }
 
+@media screen and (max-width: 1080px){
+  .sign-up-container {
+    width: 75vw;
+    max-width: 50rem;
+    height: auto;
+    padding: 2.5rem;
+    padding-top: 3.5rem;
+    border-width: 1px;
+    border-color: #6e80da;
+    border-radius: 1rem;
+
+  }
+  .sign-up-form {
+    gap: 2.5rem;
+    display: grid;
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    grid-template-columns: 1fr !important;
+    font-size: 0.8rem;
+  }  
+
+   .sign-up-col-span-large,  .sign-up-col-span-medium{
+    grid-column: span 1 !important;
+  }
+
+  .sign-up-title {
+    margin: 0rem 1rem;
+    margin-bottom: 3rem;
+    font-size: 0.8rem !important;
+  }
+
+  .sign-up-form label {
+    top: -1.5rem;
+  }
+
+  .sign-up-gender {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (min-width: 1081px){
+  .sign-up-container {
+    width: 75vw;
+    max-width: 75rem;
+    height: auto;
+    padding: 5rem;   
+    border-width: 1px;
+    border-color: #6e80da;
+    border-radius: 1rem;
+  }
+
+  .sign-up-form {
+    gap: 2rem;
+    display: grid;
+    padding-top: 2.5rem;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+  }  
+
+  .sign-up-gender {
+    margin-top: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .sign-up-title {
+    padding: 0 13rem;
+    margin: 3rem 0rem;
+    font-size: 1rem !important;
+  }
+  
+  .sign-up-col-span-large {
+    grid-column: span 4 / span 4;
+  }
+  .sign-up-col-span-medium {
+    grid-column: span 2 / span 2;
+  }
+
+  .sign-up-col-span-submit{
+    grid-column: span 8 / span 8;
+  }
+
+  .sign-up-submit {
+    grid-row-start: 5;
+  }
+
+  .sign-up-form label {
+    bottom: 0.3rem;
+  }
+}
+
+.glow label, .glow input, .glow input, .glow select, .glow button, .glow {
+  box-shadow: 0px 0px 100px 20px rgba(110,128,218,0.1), inset 2px -2px 172px -60px rgba(110,128,218,0.1);
+  color: white;
+  text-shadow: 0 0 1px #6e80da, 0 0 1px #6e80da, 0 0 1px #6e80da;
+}
+
 .perspective {
   perspective: 1200px;
 }
