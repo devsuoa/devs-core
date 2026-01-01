@@ -49,7 +49,7 @@
     },
     {
         "name": "sign_up_page_is_enabled",
-        "value": true
+        "value": false
     },
     {
         "name": "pb_page_is_enabled",
