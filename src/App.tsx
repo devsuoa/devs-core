@@ -23,6 +23,7 @@ import MemberRegistry from "./pages/admin/MemberRegistry";
 import About from "./pages/About";
 import EventsDashboard from "./pages/admin/EventsDashboard";
 import TaskTracker from "./pages/admin/TaskTracker";
+import QRCode from "./pages/QRCode";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -72,6 +73,7 @@ function App() {
           <Route path="/admin/event-attendees" element={<EventsDashboard />} />
 
           {/* Utility pages */}
+          <Route path="/qr-code" element={<QRCode />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/404" element={<PageNotFound />} />

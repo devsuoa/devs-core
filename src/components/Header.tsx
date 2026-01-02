@@ -61,7 +61,7 @@ const Header = () => {
           <div className="hidden lg:block">
             {isFeatureEnabled("join_us_page_is_enabled") && (
               <PixelatedButton
-                to="/join-us"
+                to="/join"
                 inactive="./buttons/join/join_us_inactive.png"
                 hover="./buttons/join/join_us_hover.png"
                 clicked="./buttons/join/join_us_click.png"
@@ -124,7 +124,7 @@ const Header = () => {
             {isFeatureEnabled("join_us_page_is_enabled") && (
               <div className="pt-8">
                 <PixelatedButton
-                  to="/join-us"
+                  to="/join"
                   inactive="./buttons/join/join_us_inactive.png"
                   hover="./buttons/join/join_us_hover.png"
                   clicked="./buttons/join/join_us_click.png"

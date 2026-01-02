@@ -19,12 +19,12 @@ const About: React.FC = () => {
     const trackRef = useRef<HTMLDivElement | null>(null);
     useLayoutEffect(() => {
         if (!containerRef.current || !trackRef.current) return;
-    
+
         cleanupRef.current = initAboutHorizontalScroll(
             containerRef.current,
             trackRef.current
         );
-    
+
         const onResize = () => {
             cleanupRef.current?.();
             cleanupRef.current = initAboutHorizontalScroll(
@@ -183,7 +183,7 @@ const About: React.FC = () => {
 
                         <div className="flex flex-row items-center justify-center gap-x-4 my-12">
                             <PixelatedButton
-                                to="/join-us"
+                                to="/join"
                                 inactive="/buttons/join/join_us_inactive.png"
                                 hover="/buttons/join/join_us_hover.png"
                                 clicked="/buttons/join/join_us_click.png"

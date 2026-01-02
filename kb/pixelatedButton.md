@@ -40,7 +40,7 @@ A hidden spacer image is used to lock the button’s layout height.
 import PixelatedButton from "./components/PixelatedButton";
 
 <PixelatedButton
-  to="/join-us"
+  to="/join"
   inactive="/buttons/join/join_us_inactive.png"
   hover="/buttons/join/join_us_hover.png"
   clicked="/buttons/join/join_us_click.png"
