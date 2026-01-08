@@ -19,6 +19,7 @@ import Events from "./pages/Events";
 import ManageEvents from "./pages/admin/ManageEvents";
 import Team from "./pages/Team";
 import Pb from "./pages/hidden/Pb";
+import Landing from "./pages/Landing";
 import MemberRegistry from "./pages/admin/MemberRegistry";
 import About from "./pages/About";
 import EventsDashboard from "./pages/admin/EventsDashboard";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/links" element={<Links />} />
           <Route path="/events" element={<Events />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/landing" element={<Landing />} />
           <Route path="/about" element={<About />} />
 
           {/* Admin pages */}

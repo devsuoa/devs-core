@@ -54,5 +54,9 @@
     {
         "name": "pb_page_is_enabled",
         "value": true
+    },
+    {
+        "name": "landing_page_is_enabled",
+        "value": false
     }
 ]
