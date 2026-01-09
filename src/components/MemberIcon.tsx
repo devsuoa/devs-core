@@ -91,14 +91,14 @@ export const MemberIcon: React.FC<MemberIconProps> = ({
         )}
         </div>
 
-        <div className="flex text-center ml-[1rem]">
+        <div className="flex text-center">
           <p className="text-m font-normal text-white font-rethink">
             {name}
           </p>
         </div>
 
         {role && (
-          <div className="flex text-center ml-[1rem] p-0">
+          <div className="flex text-center p-0">
           <p className="text-sm font-normal text-white font-rethink">
             {role}
           </p>
