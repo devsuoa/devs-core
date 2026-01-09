@@ -5,89 +5,61 @@ import { isFeatureEnabled } from "../lib/featureFlags";
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-t from-black/50 to-transparent text-white py-8">
-      <div className="mx-auto grid grid-cols-3 gap-1 px-20 max-[768px]:grid-cols-1">
+      {/* Mobile Layout */}
+      <div className="md:hidden flex flex-col items-center px-6">
+
+        {/* Navigation Links - Centered */}
+        <FooterLinks
+          divClassName="flex flex-col items-center gap-2 mb-8"
+          linkClassName="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
+        />
+
+        {/* Contact Section - Centered */}
+        <div className="flex flex-col items-center gap-3 mb-12">
+          <p className="font-silkscreen text-sm uppercase tracking-wide">
+            CONTACT US
+          </p>
+          <a
+            href="mailto:contact@devsuoa.com"
+            className="font-silkscreen text-xs no-underline text-[#ffffff] transition-all duration-300 ease-in-out hover:text-[#b1b1b1]"
+          >
+            contact@devsuoa.com
+          </a>
+        </div>
+
+        {/* Bottom Section - Social Links & Gameboy Buttons */}
+        <div className="w-full flex items-end justify-between px-4">
+          {/* Social Icons - Bottom Left */}
+          <SocialLinks className="gap-4" />
+
+          {/* Gameboy Buttons - Bottom Right */}
+          <div className="flex items-center gap-4">
+            <div className="relative w-20 h-20">
+              <img
+                src="/footer/gameboy_buttons.png"
+                alt="gameboy buttons"
+                className="w-full h-full pixelated"
+              />
+            </div>
+            <div className="relative w-[3.375rem] h-[3.125rem]">
+              <img
+                src="/footer/gameboy_button.png"
+                alt="gameboy button"
+                className="w-full h-full pixelated"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:grid mx-auto grid-cols-3 gap-1 px-20">
         {/* Left Section - Navigation Links */}
         <div className="flex flex-col gap-0">
-          {isFeatureEnabled('home_page_is_enabled') && (
-            <Link
-              to="/"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              HOME
-            </Link>
-          )}
-
-          {isFeatureEnabled('links_page_is_enabled') && (
-            <Link
-              to="/links"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              LINKS
-            </Link>
-          )}
-
-          {isFeatureEnabled('about_us_page_is_enabled') && (
-            <Link
-              to="/about"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              ABOUT US
-            </Link>
-          )}
-
-          {isFeatureEnabled('team_page_is_enabled') && (
-            <Link
-              to="/team"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              MEET OUR TEAM
-            </Link>
-          )}
-
-          {isFeatureEnabled('sponsors_page_is_enabled') && (
-            <Link
-              to="/sponsors"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              SPONSORS
-            </Link>
-          )}
-
-          {isFeatureEnabled('events_page_is_enabled') && (
-            <Link
-              to="/events"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              EVENTS
-            </Link>
-          )}
-
-          {isFeatureEnabled('resources_page_is_enabled') && (
-            <Link
-              to="/resources"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              RESOURCES
-            </Link>
-          )}
-
-          {isFeatureEnabled('privacy_policy_page_is_enabled') && (
-            <Link
-              to="/privacy-policy"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              PRIVACY POLICY
-            </Link>
-          )}
-
-          {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
-            <Link
-              to="/terms"
-              className="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-            >
-              TERMS AND CONDITIONS
-            </Link>
-          )}
+          <FooterLinks
+            divClassName="flex flex-col gap-0"
+            linkClassName="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
+          />
 
           {/* Social Icons */}
           <SocialLinks className="gap-4 mt-12" />
@@ -111,7 +83,6 @@ const Footer = () => {
           >
             contact@devsuoa.com
           </a>
-
           {/* TODO: Implement newsletter subscription system */}
           {/* <div className="mt-10">
             <form
@@ -171,6 +142,72 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+  );
+};
+
+const FooterLinks = ({
+  divClassName,
+  linkClassName
+}: {
+  divClassName: string;
+  linkClassName: string;
+}) => {
+  return (
+    <div className={divClassName}>
+      {isFeatureEnabled('home_page_is_enabled') && (
+        <Link to="/" className={linkClassName}>
+          HOME
+        </Link>
+      )}
+
+      {isFeatureEnabled('links_page_is_enabled') && (
+        <Link to="/links" className={linkClassName}>
+          LINKS
+        </Link>
+      )}
+
+      {isFeatureEnabled('about_us_page_is_enabled') && (
+        <Link to="/about" className={linkClassName}>
+          ABOUT US
+        </Link>
+      )}
+
+      {isFeatureEnabled('team_page_is_enabled') && (
+        <Link to="/team" className={linkClassName}>
+          MEET OUR TEAM
+        </Link>
+      )}
+
+      {isFeatureEnabled('sponsors_page_is_enabled') && (
+        <Link to="/sponsors" className={linkClassName}>
+          SPONSORS
+        </Link>
+      )}
+
+      {isFeatureEnabled('events_page_is_enabled') && (
+        <Link to="/events" className={linkClassName}>
+          EVENTS
+        </Link>
+      )}
+
+      {isFeatureEnabled('resources_page_is_enabled') && (
+        <Link to="/resources" className={linkClassName}>
+          RESOURCES
+        </Link>
+      )}
+
+      {isFeatureEnabled('privacy_policy_page_is_enabled') && (
+        <Link to="/privacy-policy" className={linkClassName}>
+          PRIVACY POLICY
+        </Link>
+      )}
+
+      {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
+        <Link to="/terms" className={linkClassName}>
+          TERMS AND CONDITIONS
+        </Link>
+      )}
+    </div>
   );
 };
 
