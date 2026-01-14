@@ -32,7 +32,7 @@ export default function TaskCard({ task }: { task: Task }) {
         </span>
       </div>
 
-      <h3 className="mt-2 font-silkscreen text-white text-sm uppercase">
+      <h3 className="mt-2 font-rethink text-white text-sm uppercase">
         {task.name}
       </h3>
 
