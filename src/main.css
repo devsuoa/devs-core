@@ -153,11 +153,11 @@ html {
   gap: 1rem;
 }
 
-.social-media i{
+.social-media i {
   color: white;
 }
 
-.social-media i:hover{
+.social-media i:hover {
   color: #d1d1d1;
 }
 
@@ -188,7 +188,6 @@ html {
     color: #d1d1d1;
     text-decoration: underline;
   }
-
 }
 
 .mobile .social-media img,
@@ -205,7 +204,7 @@ html {
   }
 }
 
-@media screen and (max-width: 1080px){
+@media screen and (max-width: 1080px) {
   .sign-up-container {
     width: 75vw;
     max-width: 50rem;
@@ -215,7 +214,6 @@ html {
     border-width: 1px;
     border-color: #6e80da;
     border-radius: 1rem;
-
   }
   .sign-up-form {
     gap: 2.5rem;
@@ -223,9 +221,10 @@ html {
     grid-template-rows: repeat(10, minmax(0, 1fr));
     grid-template-columns: 1fr !important;
     font-size: 0.8rem;
-  }  
+  }
 
-   .sign-up-col-span-large,  .sign-up-col-span-medium{
+  .sign-up-col-span-large,
+  .sign-up-col-span-medium {
     grid-column: span 1 !important;
   }
 
@@ -245,12 +244,12 @@ html {
   }
 }
 
-@media screen and (min-width: 1081px){
+@media screen and (min-width: 1081px) {
   .sign-up-container {
     width: 75vw;
     max-width: 75rem;
     height: auto;
-    padding: 5rem;   
+    padding: 5rem;
     border-width: 1px;
     border-color: #6e80da;
     border-radius: 1rem;
@@ -262,7 +261,7 @@ html {
     padding-top: 2.5rem;
     grid-template-columns: repeat(8, minmax(0, 1fr));
     grid-template-rows: repeat(6, minmax(0, 1fr));
-  }  
+  }
 
   .sign-up-gender {
     margin-top: 0.75rem;
@@ -274,7 +273,7 @@ html {
     margin: 3rem 0rem;
     font-size: 1rem !important;
   }
-  
+
   .sign-up-col-span-large {
     grid-column: span 4 / span 4;
   }
@@ -282,7 +281,7 @@ html {
     grid-column: span 2 / span 2;
   }
 
-  .sign-up-col-span-submit{
+  .sign-up-col-span-submit {
     grid-column: span 8 / span 8;
   }
 
@@ -295,8 +294,14 @@ html {
   }
 }
 
-.glow label, .glow input, .glow input, .glow select, .glow button, .glow {
-  box-shadow: 0px 0px 100px 20px rgba(110,128,218,0.1), inset 2px -2px 172px -60px rgba(110,128,218,0.1);
+.glow label,
+.glow input,
+.glow input,
+.glow select,
+.glow button,
+.glow {
+  box-shadow: 0px 0px 100px 20px rgba(110, 128, 218, 0.1),
+    inset 2px -2px 172px -60px rgba(110, 128, 218, 0.1);
   color: white;
   text-shadow: 0 0 1px #6e80da, 0 0 1px #6e80da, 0 0 1px #6e80da;
 }
@@ -339,4 +344,79 @@ html {
 
 .sponsor-track {
   animation: sponsor-scroll 25s linear infinite;
+}
+
+.pagination-container {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination-page,
+.pagination-break {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.pagination-previous,
+.pagination-next {
+  width: 2rem;
+  height: 2.5rem;
+}
+
+.pagination-link,
+.pagination-previous-link,
+.pagination-next-link,
+.pagination-break-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  user-select: none;
+}
+
+.pagination-link:hover,
+.pagination-previous-link:hover,
+.pagination-next-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.pagination-active .pagination-link {
+  background-color: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  user-select: none;
+}
+
+.pagination-disabled .pagination-link,
+.pagination-disabled .pagination-previous-link,
+.pagination-disabled .pagination-next-link {
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  user-select: none;
+}
+
+.pagination-first-last-btn {
+  width: 2rem;
+  height: 2.5rem;
+  color: white;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+}
+
+.pagination-first-last-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.pagination-first-last-btn:disabled {
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
 }

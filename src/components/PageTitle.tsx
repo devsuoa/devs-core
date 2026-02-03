@@ -41,17 +41,19 @@ export const PageTitle: React.FC<PageTitleProps> = ({
 }) => {
   return (
     <div className={`flex flex-col justify-center px-[8vw] py-12 mx-auto ${className}`}>
-      <div className="flex items-center gap-4 mb-16">
+      <div className="flex items-center gap-1 md:gap-4 mb-8 md:mb-16">
         {image && (
           <img
             src={image}
             alt={image ? imageAlt : undefined}
-            className="max-h-[100px] max-w-[100px] shrink-0 object-contain"
+            className="max-h-[50px] max-w-[50px] md:max-h-[100px] md:max-w-[100px] shrink-0 object-contain"
           />
         )}
 
         <div className="flex items-center ml-[1rem]">
-          <p className="text-[2rem] font-normal text-white font-silkscreen">{"> " + title.toUpperCase()}</p>
+          <p className="text-[1rem] md:text-[2rem] font-normal text-white font-silkscreen">
+            {"> " + title.toUpperCase()}
+          </p>
         </div>
       </div>
 
