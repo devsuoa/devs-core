@@ -87,7 +87,6 @@ const EventsCard = ({
   title,
   image,
   imageAlt,
-  tag,
   date,
   time,
   location,
@@ -369,5 +368,6 @@ const EventsCard = ({
     </div>
   );
 };
+
 
 export default EventsCard;
