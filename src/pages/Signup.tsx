@@ -15,7 +15,6 @@ import { DegreeOrMajor } from "../lib/degreeData";
 import { ToastContainer, Zoom, toast } from "react-toastify";
 import { SocialLinks } from "../components/SocialLinks";
 import { submitSignupForm } from "../lib/signupController";
-import CookieDisclaimer from "../components/CookiesDisclaimer";
 
 export type DegreeBlock = {
   degree: DegreeOrMajor | null;
@@ -219,8 +218,6 @@ const Signup: React.FC = () => {
         transition={Zoom}
       />
       <Header />
-
-      <CookieDisclaimer />
 
       <PageTitle
         title="Become a DEVS Member"

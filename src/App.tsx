@@ -5,6 +5,7 @@ import { posthog, isInitialized } from "./lib/posthog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import CookieDisclaimer from "./components/CookiesDisclaimer";
 import Construction from "./pages/Construction";
 import Links from "./pages/Links";
 import AdminSignup from "./pages/admin/AdminSignup";
@@ -66,6 +67,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />
+      <CookieDisclaimer />
       <main className="min-h-screen">
         <Routes>
           {/* Main pages */}
