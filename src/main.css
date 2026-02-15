@@ -227,15 +227,24 @@ html {
   }
   .sign-up-form {
     gap: 2.5rem;
-    display: grid;
-    grid-template-rows: repeat(10, minmax(0, 1fr));
-    grid-template-columns: 1fr !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-size: 0.8rem;
   }
 
   .sign-up-col-span-large,
-  .sign-up-col-span-medium {
-    grid-column: span 1 !important;
+  .sign-up-col-span-medium,
+  .sign-up-gender {
+    width: 100%;
+    max-width: 18rem;
+  }
+
+  .sign-up-col-span-submit {
+    width: 100%;
+    max-width: 18rem;
+    display: flex;
+    justify-content: center;
   }
 
   .sign-up-title {
@@ -251,6 +260,10 @@ html {
   .sign-up-gender {
     font-size: 0.8rem;
     white-space: nowrap;
+  }
+
+  .sign-up-gender .flex {
+    justify-content: center;
   }
 }
 
