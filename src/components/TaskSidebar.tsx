@@ -91,7 +91,14 @@ export default function TaskSidebar({
   };
 
   return (
-    <aside className="fixed right-0 top-0 w-[420px] h-full bg-black border-l-2 border-[#6E80DA] p-6 z-50 overflow-y-auto">
+    <>
+      {/* Mobile backdrop - tap to close */}
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/60 z-40 sm:hidden"
+        aria-hidden="true"
+      />
+      <aside className="fixed right-0 top-0 w-full sm:w-[420px] max-w-full h-full bg-black border-l-2 border-[#6E80DA] p-4 sm:p-6 z-50 overflow-y-auto shadow-lg">
       <button onClick={onClose} className="text-white/70 mb-4">
         ← Close
       </button>
@@ -216,5 +223,6 @@ export default function TaskSidebar({
         </>
       )}
     </aside>
+    </>
   );
 }

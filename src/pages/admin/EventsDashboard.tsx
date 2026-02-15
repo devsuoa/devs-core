@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { PageTitle } from "../../components/PageTitle";
@@ -6,6 +7,7 @@ import { useAdminDashboard } from "../../lib/adminDashboardController";
 import { formatNZDate, memberFullName, useEventAttendees, downloadEventAttendeesCSV } from "../../lib/eventsDashboardController";
 
 const EventsDashboard: React.FC = () => {
+    const navigate = useNavigate();
     const { loading: authLoading, authorized } = useAdminDashboard();
     const { grouped, loading, error, reload } = useEventAttendees();
 
@@ -59,14 +61,24 @@ const EventsDashboard: React.FC = () => {
                 className="mt-[5vh]"
             />
 
-            <div className="flex justify-center px-4 py-12 mb-[10vh] min-h-[80vh]">
-                <div className="w-[70vw] min-w-[650px] max-w-[1100px]">
-                    <div className="pixel-panel p-8 mb-6">
-                        <div className="flex items-center justify-between gap-4 flex-wrap">
-                            <div className="flex flex-col gap-2">
-                                <p className="font-silkscreen text-white text-lg">Search</p>
+            <div className="flex justify-center px-4 sm:px-6 py-8 sm:py-12 mb-8 sm:mb-[10vh] min-h-[80vh]">
+                <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[70vw] lg:min-w-[650px] lg:max-w-[1100px] min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                        <button
+                            type="button"
+                            onClick={() => navigate("/admin/dashboard")}
+                            className="text-left font-silkscreen text-sm sm:text-base text-white/80 hover:text-white dashboard-link py-2 touch-manipulation w-fit"
+                        >
+                            ← Back to dashboard
+                        </button>
+                    </div>
+
+                    <div className="pixel-panel p-6 sm:p-8 mb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                            <div className="flex flex-col gap-2 flex-1 min-w-0">
+                                <p className="font-silkscreen text-white text-base sm:text-lg">Search</p>
                                 <input
-                                    className="pixel-input w-full max-w-full font-rethink"
+                                    className="pixel-input w-full font-rethink"
                                     placeholder="Search by name, email, UPI, student ID, event..."
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
@@ -74,7 +86,7 @@ const EventsDashboard: React.FC = () => {
                             </div>
 
                             <button
-                                className="pixel-button font-silkscreen"
+                                className="pixel-button font-silkscreen min-h-[44px] touch-manipulation shrink-0"
                                 onClick={reload}
                                 type="button"
                             >
@@ -84,24 +96,24 @@ const EventsDashboard: React.FC = () => {
                     </div>
 
                     {error && (
-                        <div className="pixel-panel mb-6 p-4">
+                        <div className="pixel-panel mb-6 p-4 sm:p-5">
                             <p className="font-pixelify text-red-400 text-xs">{error}</p>
                         </div>
                     )}
 
                     <div className="flex flex-col gap-6">
                         {filtered.length === 0 ? (
-                            <div className="pixel-panel p-10">
+                            <div className="pixel-panel p-6 sm:p-10">
                                 <p className="font-pixelify text-white text-sm">
                                     No attendees found.
                                 </p>
                             </div>
                         ) : (
                             filtered.map((ev) => (
-                                <div key={ev.event_id} className="pixel-panel p-8">
-                                    <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
-                                        <div>
-                                            <p className="font-silkscreen text-white text-[1.25rem]">
+                                <div key={ev.event_id} className="pixel-panel p-6 sm:p-8">
+                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
+                                        <div className="min-w-0">
+                                            <p className="font-silkscreen text-white text-lg sm:text-[1.25rem]">
                                                 {ev.title}
                                             </p>
                                             <p className="font-pixelify text-gray-400 text-xs mt-1">
@@ -110,7 +122,7 @@ const EventsDashboard: React.FC = () => {
                                             </p>
                                         </div>
                                         <button
-                                            className="pixel-button text-xs font-silkscreen"
+                                            className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
                                             onClick={() =>
                                                 downloadEventAttendeesCSV(
                                                     ev.title,
@@ -121,10 +133,36 @@ const EventsDashboard: React.FC = () => {
                                         >
                                             Download CSV
                                         </button>
-
                                     </div>
 
-                                    <div className="overflow-x-auto">
+                                    {/* Mobile: card layout */}
+                                    <div className="flex flex-col gap-3 md:hidden">
+                                        {ev.attendees.map((a) => (
+                                            <div
+                                                key={`${a.event_id}::${a.member_email}`}
+                                                className="rounded-lg border border-white/20 bg-white/5 p-4"
+                                            >
+                                                <p className="font-silkscreen text-white text-sm">
+                                                    {memberFullName(a)}
+                                                </p>
+                                                <p className="font-pixelify text-gray-400 text-xs mt-1 break-all">
+                                                    {a.member_email}
+                                                </p>
+                                                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 font-pixelify text-xs text-white/80">
+                                                    <span>ID: {a.member_student_id ?? "—"}</span>
+                                                    <span>UPI: {a.member_upi ?? "—"}</span>
+                                                </div>
+                                                {a.dietary_requirements && (
+                                                    <p className="font-pixelify text-xs text-white/70 mt-2">
+                                                        Diet: {a.dietary_requirements}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop: table layout */}
+                                    <div className="hidden md:block overflow-x-auto">
                                         <table className="w-full border-collapse">
                                             <thead>
                                                 <tr className="border-b border-white/20">

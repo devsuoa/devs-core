@@ -32,19 +32,19 @@ const AdminLogin: React.FC = () => {
         title="Admin Login"
         className='mt-[5vh]'
       />
-      <div className="flex items-center justify-center px-4 py-12">
-        <div className="w-[50vw] max-w-[900px] min-w-[650px]">
-          <div className="pixel-panel font-pixelify relative" style={{ padding: '48px 40px' }}>
+      <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+        <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
+          <div className="pixel-panel font-pixelify relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
             {error && (
-              <div className="mb-[5vh] p-4 font-pixelify text-red-400 text-xs">
+              <div className="mb-6 sm:mb-[5vh] p-3 sm:p-4 font-pixelify text-red-400 text-xs">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2" style={{ columnGap: '80px', marginBottom: '56px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-14 lg:gap-20 mb-8 sm:mb-12 lg:mb-14">
                 <div>
-                  <label htmlFor="email" className="font-pixelify block" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="email" className="font-pixelify block mb-4">
                     email address<span className="text-red-400">*</span>
                   </label>
                   <input
@@ -60,7 +60,7 @@ const AdminLogin: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="password" className="pixel-label font-pixelify block mb-4">
                     password<span className="text-red-400">*</span>
                   </label>
                   <input
@@ -77,11 +77,11 @@ const AdminLogin: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-start mt-8">
+              <div className="flex justify-start mt-6 sm:mt-8">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="pixel-button font-silkscreen"
+                  className="pixel-button font-silkscreen min-h-[44px] min-w-[120px] touch-manipulation"
                 >
                   {loading ? 'Logging in...' : 'Submit'}
                 </button>

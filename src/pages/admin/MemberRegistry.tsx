@@ -28,19 +28,21 @@ const PieCard = ({
   title: string;
   data: { name: string; value: number }[];
 }) => (
-  <div className="border border-white/20 rounded-xl p-6">
-    <p className="font-silkscreen text-white text-lg mb-4">
+  <div className="border border-white/20 rounded-xl p-4 sm:p-6 min-w-0">
+    <p className="font-silkscreen text-white text-base sm:text-lg mb-4">
       {title}
     </p>
-    <div className="w-full h-[260px]">
-      <ResponsiveContainer>
-        <PieChart>
+    <div className="w-full h-[220px] sm:h-[280px] min-h-[180px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
           <Pie
             data={data}
             dataKey="value"
             nameKey="name"
-            outerRadius={90}
-            label
+            outerRadius="75%"
+            cx="50%"
+            cy="50%"
+            label={({ name, percent }) => (percent != null && percent >= 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : null)}
           >
             {data.map((_, i) => (
               <Cell
@@ -103,11 +105,13 @@ const MemberRegistry: React.FC = () => {
     return (
       <>
         <Header />
-        <div className="flex items-center justify-center mt-[20vh]">
+        <PageTitle image="/theme/title_icon.png" title="Member Registry" className="mt-[5vh]" />
+        <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-silkscreen text-[1.25rem] text-white">
             Loading...
           </p>
         </div>
+        <Footer />
       </>
     );
   }
@@ -126,14 +130,14 @@ const MemberRegistry: React.FC = () => {
         className="mt-[5vh]"
       />
 
-      <div className="px-[6vw] pb-24 text-white">
+      <div className="px-4 sm:px-6 lg:px-[6vw] pb-12 sm:pb-24 text-white max-w-full min-w-0">
         {/* TOTAL */}
-        <p className="font-silkscreen text-2xl mb-6">
+        <p className="font-silkscreen text-xl sm:text-2xl mb-6">
           Total Members: {members.length}
         </p>
 
         {/* CHARTS */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <PieCard
             title="Universities"
             data={groupBy(members, "university")}
@@ -155,35 +159,36 @@ const MemberRegistry: React.FC = () => {
         {/* SEARCH */}
         <input
           placeholder="Search members..."
-          className="mb-6 w-full p-3 rounded-lg bg-transparent border border-white/30 outline-none"
+          className="pixel-input font-pixelify mb-6 w-full min-h-[44px] touch-manipulation"
+          value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         {/* LIST */}
-        <div className="border border-white/20 rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="border border-white/20 rounded-xl overflow-hidden overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead className="bg-white/10">
               <tr>
-                <th className="p-3 text-left">Name</th>
-                <th>Email</th>
-                <th>University</th>
-                <th>Degree</th>
-                <th>Majors</th>
+                <th className="p-3 text-left font-silkscreen">Name</th>
+                <th className="p-3 text-left sm:text-center font-silkscreen">Email</th>
+                <th className="p-3 text-left sm:text-center font-silkscreen">University</th>
+                <th className="p-3 text-left sm:text-center font-silkscreen">Degree</th>
+                <th className="p-3 text-left sm:text-center font-silkscreen">Majors</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((m, idx) => (
                 <tr
                   key={`${m.student_id}-${idx}`}
-                  className="border-t border-white/10 text-center"
+                  className="border-t border-white/10"
                 >
-                  <td className="p-3 text-left">
+                  <td className="p-3 text-left font-pixelify">
                     {m.first_name} {m.last_name}
                   </td>
-                  <td>{m.email}</td>
-                  <td>{m.university}</td>
-                  <td>{m.degrees.join(", ")}</td>
-                  <td>
+                  <td className="p-3 text-left sm:text-center font-pixelify break-all">{m.email}</td>
+                  <td className="p-3 text-left sm:text-center font-pixelify">{m.university}</td>
+                  <td className="p-3 text-left sm:text-center font-pixelify">{m.degrees.join(", ")}</td>
+                  <td className="p-3 text-left sm:text-center font-pixelify">
                     {m.majors?.length
                       ? m.majors.join(", ")
                       : "—"}

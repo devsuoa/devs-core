@@ -127,7 +127,7 @@ export default function TaskTracker() {
   return (
     <>
       <Header />
-      <main className="px-[8vw] py-12 min-h-[90vh]">
+      <main className="px-4 sm:px-6 md:px-[8vw] py-6 md:py-12 min-h-[90vh]">
         <PageTitle
           title="Task Tracker"
           subtext="Track your tasks and their progress. You can only see tasks assigned to your team."
@@ -135,13 +135,13 @@ export default function TaskTracker() {
         />
 
         {/* ACTION BAR */}
-        <div className="mt-6 mb-8 flex items-center justify-between">
+        <div className="mt-4 md:mt-6 mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <button
             onClick={() => {
               setActiveTask(null);
               setSidebarMode("create");
             }}
-            className="px-6 py-2 border-2 border-[#6E80DA] rounded text-white font-silkscreen"
+            className="px-4 sm:px-6 py-2 border-2 border-[#6E80DA] rounded text-white font-silkscreen w-full sm:w-auto shrink-0"
           >
             + Add Task
           </button>
@@ -155,7 +155,7 @@ export default function TaskTracker() {
               <button
                 key={v.key}
                 onClick={() => setViewMode(v.key as any)}
-                className={`px-4 py-2 border rounded font-silkscreen ${
+                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 border rounded font-silkscreen text-sm sm:text-base ${
                   viewMode === v.key ? "border-[#6E80DA] text-white" : "border-white/30 text-white/50"
                 }`}
               >
@@ -168,7 +168,7 @@ export default function TaskTracker() {
         {/* BOARD VIEW */}
         {viewMode === "board" && (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-4 gap-8">
+            <div className="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 md:grid md:grid-cols-4 md:gap-8 md:overflow-visible snap-x snap-mandatory">
               {STATUSES.map((status) => (
                 <TaskColumn
                   key={status}

@@ -24,9 +24,11 @@ const ManageLinks: React.FC = () => {
     return (
       <>
         <Header />
-        <div className="flex items-center justify-center mt-[20vh]">
+        <PageTitle image="/theme/title_icon.png" title="Manage Links" className="mt-[5vh]" />
+        <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
+        <Footer />
       </>
     );
   }
@@ -140,18 +142,18 @@ const ManageLinks: React.FC = () => {
         subtext="Add, edit, and manage active links"
         className="mt-[5vh]"
       />
-      <div className="flex items-center justify-center mb-[10vh] px-4 py-12">
-        <div className="w-[50vw] max-w-[900px] min-w-[650px]">
+      <div className="flex items-center justify-center mb-8 sm:mb-[10vh] px-4 sm:px-6 py-8 sm:py-12">
+        <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
           {error && (
-            <div className="pixel-panel font-pixelify mb-4" style={{ padding: '16px 20px' }}>
-              <p className="font-pixelify text-red-400" style={{ fontSize: '10px' }}>
+            <div className="pixel-panel font-pixelify mb-4 p-4 sm:p-5">
+              <p className="font-pixelify text-red-400 text-xs sm:text-[10px]">
                 {error}
               </p>
             </div>
           )}
 
           {!showAddForm && !editingLink && (
-            <div className="mb-6 flex gap-4">
+            <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
                 onClick={() => {
                   setFormData({
@@ -165,7 +167,7 @@ const ManageLinks: React.FC = () => {
                   });
                   setShowAddForm(true);
                 }}
-                className="pixel-button font-silkscreen"
+                className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
               >
                 Add New Link
               </button>
@@ -182,7 +184,7 @@ const ManageLinks: React.FC = () => {
                   });
                   setShowAddForm(true);
                 }}
-                className="pixel-button font-silkscreen"
+                className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
               >
                 Add Spacer
               </button>
@@ -190,28 +192,28 @@ const ManageLinks: React.FC = () => {
           )}
 
           {(showAddForm || editingLink) && (
-            <div className="pixel-panel font-pixelify relative mb-6" style={{ padding: '48px 40px' }}>
-              <h2 className="font-pixelify text-white mb-6" style={{ fontSize: '12px' }}>
+            <div className="pixel-panel font-pixelify relative mb-6 p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
+              <h2 className="font-pixelify text-white mb-6 text-sm sm:text-xs">
                 {editingLink
                   ? (formData.is_spacer ? 'Edit Spacer' : 'Edit Link')
                   : (formData.is_spacer ? 'Add New Spacer' : 'Add New Link')
                 }
               </h2>
               <form onSubmit={editingLink ? handleEditSubmit : handleAddSubmit}>
-                <div style={{ marginBottom: '24px' }}>
-                  <label className="pixel-label font-pixelify flex items-center cursor-pointer mb-4">
+                <div className="mb-6">
+                  <label className="pixel-label font-pixelify flex items-center cursor-pointer gap-2 touch-manipulation">
                     <input
                       type="checkbox"
                       checked={formData.is_spacer || false}
                       onChange={(e) => setFormData({ ...formData, is_spacer: e.target.checked, url: e.target.checked ? '' : formData.url })}
-                      className="mr-2 w-4 h-4"
+                      className="w-4 h-4 min-w-[16px] min-h-[16px]"
                     />
                     <span className="font-pixelify text-xs">This is a spacer/divider</span>
                   </label>
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
-                  <label htmlFor="title" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                <div className="mb-6">
+                  <label htmlFor="title" className="pixel-label font-pixelify block mb-4">
                     {formData.is_spacer ? 'Spacer Title (optional)' : 'Title'}<span className="text-red-400">{formData.is_spacer ? '' : '*'}</span>
                   </label>
                   <input
@@ -227,8 +229,8 @@ const ManageLinks: React.FC = () => {
 
                 {!formData.is_spacer && (
                   <>
-                    <div style={{ marginBottom: '24px' }}>
-                      <label htmlFor="url" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                    <div className="mb-6">
+                      <label htmlFor="url" className="pixel-label font-pixelify block mb-4">
                         URL<span className="text-red-400">*</span>
                       </label>
                       <input
@@ -242,8 +244,8 @@ const ManageLinks: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '24px' }}>
-                      <label htmlFor="custom_icon" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                    <div className="mb-6">
+                      <label htmlFor="custom_icon" className="pixel-label font-pixelify block mb-4">
                         Custom Icon URL (optional)
                       </label>
                       <input
@@ -254,27 +256,27 @@ const ManageLinks: React.FC = () => {
                         className="pixel-input font-pixelify w-full"
                         placeholder="https://example.com/icon.png"
                       />
-                      <p className="font-pixelify text-gray-400 mt-2" style={{ fontSize: '8px' }}>
+                      <p className="font-pixelify text-gray-400 mt-2 text-[10px] sm:text-[8px]">
                         Leave empty to use the website's favicon automatically
                       </p>
                     </div>
                   </>
                 )}
 
-                <div style={{ marginBottom: '24px' }}>
-                  <label className="pixel-label font-pixelify flex items-center cursor-pointer">
+                <div className="mb-6">
+                  <label className="pixel-label font-pixelify flex items-center cursor-pointer gap-2 touch-manipulation">
                     <input
                       type="checkbox"
                       checked={formData.is_active}
                       onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                      className="mr-2 w-4 h-4"
+                      className="w-4 h-4 min-w-[16px] min-h-[16px]"
                     />
                     <span className="font-pixelify text-xs">Active</span>
                   </label>
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
-                  <label htmlFor="active_from" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                <div className="mb-6">
+                  <label htmlFor="active_from" className="pixel-label font-pixelify block mb-4">
                     Active From (optional)
                   </label>
                   <input
@@ -286,8 +288,8 @@ const ManageLinks: React.FC = () => {
                   />
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
-                  <label htmlFor="active_to" className="pixel-label font-pixelify block" style={{ marginBottom: '16px' }}>
+                <div className="mb-6">
+                  <label htmlFor="active_to" className="pixel-label font-pixelify block mb-4">
                     Active To (optional)
                   </label>
                   <input
@@ -299,14 +301,17 @@ const ManageLinks: React.FC = () => {
                   />
                 </div>
 
-                <div className="flex gap-4">
-                  <button type="submit" className="pixel-button font-silkscreen">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
+                  <button
+                    type="submit"
+                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
+                  >
                     {editingLink ? (formData.is_spacer ? 'Update Spacer' : 'Update Link') : (formData.is_spacer ? 'Add Spacer' : 'Add Link')}
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="pixel-button font-silkscreen"
+                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
                   >
                     Cancel
                   </button>
@@ -315,12 +320,12 @@ const ManageLinks: React.FC = () => {
             </div>
           )}
 
-          <div className="pixel-panel relative" style={{ padding: '48px 40px' }}>
-            <h2 className="font-pixelify text-white mb-6" style={{ fontSize: '12px' }}>
+          <div className="pixel-panel relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12 min-w-0">
+            <h2 className="font-pixelify text-white mb-6 text-sm sm:text-xs">
               All Links ({links.length})
             </h2>
             {links.length === 0 ? (
-              <p className="font-pixelify text-white text-center" style={{ fontSize: '10px' }}>
+              <p className="font-pixelify text-white text-center text-xs sm:text-[10px]">
                 No links yet. Add your first link!
               </p>
             ) : (
@@ -335,43 +340,10 @@ const ManageLinks: React.FC = () => {
                     return (
                       <div
                         key={link.id}
-                        className="pixel-panel font-pixelify text-[1rem] flex items-start gap-4 p-6 border-2 border-white border-opacity-20 rounded border-dashed"
-                        style={{ maxWidth: '100%', wordBreak: 'break-word', backgroundColor: 'rgba(255, 255, 255, 0.05)', marginBottom: '1rem' }}
+                        className="pixel-panel font-pixelify text-[1rem] flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 p-4 sm:p-6 border-2 border-white border-opacity-20 rounded border-dashed break-words bg-white/5 mb-4 last:mb-0 min-w-0"
                       >
-                        {/* Reordering Controls */}
-                        <div className="flex flex-col gap-2 flex-shrink-0">
-                          <button
-                            onClick={() => reorderLink(link.id, 'up')}
-                            disabled={index === 0}
-                            className="pixel-button font-silkscreen flex-shrink-0"
-                            style={{
-                              fontSize: '8px',
-                              padding: '6px 16px',
-                              minWidth: '40px',
-                              opacity: index === 0 ? 0.5 : 1
-                            }}
-                            title="Move up"
-                          >
-                            ↑
-                          </button>
-                          <button
-                            onClick={() => reorderLink(link.id, 'down')}
-                            disabled={index === links.length - 1}
-                            className="pixel-button font-silkscreen flex-shrink-0"
-                            style={{
-                              fontSize: '8px',
-                              padding: '6px 16px',
-                              minWidth: '40px',
-                              opacity: index === links.length - 1 ? 0.5 : 1
-                            }}
-                            title="Move down"
-                          >
-                            ↓
-                          </button>
-                        </div>
-
-                        {/* Spacer Content */}
-                        <div className="flex-1 min-w-0" style={{ maxWidth: '100%' }}>
+                        {/* Spacer Content - first on mobile */}
+                        <div className="flex-1 min-w-0 order-1 sm:order-2">
                           <div className="flex items-center gap-2 flex-wrap mb-2">
                             <span className="font-pixelify text-white opacity-70" style={{ fontSize: '10px' }}>
                               {link.title || '(Empty Space)'}
@@ -399,22 +371,40 @@ const ManageLinks: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className="flex flex-col gap-2 flex-shrink-0">
-                          <button
-                            onClick={() => handleEditClick(link)}
-                            className="pixel-button font-silkscreen"
-                            style={{ fontSize: '8px', padding: '8px 16px', whiteSpace: 'nowrap' }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClick(link.id)}
-                            className="pixel-button font-silkscreen"
-                            style={{ fontSize: '8px', padding: '8px 16px', whiteSpace: 'nowrap' }}
-                          >
-                            Delete
-                          </button>
+                        {/* Reorder + Action Buttons - row on mobile, grouped, wraps when tight */}
+                        <div className="flex flex-row flex-wrap sm:flex-nowrap sm:flex-col items-center gap-2 shrink-0 order-2 sm:order-1">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => reorderLink(link.id, 'up')}
+                              disabled={index === 0}
+                              className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 min-w-[40px] touch-manipulation disabled:opacity-50"
+                              title="Move up"
+                            >
+                              ↑
+                            </button>
+                            <button
+                              onClick={() => reorderLink(link.id, 'down')}
+                              disabled={index === links.length - 1}
+                              className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 min-w-[40px] touch-manipulation disabled:opacity-50"
+                              title="Move down"
+                            >
+                              ↓
+                            </button>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditClick(link)}
+                              className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-4 py-2 min-h-[40px] touch-manipulation"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(link.id)}
+                              className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-4 py-2 min-h-[40px] touch-manipulation !text-red-400 hover:!text-red-300"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
                       </div>
                     );
@@ -424,51 +414,17 @@ const ManageLinks: React.FC = () => {
                   return (
                     <div
                       key={link.id}
-                      className="pixel-panel font-pixelify text-[1rem] flex items-center gap-4 p-6 border-2 border-white border-opacity-30 rounded"
-                      style={{ maxWidth: '100%', wordBreak: 'break-word', marginBottom: '1rem' }}
+                      className="pixel-panel font-pixelify text-[1rem] flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 sm:p-6 border-2 border-white border-opacity-30 rounded break-words mb-4 last:mb-0 min-w-0"
                     >
-                      {/* Reordering Controls */}
-                      <div className="flex flex-col gap-2 flex-shrink-0">
-                        <button
-                          onClick={() => reorderLink(link.id, 'up')}
-                          disabled={index === 0}
-                          className="pixel-button font-silkscreen flex-shrink-0"
-                          style={{
-                            fontSize: '8px',
-                            padding: '6px 10px',
-                            minWidth: '40px',
-                            opacity: index === 0 ? 0.5 : 1
-                          }}
-                          title="Move up"
-                        >
-                          ↑
-                        </button>
-                        <button
-                          onClick={() => reorderLink(link.id, 'down')}
-                          disabled={index === links.length - 1}
-                          className="pixel-button font-silkscreen flex-shrink-0"
-                          style={{
-                            fontSize: '8px',
-                            padding: '6px 10px',
-                            minWidth: '40px',
-                            opacity: index === links.length - 1 ? 0.5 : 1
-                          }}
-                          title="Move down"
-                        >
-                          ↓
-                        </button>
-                      </div>
-
-                      {/* Icon - custom or favicon */}
-                      <img
-                        src={link.custom_icon || getFaviconUrl(link.url)}
-                        alt={`${link.title} icon`}
-                        className="flex-shrink-0 mt-1 object-contain rounded w-[40px] h-[40px] min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px]"
-                        style={{ imageRendering: 'auto' }}
-                      />
-
-                      {/* Link Content */}
-                      <div className="flex-1 min-w-0" style={{ maxWidth: '100%' }}>
+                      {/* Icon + Link Content - first on mobile */}
+                      <div className="flex items-start gap-3 flex-1 min-w-0 order-1">
+                        <img
+                          src={link.custom_icon || getFaviconUrl(link.url)}
+                          alt={`${link.title} icon`}
+                          className="flex-shrink-0 object-contain rounded w-10 h-10 min-w-10 min-h-10"
+                          style={{ imageRendering: 'auto' }}
+                        />
+                        <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-2">
                           <span className="font-pixelify text-white text-[1rem]">
                             {link.title}
@@ -489,7 +445,6 @@ const ManageLinks: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="font-pixelify text-gray-400 text-[0.8rem] hover:text-white break-all block"
-                          style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}
                         >
                           {link.url}
                         </a>
@@ -500,21 +455,36 @@ const ManageLinks: React.FC = () => {
                             {link.active_to && `To: ${new Date(link.active_to).toLocaleDateString()}`}
                           </div>
                         )}
+                        </div>
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex flex-col gap-2 flex-shrink-0">
+                      {/* Reorder + Action Buttons - wraps when tight */}
+                      <div className="flex flex-row flex-wrap items-center gap-2 shrink-0 order-2">
+                        <button
+                          onClick={() => reorderLink(link.id, 'up')}
+                          disabled={index === 0}
+                          className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-3 py-2 min-h-[40px] sm:min-h-0 min-w-[40px] touch-manipulation disabled:opacity-50"
+                          title="Move up"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          onClick={() => reorderLink(link.id, 'down')}
+                          disabled={index === links.length - 1}
+                          className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-3 py-2 min-h-[40px] sm:min-h-0 min-w-[40px] touch-manipulation disabled:opacity-50"
+                          title="Move down"
+                        >
+                          ↓
+                        </button>
                         <button
                           onClick={() => handleEditClick(link)}
-                          className="pixel-button font-silkscreen"
-                          style={{ fontSize: '8px', padding: '8px 16px', whiteSpace: 'nowrap' }}
+                          className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-4 py-2 min-h-[40px] touch-manipulation"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDeleteClick(link.id)}
-                          className="pixel-button font-silkscreen"
-                          style={{ fontSize: '8px', padding: '8px 16px', whiteSpace: 'nowrap' }}
+                          className="pixel-button font-silkscreen text-[10px] sm:text-[8px] px-4 py-2 min-h-[40px] touch-manipulation !text-red-400 hover:!text-red-300"
                         >
                           Delete
                         </button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
@@ -13,6 +14,7 @@ import { useAdminDashboard } from '../../lib/adminDashboardController';
  */
 const MarketingPortal: React.FC = () => {
   const { loading, authorized } = useAdminDashboard();
+  const navigate = useNavigate();
   const {
     postType,
     showDialog,
@@ -46,15 +48,18 @@ const MarketingPortal: React.FC = () => {
     setMarketingDescription,
     setPreWrittenCaptions,
     handleSubmit,
+    closeDialog,
   } = useMarketingPortal();
 
   if (loading) {
     return (
       <>
         <Header />
-        <div className="flex items-center justify-center mt-[20vh]">
+        <PageTitle image="/theme/title_icon.png" title="Marketing Requests" className="mt-[5vh]" />
+        <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
+        <Footer />
       </>
     );
   }
@@ -72,34 +77,50 @@ const MarketingPortal: React.FC = () => {
         subtext="Submit a marketing request for an event or sponsorship post. Please fill out the form as early as possible."
         className="mt-[5vh]"
       />
-      <div className="flex items-center justify-center mb-[10vh] px-4 py-12">
-        <div className="w-[50vw] max-w-[900px] min-w-[650px]">
-          <div className="pixel-panel relative" style={{ padding: '48px 40px' }}>
+      <div className="flex items-center justify-center mb-8 sm:mb-[10vh] px-4 sm:px-6 py-8 sm:py-12">
+        <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
+          <div className="pixel-panel relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
             {showDialog ? (
-              <div
-                className="flex flex-col items-center justify-center"
-                style={{ minHeight: '400px' }}
-              >
-                <h2
-                  className="font-pixelify text-white text-center mb-4"
-                  style={{ fontSize: '12px' }}
-                >
+              <div className="flex flex-col items-center justify-center min-h-[320px] sm:min-h-[400px] py-12 gap-6">
+                <div className="font-pixelify text-green-400 text-lg sm:text-xl text-center mb-2">
                   Request submitted!
-                </h2>
+                </div>
+                <p className="font-rethink text-gray-300 text-sm text-center max-w-sm">
+                  Your marketing request has been received. The marketing team will be notified.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                  <button
+                    type="button"
+                    onClick={closeDialog}
+                    className="pixel-button font-silkscreen min-h-[44px] min-w-[160px] touch-manipulation"
+                  >
+                    Submit another
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/admin/dashboard')}
+                    className="pixel-button font-silkscreen min-h-[44px] min-w-[160px] touch-manipulation border-white/60"
+                  >
+                    Back to dashboard
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
                 {/* Post Type Selection */}
-                <div style={{ marginBottom: '40px' }}>
-                  <label
-                    className="pixel-label font-pixelify block"
-                    style={{ marginBottom: '16px' }}
-                  >
+                <div className="mb-8 sm:mb-10">
+                  <label className="pixel-label font-pixelify block mb-4">
                     Is this for an event or sponsorship post?
                     <span className="text-red-400">*</span>
                   </label>
-                  <div className="flex gap-4">
-                    <label className="flex items-center cursor-pointer">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <label
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer touch-manipulation transition-colors ${
+                        postType === 'event'
+                          ? 'border-white bg-white/10'
+                          : 'border-white/40 hover:border-white/60'
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="postType"
@@ -110,12 +131,20 @@ const MarketingPortal: React.FC = () => {
                             e.target.value as 'event' | 'sponsorship'
                           )
                         }
-                        className="mr-2"
+                        className="sr-only"
                         required
                       />
-                      <span className="font-pixelify text-xs">Event</span>
+                      <span className="font-pixelify text-sm sm:text-base text-white">
+                        Event
+                      </span>
                     </label>
-                    <label className="flex items-center cursor-pointer">
+                    <label
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer touch-manipulation transition-colors ${
+                        postType === 'sponsorship'
+                          ? 'border-white bg-white/10'
+                          : 'border-white/40 hover:border-white/60'
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="postType"
@@ -126,22 +155,23 @@ const MarketingPortal: React.FC = () => {
                             e.target.value as 'event' | 'sponsorship'
                           )
                         }
-                        className="mr-2"
+                        className="sr-only"
                         required
                       />
-                      <span className="font-pixelify text-xs">Sponsorship</span>
+                      <span className="font-pixelify text-sm sm:text-base text-white">
+                        Sponsorship
+                      </span>
                     </label>
                   </div>
                 </div>
 
                 {/* Event Fields */}
                 {postType === 'event' && (
-                  <>
-                    <div style={{ marginBottom: '40px' }}>
+                  <div className="space-y-8 sm:space-y-10">
+                    <div>
                       <label
                         htmlFor="eventName"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Name of the Event<span className="text-red-400">*</span>
                       </label>
@@ -156,11 +186,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="eventDate"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Date of Event<span className="text-red-400">*</span>
                       </label>
@@ -174,11 +203,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="eventTime"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Time of Event<span className="text-red-400">*</span>
                       </label>
@@ -193,11 +221,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="eventLocation"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Location of Event<span className="text-red-400">*</span>
                       </label>
@@ -212,11 +239,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="eventDescription"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Description of Event
                         <span className="text-red-400">*</span>
@@ -231,11 +257,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="eventSuggestions"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Any suggestions?
                       </label>
@@ -247,17 +272,16 @@ const MarketingPortal: React.FC = () => {
                         className="pixel-input font-pixelify w-full"
                       />
                     </div>
-                  </>
+                  </div>
                 )}
 
                 {/* Sponsorship Fields */}
                 {postType === 'sponsorship' && (
-                  <>
-                    <div style={{ marginBottom: '40px' }}>
+                  <div className="space-y-8 sm:space-y-10">
+                    <div>
                       <label
                         htmlFor="sponsorName"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Name of the Sponsor
                         <span className="text-red-400">*</span>
@@ -273,11 +297,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="sponsorshipEmailDate"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Sponsorship Email Request Received On
                         <span className="text-red-400">*</span>
@@ -292,11 +315,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="sponsorshipPostDate"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Date it needs to be posted by?
                       </label>
@@ -309,11 +331,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="sponsorshipEventName"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Name of the Sponsorship Event
                         <span className="text-red-400">*</span>
@@ -330,11 +351,10 @@ const MarketingPortal: React.FC = () => {
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="sponsorshipLinks"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Related Hyperlinks
                         <span className="text-red-400">*</span>
@@ -343,18 +363,16 @@ const MarketingPortal: React.FC = () => {
                         id="sponsorshipLinks"
                         value={sponsorshipLinks}
                         onChange={(e) => setSponsorshipLinks(e.target.value)}
-                        className="pixel-input font-pixelify w-full"
-                        style={{ minHeight: '100px', resize: 'vertical' }}
+                        className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                         placeholder="Links they want us to include on our social media"
                         required
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="sponsorshipDescription"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Description of the Sponsorship
                         <span className="text-red-400">*</span>
@@ -365,22 +383,20 @@ const MarketingPortal: React.FC = () => {
                         onChange={(e) =>
                           setSponsorshipDescription(e.target.value)
                         }
-                        className="pixel-input font-pixelify w-full"
-                        style={{ minHeight: '100px', resize: 'vertical' }}
+                        className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                         required
                       />
                     </div>
-                  </>
+                  </div>
                 )}
 
                 {/* Common Fields */}
                 {postType && (
-                  <>
-                    <div style={{ marginBottom: '40px' }}>
+                  <div className="space-y-8 sm:space-y-10 mt-8 sm:mt-10">
+                    <div>
                       <label
                         htmlFor="marketingDescription"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Description/Purpose of Marketing
                       </label>
@@ -390,16 +406,14 @@ const MarketingPortal: React.FC = () => {
                         onChange={(e) =>
                           setMarketingDescription(e.target.value)
                         }
-                        className="pixel-input font-pixelify w-full"
-                        style={{ minHeight: '100px', resize: 'vertical' }}
+                        className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                       />
                     </div>
 
-                    <div style={{ marginBottom: '40px' }}>
+                    <div>
                       <label
                         htmlFor="preWrittenCaptions"
-                        className="pixel-label font-pixelify block"
-                        style={{ marginBottom: '16px' }}
+                        className="pixel-label font-pixelify block mb-4"
                       >
                         Pre written captions by sponsors : (if any)
                       </label>
@@ -409,18 +423,17 @@ const MarketingPortal: React.FC = () => {
                         onChange={(e) =>
                           setPreWrittenCaptions(e.target.value)
                         }
-                        className="pixel-input font-pixelify w-full"
-                        style={{ minHeight: '100px', resize: 'vertical' }}
+                        className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                       />
                     </div>
-                  </>
+                  </div>
                 )}
 
-                <div className="flex justify-start mt-8">
+                <div className="flex justify-start mt-6 sm:mt-8">
                   <button
                     type="submit"
                     disabled={!postType}
-                    className="pixel-button font-silkscreen"
+                    className="pixel-button font-silkscreen min-h-[44px] min-w-[120px] touch-manipulation"
                   >
                     Submit
                   </button>

@@ -33,9 +33,11 @@ const ManageEvents: React.FC = () => {
     return (
       <>
         <Header />
-        <div className="flex justify-center mt-[20vh]">
+        <PageTitle image="/theme/title_icon.png" title="Manage Events" className="mt-[5vh]" />
+        <div className="flex justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
+        <Footer />
       </>
     );
   }
@@ -82,11 +84,11 @@ const ManageEvents: React.FC = () => {
         className="mt-[5vh]"
       />
 
-      <div className="flex justify-center px-4 py-12 mb-[10vh]">
-        <div className="w-[50vw] min-w-[650px] max-w-[900px]">
+      <div className="flex justify-center px-4 sm:px-6 py-8 sm:py-12 mb-8 sm:mb-[10vh]">
+        <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px] min-w-0">
 
           {error && (
-            <div className="pixel-panel mb-6 p-4">
+            <div className="pixel-panel mb-6 p-4 sm:p-5">
               <p className="font-pixelify text-red-400 text-xs">{error}</p>
             </div>
           )}
@@ -94,15 +96,15 @@ const ManageEvents: React.FC = () => {
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="pixel-button font-silkscreen text-lg mb-6"
+              className="pixel-button font-silkscreen text-base sm:text-lg mb-6 min-h-[44px] touch-manipulation"
             >
               Add New Event
             </button>
           )}
 
           {showForm && (
-            <div className="pixel-panel p-10 mb-8">
-              <h2 className="font-silkscreen text-white text-m mb-6">
+            <div className="pixel-panel p-6 sm:p-8 md:p-10 mb-6 sm:mb-8">
+              <h2 className="font-silkscreen text-white text-sm sm:text-base mb-6">
                 {editingEvent ? 'Edit Event' : 'Add Event'}
               </h2>
 
@@ -119,7 +121,7 @@ const ManageEvents: React.FC = () => {
                 />
 
                 <textarea
-                  className="pixel-input w-full"
+                  className="pixel-input w-full min-h-[100px] resize-y"
                   style={{ marginBottom: '24px' }}
                   placeholder="Description"
                   value={formData.description || ''}
@@ -180,24 +182,27 @@ const ManageEvents: React.FC = () => {
                 />
 
                 <input
-                type="url"
-                className="pixel-input w-full"
-                style={{ marginBottom: '24px' }}
-                placeholder="Register URL (https://...)"
-                value={formData.register_url || ''}
-                onChange={(e) =>
+                  type="url"
+                  className="pixel-input w-full"
+                  style={{ marginBottom: '24px' }}
+                  placeholder="Register URL (https://...)"
+                  value={formData.register_url || ''}
+                  onChange={(e) =>
                     setFormData({ ...formData, register_url: e.target.value })
-                }
+                  }
                 />
 
-                <div className="flex gap-4">
-                  <button className="pixel-button font-silkscreen" type="submit">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+                  <button
+                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
+                    type="submit"
+                  >
                     {editingEvent ? 'Update Event' : 'Add Event'}
                   </button>
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="pixel-button font-silkscreen"
+                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
                   >
                     Cancel
                   </button>
@@ -206,8 +211,8 @@ const ManageEvents: React.FC = () => {
             </div>
           )}
 
-          <div className="pixel-panel p-10">
-            <h2 className="font-pixelify text-white text-xs mb-6">
+          <div className="pixel-panel p-6 sm:p-8 md:p-10 min-w-0">
+            <h2 className="font-pixelify text-white text-xs sm:text-sm mb-6">
               All Events ({events.length})
             </h2>
 
@@ -215,20 +220,20 @@ const ManageEvents: React.FC = () => {
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="pixel-panel p-6 flex justify-between items-start"
+                  className="pixel-panel p-4 sm:p-6 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 min-w-0"
                 >
-                  <div>
-                    <p className="font-pixelify text-white">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-pixelify text-white wrap-break-word">
                       {event.title}
                     </p>
-                    <p className="font-pixelify text-gray-400 text-xs">
+                    <p className="font-pixelify text-gray-400 text-xs mt-1">
                       {new Date(event.event_date).toDateString()}
                     </p>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <button
-                      className="pixel-button text-xs"
+                      className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation"
                       onClick={() => {
                         setEditingEvent(event);
                         setFormData({
@@ -248,7 +253,7 @@ const ManageEvents: React.FC = () => {
                       Edit
                     </button>
                     <button
-                      className="pixel-button text-xs"
+                      className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation !text-red-400 hover:!text-red-300"
                       onClick={() => removeEvent(event.id)}
                     >
                       Delete
