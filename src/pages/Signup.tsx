@@ -15,6 +15,7 @@ import { DegreeOrMajor } from "../lib/degreeData";
 import { ToastContainer, Zoom, toast } from "react-toastify";
 import { SocialLinks } from "../components/SocialLinks";
 import { submitSignupForm } from "../lib/signupController";
+import CookieDisclaimer from "../components/CookiesDisclaimer";
 
 export type DegreeBlock = {
   degree: DegreeOrMajor | null;
@@ -44,6 +45,8 @@ const Signup: React.FC = () => {
   const [degreeBlocks, setDegreeBlocks] = useState<DegreeBlock[]>([{ degree: null, majors: [null] }]);
 
   const [login, setLogin] = useState(false);
+
+  //! default error message
 
   const optionsUniversity = [
     { label: "UOA", value: "UOA" },
@@ -216,6 +219,8 @@ const Signup: React.FC = () => {
         transition={Zoom}
       />
       <Header />
+
+      <CookieDisclaimer />
 
       <PageTitle
         title="Become a DEVS Member"
