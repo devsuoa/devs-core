@@ -3,13 +3,51 @@ import PixelatedButton from "./PixelatedButton";
 import { sendEmail } from "../lib/emailController";
 import { toast } from "react-toastify";
 
-const SponsorForm: React.FC = () => {
+type FormType = "sponsor" | "contact";
+
+interface SponsorFormProps {
+  /**
+   * Type of form to render
+   * @default "sponsor"
+   */
+  formType?: FormType;
+}
+
+const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
   const [formData, setFormData] = useState({
-    companyName: "",
+    name: "",
     email: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Configuration based on form type
+  const config = {
+    sponsor: {
+      nameLabel: "COMPANY NAME",
+      emailSubject: (name: string) => `Sponsorship Inquiry from ${name}`,
+      emailBody: (name: string, email: string, message: string) => `
+        <h2>New Sponsorship Inquiry</h2>
+        <p><strong>Company:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    },
+    contact: {
+      nameLabel: "NAME",
+      emailSubject: (name: string) => `Contact Form Submission from ${name}`,
+      emailBody: (name: string, email: string, message: string) => `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    },
+  };
+
+  const currentConfig = config[formType];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -28,21 +66,19 @@ const SponsorForm: React.FC = () => {
       // Send email to team
       await sendEmail({
         to: "contact@devsuoa.com",
-        subject: `Sponsorship Inquiry from ${formData.companyName}`,
-        html: `
-          <h2>New Sponsorship Inquiry From</h2>
-          <p><strong>Company:</strong> ${formData.companyName}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${formData.message}</p>
-        `,
+        subject: currentConfig.emailSubject(formData.name),
+        html: currentConfig.emailBody(
+          formData.name,
+          formData.email,
+          formData.message,
+        ),
       });
 
       toast.success("Thank you! We'll get back to you soon.", {
         autoClose: 4000,
       });
 
-      setFormData({ companyName: "", email: "", message: "" });
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       toast.error("Failed to send message. Please try again.", {
         autoClose: 4000,
@@ -56,23 +92,19 @@ const SponsorForm: React.FC = () => {
   };
 
   return (
-    <div className="relative py-16 px-4">
-      <h2 className="text-center text-3xl font-silkscreen text-white mt-12">
-        {"<"} WANT TO SPONSOR US? {"/>"}
-      </h2>
-
-      <div className="max-w-2xl mx-auto border-4 border-[#6E80DA] rounded-3xl p-8 bg-transparent mt-32">
+    <div className="relative px-4">
+      <div className="max-w-2xl mx-auto border-4 border-[#6E80DA] rounded-3xl p-8 bg-transparent">
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Company Name */}
+          {/* Name / Company Name */}
           <div>
             <label className="block text-white font-silkscreen text-sm mb-2 text-center">
-              COMPANY NAME
+              {currentConfig.nameLabel}
             </label>
             <div className="flex justify-center">
               <input
                 type="text"
-                name="companyName"
-                value={formData.companyName}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 required
                 placeholder=""

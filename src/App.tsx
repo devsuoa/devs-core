@@ -24,6 +24,7 @@ import Sponsors from "./pages/Sponsors";
 import Team from "./pages/Team";
 import Pb from "./pages/hidden/Pb";
 import Landing from "./pages/Landing";
+import Contact from "./pages/Contact";
 import MemberRegistry from "./pages/admin/MemberRegistry";
 import About from "./pages/About";
 import EventsDashboard from "./pages/admin/EventsDashboard";
@@ -78,6 +79,7 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/team" element={<Team />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/sponsors" element={<Sponsors />} />
 

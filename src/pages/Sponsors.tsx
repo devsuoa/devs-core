@@ -32,7 +32,9 @@ const Sponsors: React.FC = () => {
   const dragProxyRef = useRef<HTMLDivElement>(null);
   const scrubRef = useRef<any>(null);
   const spacingRef = useRef<number>(0.1);
-  const autoScrollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoScrollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
   const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAutoScrollActiveRef = useRef<boolean>(true);
 
@@ -62,7 +64,7 @@ const Sponsors: React.FC = () => {
   const pauseAutoScroll = () => {
     stopAutoScroll();
     isAutoScrollActiveRef.current = false;
-    
+
     // Resume auto-scroll after 5 seconds of inactivity
     resumeTimeoutRef.current = setTimeout(() => {
       startAutoScroll();
@@ -315,15 +317,21 @@ const Sponsors: React.FC = () => {
           </button>
         </div>
 
-      <div className="flex flex-col items-center justify-center px-6 sm:px-8 md:px-4">
-        <p className="text-white text-sm sm:text-md max-w-lg font-rethink text-center py-8 sm:py-12">
-          DEVS is fortunate to have such amazing sponsors who support us in our events.
-          From providing us with swag to attending our events, we are thankful for their support in helping DEVS grow.
+        <div className="flex flex-col items-center justify-center px-6 sm:px-8 md:px-4">
+          <p className="text-white text-sm sm:text-md max-w-lg font-rethink text-center py-8 sm:py-12">
+            DEVS is fortunate to have such amazing sponsors who support us in
+            our events. From providing us with swag to attending our events, we
+            are thankful for their support in helping DEVS grow.
           </p>
-      </div>
+        </div>
 
         {/* Sponsor Submission Form */}
-        <SponsorForm />
+        <div className="py-16">
+          <h2 className="text-center text-3xl font-silkscreen text-white mb-12">
+            {"<"} WANT TO SPONSOR US? {"/>"}
+          </h2>
+          <SponsorForm />
+        </div>
 
         {/* Drag Proxy */}
         <div ref={dragProxyRef} className="drag-proxy invisible absolute" />
