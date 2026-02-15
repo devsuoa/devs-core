@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Serato",
+    "image": "/sponsors/gold/serato.png",
+    "desc": "Leading DJ software and hardware company.",
+    "tier": "silver"
+  },
+  {
+    "name": "Atlassian",
+    "image": "/sponsors/silver/atlassian.png",
+    "desc": "Enterprise software company known for products like Jira and Confluence.",
+    "tier": "silver"
+  },
+  {
+    "name": "IMC",
+    "image": "/sponsors/silver/imc.png",
+    "desc": "Global market maker and proprietary trading firm.",
+    "tier": "silver"
+  },
+  {
+    "name": "Optiver",
+    "image": "/sponsors/silver/optiver.png",
+    "desc": "Leading global electronic market maker.",
+    "tier": "silver"
+  },
+  {
+    "name": "Sandfield",
+    "image": "/sponsors/silver/sandfield.png",
+    "desc": "Innovative software solutions for modern businesses.",
+    "tier": "silver"
+  },
+  {
+    "name": "Visa",
+    "image": "/sponsors/silver/visa.png",
+    "desc": "Global payments technology company.",
+    "tier": "silver"
+  },
+  {
+    "name": "Jane Street",
+    "image": "/sponsors/gold/jane_street.png",
+    "desc": "Global trading firm specializing in technology-driven trading strategies.",
+    "tier": "gold"
+  }
+]

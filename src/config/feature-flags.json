@@ -1,62 +1,62 @@
 [
-    {
-        "name": "home_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "privacy_policy_page_is_enabled",
-        "value": true
-    },
-    {
-        "name": "terms_and_conditions_page_is_enabled",
-        "value": true
-    },
-    {
-        "name": "resources_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "about_us_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "team_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "events_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "sponsors_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "contact_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "join_us_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "links_page_is_enabled",
-        "value": true
-    },
-    {
-        "name": "construction_page_is_enabled",
-        "value": true
-    },
-    {
-        "name": "sign_up_page_is_enabled",
-        "value": false
-    },
-    {
-        "name": "pb_page_is_enabled",
-        "value": true
-    },
-    {
-        "name": "landing_page_is_enabled",
-        "value": false
-    }
+  {
+    "name": "home_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "privacy_policy_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "terms_and_conditions_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "resources_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "about_us_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "team_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "events_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "sponsors_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "contact_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "join_us_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "links_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "construction_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "sign_up_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "pb_page_is_enabled",
+    "value": true
+  },
+  {
+    "name": "landing_page_is_enabled",
+    "value": true
+  }
 ]

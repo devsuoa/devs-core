@@ -84,7 +84,7 @@ const Team: React.FC = () => {
             </a>
 
             <a href="https://www.linkedin.com/in/hazik-chaudhry-5123432aa/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100">
-              <MemberIcon image="/team/execs/hazik.jpg" name="Hazik Chaudhary" team={TeamEnum.Tech} />
+              <MemberIcon image="/team/execs/hazik.jpg" name="Hazik Chaudhry" team={TeamEnum.Tech} />
             </a>
 
             <a href="https://www.linkedin.com/in/joseph-wilson-a665332a4/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100 col-start-2 md:col-start-auto">

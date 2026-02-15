@@ -2,6 +2,8 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { registerNavigator } from "./lib/pageNotFoundController";
 import { posthog, isInitialized } from "./lib/posthog";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Construction from "./pages/Construction";
 import Links from "./pages/Links";
@@ -17,6 +19,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/admin/ManageEvents";
+import Sponsors from "./pages/Sponsors";
 import Team from "./pages/Team";
 import Pb from "./pages/hidden/Pb";
 import Landing from "./pages/Landing";
@@ -51,6 +54,18 @@ function App() {
   return (
     <>
       <PageViewTracker />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <main className="min-h-screen">
         <Routes>
           {/* Main pages */}
@@ -62,12 +77,16 @@ function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/about" element={<About />} />
+          <Route path="/sponsors" element={<Sponsors />} />
 
           {/* Admin pages */}
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/marketing-request" element={<MarketingPortal />} />
+          <Route
+            path="/admin/marketing-request"
+            element={<MarketingPortal />}
+          />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/admin/manage-events" element={<ManageEvents />} />
           <Route path="/admin/members" element={<MemberRegistry />} />
