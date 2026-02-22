@@ -4,6 +4,7 @@ import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
 import { useAdminDashboard } from '../../lib/adminDashboardController';
 import { useLinksManagement, Link, LinkFormData, getFaviconUrl } from '../../lib/linksController';
+import { Link as RouterLink} from "react-router-dom";
 
 const ManageLinks: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
@@ -136,6 +137,14 @@ const ManageLinks: React.FC = () => {
   return (
     <>
       <Header />
+      <div className="px-[8vw] pt-4 sm:pt-6">
+                <RouterLink
+                    to="/admin/dashboard"
+                    className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+                >
+                    ← Back to dashboard
+                </RouterLink>
+            </div>
       <PageTitle
         image="/theme/title_icon.png"
         title="Manage Links"

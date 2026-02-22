@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { PageTitle } from "../../components/PageTitle";
@@ -127,6 +128,14 @@ export default function TaskTracker() {
   return (
     <>
       <Header />
+      <div className="px-[8vw] pt-4 sm:pt-6">
+        <Link
+          to="/admin/dashboard"
+          className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+        >
+          ← Back to dashboard
+        </Link>
+      </div>
       <main className="px-4 sm:px-6 md:px-[8vw] py-6 md:py-12 min-h-[90vh]">
         <PageTitle
           title="Task Tracker"

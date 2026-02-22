@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { PageTitle } from "../../components/PageTitle";
@@ -123,6 +124,14 @@ const MemberRegistry: React.FC = () => {
   return (
     <>
       <Header />
+      <div className="px-[8vw] pt-4 sm:pt-6">
+        <Link
+          to="/admin/dashboard"
+          className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+        >
+          ← Back to dashboard
+        </Link>
+      </div>
 
       <PageTitle
         image="/theme/title_icon.png"

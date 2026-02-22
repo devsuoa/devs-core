@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
@@ -14,7 +14,6 @@ import { useAdminDashboard } from '../../lib/adminDashboardController';
  */
 const MarketingPortal: React.FC = () => {
   const { loading, authorized } = useAdminDashboard();
-  const navigate = useNavigate();
   const {
     postType,
     showDialog,
@@ -71,6 +70,14 @@ const MarketingPortal: React.FC = () => {
   return (
     <>
       <Header />
+      <div className="px-[8vw] pt-4 sm:pt-6">
+        <Link
+          to="/admin/dashboard"
+          className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+        >
+          ← Back to dashboard
+        </Link>
+      </div>
       <PageTitle
         image="/theme/title_icon.png"
         title="Marketing Requests"
@@ -96,13 +103,12 @@ const MarketingPortal: React.FC = () => {
                   >
                     Submit another
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => navigate('/admin/dashboard')}
-                    className="pixel-button font-silkscreen min-h-[44px] min-w-[160px] touch-manipulation border-white/60"
+                  <Link
+                    to="/admin/dashboard"
+                    className="pixel-button font-silkscreen min-h-[44px] min-w-[160px] touch-manipulation border-white/60 flex items-center justify-center"
                   >
                     Back to dashboard
-                  </button>
+                  </Link>
                 </div>
               </div>
             ) : (

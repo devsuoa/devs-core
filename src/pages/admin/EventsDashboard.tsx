@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { PageTitle } from "../../components/PageTitle";
@@ -7,7 +7,6 @@ import { useAdminDashboard } from "../../lib/adminDashboardController";
 import { formatNZDate, memberFullName, useEventAttendees, downloadEventAttendeesCSV } from "../../lib/eventsDashboardController";
 
 const EventsDashboard: React.FC = () => {
-    const navigate = useNavigate();
     const { loading: authLoading, authorized } = useAdminDashboard();
     const { grouped, loading, error, reload } = useEventAttendees();
 
@@ -54,6 +53,14 @@ const EventsDashboard: React.FC = () => {
     return (
         <>
             <Header />
+            <div className="px-[8vw] pt-4 sm:pt-6">
+                <Link
+                    to="/admin/dashboard"
+                    className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+                >
+                    ← Back to dashboard
+                </Link>
+            </div>
             <PageTitle
                 image="/theme/title_icon.png"
                 title="Event Attendees"
@@ -63,15 +70,6 @@ const EventsDashboard: React.FC = () => {
 
             <div className="flex justify-center px-4 sm:px-6 py-8 sm:py-12 mb-8 sm:mb-[10vh] min-h-[80vh]">
                 <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[70vw] lg:min-w-[650px] lg:max-w-[1100px] min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-                        <button
-                            type="button"
-                            onClick={() => navigate("/admin/dashboard")}
-                            className="text-left font-silkscreen text-sm sm:text-base text-white/80 hover:text-white dashboard-link py-2 touch-manipulation w-fit"
-                        >
-                            ← Back to dashboard
-                        </button>
-                    </div>
 
                     <div className="pixel-panel p-6 sm:p-8 mb-6">
                         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
