@@ -54,7 +54,7 @@ const MarketingPortal: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle image="/theme/title_icon.png" title="Marketing Requests" className="mt-[5vh]" />
+        <PageTitle title="Marketing Requests" className="mt-[5vh]" />
         <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
@@ -79,7 +79,6 @@ const MarketingPortal: React.FC = () => {
         </Link>
       </div>
       <PageTitle
-        image="/theme/title_icon.png"
         title="Marketing Requests"
         subtext="Submit a marketing request for an event or sponsorship post. Please fill out the form as early as possible."
         className="mt-[5vh]"

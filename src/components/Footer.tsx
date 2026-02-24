@@ -124,15 +124,15 @@ const Footer = () => {
         </div>
 
         {/* Game Boy Section */}
-        <div className="flex items-start justify-center gap-16">
-          <div className="relative mt-16 w-40 h-40">
+        <div className="flex items-start justify-end gap-16">
+          <div className="relative mb-0 mt-auto lg:w-30 sm:w-50 object-cover">
             <img
               src="/footer/gameboy_buttons.png"
               alt="gameboy buttons"
               className="w-full h-full pixelated"
             />
           </div>
-          <div className="relative ml-7 w-[6.75rem] h-[6.25rem]">
+          <div className="relative mb-15 mt-auto lg:w-30 sm:w-50 object-cover">
             <img
               src="/footer/gameboy_button.png"
               alt="gameboy button"

@@ -25,7 +25,7 @@ const ManageLinks: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle image="/theme/title_icon.png" title="Manage Links" className="mt-[5vh]" />
+        <PageTitle title="Manage Links" className="mt-[5vh]" />
         <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
@@ -146,7 +146,6 @@ const ManageLinks: React.FC = () => {
                 </RouterLink>
             </div>
       <PageTitle
-        image="/theme/title_icon.png"
         title="Manage Links"
         subtext="Add, edit, and manage active links"
         className="mt-[5vh]"

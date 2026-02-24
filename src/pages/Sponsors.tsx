@@ -10,6 +10,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/all";
 import sponsorsData from "../../public/sponsors/current_sponsors.json";
+import BinaryBackground from "../components/BinaryBackground";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger, Draggable);
@@ -264,18 +265,18 @@ const Sponsors: React.FC = () => {
 
   return (
     <>
+    <BinaryBackground/>
       <Header />
       <main className="min-h-screen">
         <PageTitle
           title="Our Sponsors"
-          image="/theme/title_icon.png"
           className="p-0"
         />
 
         {/* Carousel Gallery */}
         <div
           ref={galleryRef}
-          className="gallery relative w-full h-[90vh] overflow-hidden -mt-16 px-4 sm:px-6 md:px-8"
+          className="gallery relative w-full h-[90vh]  -mt-20 md:mt-5 px-4 sm:px-6 md:px-8"
         >
           <ul
             ref={cardsRef}
@@ -294,7 +295,7 @@ const Sponsors: React.FC = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="relative -mt-64 sm:-mt-72 md:-mt-80 flex items-center justify-center gap-3 sm:gap-4 px-4">
+        <div className="relative -mt-100 md:-mt-64 md:-mt-80 flex items-center justify-center gap-3 sm:gap-4 px-4">
           <button
             onClick={handlePrev}
             className="sponsor-prev px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg transition-colors"
@@ -317,17 +318,17 @@ const Sponsors: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex flex-col items-center justify-center px-6 sm:px-8 md:px-4">
-          <p className="text-white text-sm sm:text-md max-w-lg font-rethink text-center py-8 sm:py-12">
-            DEVS is fortunate to have such amazing sponsors who support us in
-            our events. From providing us with swag to attending our events, we
-            are thankful for their support in helping DEVS grow.
+        <div className="flex flex-col items-center justify-center px-6 mt-10 sm:px-8 md:px-4">
+          <p className="text-white text-sm sm:text-md max-w-lg font-rethink text-center py-10 sm:py-12">
+            DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
+
+
           </p>
         </div>
 
         {/* Sponsor Submission Form */}
-        <div className="py-16">
-          <h2 className="text-center text-3xl font-silkscreen text-white mb-12">
+        <div className="py-16 px-10 md:px-0 ">
+          <h2 className="text-center text-xl md:text-3xl font-silkscreen text-white mb-12">
             {"<"} WANT TO SPONSOR US? {"/>"}
           </h2>
           <SponsorForm />

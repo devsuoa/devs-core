@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import BinaryBackground from '../components/BinaryBackground';
 const logo = '/branding/text_logo.png';
 const errorDeva = '/branding/deva_not_found.png';
 
 const PageNotFound: React.FC = () => {
     return (
+        <>
+        <BinaryBackground />    
         <div className="flex items-center justify-center h-screen w-screen px-16 py-12 box-border max-[768px]:flex-col max-[768px]:justify-start max-[768px]:px-4 max-[768px]:py-8">
           {/* Desktop Layout */}
           <div className="flex flex-col gap-8 w-full max-w-[55%] max-[768px]:hidden">
@@ -80,7 +83,10 @@ const PageNotFound: React.FC = () => {
             </div>
           </div>
         </div>
+        </>
       );
+      
+
 }
 
 export default PageNotFound;

@@ -1,44 +1,49 @@
 [
   {
     "name": "Serato",
-    "image": "/sponsors/gold/serato.png",
-    "desc": "Leading DJ software and hardware company.",
+    "image": "/sponsors/silver/serato.png",
+    "desc": "Serato is a New Zealand–founded audio software company best known for its industry-leading DJ and music production tools. Its products power performances in clubs, festivals, and studios worldwide, combining intuitive design with powerful technology for professional and aspiring artists alike.",
     "tier": "silver"
   },
   {
     "name": "Atlassian",
     "image": "/sponsors/silver/atlassian.png",
-    "desc": "Enterprise software company known for products like Jira and Confluence.",
+    "desc": "Atlassian is a global software company that builds collaboration and productivity tools for teams. Known for products like Jira and Confluence, Atlassian helps engineers, designers, and businesses plan, track, and ship projects efficiently at scale across organizations.",
     "tier": "silver"
   },
   {
     "name": "IMC",
     "image": "/sponsors/silver/imc.png",
-    "desc": "Global market maker and proprietary trading firm.",
+    "desc": "IMC is a global proprietary trading firm and market maker that leverages technology, quantitative research, and data-driven strategies to trade financial instruments. By providing liquidity across markets, IMC helps ensure more efficient pricing and smoother market operations worldwide.",
     "tier": "silver"
   },
   {
     "name": "Optiver",
     "image": "/sponsors/silver/optiver.png",
-    "desc": "Leading global electronic market maker.",
+    "desc": "Optiver is an international market maker focused on improving financial markets through technology and research. Using advanced algorithms and quantitative models, Optiver provides liquidity across asset classes while investing heavily in engineering talent and innovation.",
     "tier": "silver"
   },
   {
     "name": "Sandfield",
     "image": "/sponsors/silver/sandfield.png",
-    "desc": "Innovative software solutions for modern businesses.",
+    "desc": "Sandfield is a New Zealand-based software engineering company that designs and builds custom business software solutions. They specialize in solving complex operational challenges, partnering closely with clients to create scalable, high-performance systems tailored to unique industry needs.",
     "tier": "silver"
   },
   {
     "name": "Visa",
     "image": "/sponsors/silver/visa.png",
-    "desc": "Global payments technology company.",
+    "desc": "Visa is a global leader in digital payments, operating one of the world’s largest electronic payment networks. It connects consumers, businesses, banks, and governments, enabling secure and reliable transactions across more than 200 countries and territories.",
     "tier": "silver"
   },
   {
     "name": "Jane Street",
     "image": "/sponsors/gold/jane_street.png",
-    "desc": "Global trading firm specializing in technology-driven trading strategies.",
+    "desc": "Jane Street is a global quantitative trading firm that uses mathematics, technology, and research to trade financial products across markets worldwide. They design sophisticated algorithms, build advanced software systems, and collaborate in small teams to solve complex problems in finance.",
     "tier": "gold"
-  }
-]
+  },
+  {
+    "name": "Partly",
+    "image": "/sponsors/gold/partly.png",
+    "desc": "Partly is a fast-growing New Zealand technology company building digital infrastructure for the global automotive parts industry. By structuring and connecting fragmented parts data, Partly improves search, compatibility, and supply chain efficiency across manufacturers and distributors worldwide.",
+    "tier": "gold"
+  }]

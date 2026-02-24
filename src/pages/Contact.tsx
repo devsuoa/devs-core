@@ -5,6 +5,7 @@ import { onPageNotFound } from "../lib/pageNotFoundController";
 import Header from "../components/Header";
 import { PageTitle } from "../components/PageTitle";
 import SponsorForm from "../components/SponsorForm";
+import BinaryBackground from "../components/BinaryBackground";
 
 const Contact: React.FC = () => {
   React.useEffect(() => {
@@ -19,17 +20,18 @@ const Contact: React.FC = () => {
 
   return (
     <>
+      <BinaryBackground/>
+      
       <Header />
 
       <main className="min-h-screen">
         <PageTitle
           title="Contact Us"
-          image="/theme/title_icon.png"
           className="p-0"
         />
 
         {/* ===== MAIN CONTENT ===== */}
-        <section className="px-12 py-8">
+        <section className="px-12 -mt-10 mb-20">
           <div className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
             {/* DESKTOP ONLY — LEFT IMAGE */}
             <div className="hidden lg:flex flex-1 items-center justify-center">

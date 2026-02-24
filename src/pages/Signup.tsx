@@ -15,6 +15,7 @@ import { DegreeOrMajor } from "../lib/degreeData";
 import { ToastContainer, Zoom, toast } from "react-toastify";
 import { SocialLinks } from "../components/SocialLinks";
 import { submitSignupForm } from "../lib/signupController";
+import BinaryBackground from "../components/BinaryBackground";
 
 export type DegreeBlock = {
   degree: DegreeOrMajor | null;
@@ -203,6 +204,7 @@ const Signup: React.FC = () => {
 
   return (
     <>
+    <BinaryBackground />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -221,20 +223,19 @@ const Signup: React.FC = () => {
 
       <PageTitle
         title="Become a DEVS Member"
-        image="/theme/title_icon.png"
         subtext="Hey 👋 Thank you for your interest in joining DEVS 💻 Join our growing community of tech enthusiasts and connect with like-minded people! Becoming a DEVS member also gives you access to our exciting social, educational, and technical events. Signing up is completely FREE ✨"
         className="sign-up-title"
       />
 
       <div className="w-full flex justify-center items-center mb-[10vh]">
         {!login ? (
-          <form className="font-pixelify glow sign-up-form sign-up-container grid" onSubmit={handleSubmit}>
+          <form className="font-pixelify glow bg-black/40 sign-up-form sign-up-container grid rounded-lg border border-2 border-[#6E80DA] ring-4 ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]" onSubmit={handleSubmit}>
             {/* FIRST NAME */}
             <div className="relative w-full sign-up-col-span-large">
               <input
                 required
                 maxLength={30}
-                className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem]"
+                className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem] "
                 onChange={(e) => setFirstName(e.target.value)}
               />
               <label className="absolute -bottom-[2rem] left-[0.25rem]">
@@ -547,22 +548,22 @@ const Signup: React.FC = () => {
             </div>
           </form>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-8 md:p-12 h-full sign-up-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-8 md:p-12 h-full bg-black/40 sign-up-container rounded-lg rounded-4 border border-2 border-[#6E80DA] ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]">
             <div className="flex justify-center items-center">
               <img
-                src="/branding/deva_mascot.png"
+                src="/branding/deva_wave.png"
                 alt="Mascot"
                 className="w-24 sm:w-48 md:w-full max-w-[320px] h-auto object-contain opacity-90"
               />
             </div>
 
             <div className="flex flex-col gap-8 text-white">
-              <div className="font-pixelify text-3xl md:text-4xl lg:text-5xl flex flex-col gap-2 tracking-widest leading-none uppercase">
+              <div className="font-silkscreen text-3xl flex flex-col gap-2 tracking-widest leading-none uppercase">
                 <span>YAY!</span>
                 <span>YOU'RE SIGNED UP!</span>
               </div>
 
-              <div className="font-sans text-base md:text-lg opacity-90 max-w-[400px] leading-relaxed">
+              <div className="font-rethink text-base md:text-sm opacity-90 max-w-[400px] leading-relaxed">
                 <p className="mb-4">
                   Be sure to connect with us on our social media platforms & connect with us on Engage to stay up to
                   date with DEVS' latest updates

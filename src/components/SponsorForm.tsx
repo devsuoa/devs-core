@@ -93,7 +93,7 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
 
   return (
     <div className="relative px-4">
-      <div className="max-w-2xl mx-auto border-4 border-[#6E80DA] rounded-3xl p-8 bg-transparent">
+      <div className="max-w-2xl mx-auto rounded-3xl p-8 bg-black/40 rounded-lg ring-4 ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]">
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Name / Company Name */}
           <div>

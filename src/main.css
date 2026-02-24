@@ -16,7 +16,10 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(ellipse at center, #0a1234 0%, #04060f 100%);
+  background-image: url("/theme/background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
   color: #ffffff;
 }
 
@@ -221,9 +224,7 @@ html {
     height: auto;
     padding: 2.5rem;
     padding-top: 3.5rem;
-    border-width: 1px;
-    border-color: #6e80da;
-    border-radius: 1rem;
+
   }
   .sign-up-form {
     gap: 2.5rem;
@@ -368,8 +369,37 @@ html {
   }
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.sponsor-card{
+  border-radius: 10px;
+}
 .sponsor-track {
   animation: sponsor-scroll 25s linear infinite;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s ease-in-out forwards;
 }
 
 /* Custom Toast Styles - Purple Theme */

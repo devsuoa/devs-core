@@ -9,57 +9,10 @@ import Pagination from "../components/Pagination";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
 import { useEvents, formatEventDate } from "../lib/eventsController";
+import BinaryBackground from "../components/BinaryBackground";
  
 const Events = () => {
   const { upcomingEvents, pastEvents, loading, error } = useEvents();
-
-  // Background glow configuration - [x%, y%, width, height, opacity, color]
-  type GlowConfig = [number, number, number, number, number, "purple" | "indigo"];
-
-  const GLOW_POSITIONS: GlowConfig[] = [
-    // Left edge
-    [-5, 5, 300, 400, 0.15,  "purple"],
-    [-8, 35, 350, 350, 0.12, "indigo"],
-    [-3, 65, 280, 380, 0.14, "purple"],
-    [-6, 85, 320, 300, 0.13, "indigo"],
-    // Right edge
-    [75, 8, 350, 380, 0.14,  "indigo"],
-    [78, 40, 300, 400, 0.13, "purple"],
-    [72, 70, 380, 350, 0.15, "indigo"],
-    [76, 90, 320, 280, 0.12, "purple"],
-    // Top edge
-    [15, -3, 350, 250, 0.11, "purple"],
-    [40, -5, 400, 280, 0.1,  "indigo"],
-    [60, -2, 320, 260, 0.12, "purple"],
-    // Bottom edge
-    [10, 88, 380, 300, 0.13, "indigo"],
-    [38, 92, 350, 250, 0.11, "purple"],
-    [65, 90, 340, 280, 0.12, "indigo"],
-    // Interior fillers
-    [25, 25, 250, 300, 0.08, "purple"],
-    [55, 30, 280, 280, 0.09, "indigo"],
-    [30, 55, 300, 320, 0.08, "indigo"],
-    [50, 60, 260, 300, 0.09, "purple"],
-  ];
-
-  const generateStarField = () =>
-    GLOW_POSITIONS.map(([x, y, w, h, opacity, color], i) => (
-      <div
-        key={i}
-        className="absolute blur-3xl"
-        style={{
-          left: `${x}%`,
-          top: `${y}%`,
-          width: w,
-          height: h,
-          borderRadius: "40%",
-          backgroundColor:
-            color === "purple"
-              ? `rgba(168, 85, 247, ${opacity})`
-              : `rgba(99, 102, 241, ${opacity})`,
-        }}
-      />
-    ));
 
   // Screen size helpers
   const getScreenSize = () => {
@@ -137,9 +90,6 @@ const Events = () => {
   const [pastTouchEnd, setPastTouchEnd] = useState<number | null>(null);
 
   const minSwipeDistance = 50;
-
-  // Memoize star field generation so it only calculates once
-  const starField = useMemo(() => generateStarField(), []);
 
   useEffect(() => {
     if (!isFeatureEnabled("events_page_is_enabled")) {
@@ -332,6 +282,7 @@ const Events = () => {
   if (loading) {
     return (
       <>
+      <BinaryBackground/>
         <Header />
         <section className="min-h-[80vh]">
           <div className="flex justify-center mt-[20vh]">
@@ -346,6 +297,7 @@ const Events = () => {
   if (error) {
     return (
       <>
+      <BinaryBackground/>
         <Header />
         <div className="flex justify-center mt-[20vh] min-h-[80vh]">
           <p className="font-pixelify text-red-400">{error}</p>
@@ -371,20 +323,21 @@ const Events = () => {
         )}
       </AnimatePresence>
 
+      <BinaryBackground />
+
       {/* Purple Star Field Background */}
-      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden opacity-50">
+      {/*<div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden opacity-50">
         {starField}
-      </div>
+      </div>*/}
 
       <Header />
 
       {/* UPCOMING EVENTS */}
       {/* Mobile title */}
-      <div className="lg:hidden">
+      <div className="lg:hidden min-h-[10vh]">
         <PageTitle
           title="Upcoming Events"
           className="scale-110 ml-5"
-          image="theme/title_icon.png"
         />
       </div>
 
@@ -392,8 +345,7 @@ const Events = () => {
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
         <PageTitle
           title="Upcoming Events"
-          className="px-0! mx-0! translate-y-1 pb-0! mb-0! scale-110"
-          image="theme/title_icon.png"
+          className="pl-0! ml-20! scale-110"
         />
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
@@ -429,7 +381,7 @@ const Events = () => {
         </div>
       </div>
 
-      <section className="transition-all duration-500 ease-in-out mx-[1vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] ">
+      <section className="transition-all duration-500 ease-in-out mx-[1vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
         {upcomingEvents.length === 0 ? (
           <p className="font-pixelify text-white text-center text-sm sm:text-base">
             No upcoming events.
@@ -489,15 +441,14 @@ const Events = () => {
       {/* PAST EVENTS */}
       {/* Mobile title */}
       <div className="lg:hidden">
-        <PageTitle title="Past Events" className="scale-110 ml-5" image="theme/title_icon.png" />
+        <PageTitle title="Past Events" className="scale-110 ml-5" />
       </div>
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
         <PageTitle
           title="Past Events"
-          className="px-0! mx-0! translate-y-1 pb-0! mb-0! scale-110"
-          image="theme/title_icon.png"
+          className="pl-0! ml-20! scale-110"
         />
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
@@ -533,7 +484,7 @@ const Events = () => {
         </div>
       </div>
 
-      <section className="transition-all duration-500 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] ">
+      <section className="transition-all duration-500 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
         {pastEvents.length === 0 ? (
           <p className="font-pixelify text-white text-center text-sm sm:text-base">
             No past events.

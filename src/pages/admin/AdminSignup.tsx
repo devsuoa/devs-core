@@ -33,7 +33,6 @@ const AdminSignup: React.FC = () => {
     <>
       <Header />
       <PageTitle
-        image="/theme/title_icon.png"
         title="Admin Signup"
         className='mt-[5vh]'
       />

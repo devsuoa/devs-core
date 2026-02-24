@@ -87,7 +87,6 @@ const AdminResetPassword: React.FC = () => {
       <>
         <Header />
         <PageTitle
-          image="/theme/title_icon.png"
           title="Reset Password"
           className="mt-[5vh]"
         />
@@ -110,7 +109,6 @@ const AdminResetPassword: React.FC = () => {
       <>
         <Header />
         <PageTitle
-          image="/theme/title_icon.png"
           title="Reset Password"
           className="mt-[5vh]"
         />
@@ -138,7 +136,6 @@ const AdminResetPassword: React.FC = () => {
     <>
       <Header />
       <PageTitle
-        image="/theme/title_icon.png"
         title="Reset Password"
         className="mt-[5vh]"
       />

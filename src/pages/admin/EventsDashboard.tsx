@@ -62,7 +62,6 @@ const EventsDashboard: React.FC = () => {
                 </Link>
             </div>
             <PageTitle
-                image="/theme/title_icon.png"
                 title="Event Attendees"
                 subtext="Confirmed RSVPs grouped by event"
                 className="mt-[5vh]"

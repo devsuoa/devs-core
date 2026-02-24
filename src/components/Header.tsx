@@ -3,10 +3,19 @@ import { useState, useEffect } from "react";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import PixelatedButton from "./PixelatedButton";
 
-const logo = "/branding/text_logo.png";
+const logo = "/branding/deva_head.png";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const closeMenu = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setMenuOpen(false);
+      setIsClosing(false);
+    }, 400);
+  };
 
   useEffect(() => {
     if (menuOpen) {
@@ -22,19 +31,17 @@ const Header = () => {
 
   return (
     <>
-      {/* HEADER BAR */}
       <nav className="mt-[30px] px-6 lg:px-[40px] relative z-50">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img className="w-[120px] lg:max-w-[8vw] pixelated" src={logo} alt="Logo" />
+            <img className="h-[40px] lg:max-w-[8vw] pixelated" src={logo} alt="Logo" />
           </Link>
 
-          {/* Desktop links*/}
-          <div className="hidden lg:flex items-center gap-[10vw] font-silkscreen text-[20px] whitespace-nowrap">
+          <div className="hidden xl:flex items-center gap-[10vw] font-silkscreen text-[20px] whitespace-nowrap">
             {isFeatureEnabled("team_page_is_enabled") && (
-              <Link to="/team" className="link-white">
-                OUR TEAM
+              <Link to="/about" className="link-white">
+                ABOUT
               </Link>
             )}
 
@@ -58,7 +65,7 @@ const Header = () => {
           </div>
 
           {/* Desktop button */}
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             {isFeatureEnabled("join_us_page_is_enabled") && (
               <PixelatedButton
                 to="/join"
@@ -71,7 +78,10 @@ const Header = () => {
           </div>
 
           {/* Hamburger Menu */}
-          <button className="lg:hidden flex flex-col gap-1" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          <button className="xl:hidden hover:cursor-pointer flex flex-col gap-1" onClick={() => {
+            setMenuOpen(true);
+            setIsClosing(false);
+          }} aria-label="Open menu">
             <span className="w-6 h-[2px] bg-white" />
             <span className="w-6 h-[2px] bg-white" />
             <span className="w-6 h-[2px] bg-white" />
@@ -81,15 +91,15 @@ const Header = () => {
 
       {/* Mobile menu*/}
       {menuOpen && (
-        <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#04060f] z-[100] flex flex-col">
+        <div className={`fixed inset-0 w-screen h-screen overflow-hidden bg-[#04060f] z-[100] flex flex-col ${isClosing ? 'animate-fadeOut' : 'animate-fadeIn'}`}>
           <div className="flex items-center justify-between px-6 pt-8">
-            <Link to="/" onClick={() => setMenuOpen(false)}>
-              <img className="w-[120px] pixelated" src={logo} alt="Logo" />
+            <Link to="/" onClick={() => closeMenu()}>
+              <img className="w-[50px] pixelated " src={logo} alt="Logo" />
             </Link>
 
             <button
-              className="text-white text-4xl font-silkscreen"
-              onClick={() => setMenuOpen(false)}
+              className="text-white text-4xl hover:cursor-pointer font-silkscreen"
+              onClick={() => closeMenu()}
               aria-label="Close menu"
             >
               ✕
@@ -98,25 +108,25 @@ const Header = () => {
 
           <div className="flex flex-1 flex-col items-center justify-center gap-10 font-silkscreen text-[26px]">
             {isFeatureEnabled("team_page_is_enabled") && (
-              <Link to="/team" className="link-white" onClick={() => setMenuOpen(false)}>
-                OUR TEAM
+              <Link to="/about" className="link-white" onClick={() => closeMenu()}>
+                ABOUT
               </Link>
             )}
 
             {isFeatureEnabled("events_page_is_enabled") && (
-              <Link to="/events" className="link-white" onClick={() => setMenuOpen(false)}>
+              <Link to="/events" className="link-white" onClick={() => closeMenu()}>
                 EVENTS
               </Link>
             )}
 
             {isFeatureEnabled("sponsors_page_is_enabled") && (
-              <Link to="/sponsors" className="link-white" onClick={() => setMenuOpen(false)}>
+              <Link to="/sponsors" className="link-white" onClick={() => closeMenu()}>
                 SPONSORS
               </Link>
             )}
 
             {isFeatureEnabled("contact_page_is_enabled") && (
-              <Link to="/contact" className="link-white" onClick={() => setMenuOpen(false)}>
+              <Link to="/contact" className="link-white" onClick={() => closeMenu()}>
                 CONTACT US
               </Link>
             )}

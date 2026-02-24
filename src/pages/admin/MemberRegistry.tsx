@@ -106,7 +106,7 @@ const MemberRegistry: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle image="/theme/title_icon.png" title="Member Registry" className="mt-[5vh]" />
+        <PageTitle title="Member Registry" className="mt-[5vh]" />
         <div className="flex items-center justify-center min-h-[50vh]">
           <p className="font-silkscreen text-[1.25rem] text-white">
             Loading...
@@ -134,7 +134,6 @@ const MemberRegistry: React.FC = () => {
       </div>
 
       <PageTitle
-        image="/theme/title_icon.png"
         title="Member Registry"
         className="mt-[5vh]"
       />

@@ -1,6 +1,7 @@
 const sponsors = [
     "/sponsors/gold/jane_street.png",
-    "/sponsors/gold/serato.png",
+    "/sponsors/gold/partly.png",
+    "/sponsors/silver/serato.png",
     "/sponsors/silver/atlassian.png",
     "/sponsors/silver/optiver.png",
     "/sponsors/silver/sandfield.png",

@@ -23,7 +23,6 @@ const PrivacyPolicy: React.FC = () => {
             </div>
 
             <PageTitle
-                image="/theme/title_icon.png"
                 title="Privacy Policy"
                 subtext='Last updated: 2025-12-20'
                 className='max-w-6xl !px-4'

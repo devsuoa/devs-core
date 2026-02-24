@@ -7,6 +7,7 @@ import { SocialLinks } from '../components/SocialLinks';
 import { Link } from 'react-router-dom';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
+import BinaryBackground from '../components/BinaryBackground';
 
 const Links: React.FC = () => {
   const { links, loading, error } = useActiveLinks();
@@ -45,11 +46,12 @@ const Links: React.FC = () => {
 
   return (
     <>
-
+    <BinaryBackground />
+    <div className='p-8 lg:p-0'>
       <div className="flex items-center flex-col justify-center mt-[10vh] mb-[2rem] gap-4">
         <img
-          src="/branding/deva_pc.jpeg"
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg"
+          src="/branding/deva_head.png"
+          className="object-cover h-20 sm:h-24 rounded-lg"
         />
         <p className="font-silkscreen font-bold text-[2rem] text-white text-center" style={{ marginBottom: '0.5rem' }}>Developers Society</p>
         <p className="font-rethink text-white text-center text-[1rem]">Connecting software enthusiasts with the industry. 👾</p>
@@ -134,7 +136,9 @@ const Links: React.FC = () => {
           Privacy Policy
         </Link>
       </p>
+      </div>
       {/* <Footer /> */}
+      
     </>
   );
 };

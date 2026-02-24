@@ -12,7 +12,7 @@ const AdminDashboard: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle image="/theme/title_icon.png" title="Admin Dashboard" className="mt-[5vh]" />
+        <PageTitle title="Admin Dashboard" className="mt-[5vh]" />
         <div className="flex items-center justify-center h-[80vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
@@ -28,7 +28,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <>
       <Header />
-      <PageTitle image="/theme/title_icon.png" title="Admin Dashboard" className="mt-[5vh]" />
+      <PageTitle title="Admin Dashboard" className="mt-[5vh]" />
       <div className="flex items-center justify-center px-4 sm:px-6 pb-8 sm:pb-12">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
           <div className="relative bg-transparent border-none px-4 sm:px-6 md:px-10 py-8 sm:py-12">

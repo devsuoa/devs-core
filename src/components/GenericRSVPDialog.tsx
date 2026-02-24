@@ -129,7 +129,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                             <button
                                 onClick={onClose}
                                 disabled={loading}
-                                className="font-pixelify px-4 py-2 rounded-lg border-2 border-white/40 hover:border-white transition"
+                                className="font-pixelify hover:cursor-pointer px-4 py-2 rounded-lg border-2 border-white/40 hover:border-white transition"
                             >
                                 cancel
                             </button>
@@ -137,7 +137,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                             <button
                                 onClick={handleConfirm}
                                 disabled={loading}
-                                className="font-pixelify px-4 py-2 rounded-lg border-2 border-white bg-white text-black hover:bg-gray-200 transition"
+                                className="hover:cursor-pointer font-pixelify px-4 py-2 rounded-lg border-2 border-white bg-white text-black hover:bg-gray-200 transition"
                             >
                                 {loading ? "submitting..." : "confirm"}
                             </button>

@@ -34,7 +34,7 @@ const ManageEvents: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle image="/theme/title_icon.png" title="Manage Events" className="mt-[5vh]" />
+        <PageTitle title="Manage Events" className="mt-[5vh]" />
         <div className="flex justify-center min-h-[50vh]">
           <p className="font-pixelify text-white">Loading...</p>
         </div>
@@ -87,7 +87,6 @@ const ManageEvents: React.FC = () => {
         </Link>
       </div>
       <PageTitle
-        image="/theme/title_icon.png"
         title="Manage Events"
         subtext="Create and manage upcoming and past events"
         className="mt-[5vh]"

@@ -1,13 +1,14 @@
 import React from "react";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
 import Header from "../components/Header";
-import { PageTitle } from "../components/PageTitle";
 import PixelatedButton from "../components/PixelatedButton";
 import SponsorItem from "../components/SponsorItem";
 import { useSlideShowController } from "../lib/slideShowController";
-
+import BinaryBackground from "../components/BinaryBackground";
+import { SocialLinks } from "../components/SocialLinks";
 const Home: React.FC = () => {
   const slideShow = useSlideShowController();
 
@@ -18,58 +19,59 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <BinaryBackground />
       <Header />
 
       {/* HERO SECTION */}
-      <section className="min-h-[80vh] flex items-center">
-        <div className="flex flex-col md:flex-row w-full px-4 md:px-[8vw] gap-8 md:gap-16 items-center">
-          <div className="flex flex-col items-center flex-1 gap-6 md:gap-8">
-            <div className="pt-12 md:pt-0">
-              <PageTitle
-                image="/theme/title_icon.png"
-                title="Welcome to Developers Society"
-                className="!p-0 "
+      <section className="h-[85vh] items-center flex">
+        <div className="flex flex-col md:flex-row w-full mb-0 px-4 md:px-[8vw] gap-8 md:gap-16 items-center">
+          <div className="relative flex flex-col items-center flex-1 gap-6 md:gap-8">
+            <div className="pt-1 md:pt-0 flex flex-col items-center justify-center">
+              <h1 className="text-white font-silkscreen text-3xl md:text-5xl mb-12 tracking-widest uppercase">
+                Welcome to
+              </h1>
+              <img
+                src="/branding/text_logo.png"
+                alt="DEVS Logo"
+                className="w-[50vw] lg:w-[40vw] mb-5"
               />
+
             </div>
-            <p className="text-white text-sm md:text-m max-w-xl font-rethink text-center md:text-left px-4 md:px-0">
-              Based in the University of Auckland, Developers Society is a
-              community of software enthusiasts who are passionate about
-              roasting the ever living shit out of Phoebe. Our 2025
-              Co-President, arguably the shortest person on Earth, is the one
-              who is responsible for this website as she was the one who came up
-              with the idea. She also has a knack for not knowing how to drive,
-              with a record of 4 flat tires in the past year.
+            <p className="text-white text-sm md:text-m max-w-xl font-rethink text-center xs:text-left px-20 md:px-0">
+              Developers Society (DEVS) is Auckland’s leading university technology club, serving students from the University of Auckland and Auckland University of Technology.
             </p>
-            <PixelatedButton
-              to="/join"
-              inactive="./buttons/join/join_us_inactive.png"
-              hover="./buttons/join/join_us_hover.png"
-              clicked="./buttons/join/join_us_click.png"
-            />
+            <p className="text-white text-sm mb-10 md:text-m max-w-xl font-rethink text-center xs:text-left px-20 md:px-0">
+              We bridge the gap between academia and industry by running hands-on workshops, hackathons, and networking events that help students grow their technical skills, prepare for the workplace, and connect with leading organisations. Through strong industry partnerships, we create meaningful opportunities that empower and shape the next generation of technology talent in Auckland.
+            </p>
+            {/* Learn more button (absolute in hero) */}
+
           </div>
 
-          {/* RIGHT SIDE */}
-          <div className="flex-1 flex justify-center w-full">
-            <img
-              src="/branding/3d_logo.png"
-              alt="Developers Society Mascot"
-              className="max-w-[280px] md:max-w-[420px] w-full pixelated"
-            />
-          </div>
+        </div>
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-7">
+          <button
+            onClick={() => {
+              const el = document.getElementById('next-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="font-silkscreen uppercase text-white px-6 py-3 hover:cursor-pointer rounded-lg animate-bounce"
+            aria-label="Learn more"
+          >
+            Learn More
+          </button>
         </div>
       </section>
 
       {/* largest tech club */}
-      <section className="w-full flex justify-center py-12 px-4">
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-20 max-w-6xl">
-          {/* Slideshow */}
+      <section id="next-section" className="w-full min-h-screen flex justify-center px-4 mt-8">
+        <div className="flex flex-col lg:grid grid-cols-1 lg:p-0 p-20 lg:grid-cols-2 lg:gap-0 items-center justify-center w-full lg:pr-30 lg:pl-30 gap-12">
           <div
             className="flex flex-row items-center justify-center w-full md:w-auto gap-1 md:gap-0"
             onMouseEnter={slideShow.pause}
             onMouseLeave={slideShow.resume}
           >
             <button
-              className="min-w-8 md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
+              className="min-w-8 hover:cursor-pointer d:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
               onClick={slideShow.prev}
               aria-label="Previous Slide Button"
             >
@@ -85,7 +87,7 @@ const Home: React.FC = () => {
               className="hover:scale-101 transition max-w-[85%] md:max-w-full"
             />
             <button
-              className="min-w-8 md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
+              className="min-w-8 hover:cursor-pointer z-10 md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
               onClick={slideShow.next}
               aria-label="Next Slide Button"
             >
@@ -98,21 +100,35 @@ const Home: React.FC = () => {
           </div>
 
           {/* Text */}
-          <div className="flex flex-col gap-4 max-w-xl text-center md:text-left">
+          <div className="flex lg:pl-40 flex-col items-center  justify-center gap-8 max-w-xl text-center lg:max-w-2xl lg:text-left">
             <p className="text-white font-silkscreen text-lg md:text-2xl tracking-widest uppercase">
-              NZ's Largest Tech Club
+              NZ's Largest Tech Society
             </p>
 
-            <p className="text-white font-rethink text-sm md:text-m leading-relaxed">
-              DEVS is the largest tech club at the University of Auckland. We're
-              a community of software enthusiasts who build, learn, and ship
+            <p className="text-white font-rethink text-sm lg:text-m leading-relaxed">
+              DEVS is Auckland's largest tech club, at both the University of Auckland and Auckland University of Technology. We're
+              a community of software enthusiasts who build, learn, and grow
               together.
             </p>
 
-            <div className="flex flex-col gap-3 mt-4 items-center md:items-start">
-              <div className="h-10 w-full md:w-48 max-w-xs rounded-lg bg-pink-400/80 border-2 border-white" />
-              <div className="h-10 w-full md:w-48 max-w-xs rounded-lg bg-blue-400/80 border-2 border-white" />
-              <div className="h-10 w-full md:w-48 max-w-xs rounded-lg bg-purple-400/80 border-2 border-white" />
+            <div className="flex flex-col gap-3 mt-4 items-center lg:items-start">
+              <Link to="/join" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-pink-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+                <span className="text-white font-silkscreen text-sm md:text-m text-center">
+                  1000+ members
+                </span>
+              </Link>
+
+              <Link to="/events" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-blue-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+                <span className="text-white font-silkscreen text-sm md:text-m text-center">
+                  25+ events per year
+                </span>
+              </Link>
+
+              <Link to="/team" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-purple-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+                <span className="text-white font-silkscreen text-sm md:text-m text-center">
+                  27 student executives
+                </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -120,110 +136,116 @@ const Home: React.FC = () => {
 
       {/* sponsors */}
       {/* TODO: Replace with 2026 sponsors */}
-      <section className="w-full py-12 px-4 md:px-24">
-        <PageTitle title="Proudly Sponsored By" className="!p-0" />
+      <section className="w-full px-4 pt-5 flex flex-col items-center top-0">
+        <h1 className="text-white font-silkscreen px-10 lg:px-0 text-center text-2xl lg:text-4xl mb-20 tracking-widest uppercase">
+          proudly sponsored by
+        </h1>
 
         {/* Gold */}
-        <p className="text-[#D09424] font-pixelify text-xl md:text-[2rem] pl-[1rem]">
-          gold sponsors
+        <p className="text-[#D09424] font-pixelify text-center mb-7 text-xl md:text-[2rem] pl-[1rem]">
+          GOLD
         </p>
         <div className="flex flex-col md:flex-row items-center justify-evenly w-full gap-4 md:gap-0">
+          {/* <img src="/sponsors/gold/jane_street.png"  className="w-[24rem] h-auto max-w-[24rem] p-4" /> */}
           <SponsorItem
             name="Jane Street"
-            image="/landing/file.png"
+            className="w-[24rem] h-auto max-w-[24rem] p-2"
             logo="/sponsors/gold/jane_street.png"
           />
           <SponsorItem
-            name="Serato"
-            image="/landing/file.png"
-            logo="/sponsors/gold/serato.png"
+            name="Partly"
+            className="w-[24rem] h-auto max-w-[24rem] p-2"
+            logo="/sponsors/gold/partly.png"
           />
         </div>
 
         {/* Silver */}
-        <p className="text-[#D3D3D3] font-pixelify text-xl md:text-[2rem] pl-[1rem] mt-8 md:mt-[4rem]">
-          silver sponsors
+        <p className="text-[#D3D3D3] items-center text-center mb-7 font-pixelify text-xl md:text-[2rem] pl-[1rem] mt-8 md:mt-[4rem]">
+          SILVER
         </p>
-        <div className="flex flex-col md:flex-row items-center justify-evenly w-full gap-4 md:gap-0">
+        <div className="flex flex-col lg:flex-row items-center justify-evenly w-full gap-4 md:gap-0">
           <SponsorItem
             name="Atlassian"
-            image="/landing/file.png"
             logo="/sponsors/silver/atlassian.png"
           />
 
           <SponsorItem
+            name="IMC"
+            logo="/sponsors/silver/imc.png"
+          />
+
+          <SponsorItem
             name="Optiver"
-            image="/landing/file.png"
             logo="/sponsors/silver/optiver.png"
           />
 
           <SponsorItem
+            name="Serato"
+            logo="/sponsors/silver/serato.png"
+          />
+
+          <SponsorItem
             name="Sandfield"
-            image="/landing/file.png"
             logo="/sponsors/silver/sandfield.png"
           />
 
           <SponsorItem
             name="Visa"
-            image="/landing/file.png"
             logo="/sponsors/silver/visa.png"
           />
         </div>
       </section>
 
       {/* Random Section */}
-      <section className="w-full py-12 px-4 md:px-24 flex justify-center">
-        <div className="flex flex-col md:flex-row items-center justify-center w-full md:w-[70vw] min-h-[35vh] h-full border-2 border-[#6E80DA] rounded-[25px] p-6 md:p-0 gap-4 md:gap-0">
+      <section className="w-full mt-50 flex justify-center">
+        <div className="flex flex-col lg:flex-row justify-center lg:py-20 lg:px-20 py-15 px-15 w-[70vw] md:w-[70vw] h-full  border-2 border-[#6E80DA] rounded-[25px] px-0 gap-6 md:gap-10">
           <div className="flex flex-col max-w-xl text-center md:text-left items-center md:items-left justify-center gap-4">
             <p className="text-white font-silkscreen text-lg md:text-2xl uppercase">
-              Lorem Ipsum Dolor Sit Amet
+              stay connected with us!
             </p>
-            <p className="text-white font-rethink text-sm md:text-m">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+            <p className="text-white font-rethink text-center text-sm md:text-m">
+              Follow us on social media to stay up to date with our latest news, events, and opportunities. Join our community and never miss out on the exciting things happening at DEVS!
             </p>
+            <SocialLinks className="gap-4 mt-4" />
           </div>
           <img
-            src="branding/deva_mascot.png"
-            className="w-1/2 md:w-1/4 h-auto pixelated drop-shadow-[0_12px_10px_rgba(0,0,0,0.4)]"
+            src="branding/deva_wave.png"
+            className="lg:max-w-[40vh] scale-x-[-1] h-full pixelated drop-shadow-[0_12px_10px_rgba(0,0,0,0.4)]"
             alt="DEVS Mascot Deva"
           />
         </div>
       </section>
 
       {/* Sign up */}
-      <section className="w-full py-12 md:py-24 px-4 md:px-24">
-        <PageTitle
-          title="Want to become a member?"
-          className="!p-0 mb-8 md:mb-16"
-        />
+      <section className="w-full py-12 mt-20 md:py-24 md:px-4 px-15 mb-30">
+        <h1 className="text-white font-silkscreen text-2xl lg:text-4xl mb-20 uppercase text-center">
+          ready to join the fun?
+        </h1>
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-24">
+        <div className="flex flex-col items-center justify-between gap-8 md:mt-0 -mt-12 ">
           {/* LEFT SIDE */}
           <div className="flex flex-col items-center w-full md:w-auto">
             {/* Framed content */}
-            <div className="relative w-full max-w-[720px] h-[300px] md:h-[500px] aspect-[16/9]">
-              {/* Border */}
+            <div className="">
+              {/* 
               <img
                 src="/landing/border.png"
                 alt=""
                 className="absolute inset-0 w-full h-full pixelated"
               />
 
-              {/* Text inside frame */}
-              <div className="absolute inset-0 flex items-center justify-center px-8 md:px-16 text-center">
-                <p className="text-white text-xs md:text-sm leading-relaxed max-w-md">
+              */}
+              <div className=" inset-0 flex items-center justify-center px-8 md:px-16 text-center">
+                <p className="text-white text-sm md:text-sm leading-relaxed max-w-md">
                   We're always excited to meet motivated individuals who love
-                  technology! Sign up now to join the devs community and explore
+                  technology! Sign up now to join the DEVS community and explore
                   more opportunities with us.
                 </p>
               </div>
             </div>
 
             {/* Button */}
-            <div className="mt-6 md:mt-10">
+            <div className="mt-10 md:mt-15">
               <PixelatedButton
                 to="/join"
                 inactive="/buttons/join/join_us_inactive.png"
@@ -235,11 +257,7 @@ const Home: React.FC = () => {
           </div>
 
           {/* RIGHT SIDE */}
-          <img
-            src="/branding/deva_reading.png"
-            alt=""
-            className="w-[280px] md:w-[420px] h-auto pixelated"
-          />
+
         </div>
       </section>
 
