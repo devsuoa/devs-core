@@ -6,6 +6,7 @@ const sponsors = [
     "/sponsors/silver/optiver.png",
     "/sponsors/silver/sandfield.png",
     "/sponsors/silver/visa.png",
+    "/sponsors/silver/imc.png",
   ];
   
   export default function SponsorTape() {
