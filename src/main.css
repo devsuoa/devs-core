@@ -6,6 +6,7 @@ html,
 body {
   overflow-x: hidden;
   max-width: 100vw;
+  /* background-color: #0d0a12; */
 }
 
 body {
@@ -76,6 +77,10 @@ html {
 }
 
 @media (max-width: 768px) {
+  html,
+  body{
+    background-color: #0d0a12;
+  }
   .pixel-input {
     font-size: 16px; /* Prevents iOS zoom on focus */
     padding: 14px 16px;
@@ -362,10 +367,10 @@ html {
 
 @keyframes sponsor-scroll {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -392,6 +397,15 @@ html {
 }
 .sponsor-track {
   animation: sponsor-scroll 25s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 767px) {
+  .sponsor-track {
+    animation-duration: 16s;
+  }
 }
 
 .animate-fadeIn {

@@ -3,11 +3,10 @@ import React from 'react';
 import Header from '../components/Header';
 import { useActiveLinks, getFaviconUrl } from '../lib/linksController';
 import { SocialLinks } from '../components/SocialLinks';
-// import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
 import BinaryBackground from '../components/BinaryBackground';
+import Footer from '../components/Footer';
 
 const Links: React.FC = () => {
   const { links, loading, error } = useActiveLinks();
@@ -131,14 +130,8 @@ const Links: React.FC = () => {
           )}
         </div>
       </div>
-      <p className="text-white text-center text-[1rem] mb-12">
-        <Link to="/privacy-policy" className="text-white font-rethink hover:text-gray-300 hover:underline transition-all duration-300 ease-in-out">
-          Privacy Policy
-        </Link>
-      </p>
       </div>
-      {/* <Footer /> */}
-      
+      <Footer />
     </>
   );
 };

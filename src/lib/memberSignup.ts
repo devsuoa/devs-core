@@ -48,9 +48,11 @@ export async function signupMember(payload: SignupPayload) {
     upi: upi || null,
     student_id: studentId,
   });
-  
-  if (memberError) {
-    return {status: false, error: memberError};
+
+  const alreadyExists = (memberError as { code?: string })?.code === "23505";
+
+  if (memberError && !alreadyExists) {
+    return { status: false, error: memberError };
   }
 
   try {
@@ -65,12 +67,11 @@ export async function signupMember(payload: SignupPayload) {
 
     const { error: degreeError } = await supabase
       .from("student_degree")
-      .upsert(studentDegreeRows, {
-        onConflict: "student_id,degree_id",
-      });
+      .insert(studentDegreeRows);
 
-    if (degreeError) {
-      return {status: false, error: degreeError}
+    const degreeIsDuplicate = (degreeError as { code?: string })?.code === "23505";
+    if (degreeError && !degreeIsDuplicate) {
+      return { status: false, error: degreeError };
     }
 
     const seen = new Set<string>();
@@ -93,18 +94,22 @@ export async function signupMember(payload: SignupPayload) {
     if (studentMajorRows.length > 0) {
       const { error: majorError } = await supabase
         .from("student_major")
-        .upsert(studentMajorRows, {
-          onConflict: "student_id,degree_id,major_id",
-        });
+        .insert(studentMajorRows);
 
-      if (majorError){
-        return {status: false, error: majorError} 
-      } 
+      const majorIsDuplicate = (majorError as { code?: string })?.code === "23505";
+      if (majorError && !majorIsDuplicate) {
+        return { status: false, error: majorError };
+      }
     }
 
-    return {status: true, error: null}
+    if (alreadyExists) {
+      return { status: false, error: memberError };
+    }
+    return { status: true, error: null };
   } catch (err) {
-    await supabase.from("members").delete().eq("student_id", studentId);
-    return { status: false, error: err};  
+    if (!alreadyExists) {
+      await supabase.from("members").delete().eq("student_id", studentId);
+    }
+    return { status: false, error: err };
   }
 }

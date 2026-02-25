@@ -40,35 +40,41 @@ type SectionProps = {
   children: React.ReactNode[];
 };
 
-const TeamSection: React.FC<SectionProps> = ({ title, gridClass = "grid-cols-3", children }) => (
-  <section className="px-12 pb-10 text-center">
-    {title && (
-      <motion.p
-        className="text-white text-2xl font-pixelify mb-4"
-        variants={headingVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.5 }}
-      >
-        {title}
-      </motion.p>
-    )}
-    <div className={`grid ${gridClass} gap-8 justify-items-center place-content-center max-w-fit mx-auto`}>
-      {React.Children.map(children, (child, i) => (
-        <motion.div
-          key={i}
-          custom={i}
-          variants={cardVariants}
+const TeamSection: React.FC<SectionProps> = ({ title, gridClass = "grid-cols-3", children }) => {
+  const childArray = React.Children.toArray(children);
+  const count = childArray.length;
+
+  return (
+    <section className="px-10 pb-10 text-center">
+      {title && (
+        <motion.p
+          className="text-white text-2xl font-pixelify mb-4"
+          variants={headingVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.5 }}
         >
-          {child}
-        </motion.div>
-      ))}
-    </div>
-  </section>
-);
+          {title}
+        </motion.p>
+      )}
+      <div className={`grid ${gridClass} gap-8 justify-items-center place-content-center max-w-fit mx-auto`}>
+        {childArray.map((child, i) => (
+          <motion.div
+            key={i}
+            custom={i}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.3 }}
+            className={count === 4 && i === count - 1 ? "col-start-2 md:col-start-auto" : undefined}
+          >
+            {child}
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 const Team: React.FC = () => {
   React.useEffect(() => {
@@ -132,7 +138,7 @@ const Team: React.FC = () => {
           <a href="https://www.linkedin.com/in/hazik-chaudhry-5123432aa/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100">
             <MemberIcon image="/team/execs/hazik.jpg" name="Hazik Chaudhry" team={TeamEnum.Tech} />
           </a>
-          <a href="https://www.linkedin.com/in/joseph-wilson-a665332a4/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100 col-start-2 md:col-start-auto">
+          <a href="https://www.linkedin.com/in/joseph-wilson-a665332a4/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100">
             <MemberIcon image="/team/execs/joseph.jpg" name="Joseph Wilson" team={TeamEnum.Tech} />
           </a>
         </TeamSection>
@@ -174,7 +180,7 @@ const Team: React.FC = () => {
           <a href="https://www.linkedin.com/in/ayemyatthu04/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100">
             <MemberIcon image="/team/execs/aye.jpg" name="Aye Thu" team={TeamEnum.Social} />
           </a>
-          <a href="https://www.linkedin.com/in/eileen-qiu-7b0009287/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100 col-start-2 md:col-start-auto">
+          <a href="https://www.linkedin.com/in/eileen-qiu-7b0009287/" target="_blank" rel="noopener noreferrer" className="scale-90 md:scale-100">
             <MemberIcon image="/team/execs/eileen.jpg" name="Eileen Qiu" team={TeamEnum.Social} />
           </a>
         </TeamSection>
@@ -203,7 +209,7 @@ const Team: React.FC = () => {
 
         {/* Team photo */}
         <motion.section
-          className="px-12 py-6 my-12 flex justify-center"
+          className="px-4 py-6 my-12 flex justify-center"
           variants={headingVariants}
           initial="hidden"
           whileInView="visible"

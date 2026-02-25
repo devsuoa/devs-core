@@ -20,7 +20,9 @@ const Home: React.FC = () => {
   return (
     <>
       <BinaryBackground />
-      <Header />
+      <div className="mb-8">
+      <Header/>
+      </div>
 
       {/* HERO SECTION */}
       <section className="h-[85vh] items-center flex">
@@ -37,10 +39,10 @@ const Home: React.FC = () => {
               />
 
             </div>
-            <p className="text-white text-sm md:text-m max-w-xl font-rethink text-center xs:text-left px-20 md:px-0">
+            <p className="text-white text-sm md:text-m max-w-xl font-rethink text-center xs:text-left px-10 md:px-0">
               Developers Society (DEVS) is Auckland’s leading university technology club, serving students from the University of Auckland and Auckland University of Technology.
             </p>
-            <p className="text-white text-sm mb-10 md:text-m max-w-xl font-rethink text-center xs:text-left px-20 md:px-0">
+            <p className="text-white text-sm mb-10 md:text-m max-w-xl font-rethink text-center xs:text-left px-10 md:px-0">
               We bridge the gap between academia and industry by running hands-on workshops, hackathons, and networking events that help students grow their technical skills, prepare for the workplace, and connect with leading organisations. Through strong industry partnerships, we create meaningful opportunities that empower and shape the next generation of technology talent in Auckland.
             </p>
             {/* Learn more button (absolute in hero) */}
@@ -48,7 +50,7 @@ const Home: React.FC = () => {
           </div>
 
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-7">
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-7 flex flex-col items-center">
           <button
             onClick={() => {
               const el = document.getElementById('next-section');
@@ -59,19 +61,30 @@ const Home: React.FC = () => {
           >
             Learn More
           </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="hidden md:block w-6 h-6 text-white mt-1 animate-bounce"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
       </section>
 
       {/* largest tech club */}
       <section id="next-section" className="w-full min-h-screen flex justify-center px-4 mt-8">
-        <div className="flex flex-col lg:grid grid-cols-1 lg:p-0 p-20 lg:grid-cols-2 lg:gap-0 items-center justify-center w-full lg:pr-30 lg:pl-30 gap-12">
+        <div className="flex flex-col lg:grid grid-cols-1 lg:p-0 p-4 lg:grid-cols-2 lg:gap-0 items-center justify-center w-full lg:pr-30 lg:pl-30 gap-12">
           <div
             className="flex flex-row items-center justify-center w-full md:w-auto gap-1 md:gap-0"
             onMouseEnter={slideShow.pause}
             onMouseLeave={slideShow.resume}
           >
             <button
-              className="min-w-8 hover:cursor-pointer d:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
+              className="hidden md:block min-w-8 hover:cursor-pointer md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
               onClick={slideShow.prev}
               aria-label="Previous Slide Button"
             >
@@ -84,10 +97,10 @@ const Home: React.FC = () => {
             <img
               src={slideShow.slide}
               alt="DEVS Events Slideshow"
-              className="hover:scale-101 transition max-w-[85%] md:max-w-full"
+              className="hover:scale-101 transition w-full md:flex-1 md:min-w-0 md:max-w-full"
             />
             <button
-              className="min-w-8 hover:cursor-pointer z-10 md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
+              className="hidden md:block min-w-8 hover:cursor-pointer z-10 md:min-w-10 min-h-8 md:min-h-10 hover:scale-105 transition flex-shrink-0"
               onClick={slideShow.next}
               aria-label="Next Slide Button"
             >
@@ -135,7 +148,6 @@ const Home: React.FC = () => {
       </section>
 
       {/* sponsors */}
-      {/* TODO: Replace with 2026 sponsors */}
       <section className="w-full px-4 pt-5 flex flex-col items-center top-0">
         <h1 className="text-white font-silkscreen px-10 lg:px-0 text-center text-2xl lg:text-4xl mb-20 tracking-widest uppercase">
           proudly sponsored by
@@ -149,12 +161,12 @@ const Home: React.FC = () => {
           {/* <img src="/sponsors/gold/jane_street.png"  className="w-[24rem] h-auto max-w-[24rem] p-4" /> */}
           <SponsorItem
             name="Jane Street"
-            className="w-[24rem] h-auto max-w-[24rem] p-2"
+            className="w-[24rem] h-auto max-w-[24rem] p-2 px-10"
             logo="/sponsors/gold/jane_street.png"
           />
           <SponsorItem
             name="Partly"
-            className="w-[24rem] h-auto max-w-[24rem] p-2"
+            className="w-[24rem] h-auto max-w-[24rem] p-2 px-10"
             logo="/sponsors/gold/partly.png"
           />
         </div>

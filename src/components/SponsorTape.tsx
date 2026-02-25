@@ -9,9 +9,9 @@ const sponsors = [
   ];
   
   export default function SponsorTape() {
-    return (
-      <div className="relative w-full overflow-hidden py-6 opacity-70">
-        <div className="sponsor-track flex w-max items-center gap-16">
+  return (
+    <div className="relative w-full overflow-hidden py-6 opacity-70 isolate">
+      <div className="sponsor-track flex w-max items-center gap-16" style={{ transform: "translateZ(0)" }}>
           {sponsors.map((logo, i) => (
             <img
               key={`a-${i}`}

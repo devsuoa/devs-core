@@ -184,11 +184,18 @@ const Signup: React.FC = () => {
       });
 
       if (!status) {
-        toast.error((error as Error).message);
+        const pgError = error as { code?: string };
+        if (pgError?.code === "23505") {
+          toast.error("You're already signed up!");
+        } else {
+          console.error(error);
+          toast.error("An error occurred. Please try again.");
+        }
       }
       setLogin(status);
     } catch (error) {
-      toast.error("Server Error");
+      console.error(error);
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -552,7 +559,7 @@ const Signup: React.FC = () => {
             <div className="flex justify-center items-center">
               <img
                 src="/branding/deva_wave.png"
-                alt="Mascot"
+                alt="DEVA Waving"
                 className="w-24 sm:w-48 md:w-full max-w-[320px] h-auto object-contain opacity-90"
               />
             </div>

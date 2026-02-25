@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import CookieDisclaimer from "./components/CookiesDisclaimer";
-import Construction from "./pages/Construction";
+// import Construction from "./pages/Construction";
 import Links from "./pages/Links";
 import AdminSignup from "./pages/admin/AdminSignup";
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -74,9 +74,9 @@ function App() {
       <main className="min-h-screen">
         <Routes>
           {/* Main pages */}
-          <Route path="/" element={<Construction />} />
-          <Route path="/join" element={<Signup />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/join" element={<Signup />} />
           <Route path="/links" element={<Links />} />
           <Route path="/events" element={<Events />} />
           <Route path="/team" element={<Team />} />

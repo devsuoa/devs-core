@@ -3,7 +3,7 @@ import { SocialLinks } from '../components/SocialLinks';
 import { isFeatureEnabled } from '../lib/featureFlags';
 import { onPageNotFound } from '../lib/pageNotFoundController';
 import BinaryBackground from '../components/BinaryBackground';
-import { Link } from 'react-router-dom';
+import PixelatedButton from '../components/PixelatedButton';
 
 const logo = '/branding/text_logo.png';
 
@@ -109,27 +109,27 @@ const Landing: React.FC = () => {
             "
             >
               {/* TODO: REPLACE WITH PIXELATED BUTTONS */}
-              {/* <PixelatedButton
+              <PixelatedButton
                 to="/home"
-                inactive="/buttons/join/join_us_inactive.png"
-                hover="/buttons/join/join_us_hover.png"
-                clicked="/buttons/join/join_us_click.png"
+                inactive="/buttons/home/home_inactive.png"
+                hover="/buttons/home/home_hover.png"
+                clicked="/buttons/home/home_click.png"
               />
 
               <PixelatedButton
                 to="/events"
-                inactive="/buttons/join/join_us_inactive.png"
-                hover="/buttons/join/join_us_hover.png"
-                clicked="/buttons/join/join_us_click.png"
+                inactive="/buttons/events/events_inactive.png"
+                hover="/buttons/events/events_hover.png"
+                clicked="/buttons/events/events_click.png"
               />
               <PixelatedButton
                 to="/sponsors"
-                inactive="/buttons/join/join_us_inactive.png"
-                hover="/buttons/join/join_us_hover.png"
-                clicked="/buttons/join/join_us_click.png"
-              /> */}
+                inactive="/buttons/sponsors/sponsors_inactive.png"
+                hover="/buttons/sponsors/sponsors_hover.png"
+                clicked="/buttons/sponsors/sponsors_click.png"
+              />
 
-              {/* TODO: REMOVE TEMPORARY BUTTONS */}
+              {/* TODO: REMOVE TEMPORARY BUTTONS
               <Link
                 to="/home"
                 className="inline-block w-36 text-center font-silkscreen text-white text-sm sm:text-base px-4 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider hover:bg-pink-400/80 active:scale-95 transition-all duration-150"
@@ -149,7 +149,7 @@ const Landing: React.FC = () => {
                 className="inline-block w-36 text-center font-silkscreen text-white text-sm sm:text-base px-4 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider hover:bg-pink-400/80 active:scale-95 transition-all duration-150"
               >
                 SPONSORS
-              </Link>
+              </Link> */}
 
             </div>
           </div>

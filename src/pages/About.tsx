@@ -8,7 +8,6 @@ import { initAboutHorizontalScroll } from "../lib/aboutController";
 import PixelatedButton from "../components/PixelatedButton";
 import SponsorTape from "../components/SponsorTape";
 import BinaryBackground from "../components/BinaryBackground";
-import { Link } from "react-router-dom";
 
 const About = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -127,13 +126,12 @@ const About = () => {
                 <p className="text-white text-sm max-w-md italic font-rethink p-0">
                   DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
                 </p>
-                {/* TODO: REPLACE WITH PIXELATED LEARN MORE BUTTON */}
-                <Link
+                <PixelatedButton
                   to="/sponsors"
-                  className="inline-block font-silkscreen text-white text-sm sm:text-base px-6 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider hover:bg-pink-400/80 active:scale-95 transition-all duration-150"
-                >
-                  LEARN MORE
-                </Link>
+                  inactive="/buttons/learn/learn_more_inactive.png"
+                  hover="/buttons/learn/learn_more_hover.png"
+                  clicked="/buttons/learn/learn_more_click.png"
+                />
               </div>
             </div>
 
@@ -178,16 +176,16 @@ const About = () => {
                   alt="2025/26 DEVS Exec Photo"
                   className="w-[70%] h-auto"
                 />
-                <p className="text-white text-sm -mt-20 italic font-rethink">
+                <p className="text-white text-sm mt-2 italic font-rethink">
                   2025/26 DEVS Exec Team
                 </p>
-                {/* TODO: REPLACE WITH MEET THE TEAM BUTTON */}
-                <Link
+                <PixelatedButton
                   to="/team"
-                  className="mt-8 inline-block font-silkscreen text-white text-sm sm:text-base px-6 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider hover:bg-pink-400/80 active:scale-95 transition-all duration-150"
-                >
-                  MEET THE TEAM
-                </Link>
+                  inactive="/buttons/team/meet_the_team_inactive.png"
+                  hover="/buttons/team/meet_the_team_hover.png"
+                  clicked="/buttons/team/meet_the_team_click.png"
+                  className="max-w-60 mt-12"
+                />
               </div>
             </div>
           </section>
@@ -260,7 +258,7 @@ const About = () => {
           </section>
 
           {/* Carousel */}
-          <section className="mt-6 px-4 self-stretch">
+          <section className="mt-6 px-0 self-stretch">
             <div
               ref={carouselRef}
               className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
@@ -296,13 +294,13 @@ const About = () => {
               <p className="text-white text-sm max-w-sm italic font-rethink p-0 text-center">
                 DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
               </p>
-              {/* TODO: REPLACE WITH LEARN MORE BUTTON */}
-              <Link
+              <PixelatedButton
                 to="/sponsors"
-                className="inline-block font-silkscreen text-white text-sm px-6 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider focus:bg-pink-400/80  active:scale-95 transition-all duration-150"
-              >
-                LEARN MORE
-              </Link>
+                inactive="/buttons/learn/learn_more_inactive.png"
+                hover="/buttons/learn/learn_more_hover.png"
+                clicked="/buttons/learn/learn_more_click.png"
+                className="sm:min-w-40 max-w-40"
+              />
             </div>
             <div className="w-full overflow-hidden">
               <SponsorTape />
@@ -333,7 +331,7 @@ const About = () => {
           </section>
 
           {/* Team Photo */}
-          <section className="my-12 px-12">
+          <section className="my-12 px-4">
             <div className="flex flex-col items-center justify-center gap-4">
               <img
                 src="/team/execs/team.png"
@@ -343,13 +341,14 @@ const About = () => {
               <p className="text-white text-sm italic font-rethink text-center">
                 2025/26 DEVS Exec Team
               </p>
-              {/* TODO: REPLACE WITH MEET THE TEAM BUTTON */}
-              <Link
+              <PixelatedButton
                 to="/team"
-                className="mt-4 inline-block font-silkscreen text-white text-sm px-6 py-3 rounded-lg border border-white/60 ring-2 ring-white/60 shadow-[0_0_18px_4px_rgba(255,255,255,0.35)] bg-transparent tracking-wider focus:bg-pink-400/80 active:scale-95 transition-all duration-150"
-              >
-                MEET THE TEAM
-              </Link>
+                inactive="/buttons/team/meet_the_team_inactive.png"
+                hover="/buttons/team/meet_the_team_hover.png"
+                clicked="/buttons/team/meet_the_team_click.png"
+                // className="max-w-60 mt-12"
+                className="sm:min-w-40 max-w-40 my-6"
+              />
             </div>
           </section>
 
@@ -392,9 +391,9 @@ const About = () => {
             </div>
           </section>
 
-          <Footer />
-
         </main>
+
+        <Footer />
       </>
     );
   }
