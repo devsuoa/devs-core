@@ -74,7 +74,7 @@ function App() {
       <main className="min-h-screen">
         <Routes>
           {/* Main pages */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/home" element={<Home />} />
           <Route path="/join" element={<Signup />} />
           <Route path="/links" element={<Links />} />
