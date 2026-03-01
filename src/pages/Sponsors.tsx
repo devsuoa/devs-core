@@ -267,55 +267,57 @@ const Sponsors: React.FC = () => {
     <>
     <BinaryBackground/>
       <Header />
-      <main className="min-h-screen">
+      <main className="min-h-screen overflow-x-hidden">
         <PageTitle
           title="Our Sponsors"
           className="p-0"
         />
 
-        {/* Carousel Gallery */}
-        <div
-          ref={galleryRef}
-          className="gallery relative w-full h-[90vh]  -mt-20 md:mt-5 px-4 sm:px-6 md:px-8"
-        >
-          <ul
-            ref={cardsRef}
-            className="cards absolute w-64 h-[480px] sm:w-72 sm:h-[540px] md:w-80 md:h-[600px] top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+        {/* Carousel Section */}
+        <div className="flex flex-col items-center w-full gap-5 -mt-20 md:mt-5 pt-5 sm:pt-0">
+          <div
+            ref={galleryRef}
+            className="gallery relative w-full h-[360px] sm:h-[410px] md:h-[460px]"
           >
-            {sponsorCards.map((sponsor, index) => (
-              <SponsorCard
-                key={`${sponsor.name}-${index}`}
-                name={sponsor.name}
-                image={sponsor.image}
-                desc={sponsor.desc}
-                tier={sponsor.tier}
-              />
-            ))}
-          </ul>
-        </div>
+            <ul
+              ref={cardsRef}
+              className="cards absolute w-64 h-[358px] sm:w-72 sm:h-[403px] md:w-80 md:h-[448px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            >
+              {sponsorCards.map((sponsor, index) => (
+                <SponsorCard
+                  key={`${sponsor.name}-${index}`}
+                  name={sponsor.name}
+                  image={sponsor.image}
+                  desc={sponsor.desc}
+                  tier={sponsor.tier}
+                />
+              ))}
+            </ul>
+          </div>
 
-        {/* Navigation Buttons */}
-        <div className="relative -mt-100 md:-mt-64 md:-mt-80 flex items-center justify-center gap-3 sm:gap-4 px-4">
-          <button
-            onClick={handlePrev}
-            className="sponsor-prev px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg transition-colors"
-          >
-            <img
-              src="buttons/slides/slide_left_button.svg"
-              alt="Previous"
-              className="w-5 h-5 sm:w-6 sm:h-6 inline-block hover:cursor-pointer"
-            />
-          </button>
-          <button
-            onClick={handleNext}
-            className="sponsor-next px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg transition-colors"
-          >
-            <img
-              src="buttons/slides/slide_right_button.svg"
-              alt="Next"
-              className="w-5 h-5 sm:w-6 sm:h-6 inline-block hover:cursor-pointer"
-            />
-          </button>
+          {/* Navigation Buttons */}
+          <div className="flex items-center justify-center gap-3 sm:gap-4">
+            <button
+              onClick={handlePrev}
+              className="sponsor-prev px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg transition-colors"
+            >
+              <img
+                src="buttons/slides/slide_left_button.svg"
+                alt="Previous"
+                className="w-5 h-5 sm:w-6 sm:h-6 inline-block hover:cursor-pointer"
+              />
+            </button>
+            <button
+              onClick={handleNext}
+              className="sponsor-next px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg transition-colors"
+            >
+              <img
+                src="buttons/slides/slide_right_button.svg"
+                alt="Next"
+                className="w-5 h-5 sm:w-6 sm:h-6 inline-block hover:cursor-pointer"
+              />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center px-6 mt-10 sm:px-8 md:px-4">
@@ -328,9 +330,11 @@ const Sponsors: React.FC = () => {
 
         {/* Sponsor Submission Form */}
         <div className="py-16 px-10 md:px-0 ">
-          <h2 className="text-center text-xl md:text-3xl font-silkscreen text-white mb-12">
-            {"<"} WANT TO SPONSOR US? {"/>"}
-          </h2>
+          <div className="flex justify-center">
+            <h2 className="text-center font-silkscreen text-white mb-12 text-[clamp(1rem,4vw,2.5rem)] whitespace-nowrap">
+              &lt; WANT TO SPONSOR US? /&gt;
+            </h2>
+          </div>
           <SponsorForm />
         </div>
 

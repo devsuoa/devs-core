@@ -50,7 +50,7 @@ const Home: React.FC = () => {
           </div>
 
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-7 flex flex-col items-center">
+        <div className="hidden [@media(min-height:750px)]:flex absolute left-1/2 transform -translate-x-1/2 bottom-7 flex-col items-center">
           <button
             onClick={() => {
               const el = document.getElementById('next-section');
@@ -125,19 +125,19 @@ const Home: React.FC = () => {
             </p>
 
             <div className="flex flex-col gap-3 mt-4 items-center lg:items-start">
-              <Link to="/join" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-pink-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link to="/join" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-pink-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   1000+ members
                 </span>
               </Link>
 
-              <Link to="/events" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-blue-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link to="/events" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-blue-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   25+ events per year
                 </span>
               </Link>
 
-              <Link to="/team" className="h-10 w-full md:w-70 max-w-xs rounded-lg bg-purple-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link to="/team" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-purple-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   27 student executives
                 </span>

@@ -8,12 +8,6 @@ const Footer = () => {
       {/* Mobile Layout */}
       <div className="md:hidden flex flex-col items-center px-6">
 
-        {/* Navigation Links - Centered */}
-        <FooterLinks
-          divClassName="flex flex-col items-center gap-2 mb-8"
-          linkClassName="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
-        />
-
         {/* Contact Section - Centered */}
         <div className="flex flex-col items-center gap-3 mb-12">
           <p className="font-silkscreen text-sm uppercase tracking-wide">
@@ -26,6 +20,12 @@ const Footer = () => {
             contact@devsuoa.com
           </a>
         </div>
+
+        {/* Navigation Links - Centered */}
+        <MobileFooterLinks
+          divClassName="flex flex-col items-center gap-2 mb-8"
+          linkClassName="link-white font-silkscreen text-xs tracking-wide hover:opacity-80"
+        />
 
         {/* Bottom Section - Social Links & Gameboy Buttons */}
         <div className="w-full flex items-end justify-between px-4">
@@ -144,6 +144,37 @@ const Footer = () => {
     </footer>
   );
 };
+
+const MobileFooterLinks = ({
+  divClassName,
+  linkClassName
+}: {
+  divClassName: string;
+  linkClassName: string;
+}) => {
+  return (
+    <div className={divClassName}>
+      {isFeatureEnabled('links_page_is_enabled') && (
+        <Link to="/links" className={linkClassName}>
+          LINKS
+        </Link>
+      )}
+
+      {isFeatureEnabled('privacy_policy_page_is_enabled') && (
+        <Link to="/privacy-policy" className={linkClassName}>
+          PRIVACY POLICY
+        </Link>
+      )}
+
+      {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
+        <Link to="/terms" className={linkClassName}>
+          TERMS AND CONDITIONS
+        </Link>
+      )}
+    </div>
+  );
+};
+
 
 const FooterLinks = ({
   divClassName,

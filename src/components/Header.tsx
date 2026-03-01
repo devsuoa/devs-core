@@ -34,12 +34,12 @@ const Header = () => {
       <nav className="mt-[30px] px-6 lg:px-[40px] relative z-50">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/home" className="flex items-center">
             <img className="h-[40px] lg:max-w-[8vw] pixelated" src={logo} alt="Logo" />
           </Link>
 
           <div className="hidden xl:flex items-center gap-[10vw] font-silkscreen text-[20px] whitespace-nowrap">
-            {isFeatureEnabled("team_page_is_enabled") && (
+            {isFeatureEnabled("about_us_page_is_enabled") && (
               <Link to="/about" className="link-white">
                 ABOUT
               </Link>
@@ -93,7 +93,7 @@ const Header = () => {
       {menuOpen && (
         <div className={`fixed inset-0 w-screen h-screen overflow-hidden bg-[#04060f] z-[100] flex flex-col ${isClosing ? 'animate-fadeOut' : 'animate-fadeIn'}`}>
           <div className="flex items-center justify-between px-6 pt-8">
-            <Link to="/" onClick={() => closeMenu()}>
+            <Link to="/home" onClick={() => closeMenu()}>
               <img className="w-[50px] pixelated " src={logo} alt="Logo" />
             </Link>
 
@@ -107,9 +107,15 @@ const Header = () => {
           </div>
 
           <div className="flex flex-1 flex-col items-center justify-center gap-10 font-silkscreen text-[26px]">
-            {isFeatureEnabled("team_page_is_enabled") && (
+            {isFeatureEnabled("about_us_page_is_enabled") && (
               <Link to="/about" className="link-white" onClick={() => closeMenu()}>
                 ABOUT
+              </Link>
+            )}
+
+            {isFeatureEnabled("team_page_is_enabled") && (
+              <Link to="/team" className="link-white" onClick={() => closeMenu()}>
+                TEAM
               </Link>
             )}
 
