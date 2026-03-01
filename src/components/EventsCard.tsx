@@ -260,9 +260,15 @@ const EventsCard = ({
               <span>{location}</span>
             </div>
 
-            {/* Description - LIMITED TO 6 LINES */}
-            <div className="relative flex-1 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 md:py-5 lg:py-6 text-white leading-relaxed overflow-auto">
-              <p className="font-rethink text-sm sm:text-base md:text-base lg:text-lg xl:text-lg line-clamp-6">
+            {/* Description - max 3 lines then scrollable */}
+            <div className="relative flex-1 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4 md:pt-5 lg:pt-6 pb-14 sm:pb-16 md:pb-16 lg:pb-16 overflow-hidden">
+              <p
+                className="font-rethink text-white leading-relaxed overflow-y-auto"
+                style={{
+                  fontSize: "clamp(0.65rem, 1.8vw, 1.05rem)",
+                  maxHeight: "4.875em",
+                }}
+              >
                 {description}
               </p>
             </div>
