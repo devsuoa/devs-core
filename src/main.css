@@ -265,6 +265,10 @@ html {
     pointer-events: none;
   }
 
+  .sign-up-gender label {
+    pointer-events: auto;
+  }
+
   .sign-up-gender {
     font-size: 0.8rem;
     white-space: nowrap;
@@ -323,6 +327,10 @@ html {
   .sign-up-form label {
     bottom: 0.3rem;
     pointer-events: none;
+  }
+
+  .sign-up-gender label {
+    pointer-events: auto;
   }
 }
 
