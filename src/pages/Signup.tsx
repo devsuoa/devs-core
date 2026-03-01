@@ -245,7 +245,7 @@ const Signup: React.FC = () => {
                 className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem] "
                 onChange={(e) => setFirstName(e.target.value)}
               />
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 first name <span>*</span>
               </label>
             </div>
@@ -258,7 +258,7 @@ const Signup: React.FC = () => {
                 className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem]"
                 onChange={(e) => setLastName(e.target.value)}
               />
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 last name <span>*</span>
               </label>
             </div>
@@ -272,7 +272,7 @@ const Signup: React.FC = () => {
                 className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem]"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 email <span>*</span>
               </label>
             </div>
@@ -377,7 +377,7 @@ const Signup: React.FC = () => {
                 </div>
               )}
 
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 university <span>*</span>
               </label>
             </div>
@@ -389,7 +389,7 @@ const Signup: React.FC = () => {
                 className="h-[3rem] w-full outline-none bg-transparent border-1 border-white rounded-[1rem] text-white p-[1rem]"
                 onChange={(e) => setUpi(e.target.value || null)}
               />
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">upi</label>
+              <label className="absolute left-1">upi</label>
             </div>
 
             {/* STUDENT ID */}
@@ -407,7 +407,7 @@ const Signup: React.FC = () => {
                   setStudentId(digitsOnly ? Number(digitsOnly) : null);
                 }}
               />
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 student-id <span>*</span>
               </label>
             </div>
@@ -445,7 +445,7 @@ const Signup: React.FC = () => {
                 </div>
               )}
 
-              <label className="absolute -bottom-[2rem] left-[0.25rem]">
+              <label className="absolute left-1">
                 year <span>*</span>
               </label>
             </div>
@@ -475,7 +475,7 @@ const Signup: React.FC = () => {
                     }}
                     renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
                   />
-                  <label className="absolute -bottom-[2rem] left-[0.25rem]">
+                  <label className="absolute left-1">
                     degree <span>*</span>
                   </label>
                 </div>
@@ -512,7 +512,7 @@ const Signup: React.FC = () => {
                       }}
                       renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
                     />
-                    <label className="absolute -bottom-[2rem] left-[0.25rem]">
+                    <label className="absolute left-1">
                       major <span>*</span>
                     </label>
                   </div>

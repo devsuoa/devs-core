@@ -261,6 +261,8 @@ html {
 
   .sign-up-form label {
     top: -1.5rem;
+    bottom: auto;
+    pointer-events: none;
   }
 
   .sign-up-gender {
@@ -320,6 +322,7 @@ html {
 
   .sign-up-form label {
     bottom: 0.3rem;
+    pointer-events: none;
   }
 }
 
