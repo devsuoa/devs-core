@@ -96,6 +96,7 @@ function App() {
           <Route path="/admin/members" element={<MemberRegistry />} />
           <Route path="/admin/tasks" element={<TaskTracker />} />
           <Route path="/admin/event-attendees" element={<EventsDashboard />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
 
           {/* Utility pages */}
           <Route path="/qr-code" element={<QRCode />} />

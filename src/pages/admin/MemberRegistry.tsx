@@ -195,11 +195,11 @@ const MemberRegistry: React.FC = () => {
                   </td>
                   <td className="p-3 text-left sm:text-center font-pixelify break-all">{m.email}</td>
                   <td className="p-3 text-left sm:text-center font-pixelify">{m.university}</td>
-                  <td className="p-3 text-left sm:text-center font-pixelify">{m.degrees.join(", ")}</td>
                   <td className="p-3 text-left sm:text-center font-pixelify">
-                    {m.majors?.length
-                      ? m.majors.join(", ")
-                      : "—"}
+                    {m.degrees?.length ? m.degrees.join(", ") : "—"}
+                  </td>
+                  <td className="p-3 text-left sm:text-center font-pixelify">
+                    {m.majors?.length ? m.majors.join(", ") : "—"}
                   </td>
                 </tr>
               ))}

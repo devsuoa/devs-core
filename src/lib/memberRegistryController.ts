@@ -36,6 +36,8 @@ export function groupBy(
       continue;
     }
 
+    if (value === null || value === undefined) continue;
+
     const label = value ?? "Unknown";
     map.set(String(label), (map.get(String(label)) ?? 0) + 1);
   }
