@@ -39,7 +39,7 @@ const Signup: React.FC = () => {
   const [isOpenUniversity, setIsOpenUniversity] = useState(false);
   const [isOpenYear, setIsOpenYear] = useState(false);
 
-  const [degrees, setDegrees] = useState<DegreeOrMajor[]>([]);
+  const [allDegrees, setAllDegrees] = useState<DegreeOrMajor[]>([]);
   const [majorsMap, setMajorsMap] = useState<Record<string, DegreeOrMajor[]>>({});
 
   const [degreeBlocks, setDegreeBlocks] = useState<DegreeBlock[]>([{ degree: null, majors: [null] }]);
@@ -130,23 +130,30 @@ const Signup: React.FC = () => {
     },
   };
 
-  useEffect(() => {
-    const selectedDegreeIds = degreeBlocks.map((b) => b.degree?.id).filter(Boolean) as string[];
+  const selectedDegreeIds = degreeBlocks.map((b) => b.degree?.id).filter(Boolean) as string[];
+  const degrees = allDegrees.filter((d) => !selectedDegreeIds.includes(d.id));
 
-    fetchDegrees(selectedDegreeIds)
-      .then(setDegrees)
+  useEffect(() => {
+    fetchDegrees([])
+      .then((all) => {
+        setAllDegrees(all);
+        all.forEach((degree) => {
+          fetchMajorsForDegree(degree.id, [])
+            .then((majors) =>
+              setMajorsMap((prev) => ({ ...prev, [degree.id]: majors }))
+            )
+            .catch(() => {});
+        });
+      })
       .catch(() => toast.error("Failed to load degrees. Please refresh."));
-  }, [degreeBlocks]);
+  }, []);
 
   const loadMajors = async (degreeId: string, excludeMajorIds: string[] = []) => {
+    if (majorsMap[degreeId]) return;
     try {
       const data = await fetchMajorsForDegree(degreeId, excludeMajorIds);
-
-      setMajorsMap((prev) => ({
-        ...prev,
-        [degreeId]: data,
-      }));
-    } catch (error) {
+      setMajorsMap((prev) => ({ ...prev, [degreeId]: data }));
+    } catch {
       toast.error("Could not fetch majors for this degree.");
     }
   };
