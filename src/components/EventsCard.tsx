@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
 import { rsvpToEvent } from "../lib/eventsRSVPController";
@@ -98,7 +98,20 @@ const EventsCard = ({
 }: EventsCardProps) => {
   const [internalFlipped, setInternalFlipped] = useState(false);
   const [rsvpOpen, setRsvpOpen] = useState(false);
+  const [frontHeight, setFrontHeight] = useState(0);
+  const frontRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Track front face height so back face can use it as min-height
+  useEffect(() => {
+    const el = frontRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setFrontHeight(entry.contentRect.height);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   
   // Use controlled state if provided, otherwise use internal state
   const isControlled = controlledFlipped !== undefined;
@@ -143,17 +156,17 @@ const EventsCard = ({
       onClick={handleCardClick}
     >
       <div
-        className={`relative w-[75vw] sm:w-[44vw] md:w-[40vw] lg:w-[28vw] xl:w-[26vw] 2xl:w-[22vw] aspect-4/5 perspective transition-transform duration-500 preserve-3d
+        className={`relative w-[75vw] sm:w-[44vw] md:w-[40vw] lg:w-[28vw] xl:w-[26vw] 2xl:w-[22vw] aspect-4/5 perspective transition-all duration-500 preserve-3d overflow-visible
         ${flipped ? "rotate-y-180" : ""}`}
       >
         {/* FRONT */}
-        <div className="absolute inset-0 backface-hidden">
+        <div ref={frontRef} className="absolute inset-0 backface-hidden">
           <img src={image} alt={imageAlt} className="w-full h-full pixelated" />
         </div>
 
         {/* BACK */}
-        <div className="absolute inset-0 backface-hidden rotate-y-180">
-          <div className="h-full border-2 border-white bg-[#0e1026] flex flex-col overflow-hidden relative">
+        <div className="absolute left-0 right-0 top-0 backface-hidden rotate-y-180" style={{ minHeight: frontHeight || '100%' }}>
+          <div className="border-2 border-white bg-[#0e1026] flex flex-col relative" style={{ minHeight: frontHeight || '100%' }}>
             {/* Subtle diagonal scan lines overlay */}
             <div
               className="absolute inset-0 pointer-events-none opacity-[0.05]"
@@ -261,7 +274,7 @@ const EventsCard = ({
             </div>
 
             {/* Description - max 3 lines then scrollable */}
-            <div className="relative flex-1 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4 md:pt-5 lg:pt-6 pb-14 sm:pb-16 md:pb-16 lg:pb-16 overflow-hidden">
+            <div className="relative flex-1 min-h-0 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4 md:pt-5 lg:pt-6 pb-2 sm:pb-3">
               <p
                 className="font-rethink text-white leading-relaxed overflow-y-auto"
                 style={{
@@ -275,79 +288,75 @@ const EventsCard = ({
 
             {/* Register button, share button */}
             <div className="p-2 sm:p-3 md:p-4 lg:p-5 shrink-0 flex justify-between items-center gap-2 sm:gap-3">
-              {/* Left side - Register*/}
-              <div className="absolute right-5 bottom-5 flex items-center gap-1 sm:gap-2">
-                {!isPastEvent ? (
-                  <PixelatedButton
-                    inactive="/buttons/register/register_inactive.png"
-                    hover="/buttons/register/register_hover.png"
-                    clicked="/buttons/register/register_click.png"
-                    className="w-[80px] sm:w-[100px] md:w-[120px] lg:w-[145px] h-[32px] sm:h-[40px] md:h-[45px] lg:h-[52px]"
-                    onClick={() => {
-                      if (registerUrl) {
-                        window.open(registerUrl, "_blank", "noopener,noreferrer");
-                        return;
-                      }
+              {/* Share button */}
+              <button
+                className="bg-transparent hover:bg-white/10 transition-colors w-[32px] sm:w-[40px] md:w-[45px] h-[32px] sm:h-[40px] md:h-[45px] shrink-0 flex items-center justify-center"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (navigator.share) {
+                    navigator.share({
+                      title: title,
+                      text: description,
+                      url: window.location.href,
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
 
-                      setFlipped(true);
-                      setRsvpOpen(true);
-                    }}
+                    // Create toast notification
+                    const toast = document.createElement('div');
+                    toast.textContent = 'Link copied!';
+                    toast.className = 'fixed bottom-[10vh] left-1/2 -translate-x-1/2 bg-indigo-400 px-5 py-3 rounded-lg shadow-lg font-silkscreen text-sm lg:text-lg z-[9999] transition-opacity duration-300';
+                    toast.style.opacity = '0';
+
+                    document.body.appendChild(toast);
+
+                    // Fade in
+                    setTimeout(() => toast.style.opacity = '1', 10);
+
+                    // Remove after 2 seconds
+                    setTimeout(() => {
+                      toast.style.opacity = '0';
+                      setTimeout(() => toast.remove(), 300);
+                    }, 2000);
+                  }
+                }}
+                title="Share event"
+              >
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
                   />
-                ) : (
-                  <div className="flex-1" />
-                )}
-                </div>
+                </svg>
+              </button>
 
-                {/* Share button */}
-                <button
-                    className="absolute left-5 bottom-5 bg-transparent hover:bg-white/10 transition-colors w-[32px] sm:w-[40px] md:w-[45px] h-[32px] sm:h-[40px] md:h-[45px] shrink-0 flex items-center justify-center"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (navigator.share) {
-                        navigator.share({
-                          title: title,
-                          text: description,
-                          url: window.location.href,
-                        });
-                      } else {
-                        navigator.clipboard.writeText(window.location.href);
-                        
-                        // Create toast notification
-                        const toast = document.createElement('div');
-                        toast.textContent = 'Link copied!';
-                        toast.className = 'fixed bottom-[10vh] left-1/2 -translate-x-1/2 bg-indigo-400 px-5 py-3 rounded-lg shadow-lg font-silkscreen text-sm lg:text-lg z-[9999] transition-opacity duration-300';
-                        toast.style.opacity = '0';
-                        
-                        document.body.appendChild(toast);
-                        
-                        // Fade in
-                        setTimeout(() => toast.style.opacity = '1', 10);
-                        
-                        // Remove after 2 seconds
-                        setTimeout(() => {
-                          toast.style.opacity = '0';
-                          setTimeout(() => toast.remove(), 300);
-                        }, 2000);
-                      }
-                    }}
-                    title="Share event">
-                  <svg
-                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                    />
-                  </svg>
-                </button>
-              
-              {/* Right side - Tag */}
-              
+              {/* Register button */}
+              {!isPastEvent ? (
+                <PixelatedButton
+                  inactive="/buttons/register/register_inactive.png"
+                  hover="/buttons/register/register_hover.png"
+                  clicked="/buttons/register/register_click.png"
+                  className="w-[80px] sm:w-[100px] md:w-[120px] lg:w-[145px]"
+                  onClick={() => {
+                    if (registerUrl) {
+                      window.open(registerUrl, "_blank", "noopener,noreferrer");
+                      return;
+                    }
+
+                    setFlipped(true);
+                    setRsvpOpen(true);
+                  }}
+                />
+              ) : (
+                <div />
+              )}
             </div>
           </div>  
         </div>
