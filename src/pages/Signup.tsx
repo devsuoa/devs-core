@@ -75,10 +75,10 @@ const Signup: React.FC = () => {
       borderColor: "white",
       borderWidth: "1px",
     },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
+    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: "white",
     },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: "white",
     },
     "& .MuiInputLabel-root": {
@@ -454,30 +454,42 @@ const Signup: React.FC = () => {
             {degreeBlocks.map((block, dIdx) => (
               <React.Fragment key={dIdx}>
                 <div className="relative w-full sign-up-col-span-medium">
+                  {dIdx > 0 && (
+                    <button
+                      type="button"
+                      className="absolute -left-7 lg:-left-8 top-[1.5rem] -translate-y-1/2 text-white/80 hover:text-red-500 transition text-xl"
+                      onClick={() => {
+                        const copy = degreeBlocks.filter((_, i) => i !== dIdx);
+                        setDegreeBlocks(copy);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
                   <Autocomplete
-                    options={degrees}
-                    value={block.degree}
-                    getOptionLabel={(o) => o.name}
-                    onChange={(_, v) => {
-                      const copy = [...degreeBlocks];
-                      copy[dIdx] = { degree: v, majors: [null] };
-                      setDegreeBlocks(copy);
+                      options={degrees}
+                      value={block.degree}
+                      getOptionLabel={(o) => o.name}
+                      onChange={(_, v) => {
+                        const copy = [...degreeBlocks];
+                        copy[dIdx] = { degree: v, majors: [null] };
+                        setDegreeBlocks(copy);
 
-                      if (v) {
-                        loadMajors(v.id, []);
+                        if (v) {
+                          loadMajors(v.id, []);
                       }
-                    }}
-                    popupIcon={<span>▼</span>}
-                    sx={muiInputSx}
-                    slotProps={{
-                      paper: { sx: muiPaperSx },
-                      listbox: { sx: muiListboxSx },
-                    }}
-                    renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
-                  />
-                  <label className="absolute left-1">
-                    degree <span>*</span>
-                  </label>
+                      }}
+                      popupIcon={<span>▼</span>}
+                      sx={muiInputSx}
+                      slotProps={{
+                        paper: { sx: muiPaperSx },
+                        listbox: { sx: muiListboxSx },
+                      }}
+                      renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
+                    />
+                    <label className="absolute left-1">
+                      degree <span>*</span>
+                    </label>
                 </div>
 
                 {block.majors.map((m, mIdx) => (
@@ -485,20 +497,32 @@ const Signup: React.FC = () => {
                     <Autocomplete
                       options={
                         block.degree
-                          ? (majorsMap[block.degree.id] || []).filter(
-                              (m) =>
-                                !block.majors
-                                  .map((x) => x?.id)
-                                  .filter(Boolean)
-                                  .includes(m.id)
-                            )
+                          ? [
+                              ...(mIdx > 0 ? [{ id: "__none__", name: "None" }] : []),
+                              ...(majorsMap[block.degree.id] || []).filter(
+                                (m) =>
+                                  !block.majors
+                                    .map((x) => x?.id)
+                                    .filter(Boolean)
+                                    .includes(m.id)
+                              ),
+                            ]
                           : []
                       }
                       value={m}
                       getOptionLabel={(o) => o.name}
                       onChange={(_, v) => {
                         const copy = [...degreeBlocks];
-                        copy[dIdx].majors[mIdx] = v;
+                        if (v?.id === "__none__") {
+                          if (copy[dIdx].majors.length === 1) {
+                            // If it's the only major, set it to null instead of removing
+                            copy[dIdx].majors[mIdx] = null;
+                          } else {
+                            copy[dIdx].majors.splice(mIdx, 1);
+                          }
+                        } else {
+                          copy[dIdx].majors[mIdx] = v;
+                        }
                         setDegreeBlocks(copy);
                       }}
                       popupIcon={<span>▼</span>}

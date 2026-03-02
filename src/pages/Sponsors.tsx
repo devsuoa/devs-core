@@ -9,7 +9,7 @@ import { onPageNotFound } from "../lib/pageNotFoundController";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/all";
-import sponsorsData from "../../public/sponsors/current_sponsors.json";
+import sponsorsData from "../data/current_sponsors.json";
 import BinaryBackground from "../components/BinaryBackground";
 
 // Register GSAP plugins
