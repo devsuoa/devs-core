@@ -15,14 +15,15 @@ export class AlreadyRSVPedError extends Error {
 }
 
 export async function rsvpToEvent(eventId: string, email: string, dietaryRequirements: string | null) {
-  const { data: member, error: memberError } = await supabase
-    .from("members")
-    .select("email")
-    .eq("email", email)
-    .single();
-
+  const { data: data, error: memberError } = await supabase.functions.invoke("member-exists", { body: { email } });
+  
+  // check for other errors
+  if (memberError) {
+    throw memberError;
+  }
+  
   // If member does not exist, redirect to join page
-  if (memberError || !member) {
+  if (!data.exists) {
     throw new NotMemberError()
   }
 
