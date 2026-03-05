@@ -692,6 +692,6 @@ const Signup: React.FC = () => {
       <Footer />
     </>
   );
-}; 
+};
 
 export default Signup;
