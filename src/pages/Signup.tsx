@@ -32,17 +32,27 @@ const Signup: React.FC = () => {
   const [upi, setUpi] = useState<string | null>(null);
   const [studentId, setStudentId] = useState<number | null>(null);
 
-  const [selectedGender, setSelectedGender] = useState<Gender | undefined>(undefined);
-  const [selectedUniversity, setSelectedUniversity] = useState<University | "">("");
-  const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
+  const [selectedGender, setSelectedGender] = useState<Gender | undefined>(
+    undefined,
+  );
+  const [selectedUniversity, setSelectedUniversity] = useState<University | "">(
+    "",
+  );
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(
+    undefined,
+  );
 
   const [isOpenUniversity, setIsOpenUniversity] = useState(false);
   const [isOpenYear, setIsOpenYear] = useState(false);
 
   const [allDegrees, setAllDegrees] = useState<DegreeOrMajor[]>([]);
-  const [majorsMap, setMajorsMap] = useState<Record<string, DegreeOrMajor[]>>({});
+  const [majorsMap, setMajorsMap] = useState<Record<string, DegreeOrMajor[]>>(
+    {},
+  );
 
-  const [degreeBlocks, setDegreeBlocks] = useState<DegreeBlock[]>([{ degree: null, majors: [null] }]);
+  const [degreeBlocks, setDegreeBlocks] = useState<DegreeBlock[]>([
+    { degree: null, majors: [null] },
+  ]);
 
   const [login, setLogin] = useState(false);
 
@@ -130,7 +140,9 @@ const Signup: React.FC = () => {
     },
   };
 
-  const selectedDegreeIds = degreeBlocks.map((b) => b.degree?.id).filter(Boolean) as string[];
+  const selectedDegreeIds = degreeBlocks
+    .map((b) => b.degree?.id)
+    .filter(Boolean) as string[];
   const degrees = allDegrees.filter((d) => !selectedDegreeIds.includes(d.id));
 
   useEffect(() => {
@@ -140,7 +152,7 @@ const Signup: React.FC = () => {
         all.forEach((degree) => {
           fetchMajorsForDegree(degree.id, [])
             .then((majors) =>
-              setMajorsMap((prev) => ({ ...prev, [degree.id]: majors }))
+              setMajorsMap((prev) => ({ ...prev, [degree.id]: majors })),
             )
             .catch(() => {});
         });
@@ -148,7 +160,10 @@ const Signup: React.FC = () => {
       .catch(() => toast.error("Failed to load degrees. Please refresh."));
   }, []);
 
-  const loadMajors = async (degreeId: string, excludeMajorIds: string[] = []) => {
+  const loadMajors = async (
+    degreeId: string,
+    excludeMajorIds: string[] = [],
+  ) => {
     if (majorsMap[degreeId]) return;
     try {
       const data = await fetchMajorsForDegree(degreeId, excludeMajorIds);
@@ -169,12 +184,19 @@ const Signup: React.FC = () => {
           majorIds: b.majors.filter(Boolean).map((m) => m!.id),
         }));
 
-      if (!selectedGender || !selectedUniversity || !selectedYear || !studentId || formattedDegrees.length === 0) {
+      if (
+        !selectedGender ||
+        !selectedUniversity ||
+        !selectedYear ||
+        !studentId ||
+        formattedDegrees.length === 0
+      ) {
         if (!selectedGender) toast.error("Please select a gender");
         else if (!selectedUniversity) toast.error("Please select a university");
         else if (!selectedYear) toast.error("Please select your year");
         else if (!studentId) toast.error("Please enter your student ID");
-        else if (formattedDegrees.length === 0) toast.error("Please select at least one degree and major");
+        else if (formattedDegrees.length === 0)
+          toast.error("Please select at least one degree and major");
         return;
       }
 
@@ -218,7 +240,7 @@ const Signup: React.FC = () => {
 
   return (
     <>
-    <BinaryBackground />
+      <BinaryBackground />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -243,7 +265,10 @@ const Signup: React.FC = () => {
 
       <div className="w-full flex justify-center items-center mb-[10vh]">
         {!login ? (
-          <form className="font-pixelify glow bg-black/40 sign-up-form sign-up-container grid rounded-lg border border-2 border-[#6E80DA] ring-4 ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]" onSubmit={handleSubmit}>
+          <form
+            className="font-pixelify glow bg-black/40 sign-up-form sign-up-container grid rounded-lg border border-2 border-[#6E80DA] ring-4 ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]"
+            onSubmit={handleSubmit}
+          >
             {/* FIRST NAME */}
             <div className="relative w-full sign-up-col-span-large">
               <input
@@ -295,12 +320,16 @@ const Signup: React.FC = () => {
                     type="radio"
                     value="male"
                     checked={selectedGender === "male"}
-                    onChange={(e) => setSelectedGender(e.target.value as Gender)}
+                    onChange={(e) =>
+                      setSelectedGender(e.target.value as Gender)
+                    }
                     className="hidden"
                   />
                   <span
                     className={`underline-offset-8 px-4 py-2 transition-all duration-200 ${
-                      selectedGender === "male" ? "underline border-white" : "hover:underline"
+                      selectedGender === "male"
+                        ? "underline border-white"
+                        : "hover:underline"
                     }`}
                   >
                     MALE
@@ -315,12 +344,16 @@ const Signup: React.FC = () => {
                     type="radio"
                     value="female"
                     checked={selectedGender === "female"}
-                    onChange={(e) => setSelectedGender(e.target.value as Gender)}
+                    onChange={(e) =>
+                      setSelectedGender(e.target.value as Gender)
+                    }
                     className="hidden"
                   />
                   <span
                     className={`underline-offset-8 px-4 py-2 transition-all duration-200 ${
-                      selectedGender === "female" ? "underline border-white" : "hover:underline"
+                      selectedGender === "female"
+                        ? "underline border-white"
+                        : "hover:underline"
                     }`}
                   >
                     FEMALE
@@ -335,12 +368,16 @@ const Signup: React.FC = () => {
                     type="radio"
                     value="prefer-not-to-say"
                     checked={selectedGender === "prefer-not-to-say"}
-                    onChange={(e) => setSelectedGender(e.target.value as Gender)}
+                    onChange={(e) =>
+                      setSelectedGender(e.target.value as Gender)
+                    }
                     className="hidden"
                   />
                   <span
                     className={`underline-offset-8 px-4 py-2 transition-all duration-200 ${
-                      selectedGender === "prefer-not-to-say" ? "underline border-white" : "hover:underline"
+                      selectedGender === "prefer-not-to-say"
+                        ? "underline border-white"
+                        : "hover:underline"
                     }`}
                   >
                     OTHER
@@ -352,7 +389,11 @@ const Signup: React.FC = () => {
             {/* UNIVERSITY */}
             <div className="relative w-full sign-up-col-span-large">
               <div
-                onClick={() => setIsOpenUniversity(!isOpenUniversity)}
+                tabIndex={0}
+                onMouseDown={() => setIsOpenUniversity(!isOpenUniversity)}
+                onBlur={() => {
+                  setIsOpenUniversity(false);
+                }}
                 className="h-[3rem] w-full border-1 border-white rounded-[1rem] flex items-center justify-between px-[1rem] text-white cursor-pointer"
               >
                 <span>{selectedUniversity || "--Please-select-an-option"}</span>
@@ -371,9 +412,11 @@ const Signup: React.FC = () => {
                     <div
                       key={option.value}
                       className={`px-4 py-3 rounded-[0.75rem] cursor-pointer text-white hover:bg-white/10 ${
-                        selectedUniversity === option.value ? "bg-[#6E80DA]/30" : ""
+                        selectedUniversity === option.value
+                          ? "bg-[#6E80DA]/30"
+                          : ""
                       }`}
-                      onClick={() => {
+                      onMouseDown={() => {
                         setSelectedUniversity(option.value as University);
                         setIsOpenUniversity(false);
                       }}
@@ -422,10 +465,18 @@ const Signup: React.FC = () => {
             {/* YEAR */}
             <div className="relative w-full sign-up-col-span-medium">
               <div
-                onClick={() => setIsOpenYear(!isOpenYear)}
+                tabIndex={0}
+                onMouseDown={() => setIsOpenYear(!isOpenYear)}
+                onBlur={() => {
+                  setIsOpenYear(false);
+                }}
                 className="h-[3rem] w-full border-1 border-white rounded-[1rem] flex items-center justify-between px-[1rem] text-white cursor-pointer"
               >
-                <span>{selectedYear ? optionsYear.find((o) => o.value === selectedYear)?.label : "--Year--"}</span>
+                <span>
+                  {selectedYear
+                    ? optionsYear.find((o) => o.value === selectedYear)?.label
+                    : "--Year--"}
+                </span>
                 <span
                   className={`transition-transform duration-300 ease-in-out ${isOpenYear ? "rotate-180" : "rotate-0"}`}
                 >
@@ -441,7 +492,7 @@ const Signup: React.FC = () => {
                       className={`px-4 py-3 rounded-[0.75rem] cursor-pointer text-white hover:bg-white/10 ${
                         selectedYear === option.value ? "bg-[#6E80DA]/30" : ""
                       }`}
-                      onClick={() => {
+                      onMouseDown={() => {
                         setSelectedYear(option.value);
                         setIsOpenYear(false);
                       }}
@@ -474,44 +525,54 @@ const Signup: React.FC = () => {
                     </button>
                   )}
                   <Autocomplete
-                      options={degrees}
-                      value={block.degree}
-                      getOptionLabel={(o) => o.name}
-                      onChange={(_, v) => {
-                        const copy = [...degreeBlocks];
-                        copy[dIdx] = { degree: v, majors: [null] };
-                        setDegreeBlocks(copy);
+                    options={degrees}
+                    value={block.degree}
+                    getOptionLabel={(o) => o.name}
+                    onChange={(_, v) => {
+                      const copy = [...degreeBlocks];
+                      copy[dIdx] = { degree: v, majors: [null] };
+                      setDegreeBlocks(copy);
 
-                        if (v) {
-                          loadMajors(v.id, []);
+                      if (v) {
+                        loadMajors(v.id, []);
                       }
-                      }}
-                      popupIcon={<span>▼</span>}
-                      sx={muiInputSx}
-                      slotProps={{
-                        paper: { sx: muiPaperSx },
-                        listbox: { sx: muiListboxSx },
-                      }}
-                      renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
-                    />
-                    <label className="absolute left-1">
-                      degree <span>*</span>
-                    </label>
+                    }}
+                    popupIcon={<span>▼</span>}
+                    sx={muiInputSx}
+                    slotProps={{
+                      paper: { sx: muiPaperSx },
+                      listbox: { sx: muiListboxSx },
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="--Please-select-an-option"
+                      />
+                    )}
+                  />
+                  <label className="absolute left-1">
+                    degree <span>*</span>
+                  </label>
                 </div>
 
                 {block.majors.map((m, mIdx) => (
-                  <div key={mIdx} className="relative w-full sign-up-col-span-medium">
+                  <div
+                    key={mIdx}
+                    className="relative w-full sign-up-col-span-medium"
+                  >
                     <Autocomplete
                       options={
                         block.degree
                           ? [
-                              ...(mIdx > 0 ? [{ id: "__none__", name: "None" }] : []),
+                              ...(mIdx > 0
+                                ? [{ id: "__none__", name: "None" }]
+                                : []),
                               ...(majorsMap[block.degree.id] || []).filter(
                                 (m) =>
                                   !block.majors
                                     .map((x) => x?.id)
                                     .filter(Boolean)
-                                    .includes(m.id)
+                                    .includes(m.id),
                               ),
                             ]
                           : []
@@ -541,7 +602,12 @@ const Signup: React.FC = () => {
                         paper: { sx: muiPaperSx },
                         listbox: { sx: muiListboxSx },
                       }}
-                      renderInput={(params) => <TextField {...params} placeholder="--Please-select-an-option" />}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="--Please-select-an-option"
+                        />
+                      )}
                     />
                     <label className="absolute left-1">
                       major <span>*</span>
@@ -569,7 +635,12 @@ const Signup: React.FC = () => {
               <button
                 type="button"
                 className="sign-up-col-span-medium h-[3rem] border-1 border-dashed border-white/60 rounded-[1rem] text-white/80 hover:bg-white/10 transition"
-                onClick={() => setDegreeBlocks([...degreeBlocks, { degree: null, majors: [null] }])}
+                onClick={() =>
+                  setDegreeBlocks([
+                    ...degreeBlocks,
+                    { degree: null, majors: [null] },
+                  ])
+                }
               >
                 + add degree
               </button>
@@ -603,8 +674,9 @@ const Signup: React.FC = () => {
 
               <div className="font-rethink text-base md:text-sm opacity-90 max-w-[400px] leading-relaxed">
                 <p className="mb-4">
-                  Be sure to connect with us on our social media platforms & connect with us on Engage to stay up to
-                  date with DEVS' latest updates
+                  Be sure to connect with us on our social media platforms &
+                  connect with us on Engage to stay up to date with DEVS' latest
+                  updates
                 </p>
                 <p>See you at the next event!</p>
               </div>
