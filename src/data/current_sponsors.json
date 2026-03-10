@@ -48,9 +48,9 @@
     "tier": "gold"
   },
   {
-    "name": "ERoad",
+    "name": "EROAD",
     "image": "/sponsors/silver/eroad.png",
-    "desc": "ERoad is a global telematics and transportation technology company specializing in fleet management. Based in New Zealand, it provides real-time GPS tracking, regulatory compliance tools, and safety data. Their platform helps businesses optimize fuel efficiency, monitor driver behavior, and automate tax reporting.",
+    "desc": "EROAD is a global telematics and transportation technology company specializing in fleet management. Based in New Zealand, it provides real-time GPS tracking, regulatory compliance tools, and safety data. Their platform helps businesses optimize fuel efficiency, monitor driver behavior, and automate tax reporting.",
     "tier": "silver"
   }
 ]
