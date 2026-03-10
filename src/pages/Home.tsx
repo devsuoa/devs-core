@@ -9,6 +9,11 @@ import SponsorItem from "../components/SponsorItem";
 import { useSlideShowController } from "../lib/slideShowController";
 import BinaryBackground from "../components/BinaryBackground";
 import { SocialLinks } from "../components/SocialLinks";
+import sponsorData from "../data/current_sponsors.json";
+
+const goldSponsors = sponsorData.filter((s) => s.tier === "gold");
+const silverSponsors = sponsorData.filter((s) => s.tier === "silver");
+
 const Home: React.FC = () => {
   const slideShow = useSlideShowController();
 
@@ -158,53 +163,28 @@ const Home: React.FC = () => {
           GOLD
         </p>
         <div className="flex flex-col md:flex-row items-center justify-evenly w-full gap-4 md:gap-0">
-          {/* <img src="/sponsors/gold/jane_street.png"  className="w-[24rem] h-auto max-w-[24rem] p-4" /> */}
-          <SponsorItem
-            name="Jane Street"
-            className="w-[24rem] h-auto max-w-[24rem] p-2 px-10"
-            logo="/sponsors/gold/jane_street.png"
-          />
-          <SponsorItem
-            name="Partly"
-            className="w-[24rem] h-auto max-w-[24rem] p-2 px-10"
-            logo="/sponsors/gold/partly.png"
-          />
+          {goldSponsors.map((sponsor) => (
+            <SponsorItem
+              key={sponsor.name}
+              name={sponsor.name}
+              className="w-[24rem] h-auto max-w-[24rem] p-2 px-10"
+              logo={sponsor.image}
+            />
+          ))}
         </div>
 
         {/* Silver */}
-        <p className="text-[#D3D3D3] items-center text-center mb-7 font-pixelify text-xl md:text-[2rem] pl-[1rem] mt-8 md:mt-[4rem]">
+        <p className="text-[#D3D3D3] text-center mb-7 font-pixelify text-xl md:text-[2rem] pl-[1rem] mt-8 md:mt-[4rem]">
           SILVER
         </p>
-        <div className="flex flex-col lg:flex-row items-center justify-evenly w-full gap-4 md:gap-0">
-          <SponsorItem
-            name="Atlassian"
-            logo="/sponsors/silver/atlassian.png"
-          />
-
-          <SponsorItem
-            name="IMC"
-            logo="/sponsors/silver/imc.png"
-          />
-
-          <SponsorItem
-            name="Optiver"
-            logo="/sponsors/silver/optiver.png"
-          />
-
-          <SponsorItem
-            name="Serato"
-            logo="/sponsors/silver/serato.png"
-          />
-
-          <SponsorItem
-            name="Sandfield"
-            logo="/sponsors/silver/sandfield.png"
-          />
-
-          <SponsorItem
-            name="Visa"
-            logo="/sponsors/silver/visa.png"
-          />
+        <div className="flex flex-col lg:flex-row flex-wrap items-center justify-evenly w-full gap-4">
+          {silverSponsors.map((sponsor) => (
+            <SponsorItem
+              key={sponsor.name}
+              name={sponsor.name}
+              logo={sponsor.image}
+            />
+          ))}
         </div>
       </section>
 

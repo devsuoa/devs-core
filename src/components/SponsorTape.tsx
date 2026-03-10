@@ -1,13 +1,6 @@
-const sponsors = [
-    "/sponsors/gold/jane_street.png",
-    "/sponsors/gold/partly.png",
-    "/sponsors/silver/serato.png",
-    "/sponsors/silver/atlassian.png",
-    "/sponsors/silver/optiver.png",
-    "/sponsors/silver/sandfield.png",
-    "/sponsors/silver/visa.png",
-    "/sponsors/silver/imc.png",
-  ];
+import sponsorData from "../data/current_sponsors.json";
+
+const sponsors = sponsorData.map((s) => s.image);
   
   export default function SponsorTape() {
   return (
