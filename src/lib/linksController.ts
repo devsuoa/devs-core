@@ -384,6 +384,20 @@ export function useLinksManagement() {
 }
 
 /**
+ * Upload a custom icon image to Supabase Storage and return its public URL
+ */
+export const uploadLinkIcon = async (file: File): Promise<string> => {
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await supabase.storage
+    .from('Links')
+    .upload(filename, file, { upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from('Links').getPublicUrl(filename);
+  return data.publicUrl;
+};
+
+/**
  * Hook for displaying active links on public page
  */
 export function useActiveLinks() {

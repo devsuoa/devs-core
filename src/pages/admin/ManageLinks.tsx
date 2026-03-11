@@ -1,16 +1,95 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { PageTitle } from '../../components/PageTitle';
 import { useAdminDashboard } from '../../lib/adminDashboardController';
-import { useLinksManagement, Link, LinkFormData, getFaviconUrl } from '../../lib/linksController';
+import { useLinksManagement, uploadLinkIcon, Link, LinkFormData, getFaviconUrl } from '../../lib/linksController';
 import { Link as RouterLink} from "react-router-dom";
+
+const ImageDropZone: React.FC<{
+  imageUrl: string | null;
+  onUpload: (url: string) => void;
+  onError: (msg: string) => void;
+}> = ({ imageUrl, onUpload, onError }) => {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      onError('Only image files are supported.');
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadLinkIcon(file);
+      onUpload(url);
+    } catch (err: unknown) {
+      onError(err instanceof Error ? err.message : 'Image upload failed.');
+    } finally {
+      setUploading(false);
+    }
+  }, [onUpload, onError]);
+
+  const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  }, [handleFile]);
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+    e.target.value = '';
+  };
+
+  return (
+    <div>
+      <div
+        className={`pixel-input w-full flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors ${dragOver ? 'opacity-70' : ''}`}
+        style={{ minHeight: '100px', borderStyle: 'dashed', padding: '16px' }}
+        onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={onDrop}
+      >
+        {uploading ? (
+          <p className="font-pixelify text-xs text-white/70">Uploading...</p>
+        ) : imageUrl ? (
+          <>
+            <img
+              src={imageUrl}
+              alt="Icon preview"
+              className="w-10 h-10 object-contain"
+              style={{ imageRendering: 'auto' }}
+            />
+            <p className="font-pixelify text-xs text-white/50">Click or drop to replace</p>
+          </>
+        ) : (
+          <>
+            <p className="font-pixelify text-xs text-white/70">Drag & drop or click to upload icon</p>
+            <p className="font-pixelify text-xs text-white/40">PNG, JPG, SVG, WEBP</p>
+          </>
+        )}
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onInputChange}
+      />
+    </div>
+  );
+};
 
 const ManageLinks: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
   const { links, loading, error, addLink, editLink, removeLink, reorderLink } = useLinksManagement();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingLink, setEditingLink] = useState<Link | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [formData, setFormData] = useState<LinkFormData>({
     title: '',
     url: '',
@@ -123,6 +202,7 @@ const ManageLinks: React.FC = () => {
   const handleCancel = () => {
     setShowAddForm(false);
     setEditingLink(null);
+    setUploadError(null);
     setFormData({
       title: '',
       url: '',
@@ -152,10 +232,10 @@ const ManageLinks: React.FC = () => {
       />
       <div className="flex items-center justify-center mb-8 sm:mb-[10vh] px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
-          {error && (
+          {(error || uploadError) && (
             <div className="pixel-panel font-pixelify mb-4 p-4 sm:p-5">
               <p className="font-pixelify text-red-400 text-xs sm:text-[10px]">
-                {error}
+                {error || uploadError}
               </p>
             </div>
           )}
@@ -253,16 +333,13 @@ const ManageLinks: React.FC = () => {
                     </div>
 
                     <div className="mb-6">
-                      <label htmlFor="custom_icon" className="pixel-label font-pixelify block mb-4">
-                        Custom Icon URL (optional)
+                      <label className="pixel-label font-pixelify block mb-4">
+                        Custom Icon (optional)
                       </label>
-                      <input
-                        id="custom_icon"
-                        type="url"
-                        value={formData.custom_icon || ''}
-                        onChange={(e) => setFormData({ ...formData, custom_icon: e.target.value || null })}
-                        className="pixel-input font-pixelify w-full"
-                        placeholder="https://example.com/icon.png"
+                      <ImageDropZone
+                        imageUrl={formData.custom_icon || null}
+                        onUpload={(url) => { setUploadError(null); setFormData({ ...formData, custom_icon: url }); }}
+                        onError={(msg) => setUploadError(msg)}
                       />
                       <p className="font-pixelify text-gray-400 mt-2 text-[10px] sm:text-[8px]">
                         Leave empty to use the website's favicon automatically
