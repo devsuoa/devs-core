@@ -10,6 +10,7 @@ import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
 import { useEvents, formatEventDate } from "../lib/eventsController";
 import BinaryBackground from "../components/BinaryBackground";
+import { ClassNames } from "@emotion/react";
  
 const Events = () => {
   const { upcomingEvents, pastEvents, loading, error } = useEvents();
@@ -53,6 +54,10 @@ const Events = () => {
   // state for focused event card (for overlay)
   const [focusedEventId, setFocusedEventId] = useState<string | null>(null);
   const location = useLocation();
+
+  // pointer events
+  const [pointerOver, setPointerOver] = useState('' as string);
+  const [pointerClick, setPointerClick] = useState('' as string);
 
   // Extract unique tags from events
   const upcomingTags = useMemo(() => {
@@ -331,6 +336,19 @@ const Events = () => {
       </div>*/}
 
       <Header />
+
+      <span className={`fixed top-[9vh] w-[50vw] min-h-[40px] left-[25vw] transition-all duration-500  bg-purple-200 hover:bg-purple-300 text-black text-center text-xl font-silkscreen place-content-center-safe rounded-2xl z-10`
+        + ` ${pointerClick === "toast_notif" ? 'hidden' : ''}`
+      }
+        onPointerEnter={()=>{setPointerOver("toast_notif")}}
+        onPointerLeave={()=>{setPointerOver('')}}
+        onClick={()=>{setPointerClick('toast_notif')}}
+        >
+           {<div className='relative items-center'>
+            <span className={`transition-all duration-300 ${pointerOver === "toast_notif" ? 'opacity-0 hidden' : 'opacity-100 inline-block'}`}>Pro Tip! Click the cards to see more details about the event!</span>
+            <span className={`hidden transition-all duration-300 ${pointerOver === "toast_notif" ? 'opacity-100 inline-block' : 'opacity-0 hidden'}`}>Click to get rid of me!</span>
+            </div>}
+        </span>
 
       {/* UPCOMING EVENTS */}
       {/* Mobile title */}
