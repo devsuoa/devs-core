@@ -31,6 +31,7 @@ import About from "./pages/About";
 import EventsDashboard from "./pages/admin/EventsDashboard";
 import TaskTracker from "./pages/admin/TaskTracker";
 import QRCode from "./pages/QRCode";
+import AdminCMSAuditLog from "./pages/admin/AdminCMSAuditLog";
 
 function PageViewTracker() {
   const location = useLocation();
@@ -96,6 +97,7 @@ function App() {
           <Route path="/admin/members" element={<MemberRegistry />} />
           <Route path="/admin/tasks" element={<TaskTracker />} />
           <Route path="/admin/event-attendees" element={<EventsDashboard />} />
+          <Route path="/admin/audit-log" element={<AdminCMSAuditLog />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
 
           {/* Utility pages */}
