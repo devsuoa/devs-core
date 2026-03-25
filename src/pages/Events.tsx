@@ -8,7 +8,7 @@ import EventsCard from "../components/EventsCard";
 import Pagination from "../components/Pagination";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
-import { useEvents, formatEventDate } from "../lib/eventsController";
+import { useEvents } from "../lib/eventsController";
 import BinaryBackground from "../components/BinaryBackground";
  
 const Events = () => {
@@ -413,7 +413,7 @@ const Events = () => {
                       image={event.image_url || "/events/placeholder_event.png"}
                       imageAlt={event.title}
                       tag={event.tag || "Event"}
-                      date={formatEventDate(event.event_date)}
+                      date={event.event_date}
                       time={event.event_time || ""}
                       location={event.location || ""}
                       description={event.description || ""}
@@ -516,7 +516,7 @@ const Events = () => {
                       image={event.image_url || "/events/placeholder_event.png"}
                       imageAlt={event.title}
                       tag={event.tag || "Event"}
-                      date={formatEventDate(event.event_date)}
+                      date={event.event_date}
                       time={event.event_time || ""}
                       location={event.location || ""}
                       description={event.description || ""}

@@ -4,6 +4,7 @@ import GenericRSVPDialog from "./GenericRSVPDialog";
 import { rsvpToEvent } from "../lib/eventsRSVPController";
 import { NotMemberError } from "../lib/eventsRSVPController";
 import { useNavigate } from "react-router-dom";
+import { formatEventDate } from "../lib/eventsController";
 
 type EventsCardProps = {
   /** Event ID */
@@ -126,13 +127,10 @@ const EventsCard = ({
     }
   }, [isControlled, flipped, onFlipChange]);
 
-  const eventDate = new Date(date);
-  eventDate.setHours(0, 0, 0, 0);
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
+  const eventDate = new Date(date).getTime()/1000;
+  const today = Date.now()/1000;
   const isPastEvent = eventDate < today;
+  const formattedDate = formatEventDate(date);
 
   const handleCardClick = useCallback((e: React.MouseEvent) => {
     // Don't toggle if clicking on interactive elements inside the card
@@ -228,7 +226,7 @@ const EventsCard = ({
                 <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" strokeLinecap="round" />
                 <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <span>{date}</span>
+              <span>{formattedDate}</span>
             </div>
 
             {/* Time row */}
@@ -273,13 +271,12 @@ const EventsCard = ({
               <span>{location}</span>
             </div>
 
-            {/* Description - max 3 lines then scrollable */}
-            <div className="relative flex-1 min-h-0 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4 md:pt-5 lg:pt-6 pb-2 sm:pb-3">
+            {/* Description */}
+            <div className="relative flex-1 min-h-0 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-8 pt-3 sm:pt-4 md:pt-5 lg:pt-4 pb-2 sm:pb-3 h-auto">
               <p
                 className="font-rethink text-white leading-relaxed overflow-y-auto"
                 style={{
-                  fontSize: "clamp(0.65rem, 1.8vw, 1.05rem)",
-                  maxHeight: "4.875em",
+                  fontSize: "clamp(0.8rem, 1.1vw, 1.05rem)",
                 }}
               >
                 {description}
