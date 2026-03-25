@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
+import { RSVPQuestion } from "./eventRsvpTypes";
 
 export interface PublicEvent {
   id: string;
@@ -11,6 +12,10 @@ export interface PublicEvent {
   event_time: string | null;
   location: string | null;
   register_url: string | null;
+  max_attendees: number | null;
+  group_rsvp_enabled: boolean;
+  group_rsvp_max_emails: number | null;
+  rsvp_questions: RSVPQuestion[];
 }
 
 export const formatEventDate = (dateStr: string) => {
@@ -52,7 +57,11 @@ export const useEvents = () => {
           event_date,
           event_time,
           location,
-          register_url
+          register_url,
+          max_attendees,
+          group_rsvp_enabled,
+          group_rsvp_max_emails,
+          rsvp_questions
         `
         )
         .eq("is_active", true)
@@ -61,7 +70,11 @@ export const useEvents = () => {
       if (error) {
         setError(error.message);
       } else {
-        setEvents(data || []);
+        const normalized = (data || []).map((event) => ({
+          ...event,
+          rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
+        }));
+        setEvents(normalized);
       }
 
       setLoading(false);

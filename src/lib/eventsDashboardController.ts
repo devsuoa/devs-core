@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabase";
 
 export type AttendeeRow = {
+    rsvp_id: string | null;
     rsvp_created_at: string;
 
     event_id: string;
@@ -14,6 +15,9 @@ export type AttendeeRow = {
     member_student_id: number | null;
     member_upi: string | null;
     dietary_requirements: string | null;
+    group_emails: string[];
+    rsvp_answers: Record<string, string | string[]>;
+    present: boolean;
 };
 
 function normalizeRow(raw: any): AttendeeRow {
@@ -21,6 +25,7 @@ function normalizeRow(raw: any): AttendeeRow {
     const mem = raw.members ?? raw.member ?? null;
 
     return {
+        rsvp_id: raw.id ? String(raw.id) : null,
         rsvp_created_at: raw.created_at,
         event_id: raw.event_id,
         event_title: ev?.title ?? "(Unknown event)",
@@ -32,6 +37,12 @@ function normalizeRow(raw: any): AttendeeRow {
         member_student_id: mem?.student_id ?? null,
         member_upi: mem?.upi ?? null,
         dietary_requirements: raw.dietary_requirements ?? null,
+        group_emails: Array.isArray(raw.group_emails) ? raw.group_emails : [],
+        rsvp_answers:
+            raw.rsvp_answers && typeof raw.rsvp_answers === "object" && !Array.isArray(raw.rsvp_answers)
+                ? raw.rsvp_answers
+                : {},
+        present: Boolean(raw.present),
     };
 }
 
@@ -54,7 +65,7 @@ export function memberFullName(a: AttendeeRow): string {
     return full.length ? full : "—";
 }
 
-export function useEventAttendees() {
+export function useEventAttendees(eventIdFilter?: string | null) {
     const [rows, setRows] = useState<AttendeeRow[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -63,14 +74,18 @@ export function useEventAttendees() {
         setLoading(true);
         setError(null);
 
-        const { data, error: qErr } = await supabase
+        let query = supabase
             .from("events_rsvp")
             .select(
                 `
+        id,
         created_at,
         event_id,
         email,
         dietary_requirements,
+        group_emails,
+        rsvp_answers,
+        present,
         events (
           id,
           title,
@@ -84,8 +99,13 @@ export function useEventAttendees() {
           upi
         )
       `
-            )
-            .order("created_at", { ascending: false });
+            );
+
+        if (eventIdFilter) {
+            query = query.eq("event_id", eventIdFilter);
+        }
+
+        const { data, error: qErr } = await query.order("created_at", { ascending: false });
 
         if (qErr) {
             console.error("Event Attendees load failed:", qErr);
@@ -112,7 +132,7 @@ export function useEventAttendees() {
 
     useEffect(() => {
         load();
-    }, []);
+    }, [eventIdFilter]);
 
     const grouped = useMemo(() => {
         const map = new Map<
@@ -153,7 +173,56 @@ export function useEventAttendees() {
         return list;
     }, [rows]);
 
-    return { grouped, loading, error, reload: load };
+    const setAttendeePresentLocal = (target: { rsvpId: string | null; eventId: string; memberEmail: string }, present: boolean) => {
+        setRows((current) =>
+            current.map((row) =>
+                (
+                    (target.rsvpId && row.rsvp_id === target.rsvpId)
+                    || (row.event_id === target.eventId && row.member_email === target.memberEmail)
+                )
+                    ? { ...row, present }
+                    : row
+            )
+        );
+    };
+
+    return { grouped, loading, error, reload: load, setAttendeePresentLocal };
+}
+
+export async function updateAttendeePresentStatus(input: {
+    rsvpId: string | null;
+    eventId: string;
+    memberEmail: string;
+    present: boolean;
+}) {
+    if (input.rsvpId) {
+        const { data, error } = await supabase
+            .from("events_rsvp")
+            .update({ present: input.present })
+            .eq("id", input.rsvpId)
+            .select("id");
+
+        if (error) {
+            throw error;
+        }
+        if ((data ?? []).length > 0) {
+            return;
+        }
+    }
+
+    const { data, error } = await supabase
+        .from("events_rsvp")
+        .update({ present: input.present })
+        .eq("event_id", input.eventId)
+        .eq("email", input.memberEmail)
+        .select("id");
+
+    if (error) {
+        throw error;
+    }
+    if ((data ?? []).length === 0) {
+        throw new Error("Attendance update did not persist. Check events_rsvp update policy.");
+    }
 }
 
 export function downloadEventAttendeesCSV(
@@ -169,6 +238,8 @@ export function downloadEventAttendeesCSV(
         "Student ID",
         "UPI",
         "Dietary Requirements",
+        "Group Emails",
+        "Present",
     ];
 
     const rows = attendees.map((a) => [
@@ -179,6 +250,8 @@ export function downloadEventAttendeesCSV(
         a.member_student_id ?? "",
         a.member_upi ?? "",
         a.dietary_requirements ?? "",
+        a.group_emails.join("; "),
+        a.present ? "Yes" : "No",
     ]);
 
     const csvContent =

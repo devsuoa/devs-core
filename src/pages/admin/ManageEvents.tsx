@@ -10,6 +10,31 @@ import {
   Event,
   EventFormData,
 } from '../../lib/manageEventsController';
+import { RSVPQuestion, RSVPQuestionType } from '../../lib/eventRsvpTypes';
+
+const buildEmptyEventFormData = (): EventFormData => ({
+  title: '',
+  description: '',
+  image_url: '',
+  tag: '',
+  event_date: '',
+  event_time: '',
+  location: '',
+  register_url: '',
+  is_active: true,
+  max_attendees: null,
+  group_rsvp_enabled: false,
+  group_rsvp_max_emails: null,
+  rsvp_questions: [],
+});
+
+const createNewQuestion = (): RSVPQuestion => ({
+  id: crypto.randomUUID(),
+  prompt: '',
+  type: 'text',
+  required: false,
+  options: [],
+});
 
 const ImageDropZone: React.FC<{
   imageUrl: string | null;
@@ -98,17 +123,7 @@ const ManageEvents: React.FC = () => {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<EventFormData>({
-    title: '',
-    description: '',
-    image_url: '',
-    tag: '',
-    event_date: '',
-    event_time: '',
-    location: '',
-    register_url: '',
-    is_active: true,
-  });
+  const [formData, setFormData] = useState<EventFormData>(buildEmptyEventFormData());
 
   if (authLoading || loading) {
     return (
@@ -126,17 +141,7 @@ const ManageEvents: React.FC = () => {
   if (!authorized) return null;
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      image_url: '',
-      tag: '',
-      event_date: '',
-      event_time: '',
-      location: '',
-      register_url: '',
-      is_active: true,
-    });
+    setFormData(buildEmptyEventFormData());
     setEditingEvent(null);
     setShowForm(false);
     setUploadError(null);
@@ -145,10 +150,30 @@ const ManageEvents: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const normalizedQuestions = formData.rsvp_questions
+        .map((question) => ({
+          ...question,
+          prompt: question.prompt.trim(),
+          options:
+            question.type === 'text'
+              ? []
+              : question.options.map((option) => option.trim()).filter(Boolean),
+        }))
+        .filter((question) => question.prompt.length > 0);
+
+      const payload: EventFormData = {
+        ...formData,
+        max_attendees: formData.max_attendees ?? null,
+        group_rsvp_max_emails: formData.group_rsvp_enabled
+          ? formData.group_rsvp_max_emails ?? null
+          : null,
+        rsvp_questions: normalizedQuestions,
+      };
+
       if (editingEvent) {
-        await editEvent(editingEvent.id, formData);
+        await editEvent(editingEvent.id, payload);
       } else {
-        await addEvent(formData);
+        await addEvent(payload);
       }
       resetForm();
     } catch (err) {
@@ -277,6 +302,231 @@ const ManageEvents: React.FC = () => {
                   }
                 />
 
+                <div className="pixel-panel p-4 sm:p-5 mb-6">
+                  <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4">RSVP Settings</h3>
+
+                  <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                    Max attendees (optional)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    className="pixel-input w-full"
+                    style={{ marginBottom: '24px' }}
+                    placeholder="Leave blank for unlimited"
+                    value={formData.max_attendees ?? ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        max_attendees: e.target.value === '' ? null : Number(e.target.value),
+                      })
+                    }
+                  />
+
+                  <div className="flex items-center gap-2 mb-4">
+                    <input
+                      id="group-rsvp-toggle"
+                      type="checkbox"
+                      checked={formData.group_rsvp_enabled}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          group_rsvp_enabled: e.target.checked,
+                          group_rsvp_max_emails: e.target.checked
+                            ? formData.group_rsvp_max_emails
+                            : null,
+                        })
+                      }
+                    />
+                    <label htmlFor="group-rsvp-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                      Enable group RSVP
+                    </label>
+                  </div>
+
+                  {formData.group_rsvp_enabled && (
+                    <>
+                      <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                        Max emails per RSVP submission
+                      </label>
+                      <input
+                        type="number"
+                        min={2}
+                        className="pixel-input w-full"
+                        style={{ marginBottom: '24px' }}
+                        placeholder="e.g. 5"
+                        value={formData.group_rsvp_max_emails ?? ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            group_rsvp_max_emails: e.target.value === '' ? null : Number(e.target.value),
+                          })
+                        }
+                      />
+                    </>
+                  )}
+
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <p className="font-silkscreen text-white text-xs sm:text-sm">Additional RSVP questions</p>
+                      <button
+                        type="button"
+                        className="pixel-button text-xs px-3 py-2"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            rsvp_questions: [...prev.rsvp_questions, createNewQuestion()],
+                          }))
+                        }
+                      >
+                        Add question
+                      </button>
+                    </div>
+
+                    {formData.rsvp_questions.length === 0 ? (
+                      <p className="font-pixelify text-xs text-white/60">
+                        No additional questions configured.
+                      </p>
+                    ) : (
+                      <div className="flex flex-col gap-4">
+                        {formData.rsvp_questions.map((question) => (
+                          <div key={question.id} className="rounded border border-white/20 p-3">
+                            <div className="flex flex-col sm:flex-row gap-3 mb-3">
+                              <input
+                                className="pixel-input w-full"
+                                placeholder="Question prompt"
+                                value={question.prompt}
+                                onChange={(e) =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    rsvp_questions: prev.rsvp_questions.map((item) =>
+                                      item.id === question.id ? { ...item, prompt: e.target.value } : item
+                                    ),
+                                  }))
+                                }
+                              />
+                              <select
+                                className="pixel-input w-full sm:w-[220px]"
+                                value={question.type}
+                                onChange={(e) =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    rsvp_questions: prev.rsvp_questions.map((item) => {
+                                      if (item.id !== question.id) return item;
+                                      const nextType = e.target.value as RSVPQuestionType;
+                                      return {
+                                        ...item,
+                                        type: nextType,
+                                        options: nextType === 'text' ? [] : item.options.length ? item.options : [''],
+                                      };
+                                    }),
+                                  }))
+                                }
+                              >
+                                <option value="text">Short text</option>
+                                <option value="single_select">Single select</option>
+                                <option value="multi_select">Multi select</option>
+                              </select>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-4 mb-3">
+                              <label className="font-pixelify text-xs flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={question.required}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      rsvp_questions: prev.rsvp_questions.map((item) =>
+                                        item.id === question.id ? { ...item, required: e.target.checked } : item
+                                      ),
+                                    }))
+                                  }
+                                />
+                                Required
+                              </label>
+
+                              <button
+                                type="button"
+                                className="pixel-button text-xs px-3 py-2 text-red-400! hover:text-red-300!"
+                                onClick={() =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    rsvp_questions: prev.rsvp_questions.filter((item) => item.id !== question.id),
+                                  }))
+                                }
+                              >
+                                Remove
+                              </button>
+                            </div>
+
+                            {question.type !== 'text' && (
+                              <div className="flex flex-col gap-2">
+                                {question.options.map((option, optionIndex) => (
+                                  <div key={`${question.id}-option-${optionIndex}`} className="flex items-center gap-2">
+                                    <input
+                                      className="pixel-input w-full"
+                                      placeholder={`Option ${optionIndex + 1}`}
+                                      value={option}
+                                      onChange={(e) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          rsvp_questions: prev.rsvp_questions.map((item) => {
+                                            if (item.id !== question.id) return item;
+                                            const options = [...item.options];
+                                            options[optionIndex] = e.target.value;
+                                            return { ...item, options };
+                                          }),
+                                        }))
+                                      }
+                                    />
+                                    <button
+                                      type="button"
+                                      className="pixel-button text-xs px-3 py-2"
+                                      onClick={() =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          rsvp_questions: prev.rsvp_questions.map((item) => {
+                                            if (item.id !== question.id) return item;
+                                            return {
+                                              ...item,
+                                              options:
+                                                item.options.length <= 1
+                                                  ? ['']
+                                                  : item.options.filter((_, idx) => idx !== optionIndex),
+                                            };
+                                          }),
+                                        }))
+                                      }
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
+                                ))}
+                                <button
+                                  type="button"
+                                  className="pixel-button text-xs px-3 py-2 w-fit"
+                                  onClick={() =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      rsvp_questions: prev.rsvp_questions.map((item) =>
+                                        item.id === question.id
+                                          ? { ...item, options: [...item.options, ''] }
+                                          : item
+                                      ),
+                                    }))
+                                  }
+                                >
+                                  Add option
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                   <button
                     className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
@@ -317,6 +567,12 @@ const ManageEvents: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 shrink-0">
+                    <Link
+                      className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation flex items-center"
+                      to={`/admin/event-attendees?eventId=${event.id}`}
+                    >
+                      Attendees
+                    </Link>
                     <button
                       className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation"
                       onClick={() => {
@@ -331,6 +587,10 @@ const ManageEvents: React.FC = () => {
                           location: event.location || '',
                           register_url: event.register_url || '',
                           is_active: event.is_active,
+                          max_attendees: event.max_attendees,
+                          group_rsvp_enabled: event.group_rsvp_enabled,
+                          group_rsvp_max_emails: event.group_rsvp_max_emails,
+                          rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
                         });
                         setShowForm(true);
                       }}
@@ -338,7 +598,7 @@ const ManageEvents: React.FC = () => {
                       Edit
                     </button>
                     <button
-                      className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation !text-red-400 hover:!text-red-300"
+                      className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation text-red-400! hover:text-red-300!"
                       onClick={() => removeEvent(event.id)}
                     >
                       Delete

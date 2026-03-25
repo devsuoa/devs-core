@@ -5,6 +5,7 @@ import { rsvpToEvent } from "../lib/eventsRSVPController";
 import { NotMemberError } from "../lib/eventsRSVPController";
 import { useNavigate } from "react-router-dom";
 import { formatEventDate } from "../lib/eventsController";
+import { RSVPQuestion } from "../lib/eventRsvpTypes";
 
 type EventsCardProps = {
   /** Event ID */
@@ -63,6 +64,9 @@ type EventsCardProps = {
    * @example "https://devsuoa.com/register"
    */
   registerUrl?: string;
+  groupRSVPEnabled?: boolean;
+  groupRSVPMaxEmails?: number | null;
+  rsvpQuestions?: RSVPQuestion[];
 
   /**
    * Additional CSS Classes
@@ -93,6 +97,9 @@ const EventsCard = ({
   location,
   description,
   registerUrl,
+  groupRSVPEnabled = false,
+  groupRSVPMaxEmails = null,
+  rsvpQuestions = [],
   className,
   isFlipped: controlledFlipped,
   onFlipChange,
@@ -365,9 +372,18 @@ const EventsCard = ({
           setRsvpOpen(false);
           setFlipped(false);
         }}
-        onConfirm={async (email, dietaryRequirements) => {
+        groupRSVPEnabled={groupRSVPEnabled}
+        groupRSVPMaxEmails={groupRSVPMaxEmails}
+        rsvpQuestions={rsvpQuestions}
+        onConfirm={async ({ leaderEmail, groupEmails, dietaryRequirements, answers }) => {
           try {
-            await rsvpToEvent(id, email, dietaryRequirements || null);
+            await rsvpToEvent({
+              eventId: id,
+              leaderEmail,
+              groupEmails,
+              dietaryRequirements: dietaryRequirements || null,
+              answers,
+            });
           } catch (error) {
             if (error instanceof NotMemberError) {
               navigate("/join");

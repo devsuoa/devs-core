@@ -418,6 +418,9 @@ const Events = () => {
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl={event.register_url || ""}
+                      groupRSVPEnabled={event.group_rsvp_enabled}
+                      groupRSVPMaxEmails={event.group_rsvp_max_emails}
+                      rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
                     />
@@ -521,6 +524,9 @@ const Events = () => {
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl=""
+                      groupRSVPEnabled={event.group_rsvp_enabled}
+                      groupRSVPMaxEmails={event.group_rsvp_max_emails}
+                      rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
                     />

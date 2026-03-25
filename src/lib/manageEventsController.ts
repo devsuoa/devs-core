@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { RSVPQuestion } from './eventRsvpTypes';
 
 export interface Event {
     id: string;
@@ -12,6 +13,10 @@ export interface Event {
     location: string | null;
     register_url: string | null;
     is_active: boolean;
+    max_attendees: number | null;
+    group_rsvp_enabled: boolean;
+    group_rsvp_max_emails: number | null;
+    rsvp_questions: RSVPQuestion[];
   }  
 
 export interface EventFormData {
@@ -24,6 +29,10 @@ export interface EventFormData {
   location: string | null;
   register_url: string | null;
   is_active: boolean;
+  max_attendees: number | null;
+  group_rsvp_enabled: boolean;
+  group_rsvp_max_emails: number | null;
+  rsvp_questions: RSVPQuestion[];
 }
 
 export const useEventsManagement = () => {
