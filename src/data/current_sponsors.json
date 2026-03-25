@@ -52,5 +52,11 @@
     "image": "/sponsors/silver/eroad.png",
     "desc": "EROAD is a global telematics and transportation technology company specializing in fleet management. Based in New Zealand, it provides real-time GPS tracking, regulatory compliance tools, and safety data. Their platform helps businesses optimize fuel efficiency, monitor driver behavior, and automate tax reporting.",
     "tier": "silver"
+  },
+  {
+    "name": "SAP",
+    "image": "/sponsors/silver/sap.png",
+    "desc": "SAP helps the world's leading orgranisations bring out their best by connection data, applications and AI to run intelligent, sustainable businesses. With a global ecosystem and cloud-first platform, SAP powers innocation and digital transformation for companies in every industry.",
+    "tier": "silver"
   }
 ]
