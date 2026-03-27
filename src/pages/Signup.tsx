@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { PageTitle } from "../components/PageTitle";
 import Footer from "../components/Footer";
@@ -12,9 +13,13 @@ import { fetchDegrees, fetchMajorsForDegree } from "../lib/degreeData";
 import { Gender, University } from "../lib/memberSignup";
 import { DegreeOrMajor } from "../lib/degreeData";
 
-import { ToastContainer, Zoom, toast } from "react-toastify";
 import { SocialLinks } from "../components/SocialLinks";
+import { showSiteToast } from "../components/SiteToast";
 import { submitSignupForm } from "../lib/signupController";
+import {
+  getMemberFlow,
+  setSignupComplete,
+} from "../lib/eventRsvpMemberFlowStorage";
 import BinaryBackground from "../components/BinaryBackground";
 
 export type DegreeBlock = {
@@ -26,6 +31,7 @@ const MAX_DEGREES = 2;
 const MAX_MAJORS = 2;
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -146,6 +152,13 @@ const Signup: React.FC = () => {
   const degrees = allDegrees.filter((d) => !selectedDegreeIds.includes(d.id));
 
   useEffect(() => {
+    const flow = getMemberFlow();
+    if (flow?.phase === "need_signup" && flow.email) {
+      setEmail(flow.email);
+    }
+  }, []);
+
+  useEffect(() => {
     fetchDegrees([])
       .then((all) => {
         setAllDegrees(all);
@@ -157,7 +170,11 @@ const Signup: React.FC = () => {
             .catch(() => {});
         });
       })
-      .catch(() => toast.error("Failed to load degrees. Please refresh."));
+      .catch(() =>
+        showSiteToast("Failed to load degrees. Please refresh.", {
+          variant: "error",
+        }),
+      );
   }, []);
 
   const loadMajors = async (
@@ -169,7 +186,9 @@ const Signup: React.FC = () => {
       const data = await fetchMajorsForDegree(degreeId, excludeMajorIds);
       setMajorsMap((prev) => ({ ...prev, [degreeId]: data }));
     } catch {
-      toast.error("Could not fetch majors for this degree.");
+      showSiteToast("Could not fetch majors for this degree.", {
+        variant: "error",
+      });
     }
   };
 
@@ -191,12 +210,18 @@ const Signup: React.FC = () => {
         !studentId ||
         formattedDegrees.length === 0
       ) {
-        if (!selectedGender) toast.error("Please select a gender");
-        else if (!selectedUniversity) toast.error("Please select a university");
-        else if (!selectedYear) toast.error("Please select your year");
-        else if (!studentId) toast.error("Please enter your student ID");
+        if (!selectedGender)
+          showSiteToast("Please select a gender", { variant: "error" });
+        else if (!selectedUniversity)
+          showSiteToast("Please select a university", { variant: "error" });
+        else if (!selectedYear)
+          showSiteToast("Please select your year", { variant: "error" });
+        else if (!studentId)
+          showSiteToast("Please enter your student ID", { variant: "error" });
         else if (formattedDegrees.length === 0)
-          toast.error("Please select at least one degree and major");
+          showSiteToast("Please select at least one degree and major", {
+            variant: "error",
+          });
         return;
       }
 
@@ -215,16 +240,29 @@ const Signup: React.FC = () => {
       if (!status) {
         const pgError = error as { code?: string };
         if (pgError?.code === "23505") {
-          toast.error("You're already signed up!");
+          showSiteToast("You're already signed up!", { variant: "error" });
         } else {
           console.error(error);
-          toast.error("An error occurred. Please try again.");
+          showSiteToast("An error occurred. Please try again.", {
+            variant: "error",
+          });
         }
+        return;
       }
-      setLogin(status);
+
+      const flow = getMemberFlow();
+      if (flow?.phase === "need_signup" && flow.eventId) {
+        setSignupComplete(flow.eventId, email);
+        navigate({ pathname: "/events", hash: flow.eventId });
+        return;
+      }
+
+      setLogin(true);
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again.");
+      showSiteToast("An error occurred. Please try again.", {
+        variant: "error",
+      });
     }
   };
 
@@ -241,20 +279,6 @@ const Signup: React.FC = () => {
   return (
     <>
       <BinaryBackground />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        limit={2}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition={Zoom}
-      />
       <Header />
 
       <PageTitle

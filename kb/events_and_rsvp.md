@@ -22,6 +22,23 @@ This document describes how **public events**, **RSVP**, **admin event managemen
 
 **UI:** Event cards (`EventsCard`) open RSVP where applicable; external registration links may use `register_url`.
 
+**URL hash:** **`#eventId`** focuses the right card and pagination (see **`Events.tsx`**).
+
+## RSVP → join → return (non-members)
+
+Visitors who RSVP before they are **members** hit **`NotMemberError`** from **`member-exists`**. The client keeps context in **`sessionStorage`** via **`src/lib/eventRsvpMemberFlowStorage.ts`** (tab-scoped; email is not put in the query string):
+
+| Phase | Meaning |
+|------|---------|
+| **`need_signup`** | Set when redirecting from RSVP to **`/join`**; **`Signup`** prefills the email field on load. |
+| **`signup_complete`** | Set when **`Signup`** succeeds if a **`need_signup`** intent exists; then navigate to **`/events#eventId`**. |
+
+**`Events.tsx`** calls **`consumeSignupCompleteForEvent(hashEventId)`** after the list loads so the correct event is handled **even if its card is on another pagination page**. It passes the email into **`EventsCard`** as **`postJoinRsvpEmail`**, which flips the card, opens **`GenericRSVPDialog`**, and supplies **`initialLeaderEmail`**.
+
+Short prompts use the branded **[Site toast](siteToast.md)** (**`top-center`**): **“Please sign up first”** when sending the user to **`/join`**, and **“Please RSVP”** when they land back on **`/events`** after signup.
+
+If the user leaves **`/join`** without completing signup, the flow stays on **`need_signup`** and the events list does not auto-open RSVP (nothing consumes until **`signup_complete`**).
+
 ## RSVP submission
 
 **UI:** `src/components/GenericRSVPDialog.tsx` (and usage from `EventsCard` / `Events` page).
@@ -75,12 +92,15 @@ The public events page may use the shared **[Pagination](pagination.md)** compon
 | Area | Primary files |
 |------|----------------|
 | Public list | `src/pages/Events.tsx`, `src/lib/eventsController.ts`, `src/components/EventsCard.tsx` |
+| RSVP member flow (storage) | `src/lib/eventRsvpMemberFlowStorage.ts` |
+| Join (prefill / post-signup redirect) | `src/pages/Signup.tsx` |
 | RSVP UI | `src/components/GenericRSVPDialog.tsx` |
+| Site toast (RSVP prompts) | `src/components/SiteToast.tsx` — see [Site toast](siteToast.md) |
 | RSVP API | `src/lib/eventsRSVPController.ts`, `src/lib/eventRsvpTypes.ts` |
 | Admin CRUD | `src/pages/admin/ManageEvents.tsx`, `src/lib/manageEventsController.ts` |
 | Attendees | `src/pages/admin/EventsDashboard.tsx`, `src/lib/eventsDashboardController.ts` |
 
-KB component docs: [Events Card](eventsCard.md), [Generic RSVP Dialog](genericRSVPDialog.md).
+KB component docs: [Events Card](eventsCard.md), [Generic RSVP Dialog](genericRSVPDialog.md), [Site toast](siteToast.md).
 
 ## Future enhancements
 

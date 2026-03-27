@@ -11,7 +11,7 @@ The **GenericRSVPDialog** is a modal used to collect **event RSVPs**: leader ema
 
 ## Where it is used
 
-Primarily from **`EventsCard`** on the public events flow. The parent passes `onConfirm`, which should call **`rsvpToEvent`** (or equivalent). See [Events & RSVP](events_and_rsvp.md).
+Primarily from **`EventsCard`** on the public events flow. The parent passes `onConfirm`, which should call **`rsvpToEvent`** (or equivalent). After a successful **member signup** from an RSVP redirect, **`EventsCard`** may pass **`initialLeaderEmail`** so the user does not re-type their email. See [Events & RSVP](events_and_rsvp.md).
 
 ## Props
 
@@ -19,6 +19,7 @@ Primarily from **`EventsCard`** on the public events flow. The parent passes `on
 |------|------|-------------|
 | `open` | `boolean` | When true, the dialog is rendered |
 | `onClose` | `() => void` | Called to dismiss (also used after success timeout) |
+| `initialLeaderEmail` | `string` (optional) | When **`open`** and set, normalises into the leader email field (e.g. return from **`/join`** after event RSVP) |
 | `groupRSVPEnabled` | `boolean` | Enables group email fields and validation |
 | `groupRSVPMaxEmails` | `number \| null` | Caps how many group email inputs apply; `null` uses current list length |
 | `rsvpQuestions` | `RSVPQuestion[]` | Custom questions from the event (`eventRsvpTypes`) |

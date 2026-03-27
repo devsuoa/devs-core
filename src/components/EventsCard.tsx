@@ -3,6 +3,8 @@ import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
 import { rsvpToEvent } from "../lib/eventsRSVPController";
 import { NotMemberError } from "../lib/eventsRSVPController";
+import { setNeedSignupIntent } from "../lib/eventRsvpMemberFlowStorage";
+import { showSiteToast } from "./SiteToast";
 import { useNavigate } from "react-router-dom";
 import { formatEventDate } from "../lib/eventsController";
 import { RSVPQuestion } from "../lib/eventRsvpTypes";
@@ -85,6 +87,9 @@ type EventsCardProps = {
    * Called with the new flip state
    */
   onFlipChange?: (flipped: boolean) => void;
+
+  /** After returning from /join signup — prefill and open RSVP (from parent). */
+  postJoinRsvpEmail?: string;
 };
 
 const EventsCard = ({
@@ -103,12 +108,17 @@ const EventsCard = ({
   className,
   isFlipped: controlledFlipped,
   onFlipChange,
+  postJoinRsvpEmail,
 }: EventsCardProps) => {
   const [internalFlipped, setInternalFlipped] = useState(false);
   const [rsvpOpen, setRsvpOpen] = useState(false);
   const [frontHeight, setFrontHeight] = useState(0);
   const frontRef = useRef<HTMLDivElement>(null);
+  const resumeHandledRef = useRef(false);
   const navigate = useNavigate();
+  const [resumeRsvpEmail, setResumeRsvpEmail] = useState<string | undefined>(
+    undefined,
+  );
 
   // Track front face height so back face can use it as min-height
   useEffect(() => {
@@ -133,6 +143,18 @@ const EventsCard = ({
       setInternalFlipped(newValue);
     }
   }, [isControlled, flipped, onFlipChange]);
+
+  useEffect(() => {
+    resumeHandledRef.current = false;
+  }, [id]);
+
+  useEffect(() => {
+    if (!postJoinRsvpEmail || resumeHandledRef.current) return;
+    resumeHandledRef.current = true;
+    setResumeRsvpEmail(postJoinRsvpEmail);
+    setRsvpOpen(true);
+    setFlipped(true);
+  }, [postJoinRsvpEmail, setFlipped]);
 
   const eventDate = new Date(date).getTime()/1000;
   const today = Date.now()/1000;
@@ -305,23 +327,11 @@ const EventsCard = ({
                     });
                   } else {
                     navigator.clipboard.writeText(window.location.href);
-
-                    // Create toast notification
-                    const toast = document.createElement('div');
-                    toast.textContent = 'Link copied!';
-                    toast.className = 'fixed bottom-[10vh] left-1/2 -translate-x-1/2 bg-indigo-400 px-5 py-3 rounded-lg shadow-lg font-silkscreen text-sm lg:text-lg z-[9999] transition-opacity duration-300';
-                    toast.style.opacity = '0';
-
-                    document.body.appendChild(toast);
-
-                    // Fade in
-                    setTimeout(() => toast.style.opacity = '1', 10);
-
-                    // Remove after 2 seconds
-                    setTimeout(() => {
-                      toast.style.opacity = '0';
-                      setTimeout(() => toast.remove(), 300);
-                    }, 2000);
+                    showSiteToast("Link copied!", {
+                      variant: "success",
+                      autoClose: 2500,
+                      position: "bottom-center",
+                    });
                   }
                 }}
                 title="Share event"
@@ -371,7 +381,9 @@ const EventsCard = ({
         onClose={() => {
           setRsvpOpen(false);
           setFlipped(false);
+          setResumeRsvpEmail(undefined);
         }}
+        initialLeaderEmail={resumeRsvpEmail}
         groupRSVPEnabled={groupRSVPEnabled}
         groupRSVPMaxEmails={groupRSVPMaxEmails}
         rsvpQuestions={rsvpQuestions}
@@ -386,6 +398,10 @@ const EventsCard = ({
             });
           } catch (error) {
             if (error instanceof NotMemberError) {
+              setNeedSignupIntent(id, leaderEmail);
+              showSiteToast("Please sign up first", {
+                position: "top-center",
+              });
               navigate("/join");
               throw error;
             }

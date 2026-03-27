@@ -22,7 +22,7 @@ As declared in `package.json` and used in practice:
 - **MUI** (`@mui/material`, icons) and **Emotion** – component library usage where adopted
 - **Framer Motion**, **GSAP** – motion and animation
 - **@dnd-kit** – drag-and-drop (e.g. task UI)
-- **react-toastify** – toast notifications
+- **react-toastify** – toast notifications; branded messages use **[Site toast](siteToast.md)** (`SiteToast.tsx`)
 - **react-paginate** – pagination primitives (see also the custom [Pagination](pagination.md) component)
 - **recharts** – charts where used
 - **posthog-js** – product analytics (optional; gated by env and cookie consent)

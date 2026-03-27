@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
     AlreadyRSVPedError,
     EventFullError,
@@ -10,6 +11,7 @@ import { RSVPQuestion } from "../lib/eventRsvpTypes";
 type GenericRSVPDialogProps = {
     open: boolean;
     onClose: () => void;
+    initialLeaderEmail?: string;
     groupRSVPEnabled: boolean;
     groupRSVPMaxEmails: number | null;
     rsvpQuestions: RSVPQuestion[];
@@ -24,6 +26,7 @@ type GenericRSVPDialogProps = {
 const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     open,
     onClose,
+    initialLeaderEmail,
     groupRSVPEnabled,
     groupRSVPMaxEmails,
     rsvpQuestions,
@@ -36,6 +39,11 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [dietaryRequirements, setDietaryRequirements] = useState("");
     const [answers, setAnswers] = useState<RSVPAnswers>({});
+
+    useEffect(() => {
+        if (!open || initialLeaderEmail === undefined || initialLeaderEmail === "") return;
+        setLeaderEmail(initialLeaderEmail.trim().toLowerCase());
+    }, [open, initialLeaderEmail]);
 
     const handleConfirm = async () => {
         if (!leaderEmail) {
@@ -157,7 +165,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         ? groupRSVPMaxEmails ?? groupEmails.length
         : 0;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50">
             <div className="w-full max-w-2xl rounded-xl border-2 border-white bg-[#04060f] p-6 text-center max-h-[90vh] overflow-y-auto">
                 {!submitted ? (
@@ -364,7 +372,8 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                     </div>
                 )}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

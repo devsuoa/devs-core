@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PixelatedButton from "./PixelatedButton";
 import { sendEmail } from "../lib/emailController";
-import { toast } from "react-toastify";
+import { showSiteToast } from "./SiteToast";
 
 type FormType = "sponsor" | "contact";
 
@@ -74,13 +74,15 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
         ),
       });
 
-      toast.success("Thank you! We'll get back to you soon.", {
+      showSiteToast("Thank you! We'll get back to you soon.", {
+        variant: "success",
         autoClose: 4000,
       });
 
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      toast.error("Failed to send message. Please try again.", {
+      showSiteToast("Failed to send message. Please try again.", {
+        variant: "error",
         autoClose: 4000,
       });
       console.error(error);

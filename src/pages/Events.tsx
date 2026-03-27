@@ -9,6 +9,8 @@ import Pagination from "../components/Pagination";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
 import { useEvents } from "../lib/eventsController";
+import { consumeSignupCompleteForEvent } from "../lib/eventRsvpMemberFlowStorage";
+import { showSiteToast } from "../components/SiteToast";
 import BinaryBackground from "../components/BinaryBackground";
  
 const Events = () => {
@@ -52,6 +54,10 @@ const Events = () => {
 
   // state for focused event card (for overlay)
   const [focusedEventId, setFocusedEventId] = useState<string | null>(null);
+  const [postJoinRsvp, setPostJoinRsvp] = useState<{
+    eventId: string;
+    email: string;
+  } | null>(null);
   const location = useLocation();
 
   // Extract unique tags from events
@@ -106,6 +112,22 @@ const Events = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [onPageNotFound]);
+
+  useEffect(() => {
+    if (loading) return;
+    const hash = location.hash.slice(1);
+    if (!hash) {
+      setPostJoinRsvp(null);
+      return;
+    }
+    const email = consumeSignupCompleteForEvent(hash);
+    if (email) {
+      setPostJoinRsvp({ eventId: hash, email });
+      showSiteToast("Please RSVP", { position: "top-center" });
+      return;
+    }
+    setPostJoinRsvp((prev) => (prev?.eventId === hash ? prev : null));
+  }, [loading, location.hash]);
 
   // Handle URL hash to auto-focus an event card (only on initial load)
   const initialHashProcessed = useRef(false);
@@ -423,6 +445,11 @@ const Events = () => {
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
+                      }
                     />
                   </motion.div>
                 ))}
@@ -529,6 +556,11 @@ const Events = () => {
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
+                      }
                     />
                   </motion.div>
                 ))}
