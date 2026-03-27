@@ -24,6 +24,7 @@ import ManageEvents from "./pages/admin/ManageEvents";
 import Sponsors from "./pages/Sponsors";
 import Team from "./pages/Team";
 import Pb from "./pages/hidden/Pb";
+import KartikGlazer from "./pages/hidden/KartikGlazer";
 import Landing from "./pages/Landing";
 import Contact from "./pages/Contact";
 import MemberRegistry from "./pages/admin/MemberRegistry";
@@ -105,10 +106,12 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/404" element={<PageNotFound />} />
-          <Route path="*" element={<PageNotFound />} />
 
-          {/* Hidden page for jokes & glazing */}
+          {/* Hidden pages for jokes & glazing */}
           <Route path="/p/b/6/7" element={<Pb />} />
+          <Route path="/p/kartik" element={<KartikGlazer />} />
+
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
     </>
