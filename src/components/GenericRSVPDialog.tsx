@@ -171,7 +171,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 className="font-pixelify block"
                                 style={{ marginBottom: "16px" }}
                             >
-                                leader email address<span className="text-red-400">*</span>
+                                Email address<span className="text-red-400">*</span>
                             </label>
                             <input
                                 id="email"
@@ -187,7 +187,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                             {groupRSVPEnabled && (
                                 <div className="mt-4">
                                     <label className="font-pixelify block mb-3">
-                                        group emails
+                                        Group emails
                                         {groupRSVPMaxEmails !== null && (
                                             <span className="text-white/60"> (up to {groupRSVPMaxEmails})</span>
                                         )}
@@ -239,7 +239,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 htmlFor="dietaryRequirements"
                                 className="font-pixelify block my-4"
                             >
-                                dietary requirements
+                                Dietary requirements
                             </label>
                             <textarea
                                 id="dietaryRequirements"
