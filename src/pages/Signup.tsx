@@ -15,6 +15,7 @@ import { DegreeOrMajor } from "../lib/degreeData";
 
 import { SocialLinks } from "../components/SocialLinks";
 import { showSiteToast } from "../components/SiteToast";
+import { posthog } from "../lib/posthog";
 import { submitSignupForm } from "../lib/signupController";
 import {
   getMemberFlow,
@@ -210,6 +211,17 @@ const Signup: React.FC = () => {
         !studentId ||
         formattedDegrees.length === 0
       ) {
+        if (posthog && posthog.capture) {
+          posthog.capture("signup_failed", {
+            reason: "Incorrect User Input",
+            selectedGender,
+            selectedUniversity,
+            selectedYear,
+            studentId,
+            formattedDegreesLength: formattedDegrees.length,
+            email,
+          });
+        }
         if (!selectedGender)
           showSiteToast("Please select a gender", { variant: "error" });
         else if (!selectedUniversity)
@@ -240,8 +252,21 @@ const Signup: React.FC = () => {
       if (!status) {
         const pgError = error as { code?: string };
         if (pgError?.code === "23505") {
+          if (posthog && posthog.capture) {
+            posthog.capture("signup_failed", {
+              reason: "Duplicate Signup",
+              email,
+            });
+          }
           showSiteToast("You're already signed up!", { variant: "error" });
         } else {
+          if (posthog && posthog.capture) {
+            posthog.capture("signup_failed", {
+              reason: "Unknown Error",
+              email,
+              error: error instanceof Error ? error.message : String(error),
+            });
+          }
           console.error(error);
           showSiteToast("An error occurred. Please try again.", {
             variant: "error",
@@ -259,6 +284,13 @@ const Signup: React.FC = () => {
 
       setLogin(true);
     } catch (error) {
+      if (posthog && posthog.capture) {
+        posthog.capture("signup_failed", {
+          reason: "Unknown Error",
+          email,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
       console.error(error);
       showSiteToast("An error occurred. Please try again.", {
         variant: "error",
