@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { posthog } from "../lib/posthog";
 import { createPortal } from "react-dom";
 import {
     AlreadyRSVPedError,
@@ -48,6 +49,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const handleConfirm = async () => {
         if (!leaderEmail) {
             setError("Email is required");
+            
             return;
         }
 
@@ -125,11 +127,33 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         } catch (err) {
             setLoading(false);
 
+            let reason = "unknown";
             if (err instanceof AlreadyRSVPedError) {
-                setError("You have already RSVP'd to this event");
+                reason = "already_rsvped";
             } else if (err instanceof EventFullError) {
-                setError("This event is full.");
+                reason = "event_full";
             } else if (err instanceof GroupRSVPSizeExceededError) {
+                reason = "group_size_exceeded";
+            } else if (err instanceof Error) {
+                reason = err.name || "error";
+            }
+
+            if (posthog && posthog.capture) {
+                posthog.capture("rsvp_failed", {
+                    error: err instanceof Error ? err.message : String(err),
+                    reason,
+                    leaderEmail,
+                    groupEmails,
+                    dietaryRequirements,
+                    answers,
+                });
+            }
+
+            if (reason === "already_rsvped") {
+                setError("You have already RSVP'd to this event");
+            } else if (reason === "event_full") {
+                setError("This event is full.");
+            } else if (reason === "group_size_exceeded") {
                 setError("Your group exceeds the maximum allowed for this event.");
             } else {
                 setError("Something went wrong. Please try again.");
