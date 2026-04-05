@@ -53,6 +53,15 @@ const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={() => {
+                  navigate("/admin/event-todo");
+                }}
+                className="text-left w-full font-silkscreen text-base sm:text-[1.25rem] dashboard-link py-4 sm:py-[12px] px-0 min-h-[48px] touch-manipulation active:opacity-80"
+              >
+                Event To-Do
+              </button>
+
+              <button
+                onClick={() => {
                   navigate("/admin/manage-events");
                 }}
                 className="text-left w-full font-silkscreen text-base sm:text-[1.25rem] dashboard-link py-4 sm:py-[12px] px-0 min-h-[48px] touch-manipulation active:opacity-80"
