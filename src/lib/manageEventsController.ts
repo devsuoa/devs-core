@@ -17,6 +17,8 @@ export interface Event {
     group_rsvp_enabled: boolean;
     group_rsvp_max_emails: number | null;
     rsvp_questions: RSVPQuestion[];
+    google_sheet_linked: boolean;
+    google_sheet_url: string | null;
   }  
 
 export interface EventFormData {
@@ -33,6 +35,8 @@ export interface EventFormData {
   group_rsvp_enabled: boolean;
   group_rsvp_max_emails: number | null;
   rsvp_questions: RSVPQuestion[];
+  google_sheet_linked: boolean;
+  google_sheet_url: string | null;
 }
 
 export const useEventsManagement = () => {

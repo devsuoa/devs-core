@@ -26,6 +26,8 @@ const buildEmptyEventFormData = (): EventFormData => ({
   group_rsvp_enabled: false,
   group_rsvp_max_emails: null,
   rsvp_questions: [],
+  google_sheet_linked: false,
+  google_sheet_url: null,
 });
 
 const createNewQuestion = (): RSVPQuestion => ({
@@ -325,6 +327,47 @@ const ManageEvents: React.FC = () => {
 
                   <div className="flex items-center gap-2 mb-4">
                     <input
+                      id="google-sheet-linked-toggle"
+                      type="checkbox"
+                      checked={formData.google_sheet_linked}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          google_sheet_linked: e.target.checked,
+                          google_sheet_url: e.target.checked ? formData.google_sheet_url : null,
+                        })
+                      }
+                    />
+                    <label htmlFor="google-sheet-linked-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                      Link RSVPs to a Google Sheet
+                    </label>
+                  </div>
+
+                  {formData.google_sheet_linked && (
+                    <div style={{ marginBottom: '24px' }}>
+                      <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                        Google Sheet URL
+                      </label>
+                      <input
+                        type="url"
+                        className="pixel-input w-full mb-1"
+                        placeholder="https://docs.google.com/spreadsheets/d/..."
+                        value={formData.google_sheet_url || ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            google_sheet_url: e.target.value,
+                          })
+                        }
+                      />
+                      <p className="font-pixelify text-xs text-blue-400">
+                        Make sure to share this sheet with the project service account as an Editor!
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2 mb-4">
+                    <input
                       id="group-rsvp-toggle"
                       type="checkbox"
                       checked={formData.group_rsvp_enabled}
@@ -591,6 +634,8 @@ const ManageEvents: React.FC = () => {
                           group_rsvp_enabled: event.group_rsvp_enabled,
                           group_rsvp_max_emails: event.group_rsvp_max_emails,
                           rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
+                          google_sheet_linked: event.google_sheet_linked || false,
+                          google_sheet_url: event.google_sheet_url || null,
                         });
                         setShowForm(true);
                       }}
