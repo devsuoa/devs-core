@@ -179,6 +179,12 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const [backdropTapDismiss, setBackdropTapDismiss] = useState(
         () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches,
     );
+    /** Tailwind `md` breakpoint: phones / narrow layouts only dismiss via explicit cancel (no backdrop, no Escape). */
+    const [narrowViewport, setNarrowViewport] = useState(
+        () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches,
+    );
+    /** Backdrop + Escape dismiss — disabled on mobile-sized viewports and on touch-primary wide screens. */
+    const allowChromeDismiss = backdropTapDismiss && !narrowViewport;
     /** Only close on backdrop when press started and ended on overlay — extra guard when backdrop tap is enabled. */
     const backdropCloseGestureRef = useRef(false);
 
@@ -196,6 +202,14 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     useEffect(() => {
         const mq = window.matchMedia("(pointer: fine)");
         const sync = () => setBackdropTapDismiss(mq.matches);
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 767px)");
+        const sync = () => setNarrowViewport(mq.matches);
         sync();
         mq.addEventListener("change", sync);
         return () => mq.removeEventListener("change", sync);
@@ -370,6 +384,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
+                if (!allowChromeDismiss) return;
                 e.preventDefault();
                 onClose();
             }
@@ -385,7 +400,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [open, submitted, loading, leaderEmail, dietaryRequirements, groupEmails, answers]);
+    }, [open, submitted, loading, allowChromeDismiss, leaderEmail, dietaryRequirements, groupEmails, answers]);
 
     if (!open) return null;
 
@@ -419,7 +434,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     })();
 
     const onBackdropPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!backdropTapDismiss || loading) return;
+        if (!allowChromeDismiss || loading) return;
         if (e.target === e.currentTarget) {
             backdropCloseGestureRef.current = true;
         }
@@ -427,7 +442,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
     const onBackdropPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
         if (
-            backdropTapDismiss &&
+            allowChromeDismiss &&
             backdropCloseGestureRef.current &&
             e.target === e.currentTarget &&
             !loading
@@ -443,7 +458,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 px-3 py-6 pt-12 sm:pt-16 touch-manipulation"
+            className={`fixed inset-0 z-9999 flex items-center justify-center bg-black/60 px-3 py-6 pt-12 sm:pt-16 touch-manipulation overscroll-none ${!allowChromeDismiss ? "touch-none" : ""}`}
             onPointerDown={onBackdropPointerDown}
             onPointerUp={onBackdropPointerUp}
             onPointerCancel={onBackdropPointerCancel}
