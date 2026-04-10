@@ -78,6 +78,24 @@ function seatCountForGroup(raw: unknown): number {
   return Math.max(1, raw.length);
 }
 
+/**
+ * All attendee emails for a stored RSVP row (leader + group, deduped as persisted).
+ * Use this when expanding RSVPs to per-person rows in dashboards.
+ */
+export function emailsFromStoredRsvp(leaderEmail: string, groupEmails: unknown): string[] {
+  if (Array.isArray(groupEmails) && groupEmails.length > 0) {
+    const deduped = Array.from(
+      new Set(
+        groupEmails
+          .map((e) => String(e).trim().toLowerCase())
+          .filter(Boolean),
+      ),
+    );
+    return deduped.length ? deduped : [leaderEmail.trim().toLowerCase()];
+  }
+  return [leaderEmail.trim().toLowerCase()];
+}
+
 async function fetchEventRSVPConfig(eventId: string): Promise<EventRSVPConfig> {
   const { data, error } = await supabase
     .from("events")

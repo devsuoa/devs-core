@@ -45,11 +45,13 @@ const EventsDashboard: React.FC = () => {
           const email = (a.member_email ?? "").toLowerCase();
           const upi = (a.member_upi ?? "").toLowerCase();
           const sid = a.member_student_id?.toString() ?? "";
+          const groupMatch = (a.group_emails ?? []).some((g) => g.toLowerCase().includes(q));
           return (
             name.includes(q) ||
             email.includes(q) ||
             upi.includes(q) ||
             sid.includes(q) ||
+            groupMatch ||
             ev.title.toLowerCase().includes(q)
           );
         });
@@ -201,7 +203,7 @@ const EventsDashboard: React.FC = () => {
                         <div className="flex flex-col gap-3 md:hidden">
                           {ev.attendees.map((a) => (
                             <div
-                              key={`${a.event_id}::${a.member_email}`}
+                              key={`${a.rsvp_id ?? "na"}::${a.member_email}`}
                               className="rounded-lg border border-white/20 bg-white/5 p-4"
                             >
                               <p className="font-silkscreen text-white text-sm">{memberFullName(a)}</p>
@@ -254,7 +256,7 @@ const EventsDashboard: React.FC = () => {
                             </thead>
                             <tbody>
                               {ev.attendees.map((a) => (
-                                <tr key={`${a.event_id}::${a.member_email}`} className="border-b border-white/10">
+                                <tr key={`${a.rsvp_id ?? "na"}::${a.member_email}`} className="border-b border-white/10">
                                   <td className="py-3 pr-4 font-pixelify text-sm text-white">{memberFullName(a)}</td>
                                   <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_email}</td>
                                   <td className="py-3 pr-4 font-pixelify text-sm text-white">
