@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -59,6 +59,28 @@ const Events = () => {
     email: string;
   } | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Stripe Checkout success: show confirmation after return (webhook completes RSVP in background)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("rsvp_paid") !== "1") return;
+
+    showSiteToast("RSVP submitted. See you at the event!", {
+      variant: "success",
+      position: "top-center",
+    });
+    params.delete("rsvp_paid");
+    const next = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        search: next ? `?${next}` : "",
+        hash: location.hash,
+      },
+      { replace: true },
+    );
+  }, [location.search, location.pathname, location.hash, navigate]);
 
   // Extract unique tags from events
   const upcomingTags = useMemo(() => {

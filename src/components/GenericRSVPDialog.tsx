@@ -616,7 +616,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                         </label>
                                         {paymentChoice === "stripe" && (
                                             <div className="ml-4 pl-3 border-l-2 border-white/25 space-y-1 mb-1">
-                                                <p className="font-pixelify text-xs text-white/70">
+                                                <p className="font-rethink text-sm text-white/70">
                                                     {groupRSVPEnabled ? (
                                                         <>
                                                             {attendeeCount} attendee{attendeeCount === 1 ? "" : "s"} ×{" "}
@@ -631,14 +631,17 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                                         </>
                                                     )}
                                                 </p>
-                                                <p className="font-pixelify text-xs text-white/70">
+                                                <p className="font-rethink text-sm text-white/70">
                                                     Total Cost: {" "}
                                                     <span className="text-white font-semibold">
                                                         {formatNzd(cardTotalWithFee)}
                                                     </span>
                                                 </p>
-                                                <p className="font-pixelify text-[10px] text-white/45">
+                                                <p className="font-rethink text-sm text-white/45">
                                                     Includes ~{formatNzd(cardFeePortion)} processing fee
+                                                </p>
+                                                <p className="font-rethink text-sm text-amber-200/85 mt-1.5 leading-snug">
+                                                    The card processing fee is non-refundable.
                                                 </p>
                                             </div>
                                         )}
@@ -682,7 +685,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
                                     {bankDetailsReady && paymentChoice === "bank_transfer" && (
                                         <div className="space-y-4">
-                                            <p className="font-pixelify text-xs text-white/75">
+                                            <p className="font-rethink text-sm text-white/75">
                                                 Transfer{" "}
                                                 <span className="text-white font-semibold">
                                                     {formatNzd(subtotalAmount)}
@@ -696,6 +699,10 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                                     <>1 × {formatNzd(perPersonPrice)}</>
                                                 )}
                                                 ), then upload a screenshot of your confirmation.
+                                            </p>
+                                            <p className="font-rethink text-sm text-amber-200/85">
+                                                Put your <span className="text-amber-200 font-bold">name</span> or{" "}
+                                                <span className="text-amber-200 font-bold">UPI</span> in the transfer reference so we can match your payment.
                                             </p>
                                             <div>
                                                 <p className="font-pixelify text-xs text-white/60 mb-2">Account name</p>

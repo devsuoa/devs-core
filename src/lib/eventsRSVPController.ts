@@ -153,7 +153,7 @@ export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
     answers: payload.answers ?? {},
   };
 
-  const successUrl = `${window.location.origin}/events#${payload.eventId}`;
+  const successUrl = `${window.location.origin}/events?rsvp_paid=1#${payload.eventId}`;
   const cancelUrl = `${window.location.origin}/events#${payload.eventId}`;
   const { data, error } = await supabase.functions.invoke("create-event-checkout-session", {
     body: {
