@@ -175,6 +175,12 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const [answers, setAnswers] = useState<RSVPAnswers>({});
     const [paymentChoice, setPaymentChoice] = useState<"stripe" | "bank_transfer">("stripe");
     const [bankProofFile, setBankProofFile] = useState<File | null>(null);
+    /** Desktop / mouse-primary: allow tap-outside to close. Touch-primary (typical phones): off — avoids Android/iOS stray events while typing or scrolling. */
+    const [backdropTapDismiss, setBackdropTapDismiss] = useState(
+        () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches,
+    );
+    /** Only close on backdrop when press started and ended on overlay — extra guard when backdrop tap is enabled. */
+    const backdropCloseGestureRef = useRef(false);
 
     useEffect(() => {
         if (!open || initialLeaderEmail === undefined || initialLeaderEmail === "") return;
@@ -186,6 +192,14 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         setPaymentChoice("stripe");
         setBankProofFile(null);
     }, [open]);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(pointer: fine)");
+        const sync = () => setBackdropTapDismiss(mq.matches);
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
 
     const handleConfirm = async () => {
         if (!leaderEmail) {
@@ -375,15 +389,41 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         return "Pay & Confirm";
     })();
 
+    const onBackdropPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!backdropTapDismiss || loading) return;
+        if (e.target === e.currentTarget) {
+            backdropCloseGestureRef.current = true;
+        }
+    };
+
+    const onBackdropPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (
+            backdropTapDismiss &&
+            backdropCloseGestureRef.current &&
+            e.target === e.currentTarget &&
+            !loading
+        ) {
+            onClose();
+        }
+        backdropCloseGestureRef.current = false;
+    };
+
+    const onBackdropPointerCancel = () => {
+        backdropCloseGestureRef.current = false;
+    };
+
     return createPortal(
         <div
-            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 px-3 py-6 pt-12 sm:pt-16"
-            onClick={(e) => e.target === e.currentTarget && !loading && onClose()}
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 px-3 py-6 pt-12 sm:pt-16 touch-manipulation"
+            onPointerDown={onBackdropPointerDown}
+            onPointerUp={onBackdropPointerUp}
+            onPointerCancel={onBackdropPointerCancel}
             role="presentation"
         >
             <div
-                className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border-2 border-white bg-[#04060f] p-6 text-left sm:p-8"
-                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-2xl max-h-[90vh] overflow-y-auto overscroll-contain rounded-xl border-2 border-white bg-[#04060f] p-6 text-left sm:p-8 touch-pan-y"
+                onPointerDown={(e) => e.stopPropagation()}
+                onPointerUp={(e) => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="rsvp-dialog-title"
