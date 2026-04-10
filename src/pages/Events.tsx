@@ -440,6 +440,9 @@ const Events = () => {
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl={event.register_url || ""}
+                      paymentEnabled={event.payment_enabled}
+                      chargeAmount={event.charge_amount}
+                      bankTransferEnabled={event.bank_transfer_enabled}
                       groupRSVPEnabled={event.group_rsvp_enabled}
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}
@@ -551,6 +554,9 @@ const Events = () => {
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl=""
+                      paymentEnabled={event.payment_enabled}
+                      chargeAmount={event.charge_amount}
+                      bankTransferEnabled={event.bank_transfer_enabled}
                       groupRSVPEnabled={event.group_rsvp_enabled}
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}

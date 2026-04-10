@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
-import { rsvpToEvent } from "../lib/eventsRSVPController";
+import { rsvpToEvent, startPaidEventCheckout } from "../lib/eventsRSVPController";
 import { NotMemberError } from "../lib/eventsRSVPController";
+import { uploadBankPaymentProofScreenshot } from "../lib/manageEventsController";
 import { setNeedSignupIntent } from "../lib/eventRsvpMemberFlowStorage";
 import { showSiteToast } from "./SiteToast";
 import { useNavigate } from "react-router-dom";
@@ -66,6 +67,9 @@ type EventsCardProps = {
    * @example "https://devsuoa.com/register"
    */
   registerUrl?: string;
+  paymentEnabled?: boolean;
+  chargeAmount?: number | null;
+  bankTransferEnabled?: boolean;
   groupRSVPEnabled?: boolean;
   groupRSVPMaxEmails?: number | null;
   rsvpQuestions?: RSVPQuestion[];
@@ -102,6 +106,9 @@ const EventsCard = ({
   location,
   description,
   registerUrl,
+  paymentEnabled = false,
+  chargeAmount = null,
+  bankTransferEnabled = false,
   groupRSVPEnabled = false,
   groupRSVPMaxEmails = null,
   rsvpQuestions = [],
@@ -160,6 +167,14 @@ const EventsCard = ({
   const today = Date.now()/1000;
   const isPastEvent = eventDate < today;
   const formattedDate = formatEventDate(date);
+  const showCostDisclaimer = paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
+  const formattedChargeAmount = showCostDisclaimer
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "NZD",
+        minimumFractionDigits: 2,
+      }).format(chargeAmount)
+    : "";
 
   const handleCardClick = useCallback((e: React.MouseEvent) => {
     // Don't toggle if clicking on interactive elements inside the card
@@ -300,6 +315,28 @@ const EventsCard = ({
               <span>{location}</span>
             </div>
 
+            {showCostDisclaimer && (
+              <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-silkscreen text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-amber-400/0 group-hover:bg-amber-400/60 transition-colors" />
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-400 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM12 5.25C12.4142 5.25 12.75 5.58579 12.75 6V6.31673C14.3804 6.60867 15.75 7.83361 15.75 9.5C15.75 9.91421 15.4142 10.25 15 10.25C14.5858 10.25 14.25 9.91421 14.25 9.5C14.25 8.65573 13.3765 7.75 12 7.75C10.6235 7.75 9.75 8.65573 9.75 9.5C9.75 10.3443 10.6235 11.25 12 11.25C13.9372 11.25 15.75 12.5828 15.75 14.5C15.75 16.1664 14.3804 17.3913 12.75 17.6833V18C12.75 18.4142 12.4142 18.75 12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V17.6833C9.61957 17.3913 8.25 16.1664 8.25 14.5C8.25 14.0858 8.58579 13.75 9 13.75C9.41421 13.75 9.75 14.0858 9.75 14.5C9.75 15.3443 10.6235 16.25 12 16.25C13.3765 16.25 14.25 15.3443 14.25 14.5C14.25 13.6557 13.3765 12.75 12 12.75C10.0628 12.75 8.25 11.4172 8.25 9.5C8.25 7.83361 9.61957 6.60867 11.25 6.31673V6C11.25 5.58579 11.5858 5.25 12 5.25Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  {formattedChargeAmount} per person
+                </span>
+              </div>
+            )}
+
             {/* Description */}
             <div className="relative flex-1 min-h-0 px-4 sm:px-5 md:px-6 lg:px-8 xl:px-8 pt-3 sm:pt-4 md:pt-5 lg:pt-4 pb-2 sm:pb-3 h-auto">
               <p
@@ -386,16 +423,49 @@ const EventsCard = ({
         initialLeaderEmail={resumeRsvpEmail}
         groupRSVPEnabled={groupRSVPEnabled}
         groupRSVPMaxEmails={groupRSVPMaxEmails}
+        paymentEnabled={paymentEnabled}
+        chargeAmount={chargeAmount}
+        bankTransferEnabled={bankTransferEnabled}
         rsvpQuestions={rsvpQuestions}
-        onConfirm={async ({ leaderEmail, groupEmails, dietaryRequirements, answers }) => {
+        onConfirm={async ({
+          leaderEmail,
+          groupEmails,
+          dietaryRequirements,
+          answers,
+          paymentMethod,
+          bankPaymentProofFile,
+        }) => {
           try {
-            await rsvpToEvent({
+            const basePayload = {
               eventId: id,
               leaderEmail,
               groupEmails,
               dietaryRequirements: dietaryRequirements || null,
               answers,
-            });
+            };
+
+            if (paymentEnabled && chargeAmount !== null && chargeAmount > 0) {
+              if (paymentMethod === "bank_transfer") {
+                if (!bankPaymentProofFile) {
+                  throw new Error("Payment confirmation screenshot is required.");
+                }
+                const proofPath = await uploadBankPaymentProofScreenshot(
+                  title,
+                  bankPaymentProofFile,
+                  leaderEmail,
+                );
+                await rsvpToEvent({
+                  ...basePayload,
+                  paymentMethod: "bank_transfer",
+                  bankPaymentProofPath: proofPath,
+                });
+                return;
+              }
+              await startPaidEventCheckout(basePayload);
+              return;
+            }
+
+            await rsvpToEvent(basePayload);
           } catch (error) {
             if (error instanceof NotMemberError) {
               setNeedSignupIntent(id, leaderEmail);

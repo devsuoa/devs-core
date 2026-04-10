@@ -15,6 +15,9 @@ export interface PublicEvent {
   max_attendees: number | null;
   group_rsvp_enabled: boolean;
   group_rsvp_max_emails: number | null;
+  payment_enabled: boolean;
+  charge_amount: number | null;
+  bank_transfer_enabled: boolean;
   rsvp_questions: RSVPQuestion[];
 }
 
@@ -61,6 +64,9 @@ export const useEvents = () => {
           max_attendees,
           group_rsvp_enabled,
           group_rsvp_max_emails,
+          payment_enabled,
+          charge_amount,
+          bank_transfer_enabled,
           rsvp_questions
         `
         )

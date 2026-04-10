@@ -44,6 +44,8 @@ export interface RSVPSubmissionPayload {
   dietaryRequirements: string | null;
   groupEmails: string[];
   answers: RSVPAnswers;
+  paymentMethod?: "bank_transfer";
+  bankPaymentProofPath?: string | null;
 }
 
 type EventRSVPConfig = {
@@ -59,6 +61,16 @@ function normalizeEmails(leaderEmail: string, groupEmails: string[]): string[] {
 
   const deduped = Array.from(new Set(cleaned));
   return deduped.length ? deduped : [leaderEmail.trim().toLowerCase()];
+}
+
+/** Seats for pricing: 1 when group RSVP is off; deduped leader + group emails when on. */
+export function attendeeSeatCount(
+  leaderEmail: string,
+  groupEmails: string[],
+  groupRSVPEnabled: boolean,
+): number {
+  if (!groupRSVPEnabled) return 1;
+  return normalizeEmails(leaderEmail, groupEmails).length;
 }
 
 function seatCountForGroup(raw: unknown): number {
@@ -96,11 +108,23 @@ async function isEventAtCapacity(eventId: string, requestedSeats: number, maxAtt
   return currentSeats + requestedSeats > maxAttendees;
 }
 
-export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
+async function assertLeaderIsMember(leaderEmail: string) {
+  const { data, error: memberError } = await supabase.functions.invoke("member-exists", {
+    body: { email: leaderEmail },
+  });
+
+  if (memberError) {
+    throw memberError;
+  }
+
+  if (!data.exists) {
+    throw new NotMemberError();
+  }
+}
+
+async function validateRsvpRules(payload: RSVPSubmissionPayload, config: EventRSVPConfig) {
   const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
   const requestedSeats = normalizedGroupEmails.length;
-
-  const config = await fetchEventRSVPConfig(payload.eventId);
 
   if (!config.group_rsvp_enabled && requestedSeats > 1) {
     throw new GroupRSVPDisabledError();
@@ -110,22 +134,51 @@ export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
     throw new GroupRSVPSizeExceededError();
   }
 
-  const { data, error: memberError } = await supabase.functions.invoke("member-exists", {
-    body: { email: payload.leaderEmail },
-  });
-
-  if (memberError) {
-    throw memberError;
-  }
-  
-  // If member does not exist, redirect to join page
-  if (!data.exists) {
-    throw new NotMemberError()
-  }
+  await assertLeaderIsMember(payload.leaderEmail);
 
   if (await isEventAtCapacity(payload.eventId, requestedSeats, config.max_attendees)) {
     throw new EventFullError();
   }
+}
+
+export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
+  const config = await fetchEventRSVPConfig(payload.eventId);
+  await validateRsvpRules(payload, config);
+
+  const normalizedPayload: RSVPSubmissionPayload = {
+    ...payload,
+    leaderEmail: payload.leaderEmail.trim().toLowerCase(),
+    groupEmails: normalizeEmails(payload.leaderEmail, payload.groupEmails),
+    dietaryRequirements: payload.dietaryRequirements || null,
+    answers: payload.answers ?? {},
+  };
+
+  const successUrl = `${window.location.origin}/events#${payload.eventId}`;
+  const cancelUrl = `${window.location.origin}/events#${payload.eventId}`;
+  const { data, error } = await supabase.functions.invoke("create-event-checkout-session", {
+    body: {
+      ...normalizedPayload,
+      successUrl,
+      cancelUrl,
+    },
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  const checkoutUrl = data?.checkoutUrl as string | undefined;
+  if (!checkoutUrl) {
+    throw new Error("Could not create checkout session.");
+  }
+
+  window.location.assign(checkoutUrl);
+}
+
+export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
+  const config = await fetchEventRSVPConfig(payload.eventId);
+  await validateRsvpRules(payload, config);
+  const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
 
   const { error } = await supabase
     .from("events_rsvp")
@@ -135,6 +188,8 @@ export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
       dietary_requirements: payload.dietaryRequirements || null,
       group_emails: normalizedGroupEmails,
       rsvp_answers: payload.answers ?? {},
+      payment_method: payload.paymentMethod ?? null,
+      bank_payment_proof_path: payload.bankPaymentProofPath ?? null,
     });
 
   if (error) {

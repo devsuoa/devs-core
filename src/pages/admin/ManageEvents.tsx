@@ -25,6 +25,9 @@ const buildEmptyEventFormData = (): EventFormData => ({
   max_attendees: null,
   group_rsvp_enabled: false,
   group_rsvp_max_emails: null,
+  payment_enabled: false,
+  charge_amount: null,
+  bank_transfer_enabled: false,
   rsvp_questions: [],
 });
 
@@ -167,6 +170,10 @@ const ManageEvents: React.FC = () => {
         group_rsvp_max_emails: formData.group_rsvp_enabled
           ? formData.group_rsvp_max_emails ?? null
           : null,
+        charge_amount: formData.payment_enabled
+          ? formData.charge_amount ?? null
+          : null,
+        bank_transfer_enabled: formData.payment_enabled ? formData.bank_transfer_enabled : false,
         rsvp_questions: normalizedQuestions,
       };
 
@@ -362,6 +369,67 @@ const ManageEvents: React.FC = () => {
                           })
                         }
                       />
+                    </>
+                  )}
+
+                  <div className="flex items-center gap-2 mb-4">
+                    <input
+                      id="payment-toggle"
+                      type="checkbox"
+                      checked={formData.payment_enabled}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          payment_enabled: e.target.checked,
+                          charge_amount: e.target.checked
+                            ? formData.charge_amount
+                            : null,
+                          bank_transfer_enabled: e.target.checked ? formData.bank_transfer_enabled : false,
+                        })
+                      }
+                    />
+                    <label htmlFor="payment-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                      Enable payment
+                    </label>
+                  </div>
+
+                      {formData.payment_enabled && (
+                    <>
+                      <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                        Charge amount per person (NZD)
+                      </label>
+                      <input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        className="pixel-input w-full"
+                        style={{ marginBottom: '24px' }}
+                        placeholder="e.g. 15.00"
+                        value={formData.charge_amount ?? ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            charge_amount: e.target.value === '' ? null : Number(e.target.value),
+                          })
+                        }
+                      />
+
+                      <div className="flex items-center gap-2 mb-4">
+                        <input
+                          id="bank-transfer-toggle"
+                          type="checkbox"
+                          checked={formData.bank_transfer_enabled}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              bank_transfer_enabled: e.target.checked,
+                            })
+                          }
+                        />
+                        <label htmlFor="bank-transfer-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                          Offer bank transfer
+                        </label>
+                      </div>
                     </>
                   )}
 
@@ -590,6 +658,9 @@ const ManageEvents: React.FC = () => {
                           max_attendees: event.max_attendees,
                           group_rsvp_enabled: event.group_rsvp_enabled,
                           group_rsvp_max_emails: event.group_rsvp_max_emails,
+                          payment_enabled: event.payment_enabled,
+                          charge_amount: event.charge_amount,
+                          bank_transfer_enabled: event.bank_transfer_enabled,
                           rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
                         });
                         setShowForm(true);

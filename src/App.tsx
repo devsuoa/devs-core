@@ -72,6 +72,7 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
+        style={{ zIndex: 100000 }}
       />
       <CookieDisclaimer />
       <main className="min-h-screen">
