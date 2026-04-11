@@ -125,10 +125,27 @@ const Events = () => {
     }
 
     const handleResize = () => {
-      setUpcomingPage(0);
-      setPastPage(0);
-      setUpcomingPerPage(getEventsPerPage(true));
-      setPastPerPage(getEventsPerPage(false));
+      const nextUpcoming = getEventsPerPage(true);
+      const nextPast = getEventsPerPage(false);
+
+      setUpcomingPerPage((prev) => {
+        if (prev === nextUpcoming) return prev;
+        setUpcomingPage((p) => {
+          // clamps current page so that it doesnt exceed total pages after perPage change
+          const maxPage = Math.max(0, Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1);
+          return Math.min(p, maxPage);
+        });
+        return nextUpcoming;
+      });
+
+      setPastPerPage((prev) => {
+        if (prev === nextPast) return prev;
+        setPastPage((p) => {
+          const maxPage = Math.max(0, Math.ceil(filteredPastEvents.length / nextPast) - 1);
+          return Math.min(p, maxPage);
+        });
+        return nextPast;
+      });
     };
 
     window.addEventListener("resize", handleResize);
