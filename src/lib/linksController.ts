@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { supabase } from './supabase';
+import { useState, useEffect } from "react";
+import { supabase } from "./supabase";
 
 export interface Link {
   id: string;
@@ -34,7 +34,7 @@ export function getFaviconUrl(url: string): string {
     const domain = new URL(url).hostname;
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
   } catch {
-    return 'https://www.google.com/s2/favicons?domain=example.com&sz=64';
+    return "https://www.google.com/s2/favicons?domain=example.com&sz=64";
   }
 }
 
@@ -77,20 +77,20 @@ export function isLinkCurrentlyActive(link: Link): boolean {
 export async function fetchActiveLinks(): Promise<Link[]> {
   try {
     const { data, error } = await supabase
-      .from('links')
-      .select('*')
-      .order('display_order', { ascending: true })
-      .order('created_at', { ascending: false });
+      .from("links")
+      .select("*")
+      .order("display_order", { ascending: true })
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching links:', error);
+      console.error("Error fetching links:", error);
       return [];
     }
 
     // Filter links that are currently active
     return (data || []).filter(isLinkCurrentlyActive);
   } catch (err) {
-    console.error('Error fetching active links:', err);
+    console.error("Error fetching active links:", err);
     return [];
   }
 }
@@ -101,19 +101,19 @@ export async function fetchActiveLinks(): Promise<Link[]> {
 export async function fetchAllLinks(): Promise<Link[]> {
   try {
     const { data, error } = await supabase
-      .from('links')
-      .select('*')
-      .order('display_order', { ascending: true })
-      .order('created_at', { ascending: false });
+      .from("links")
+      .select("*")
+      .order("display_order", { ascending: true })
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching links:', error);
+      console.error("Error fetching links:", error);
       return [];
     }
 
     return data || [];
   } catch (err) {
-    console.error('Error fetching all links:', err);
+    console.error("Error fetching all links:", err);
     return [];
   }
 }
@@ -124,9 +124,9 @@ export async function fetchAllLinks(): Promise<Link[]> {
 async function getNextDisplayOrder(): Promise<number> {
   try {
     const { data, error } = await supabase
-      .from('links')
-      .select('display_order')
-      .order('display_order', { ascending: false })
+      .from("links")
+      .select("display_order")
+      .order("display_order", { ascending: false })
       .limit(1);
 
     if (error || !data || data.length === 0) {
@@ -135,7 +135,7 @@ async function getNextDisplayOrder(): Promise<number> {
 
     return (data[0].display_order || 0) + 1;
   } catch (err) {
-    console.error('Error getting next display order:', err);
+    console.error("Error getting next display order:", err);
     return 0;
   }
 }
@@ -146,9 +146,7 @@ async function getNextDisplayOrder(): Promise<number> {
 export async function createLink(linkData: LinkFormData): Promise<Link | null> {
   try {
     // If display_order is not provided, get the next one available
-    const displayOrder = linkData.display_order !== undefined 
-      ? linkData.display_order 
-      : await getNextDisplayOrder();
+    const displayOrder = linkData.display_order !== undefined ? linkData.display_order : await getNextDisplayOrder();
 
     // For spacers, URL is not required
     const insertData: any = {
@@ -159,23 +157,19 @@ export async function createLink(linkData: LinkFormData): Promise<Link | null> {
 
     // If it's a spacer, set url to empty string
     if (insertData.is_spacer && !insertData.url) {
-      insertData.url = '';
+      insertData.url = "";
     }
 
-    const { data, error } = await supabase
-      .from('links')
-      .insert([insertData])
-      .select()
-      .single();
+    const { data, error } = await supabase.from("links").insert([insertData]).select().single();
 
     if (error) {
-      console.error('Error creating link:', error);
+      console.error("Error creating link:", error);
       throw error;
     }
 
     return data;
   } catch (err) {
-    console.error('Error creating link:', err);
+    console.error("Error creating link:", err);
     throw err;
   }
 }
@@ -185,21 +179,16 @@ export async function createLink(linkData: LinkFormData): Promise<Link | null> {
  */
 export async function updateLink(id: string, linkData: Partial<LinkFormData>): Promise<Link | null> {
   try {
-    const { data, error } = await supabase
-      .from('links')
-      .update(linkData)
-      .eq('id', id)
-      .select()
-      .single();
+    const { data, error } = await supabase.from("links").update(linkData).eq("id", id).select().single();
 
     if (error) {
-      console.error('Error updating link:', error);
+      console.error("Error updating link:", error);
       throw error;
     }
 
     return data;
   } catch (err) {
-    console.error('Error updating link:', err);
+    console.error("Error updating link:", err);
     throw err;
   }
 }
@@ -209,17 +198,14 @@ export async function updateLink(id: string, linkData: Partial<LinkFormData>): P
  */
 export async function deleteLink(id: string): Promise<void> {
   try {
-    const { error } = await supabase
-      .from('links')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("links").delete().eq("id", id);
 
     if (error) {
-      console.error('Error deleting link:', error);
+      console.error("Error deleting link:", error);
       throw error;
     }
   } catch (err) {
-    console.error('Error deleting link:', err);
+    console.error("Error deleting link:", err);
     throw err;
   }
 }
@@ -227,19 +213,16 @@ export async function deleteLink(id: string): Promise<void> {
 /**
  * Update link display order
  */
-export async function updateLinkOrder(id: string, newOrder: number): Promise<void> {
-  try {
-    const { error } = await supabase
-      .from('links')
-      .update({ display_order: newOrder })
-      .eq('id', id);
 
-    if (error) {
-      console.error('Error updating link order:', error);
-      throw error;
-    }
+export async function updateLinkOrder(linksToUpdate: { id: string; display_order: number }[]): Promise<void> {
+  try {
+    await Promise.all(
+      linksToUpdate.map((link) =>
+        supabase.from("links").update({ display_order: link.display_order }).eq("id", link.id),
+      ),
+    );
   } catch (err) {
-    console.error('Error updating link order:', err);
+    console.error("Error updating link order:", err);
     throw err;
   }
 }
@@ -251,50 +234,47 @@ export async function reorderLinks(linkId1: string, linkId2: string): Promise<vo
   try {
     // Fetch both links display order value
     const { data: links, error: fetchError } = await supabase
-      .from('links')
-      .select('id, display_order')
-      .in('id', [linkId1, linkId2]);
+      .from("links")
+      .select("id, display_order")
+      .in("id", [linkId1, linkId2]);
 
     if (fetchError || !links || links.length !== 2) {
-      throw new Error('Failed to fetch links for reordering');
+      throw new Error("Failed to fetch links for reordering");
     }
 
-    const link1 = links.find(l => l.id === linkId1);
-    const link2 = links.find(l => l.id === linkId2);
+    const link1 = links.find((l) => l.id === linkId1);
+    const link2 = links.find((l) => l.id === linkId2);
 
     if (!link1 || !link2) {
-      throw new Error('One or both links not found');
+      throw new Error("One or both links not found");
     }
 
     // Swap the display_order values
     const tempOrder = link1.display_order;
-    
+
     const { error: error1 } = await supabase
-      .from('links')
+      .from("links")
       .update({ display_order: link2.display_order })
-      .eq('id', linkId1);
+      .eq("id", linkId1);
 
     if (error1) throw error1;
 
-    const { error: error2 } = await supabase
-      .from('links')
-      .update({ display_order: tempOrder })
-      .eq('id', linkId2);
+    const { error: error2 } = await supabase.from("links").update({ display_order: tempOrder }).eq("id", linkId2);
 
     if (error2) {
       // Attempt to rollback the first update
-      await supabase
-        .from('links')
-        .update({ display_order: tempOrder })
-        .eq('id', linkId1);
+      await supabase.from("links").update({ display_order: tempOrder }).eq("id", linkId1);
       throw error2;
     }
   } catch (err) {
-    console.error('Error reordering links:', err);
+    console.error("Error reordering links:", err);
     throw err;
   }
 }
 
+/**
+ * Hook for managing links in admin pages
+ */
 /**
  * Hook for managing links in admin pages
  */
@@ -307,17 +287,17 @@ export function useLinksManagement() {
     loadLinks();
   }, []);
 
-  const loadLinks = async () => {
+  const loadLinks = async (showLoadingScreen = true) => {
     try {
-      setLoading(true);
+      if (showLoadingScreen) setLoading(true);
       setError(null);
       const data = await fetchAllLinks();
       setLinks(data);
     } catch (err) {
-      setError('Failed to load links');
+      setError("Failed to load links");
       console.error(err);
     } finally {
-      setLoading(false);
+      if (showLoadingScreen) setLoading(false);
     }
   };
 
@@ -325,9 +305,9 @@ export function useLinksManagement() {
     try {
       setError(null);
       await createLink(linkData);
-      await loadLinks();
+      await loadLinks(false);
     } catch (err) {
-      setError('Failed to create link');
+      setError("Failed to create link");
       throw err;
     }
   };
@@ -336,9 +316,9 @@ export function useLinksManagement() {
     try {
       setError(null);
       await updateLink(id, linkData);
-      await loadLinks();
+      await loadLinks(false);
     } catch (err) {
-      setError('Failed to update link');
+      setError("Failed to update link");
       throw err;
     }
   };
@@ -347,27 +327,31 @@ export function useLinksManagement() {
     try {
       setError(null);
       await deleteLink(id);
-      await loadLinks();
+      await loadLinks(false);
     } catch (err) {
-      setError('Failed to delete link');
+      setError("Failed to delete link");
       throw err;
     }
   };
 
-  const reorderLink = async (linkId: string, direction: 'up' | 'down') => {
+  const reorderLink = async (newOrderedLinks: Link[]) => {
     try {
       setError(null);
-      const currentIndex = links.findIndex(l => l.id === linkId);
-      if (currentIndex === -1) return;
 
-      const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-      if (targetIndex < 0 || targetIndex >= links.length) return;
+      // Optimistically update the UI instantly
+      setLinks(newOrderedLinks);
 
-      await reorderLinks(linkId, links[targetIndex].id);
-      await loadLinks();
+      // Re-index the display_order based on the new array positions
+      const updates = newOrderedLinks.map((link, index) => ({
+        id: link.id,
+        display_order: index,
+      }));
+
+      await updateLinkOrder(updates);
+      await loadLinks(false); // Silently reload to ensure DB parity
     } catch (err) {
-      setError('Failed to reorder link');
-      throw err;
+      setError("Failed to reorder links");
+      await loadLinks(false); // Revert UI if it failed
     }
   };
 
@@ -387,13 +371,11 @@ export function useLinksManagement() {
  * Upload a custom icon image to Supabase Storage and return its public URL
  */
 export const uploadLinkIcon = async (file: File): Promise<string> => {
-  const ext = file.name.split('.').pop();
+  const ext = file.name.split(".").pop();
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const { error } = await supabase.storage
-    .from('Links')
-    .upload(filename, file, { upsert: false });
+  const { error } = await supabase.storage.from("Links").upload(filename, file, { upsert: false });
   if (error) throw error;
-  const { data } = supabase.storage.from('Links').getPublicUrl(filename);
+  const { data } = supabase.storage.from("Links").getPublicUrl(filename);
   return data.publicUrl;
 };
 
@@ -416,7 +398,7 @@ export function useActiveLinks() {
       const data = await fetchActiveLinks();
       setLinks(data);
     } catch (err) {
-      setError('Failed to load links');
+      setError("Failed to load links");
       console.error(err);
     } finally {
       setLoading(false);
@@ -430,4 +412,3 @@ export function useActiveLinks() {
     refreshLinks: loadActiveLinks,
   };
 }
-
