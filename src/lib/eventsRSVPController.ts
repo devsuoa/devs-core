@@ -140,6 +140,24 @@ async function assertLeaderIsMember(leaderEmail: string) {
   }
 }
 
+async function assertLeaderHasNotRSVPed(eventId: string, leaderEmail: string) {
+  const normalizedLeaderEmail = leaderEmail.trim().toLowerCase();
+  const { data, error } = await supabase
+    .from("events_rsvp")
+    .select("id")
+    .eq("event_id", eventId)
+    .eq("email", normalizedLeaderEmail)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (data) {
+    throw new AlreadyRSVPedError();
+  }
+}
+
 async function validateRsvpRules(payload: RSVPSubmissionPayload, config: EventRSVPConfig) {
   const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
   const requestedSeats = normalizedGroupEmails.length;
@@ -153,15 +171,20 @@ async function validateRsvpRules(payload: RSVPSubmissionPayload, config: EventRS
   }
 
   await assertLeaderIsMember(payload.leaderEmail);
+  await assertLeaderHasNotRSVPed(payload.eventId, payload.leaderEmail);
 
   if (await isEventAtCapacity(payload.eventId, requestedSeats, config.max_attendees)) {
     throw new EventFullError();
   }
 }
 
-export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
+export async function assertCanSubmitRSVP(payload: RSVPSubmissionPayload) {
   const config = await fetchEventRSVPConfig(payload.eventId);
   await validateRsvpRules(payload, config);
+}
+
+export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
+  await assertCanSubmitRSVP(payload);
 
   const normalizedPayload: RSVPSubmissionPayload = {
     ...payload,
@@ -194,8 +217,7 @@ export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
 }
 
 export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
-  const config = await fetchEventRSVPConfig(payload.eventId);
-  await validateRsvpRules(payload, config);
+  await assertCanSubmitRSVP(payload);
   const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
 
   const { error } = await supabase

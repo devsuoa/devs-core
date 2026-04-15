@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
-import { rsvpToEvent, startPaidEventCheckout } from "../lib/eventsRSVPController";
+import { assertCanSubmitRSVP, rsvpToEvent, startPaidEventCheckout } from "../lib/eventsRSVPController";
 import { NotMemberError } from "../lib/eventsRSVPController";
 import { uploadBankPaymentProofScreenshot } from "../lib/manageEventsController";
 import { setNeedSignupIntent } from "../lib/eventRsvpMemberFlowStorage";
@@ -449,6 +449,7 @@ const EventsCard = ({
                 if (!bankPaymentProofFile) {
                   throw new Error("Payment confirmation screenshot is required.");
                 }
+                await assertCanSubmitRSVP(basePayload);
                 const proofPath = await uploadBankPaymentProofScreenshot(
                   title,
                   bankPaymentProofFile,
