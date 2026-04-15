@@ -309,6 +309,23 @@ const ManageEvents: React.FC = () => {
                   }
                 />
 
+                <div className="flex items-center gap-2 mb-6 p-4 rounded">
+                  <input
+                    id="is-active-toggle"
+                    type="checkbox"
+                    checked={formData.is_active}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        is_active: e.target.checked
+                      })
+                    }
+                  />
+                  <label htmlFor="is-active-toggle" className="font-pixelify text-s sm:text-sm text-white/90">
+                    Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM THE PUBLIC)
+                  </label>
+                </div>
+
                 <div className="pixel-panel p-4 sm:p-5 mb-6">
                   <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4">RSVP Settings</h3>
 
@@ -628,6 +645,11 @@ const ManageEvents: React.FC = () => {
                   <div className="min-w-0 flex-1">
                     <p className="font-pixelify text-white wrap-break-word">
                       {event.title}
+                      {!event.is_active && (
+                        <span className="ml-2 text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded">
+                          Inactive
+                        </span>
+                      )}
                     </p>
                     <p className="font-pixelify text-gray-400 text-xs mt-1">
                       {new Date(event.event_date).toDateString()}
