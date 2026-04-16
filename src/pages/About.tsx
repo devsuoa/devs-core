@@ -8,6 +8,7 @@ import { initAboutHorizontalScroll } from "../lib/aboutController";
 import PixelatedButton from "../components/PixelatedButton";
 import SponsorTape from "../components/SponsorTape";
 import BinaryBackground from "../components/BinaryBackground";
+import { useEvents } from "../lib/eventsController";
 
 const About = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -66,18 +67,81 @@ const About = () => {
     return null;
   }
 
+  const images = [
+    "/home/slideshow/1.png",
+    "/home/slideshow/2.png",
+    "/home/slideshow/3.png",
+    "/home/slideshow/4.png"
+  ];
+  const { upcomingEvents,  pastEvents, eventsLoading, eventsError }: any = useEvents();
+  const events = [...upcomingEvents, ...pastEvents].slice(0, 2);
+
+  const cuhruh ='border-purple-400'
+  const leads = [
+    {
+      href: "https://www.linkedin.com/in/alannasantoso/",
+      image: "/team/execs/alanna.jpg",
+      name: "Alanna Santoso",
+      role: "Co-President",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/baljot-t-779a76264/",
+      image: "/team/execs/baljot.jpg",
+      name: "Baljot Toor",
+      role: "Co-President",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/kim-ngor/",
+      image: "/team/execs/kim.jpg",
+      name: "Kim Ngor",
+      role: "Tech Lead",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/john-andrei-vergara-3b9921285/",
+      image: "/team/execs/andrei.jpg",
+      name: "Andrei Vergara",
+      role: "Marketing Lead",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/marcus-chan-nz/",
+      image: "/team/execs/marcus.jpg",
+      name: "Marcus Chan",
+      role: "Social Lead",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/victor-qiu-dev/",
+      image: "/team/execs/victor.jpg",
+      name: "Victor Qiu",
+      role: "Comps Lead",
+      borderClass: cuhruh,
+    },
+    {
+      href: "https://www.linkedin.com/in/youyang-fu/",
+      image: "/team/execs/frank.jpg",
+      name: "Frank Fu",
+      role: "Industry Lead",
+      borderClass: cuhruh,
+    },
+  ];
+
   if (!isMobile) {
     return (
       <>
         <BinaryBackground />
         <Header />
         <main className="min-h-screen">
+          <img src="branding/icon_text_logo.png" alt="DEVS Logo" className="mx-auto mt-20 -mb-10 w-[25vw]" />
           {/* Title */}
           <PageTitle
             title="About Us"
             className="p-0"
           />
-          <section className="lg:px-0 px-20 py-6 -mb-20 text-center max-w-4xl mx-auto font-rethink">
+          <section className="lg:px-0 px-20 py-6 mb-20 text-center max-w-4xl mx-auto font-rethink">
             <h1 className="text-2xl mb-5 font-bold">
               Founded in 2019, DEVS grown to become one of the largest tech clubs in
               Auckland.
@@ -87,32 +151,90 @@ const About = () => {
 
               Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
             </p>
+            <div className="mt-14 flex w-full justify-center overflow-visible pb-2">
+              <div className="flex w-max flex-row flex-nowrap items-start justify-center gap-4">
+                {leads.map((member) => (
+                  <a
+                    key={member.name}
+                    href={member.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <div className="flex w-32.5 flex-col items-center text-center">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className={`h-24 w-24 rounded-full border-2 object-cover ${member.borderClass}`}
+                      />
+                      <p className="mt-2 font-rethink text-sm leading-tight">{member.name}</p>
+                      <p className="font-rethink text-xs leading-tight text-white/90">{member.role}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
           </section>
 
-          {/* Horizontal Scroll Gallery */}
-          <section
-            ref={containerRef}
-            className="about-horizontal-container h-screen mt-1000relative overflow-hidden"
-          >
-            <div
-              ref={trackRef}
-              className="about-horizontal-track flex flex-nowrap h-full will-change-transform"
-            >
-              <div className="min-w-[50vw] h-auto my-auto">
-                <img src="/home/slideshow/1.png" alt="REPLACE THIS" />
+          {/* Glimpse Into DEVS */}
+          <section className="flex flex-col items-center justify-center gap-6 my-60">
+            <span className="text-5xl font-silkscreen text-left whitespace-nowrap mb-10">&lt; A Glimpse Into DEVS /&gt;</span>
+
+            <div className="flex flex-row">
+              { /* gallery glimpse */}
+                <div className="grid grid-cols-2 mx-auto w-[45vw]">
+                  {images.map((g, index) => (
+                    <div key={index} className="">
+                      <img src={g} alt={`Gallery image ${index + 1}`} className="w-[20vw]" />
+                    </div>
+                  ))}
+                </div>
+
+              {/* events glimpse*/}
+              <div className="flex flex-col items-center justify-center gap-6">
+                <div>
+                  {eventsLoading && <p>Loading events...</p>}
+                  {eventsError && <p>Error loading events: {eventsError}</p>}
+                  {!eventsLoading && !eventsError && events.length === 0 && (
+                    <p>No events.</p> // shouldnt happen but just in case :P
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 mx-auto w-[45vw]">
+                  {events.map((e, index) => (
+                    <div key={index} className="">
+                      <img src={e.image_url} alt={e.title} className="w-[20vw]" />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="min-w-[50vw] h-auto my-auto">
-                <img src="/home/slideshow/2.png" alt="REPLACE THIS" />
               </div>
-              <div className="min-w-[50vw] h-auto my-auto">
-                <img src="/home/slideshow/3.png" alt="REPLACE THIS" />
-              </div>
-              <div className="min-w-[50vw] h-auto my-auto">
-                <img src="/home/slideshow/4.png" alt="REPLACE THIS" />
-              </div>
-              <div className="min-w-[50vw] h-auto my-auto">
-                <img src="/home/slideshow/5.png" alt="REPLACE THIS" />
-              </div>
+              <div className="flex flex-row w-screen items-center justify-center gap-[25vw] mt-4">
+                  
+                <button className="
+                w-[25vw]
+                font-silkscreen text-2xl 
+                transition-colors duration-200 
+                cursor-pointer  
+                bg-linear-to-br from-purple-900 to-purple-600 px-5 py-3 rounded-4xl 
+                hover:bg-linear-to-br hover:from-purple-700 hover:to-purple-500
+                " 
+                onClick={() => window.location.href = "/gallery"}>
+                  Check Out Our Gallery →
+                </button>
+
+                <button className="
+                w-[25vw] 
+                font-silkscreen text-2xl 
+                transition-colors duration-200 
+                cursor-pointer  
+                bg-linear-to-br from-purple-900 to-purple-600 px-5 py-3 rounded-4xl 
+                hover:bg-linear-to-br hover:from-purple-700 hover:to-purple-500
+                " 
+                onClick={() => window.location.href = "/events"}>
+                  Join our fun events →
+                </button>
+
             </div>
           </section>
 
@@ -255,6 +377,29 @@ const About = () => {
 
               Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
             </p>
+            <div className="mt-6 flex w-full justify-center overflow-visible pb-2">
+              <div className="flex w-max flex-row flex-nowrap items-start justify-center gap-3">
+                {leads.map((member) => (
+                  <a
+                    key={member.name}
+                    href={member.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <div className="flex w-27.5 flex-col items-center text-center">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className={`h-20 w-20 rounded-full border-2 object-cover ${member.borderClass}`}
+                      />
+                      <p className="mt-2 font-rethink text-xs leading-tight">{member.name}</p>
+                      <p className="font-rethink text-[11px] leading-tight text-white/90">{member.role}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
           </section>
 
           {/* Carousel */}
