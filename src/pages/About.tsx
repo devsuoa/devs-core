@@ -135,7 +135,7 @@ const About = () => {
         <BinaryBackground />
         <Header />
         <main className="min-h-screen">
-          <img src="branding/icon_text_logo.png" alt="DEVS Logo" className="mx-auto mt-20 -mb-10 w-[25vw]" />
+          <img src="branding/text_logo.png" alt="DEVS Logo" className="mx-auto mt-35 -mb-10 w-[15vw]" />
           {/* Title */}
           <PageTitle
             title="About Us"
