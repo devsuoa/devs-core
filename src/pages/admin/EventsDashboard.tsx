@@ -12,6 +12,134 @@ import {
   updateAttendeePresentStatus,
 } from "../../lib/eventsDashboardController";
 
+const EventCard = ({
+  ev,
+  expanded,
+  handleOnToggle,
+  handleOnPresentToggle,
+  handleUpdatingRowKey,
+}: {
+  ev: any;
+  expanded: boolean;
+  handleOnToggle: (eventId: string) => void;
+  handleOnPresentToggle: (attendee: any, present: boolean) => void;
+  handleUpdatingRowKey: string | null;
+}) => {
+  const presentCount = ev.attendees.filter((a: any) => a.present).length;
+
+  return (
+    <div className="pixel-panel p-6 sm:p-8">
+      <div key={ev.event_id} className="pixel-panel p-6 sm:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
+          <div className="min-w-0">
+            <p className="font-silkscreen text-white text-lg sm:text-[1.25rem]">{ev.title}</p>
+            <p className="font-pixelify text-gray-400 text-xs mt-1">
+              {formatNZDate(ev.event_date)} • {ev.attendees.length} attendee
+              {ev.attendees.length === 1 ? "" : "s"} • {presentCount}/{ev.attendees.length} present
+            </p>
+          </div>
+          <div>
+            <button
+              className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
+              onClick={() => downloadEventAttendeesCSV(ev.title, ev.event_date, ev.attendees)}
+            >
+              Download CSV
+            </button>
+            <button
+              className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
+              onClick={() => handleOnToggle(ev.event_id)}
+            >
+              {expanded ? "<" : ">"}
+            </button>
+          </div>
+        </div>
+
+        {expanded && (
+          <>
+            {/* Mobile: card layout */}
+            <div className="flex flex-col gap-3 md:hidden">
+              {ev.attendees.map((a: any) => (
+                <div
+                  key={`${a.rsvp_id ?? "na"}::${a.member_email}`}
+                  className="rounded-lg border border-white/20 bg-white/5 p-4"
+                >
+                  <p className="font-silkscreen text-white text-sm">{memberFullName(a)}</p>
+                  <p className="font-pixelify text-gray-400 text-xs mt-1 break-all">{a.member_email}</p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 font-pixelify text-xs text-white/80">
+                    <span>ID: {a.member_student_id ?? "—"}</span>
+                    <span>UPI: {a.member_upi ?? "—"}</span>
+                  </div>
+                  {a.group_emails.length > 0 && (
+                    <p className="font-pixelify text-xs text-white/70 mt-2 break-all">
+                      Group emails: {a.group_emails.join(", ")}
+                    </p>
+                  )}
+                  {a.dietary_requirements && (
+                    <p className="font-pixelify text-xs text-white/70 mt-2">Diet: {a.dietary_requirements}</p>
+                  )}
+                  <label className="font-pixelify text-xs text-white/80 mt-3 inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      aria-label={`Toggle attendance for ${memberFullName(a)}`}
+                      className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
+                      checked={a.present}
+                      disabled={handleUpdatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
+                      onChange={(e) => handleOnPresentToggle(a, e.target.checked)}
+                    />
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop: table layout */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-white/20">
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Member</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Email</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Student ID</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">UPI</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Group</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Dietary Requirements</th>
+                    <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Present</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ev.attendees.map((a: any) => (
+                    <tr key={`${a.rsvp_id ?? "na"}::${a.member_email}`} className="border-b border-white/10">
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">{memberFullName(a)}</td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_email}</td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_student_id ?? "—"}</td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_upi ?? "—"}</td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">
+                        {a.group_emails.length > 0 ? a.group_emails.join(", ") : "—"}
+                      </td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.dietary_requirements ?? "—"}</td>
+                      <td className="py-3 pr-4 font-pixelify text-sm text-white">
+                        <label className="inline-flex items-center">
+                          <input
+                            type="checkbox"
+                            aria-label={`Toggle attendance for ${memberFullName(a)}`}
+                            className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
+                            checked={a.present}
+                            disabled={handleUpdatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
+                            onChange={(e) => handleOnPresentToggle(a, e.target.checked)}
+                          />
+                        </label>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const EventsDashboard: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
   const [searchParams] = useSearchParams();
@@ -19,22 +147,38 @@ const EventsDashboard: React.FC = () => {
   const { grouped, loading, error, reload, setAttendeePresentLocal } = useEventAttendees(eventIdFilter);
 
   const [query, setQuery] = useState("");
-  const [showAttendee, setShowAttendee] = useState(false);
+  const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
+
   const [updatingRowKey, setUpdatingRowKey] = useState<string | null>(null);
+  const currentDate = new Date();
+
+  const toggleEvent = (eventId: string) => {
+    setExpandedEvents((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(eventId)) {
+        newSet.delete(eventId);
+      } else {
+        newSet.add(eventId);
+      }
+      return newSet;
+    });
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const sortedGrouped = grouped.map((ev) => ({
-      ...ev,
-      attendees: [...ev.attendees].sort((a, b) => {
-        // Memoize the length check inside the sort to avoid repeated lowercasing
-        const valA =
-          (a.dietary_requirements || "").toLowerCase() === "none" ? 0 : (a.dietary_requirements?.length ?? 0);
-        const valB =
-          (b.dietary_requirements || "").toLowerCase() === "none" ? 0 : (b.dietary_requirements?.length ?? 0);
-        return valB - valA;
-      }),
-    }));
+    const sortedGrouped = grouped.map((ev) => {
+      return {
+        ...ev,
+        attendees: [...ev.attendees].sort((a, b) => {
+          // Memoize the length check inside the sort to avoid repeated lowercasing
+          const valA =
+            (a.dietary_requirements || "").toLowerCase() === "none" ? 0 : (a.dietary_requirements?.length ?? 0);
+          const valB =
+            (b.dietary_requirements || "").toLowerCase() === "none" ? 0 : (b.dietary_requirements?.length ?? 0);
+          return valB - valA;
+        }),
+      };
+    });
 
     if (!q) return sortedGrouped;
 
@@ -60,6 +204,9 @@ const EventsDashboard: React.FC = () => {
       .filter((ev) => ev.attendees.length > 0);
   }, [grouped, query]);
 
+  const currentAndFutureEvents = filtered.filter((ev) => ev.event_date && new Date(ev.event_date) >= currentDate);
+  const pastEvents = filtered.filter((ev) => ev.event_date && new Date(ev.event_date) < currentDate);
+
   if (authLoading || loading) {
     return (
       <>
@@ -76,7 +223,7 @@ const EventsDashboard: React.FC = () => {
 
   const handlePresentToggle = async (
     attendee: { rsvp_id: string | null; event_id: string; member_email: string },
-    present: boolean
+    present: boolean,
   ) => {
     const key = attendee.rsvp_id ?? `${attendee.event_id}::${attendee.member_email}`;
     const previousValue = grouped
@@ -84,12 +231,12 @@ const EventsDashboard: React.FC = () => {
       .find(
         (row) =>
           (attendee.rsvp_id && row.rsvp_id === attendee.rsvp_id) ||
-          (row.event_id === attendee.event_id && row.member_email === attendee.member_email)
+          (row.event_id === attendee.event_id && row.member_email === attendee.member_email),
       )?.present;
 
     setAttendeePresentLocal(
       { rsvpId: attendee.rsvp_id, eventId: attendee.event_id, memberEmail: attendee.member_email },
-      present
+      present,
     );
     setUpdatingRowKey(key);
     try {
@@ -104,7 +251,7 @@ const EventsDashboard: React.FC = () => {
       if (typeof previousValue === "boolean") {
         setAttendeePresentLocal(
           { rsvpId: attendee.rsvp_id, eventId: attendee.event_id, memberEmail: attendee.member_email },
-          previousValue
+          previousValue,
         );
       }
     } finally {
@@ -164,135 +311,38 @@ const EventsDashboard: React.FC = () => {
           )}
 
           <div className="flex flex-col gap-6">
-            {filtered.length === 0 ? (
-              <div className="pixel-panel p-6 sm:p-10">
-                <p className="font-pixelify text-white text-sm">No attendees found.</p>
-              </div>
+            {currentAndFutureEvents.length === 0 ? (
+              <p>No upcoming events found.</p>
             ) : (
-              filtered.map((ev) => {
-                const presentCount = ev.attendees.filter((attendee) => attendee.present).length;
-                return (
-                  <div key={ev.event_id} className="pixel-panel p-6 sm:p-8">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
-                      <div className="min-w-0">
-                        <p className="font-silkscreen text-white text-lg sm:text-[1.25rem]">{ev.title}</p>
-                        <p className="font-pixelify text-gray-400 text-xs mt-1">
-                          {formatNZDate(ev.event_date)} • {ev.attendees.length} attendee
-                          {ev.attendees.length === 1 ? "" : "s"} • {presentCount}/{ev.attendees.length} present
-                        </p>
-                      </div>
-                      <div>
-                        <button
-                          className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
-                          onClick={() => downloadEventAttendeesCSV(ev.title, ev.event_date, ev.attendees)}
-                        >
-                          Download CSV
-                        </button>
-                        <button
-                          className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
-                          onClick={() => setShowAttendee((prev) => !prev)}
-                        >
-                          {showAttendee ? "<" : ">"}
-                        </button>
-                      </div>
-                    </div>
+              currentAndFutureEvents.map((ev) => (
+                <EventCard
+                  key={ev.event_id}
+                  ev={ev}
+                  expanded={expandedEvents.has(ev.event_id)}
+                  handleOnToggle={toggleEvent}
+                  handleOnPresentToggle={handlePresentToggle}
+                  handleUpdatingRowKey={updatingRowKey}
+                />
+              ))
+            )}
+          </div>
 
-                    {showAttendee && (
-                      <>
-                        {/* Mobile: card layout */}
-                        <div className="flex flex-col gap-3 md:hidden">
-                          {ev.attendees.map((a) => (
-                            <div
-                              key={`${a.rsvp_id ?? "na"}::${a.member_email}`}
-                              className="rounded-lg border border-white/20 bg-white/5 p-4"
-                            >
-                              <p className="font-silkscreen text-white text-sm">{memberFullName(a)}</p>
-                              <p className="font-pixelify text-gray-400 text-xs mt-1 break-all">{a.member_email}</p>
-                              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 font-pixelify text-xs text-white/80">
-                                <span>ID: {a.member_student_id ?? "—"}</span>
-                                <span>UPI: {a.member_upi ?? "—"}</span>
-                              </div>
-                              {a.group_emails.length > 0 && (
-                                <p className="font-pixelify text-xs text-white/70 mt-2 break-all">
-                                  Group emails: {a.group_emails.join(", ")}
-                                </p>
-                              )}
-                              {a.dietary_requirements && (
-                                <p className="font-pixelify text-xs text-white/70 mt-2">
-                                  Diet: {a.dietary_requirements}
-                                </p>
-                              )}
-                              <label className="font-pixelify text-xs text-white/80 mt-3 inline-flex items-center">
-                                <input
-                                  type="checkbox"
-                                  aria-label={`Toggle attendance for ${memberFullName(a)}`}
-                                  className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
-                                  checked={a.present}
-                                  disabled={updatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
-                                  onChange={(e) =>
-                                    handlePresentToggle(a, e.target.checked)
-                                  }
-                                />
-                              </label>
-                            </div>
-                          ))}
-                        </div>
+          <PageTitle title="Past Event Attendees" className="mt-[5vh]" />
 
-                        {/* Desktop: table layout */}
-                        <div className="hidden md:block overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="border-b border-white/20">
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Member</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Email</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Student ID</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">UPI</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Group</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
-                                  Dietary Requirements
-                                </th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Present</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {ev.attendees.map((a) => (
-                                <tr key={`${a.rsvp_id ?? "na"}::${a.member_email}`} className="border-b border-white/10">
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{memberFullName(a)}</td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_email}</td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
-                                    {a.member_student_id ?? "—"}
-                                  </td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_upi ?? "—"}</td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
-                                    {a.group_emails.length > 0 ? a.group_emails.join(", ") : "—"}
-                                  </td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
-                                    {a.dietary_requirements ?? "—"}
-                                  </td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
-                                    <label className="inline-flex items-center">
-                                      <input
-                                        type="checkbox"
-                                        aria-label={`Toggle attendance for ${memberFullName(a)}`}
-                                        className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
-                                        checked={a.present}
-                                        disabled={updatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
-                                        onChange={(e) =>
-                                          handlePresentToggle(a, e.target.checked)
-                                        }
-                                      />
-                                    </label>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                );
-              })
+          <div className="flex flex-col gap-6">
+            {pastEvents.length === 0 ? (
+              <p>No past events found.</p>
+            ) : (
+              pastEvents.map((ev) => (
+                <EventCard
+                  key={ev.event_id}
+                  ev={ev}
+                  expanded={expandedEvents.has(ev.event_id)}
+                  handleOnToggle={toggleEvent}
+                  handleOnPresentToggle={handlePresentToggle}
+                  handleUpdatingRowKey={updatingRowKey}
+                />
+              ))
             )}
           </div>
         </div>
