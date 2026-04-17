@@ -16,13 +16,15 @@ function addDays(date: Date, days: number) {
 }
 
 function formatDateKey(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;}
 
 export default function TaskCalendarView({
   tasks,
   onTaskClick,
-}: {
+}: {  
   tasks: Task[];
   onTaskClick: (task: Task) => void;
 }) {
@@ -142,8 +144,16 @@ export default function TaskCalendarView({
                   : "bg-black/20 opacity-40"
               }`}
             >
-              <div className="text-[10px] sm:text-xs text-white/60 mb-0.5 sm:mb-1">
-                {date.getDate()}
+              <div className="flex mb-0.5 sm:mb-1">
+                <span 
+                  className={`text-[10px] sm:text-xs flex items-center justify-center rounded-full ${
+                    formatDateKey(date) === formatDateKey(new Date()) 
+                      ? "bg-[#6E80DA] text-white w-5 h-5 sm:w-6 sm:h-6 font-bold" 
+                      : "text-white/60 w-5 h-5 sm:w-6 sm:h-6"
+                  }`}
+                >
+                  {date.getDate()}
+                </span>
               </div>
 
               <div className="flex flex-col gap-0.5 sm:gap-1">
@@ -151,7 +161,9 @@ export default function TaskCalendarView({
                   <button
                     key={task.id}
                     onClick={() => onTaskClick(task)}
-                    className="text-left text-[9px] sm:text-[10px] px-0.5 sm:px-1 py-0.5 rounded bg-[#6E80DA]/30 hover:bg-[#6E80DA]/50 active:bg-[#6E80DA]/60 text-white truncate touch-manipulation"
+                    className={`text-left text-[9px] sm:text-[10px] px-0.5 sm:px-1 py-0.5 rounded bg-[#6E80DA]/30 hover:bg-[#6E80DA]/50 active:bg-[#6E80DA]/60 text-white truncate touch-manipulation ${
+                      task.status === "done" ? "line-through opacity-50" : ""
+                    }`}
                   >
                     {task.name}
                   </button>

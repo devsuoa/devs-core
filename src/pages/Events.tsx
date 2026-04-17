@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -8,9 +8,11 @@ import EventsCard from "../components/EventsCard";
 import Pagination from "../components/Pagination";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
-import { useEvents, formatEventDate } from "../lib/eventsController";
+import { useEvents } from "../lib/eventsController";
+import { consumeSignupCompleteForEvent } from "../lib/eventRsvpMemberFlowStorage";
+import { showSiteToast } from "../components/SiteToast";
 import BinaryBackground from "../components/BinaryBackground";
-
+ 
 const Events = () => {
   const { upcomingEvents, pastEvents, loading, error } = useEvents();
 
@@ -52,7 +54,33 @@ const Events = () => {
 
   // state for focused event card (for overlay)
   const [focusedEventId, setFocusedEventId] = useState<string | null>(null);
+  const [postJoinRsvp, setPostJoinRsvp] = useState<{
+    eventId: string;
+    email: string;
+  } | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Stripe Checkout success: show confirmation after return (webhook completes RSVP in background)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("rsvp_paid") !== "1") return;
+
+    showSiteToast("RSVP submitted. See you at the event!", {
+      variant: "success",
+      position: "top-center",
+    });
+    params.delete("rsvp_paid");
+    const next = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        search: next ? `?${next}` : "",
+        hash: location.hash,
+      },
+      { replace: true },
+    );
+  }, [location.search, location.pathname, location.hash, navigate]);
 
   // Extract unique tags from events
   const upcomingTags = useMemo(() => {
@@ -97,15 +125,48 @@ const Events = () => {
     }
 
     const handleResize = () => {
-      setUpcomingPage(0);
-      setPastPage(0);
-      setUpcomingPerPage(getEventsPerPage(true));
-      setPastPerPage(getEventsPerPage(false));
+      const nextUpcoming = getEventsPerPage(true);
+      const nextPast = getEventsPerPage(false);
+
+      setUpcomingPerPage((prev) => {
+        if (prev === nextUpcoming) return prev;
+        setUpcomingPage((p) => {
+          // clamps current page so that it doesnt exceed total pages after perPage change
+          const maxPage = Math.max(0, Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1);
+          return Math.min(p, maxPage);
+        });
+        return nextUpcoming;
+      });
+
+      setPastPerPage((prev) => {
+        if (prev === nextPast) return prev;
+        setPastPage((p) => {
+          const maxPage = Math.max(0, Math.ceil(filteredPastEvents.length / nextPast) - 1);
+          return Math.min(p, maxPage);
+        });
+        return nextPast;
+      });
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [onPageNotFound]);
+
+  useEffect(() => {
+    if (loading) return;
+    const hash = location.hash.slice(1);
+    if (!hash) {
+      setPostJoinRsvp(null);
+      return;
+    }
+    const email = consumeSignupCompleteForEvent(hash);
+    if (email) {
+      setPostJoinRsvp({ eventId: hash, email });
+      showSiteToast("Please RSVP", { position: "top-center" });
+      return;
+    }
+    setPostJoinRsvp((prev) => (prev?.eventId === hash ? prev : null));
+  }, [loading, location.hash]);
 
   // Handle URL hash to auto-focus an event card (only on initial load)
   const initialHashProcessed = useRef(false);
@@ -181,7 +242,11 @@ const Events = () => {
     if (flipped) {
       setFocusedEventId(eventId);
       // Update URL hash
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${eventId}`);
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}#${eventId}`
+      );
     } else {
       setFocusedEventId(null);
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -200,12 +265,12 @@ const Events = () => {
   const { items: paginatedUpcomingEvents, totalPages: upcomingTotalPages } = paginate(
     filteredUpcomingEvents,
     upcomingPage,
-    upcomingPerPage,
+    upcomingPerPage
   );
   const { items: paginatedPastEvents, totalPages: pastTotalPages } = paginate(
     filteredPastEvents,
     pastPage,
-    pastPerPage,
+    pastPerPage
   );
 
   // Handlers for page animation direction
@@ -278,7 +343,7 @@ const Events = () => {
   if (loading) {
     return (
       <>
-        <BinaryBackground />
+      <BinaryBackground/>
         <Header />
         <section className="min-h-[80vh]">
           <div className="flex justify-center mt-[20vh]">
@@ -293,7 +358,7 @@ const Events = () => {
   if (error) {
     return (
       <>
-        <BinaryBackground />
+      <BinaryBackground/>
         <Header />
         <div className="flex justify-center mt-[20vh] min-h-[80vh]">
           <p className="font-pixelify text-red-400">{error}</p>
@@ -331,12 +396,18 @@ const Events = () => {
       {/* UPCOMING EVENTS */}
       {/* Mobile title */}
       <div className="lg:hidden min-h-[10vh]">
-        <PageTitle title="Upcoming Events" className="scale-110 ml-5" />
+        <PageTitle
+          title="Upcoming Events"
+          className="scale-110 ml-5"
+        />
       </div>
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
-        <PageTitle title="Upcoming Events" className="pl-0! ml-20! scale-110" />
+        <PageTitle
+          title="Upcoming Events"
+          className="pl-0! ml-20! scale-110"
+        />
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
@@ -373,7 +444,9 @@ const Events = () => {
 
       <section className="transition-all duration-500 ease-in-out mx-[1vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
         {upcomingEvents.length === 0 ? (
-          <p className="font-pixelify text-white text-center text-sm sm:text-base">No upcoming events.</p>
+          <p className="font-pixelify text-white text-center text-sm sm:text-base">
+            No upcoming events.
+          </p>
         ) : (
           <>
             <div
@@ -401,13 +474,24 @@ const Events = () => {
                       image={event.image_url || "/events/placeholder_event.png"}
                       imageAlt={event.title}
                       tag={event.tag || "Event"}
-                      date={formatEventDate(event.event_date)}
+                      date={event.event_date}
                       time={event.event_time || ""}
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl={event.register_url || ""}
+                      paymentEnabled={event.payment_enabled}
+                      chargeAmount={event.charge_amount}
+                      bankTransferEnabled={event.bank_transfer_enabled}
+                      groupRSVPEnabled={event.group_rsvp_enabled}
+                      groupRSVPMaxEmails={event.group_rsvp_max_emails}
+                      rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
+                      }
                     />
                   </motion.div>
                 ))}
@@ -434,7 +518,10 @@ const Events = () => {
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
-        <PageTitle title="Past Events" className="pl-0! ml-20! scale-110" />
+        <PageTitle
+          title="Past Events"
+          className="pl-0! ml-20! scale-110"
+        />
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
@@ -471,7 +558,9 @@ const Events = () => {
 
       <section className="transition-all duration-500 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
         {pastEvents.length === 0 ? (
-          <p className="font-pixelify text-white text-center text-sm sm:text-base">No past events.</p>
+          <p className="font-pixelify text-white text-center text-sm sm:text-base">
+            No past events.
+          </p>
         ) : (
           <>
             <div
@@ -499,13 +588,24 @@ const Events = () => {
                       image={event.image_url || "/events/placeholder_event.png"}
                       imageAlt={event.title}
                       tag={event.tag || "Event"}
-                      date={formatEventDate(event.event_date)}
+                      date={event.event_date}
                       time={event.event_time || ""}
                       location={event.location || ""}
                       description={event.description || ""}
                       registerUrl=""
+                      paymentEnabled={event.payment_enabled}
+                      chargeAmount={event.charge_amount}
+                      bankTransferEnabled={event.bank_transfer_enabled}
+                      groupRSVPEnabled={event.group_rsvp_enabled}
+                      groupRSVPMaxEmails={event.group_rsvp_max_emails}
+                      rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
                       onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
+                      }
                     />
                   </motion.div>
                 ))}
@@ -513,7 +613,11 @@ const Events = () => {
             </div>
             {pastTotalPages > 1 && (
               <div className="flex justify-center items-center mt-6 sm:mt-8 md:mt-10 font-silkscreen">
-                <Pagination currentPage={pastPage} totalPages={pastTotalPages} onPageChange={handlePastPageChange} />
+                <Pagination
+                  currentPage={pastPage}
+                  totalPages={pastTotalPages}
+                  onPageChange={handlePastPageChange}
+                />
               </div>
             )}
           </>
