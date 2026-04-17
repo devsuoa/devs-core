@@ -174,7 +174,7 @@ export async function isAllowedAccess(): Promise<boolean> {
     return data.length > 0;
 }
 
-export const AUDIT_PAGE_SIZE = 100;
+export const AUDIT_PAGE_SIZE = 5000;
 
 export async function fetchAuditLogs(
     page = 0,
