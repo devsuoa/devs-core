@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { PageTitle } from '../../components/PageTitle';
-import { useMarketingPortal } from '../../lib/marketingPortalController';
-import { useAdminDashboard } from '../../lib/adminDashboardController';
+import React from "react";
+import { Link } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { PageTitle } from "../../components/PageTitle";
+import { useMarketingPortal } from "../../lib/marketingPortalController";
+import { useAdminDashboard } from "../../lib/adminDashboardController";
 
 /**
  * The marketing portal page for submitting marketing requests for events or sponsorship posts.
@@ -48,6 +48,7 @@ const MarketingPortal: React.FC = () => {
     setPreWrittenCaptions,
     handleSubmit,
     closeDialog,
+    isSubmitting,
   } = useMarketingPortal();
 
   if (loading) {
@@ -92,7 +93,8 @@ const MarketingPortal: React.FC = () => {
                   Request submitted!
                 </div>
                 <p className="font-rethink text-gray-300 text-sm text-center max-w-sm">
-                  Your marketing request has been received. The marketing team will be notified.
+                  Your marketing request has been received. The marketing team
+                  will be notified.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 mt-4">
                   <button
@@ -121,20 +123,18 @@ const MarketingPortal: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <label
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer touch-manipulation transition-colors ${
-                        postType === 'event'
-                          ? 'border-white bg-white/10'
-                          : 'border-white/40 hover:border-white/60'
+                        postType === "event"
+                          ? "border-white bg-white/10"
+                          : "border-white/40 hover:border-white/60"
                       }`}
                     >
                       <input
                         type="radio"
                         name="postType"
                         value="event"
-                        checked={postType === 'event'}
+                        checked={postType === "event"}
                         onChange={(e) =>
-                          setPostType(
-                            e.target.value as 'event' | 'sponsorship'
-                          )
+                          setPostType(e.target.value as "event" | "sponsorship")
                         }
                         className="sr-only"
                         required
@@ -145,20 +145,18 @@ const MarketingPortal: React.FC = () => {
                     </label>
                     <label
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer touch-manipulation transition-colors ${
-                        postType === 'sponsorship'
-                          ? 'border-white bg-white/10'
-                          : 'border-white/40 hover:border-white/60'
+                        postType === "sponsorship"
+                          ? "border-white bg-white/10"
+                          : "border-white/40 hover:border-white/60"
                       }`}
                     >
                       <input
                         type="radio"
                         name="postType"
                         value="sponsorship"
-                        checked={postType === 'sponsorship'}
+                        checked={postType === "sponsorship"}
                         onChange={(e) =>
-                          setPostType(
-                            e.target.value as 'event' | 'sponsorship'
-                          )
+                          setPostType(e.target.value as "event" | "sponsorship")
                         }
                         className="sr-only"
                         required
@@ -171,7 +169,7 @@ const MarketingPortal: React.FC = () => {
                 </div>
 
                 {/* Event Fields */}
-                {postType === 'event' && (
+                {postType === "event" && (
                   <div className="space-y-8 sm:space-y-10">
                     <div>
                       <label
@@ -281,7 +279,7 @@ const MarketingPortal: React.FC = () => {
                 )}
 
                 {/* Sponsorship Fields */}
-                {postType === 'sponsorship' && (
+                {postType === "sponsorship" && (
                   <div className="space-y-8 sm:space-y-10">
                     <div>
                       <label
@@ -314,7 +312,9 @@ const MarketingPortal: React.FC = () => {
                         id="sponsorshipEmailDate"
                         type="date"
                         value={sponsorshipEmailDate}
-                        onChange={(e) => setSponsorshipEmailDate(e.target.value)}
+                        onChange={(e) =>
+                          setSponsorshipEmailDate(e.target.value)
+                        }
                         className="pixel-input font-pixelify w-full"
                         required
                       />
@@ -425,9 +425,7 @@ const MarketingPortal: React.FC = () => {
                       <textarea
                         id="preWrittenCaptions"
                         value={preWrittenCaptions}
-                        onChange={(e) =>
-                          setPreWrittenCaptions(e.target.value)
-                        }
+                        onChange={(e) => setPreWrittenCaptions(e.target.value)}
                         className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                       />
                     </div>
@@ -437,10 +435,10 @@ const MarketingPortal: React.FC = () => {
                 <div className="flex justify-start mt-6 sm:mt-8">
                   <button
                     type="submit"
-                    disabled={!postType}
+                    disabled={!postType || isSubmitting}
                     className="pixel-button font-silkscreen min-h-[44px] min-w-[120px] touch-manipulation"
                   >
-                    Submit
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </button>
                 </div>
               </form>

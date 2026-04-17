@@ -235,6 +235,7 @@ export function closeMarketingDialog(setShowDialog: (value: boolean) => void) {
 export function useMarketingPortal() {
   const [postType, setPostType] = useState<'event' | 'sponsorship' | ''>('');
   const [showDialog, setShowDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Event fields
   const [eventName, setEventName] = useState('');
@@ -256,46 +257,52 @@ export function useMarketingPortal() {
   const [marketingDescription, setMarketingDescription] = useState('');
   const [preWrittenCaptions, setPreWrittenCaptions] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    handleMarketingSubmit(
-      e,
-      {
-        postType,
-        eventName,
-        eventDate,
-        eventTime,
-        eventLocation,
-        eventDescription,
-        eventSuggestions,
-        sponsorName,
-        sponsorshipEmailDate,
-        sponsorshipPostDate,
-        sponsorshipEventName,
-        sponsorshipLinks,
-        sponsorshipDescription,
-        marketingDescription,
-        preWrittenCaptions,
-        showDialog,
-      },
-      {
-        setPostType,
-        setShowDialog,
-        setEventName,
-        setEventDate,
-        setEventTime,
-        setEventLocation,
-        setEventDescription,
-        setEventSuggestions,
-        setSponsorName,
-        setSponsorshipEmailDate,
-        setSponsorshipPostDate,
-        setSponsorshipEventName,
-        setSponsorshipLinks,
-        setSponsorshipDescription,
-        setMarketingDescription,
-        setPreWrittenCaptions,
-      }
-    );
+  const handleSubmit = async (e: React.FormEvent) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await handleMarketingSubmit(
+        e,
+        {
+          postType,
+          eventName,
+          eventDate,
+          eventTime,
+          eventLocation,
+          eventDescription,
+          eventSuggestions,
+          sponsorName,
+          sponsorshipEmailDate,
+          sponsorshipPostDate,
+          sponsorshipEventName,
+          sponsorshipLinks,
+          sponsorshipDescription,
+          marketingDescription,
+          preWrittenCaptions,
+          showDialog,
+        },
+        {
+          setPostType,
+          setShowDialog,
+          setEventName,
+          setEventDate,
+          setEventTime,
+          setEventLocation,
+          setEventDescription,
+          setEventSuggestions,
+          setSponsorName,
+          setSponsorshipEmailDate,
+          setSponsorshipPostDate,
+          setSponsorshipEventName,
+          setSponsorshipLinks,
+          setSponsorshipDescription,
+          setMarketingDescription,
+          setPreWrittenCaptions,
+        }
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const closeDialog = () => {
@@ -346,5 +353,6 @@ export function useMarketingPortal() {
     setPreWrittenCaptions,
     handleSubmit,
     closeDialog,
+    isSubmitting,
   };
 }
