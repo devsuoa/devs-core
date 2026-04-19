@@ -71,12 +71,13 @@ const About = () => {
     "/home/slideshow/1.png",
     "/home/slideshow/2.png",
     "/home/slideshow/3.png",
-    "/home/slideshow/4.png"
+    "/home/slideshow/4.png",
   ];
-  const { upcomingEvents,  pastEvents, eventsLoading, eventsError }: any = useEvents();
+  const { upcomingEvents, pastEvents, eventsLoading, eventsError }: any =
+    useEvents();
   const events = [...upcomingEvents, ...pastEvents].slice(0, 2);
 
-  const cuhruh ='border-purple-400'
+  const cuhruh = "border-purple-400";
   const leads = [
     {
       href: "https://www.linkedin.com/in/alannasantoso/",
@@ -135,21 +136,29 @@ const About = () => {
         <BinaryBackground />
         <Header />
         <main className="min-h-screen">
-          <img src="branding/text_logo.png" alt="DEVS Logo" className="mx-auto mt-35 -mb-10 w-[15vw]" />
-          {/* Title */}
-          <PageTitle
-            title="About Us"
-            className="p-0"
+          <img
+            src="branding/text_logo.png"
+            alt="DEVS Logo"
+            className="mx-auto mt-35 -mb-10 w-[15vw]"
           />
+          {/* Title */}
+          <PageTitle title="About Us" className="p-0" />
           <section className="lg:px-0 px-20 py-6 mb-20 text-center max-w-4xl mx-auto font-rethink">
             <h1 className="text-2xl mb-5 font-bold">
-              Founded in 2019, DEVS grown to become one of the largest tech clubs in
-              Auckland.
+              Founded in 2019, DEVS grown to become one of the largest tech
+              clubs in Auckland.
             </h1>
             <p>
-              DEVS has grown from a small group of curious, passionate students into Auckland's largest tech club. What sets us apart is that we are entirely student-led — built by students, for students. Every workshop, hackathon, and networking event is designed around what our members genuinely want to learn and experience.
-
-              Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
+              DEVS has grown from a small group of curious, passionate students
+              into Auckland's largest tech club. What sets us apart is that we
+              are entirely student-led — built by students, for students. Every
+              workshop, hackathon, and networking event is designed around what
+              our members genuinely want to learn and experience. Our growth
+              reflects the strength and energy of our community. From first-year
+              beginners writing their first lines of code to experienced
+              developers building full-stack projects, DEVS is a space where
+              students support one another, share knowledge openly, and grow
+              together.
             </p>
             <div className="mt-14 flex w-full justify-center overflow-visible pb-2">
               <div className="flex w-max flex-row flex-nowrap items-start justify-center gap-4">
@@ -167,8 +176,12 @@ const About = () => {
                         alt={member.name}
                         className={`h-24 w-24 rounded-full border-2 object-cover ${member.borderClass}`}
                       />
-                      <p className="mt-2 font-rethink text-sm leading-tight">{member.name}</p>
-                      <p className="font-rethink text-xs leading-tight text-white/90">{member.role}</p>
+                      <p className="mt-2 font-rethink text-sm leading-tight">
+                        {member.name}
+                      </p>
+                      <p className="font-rethink text-xs leading-tight text-white/90">
+                        {member.role}
+                      </p>
                     </div>
                   </a>
                 ))}
@@ -178,17 +191,23 @@ const About = () => {
 
           {/* Glimpse Into DEVS */}
           <section className="flex flex-col items-center justify-center gap-6 my-60">
-            <span className="text-5xl font-silkscreen text-left whitespace-nowrap mb-10">&lt; A Glimpse Into DEVS /&gt;</span>
+            <span className="text-5xl font-silkscreen text-left whitespace-nowrap mb-10">
+              &lt; A Glimpse Into DEVS /&gt;
+            </span>
 
             <div className="flex flex-row">
-              { /* gallery glimpse */}
-                <div className="grid grid-cols-2 mx-auto w-[45vw]">
-                  {images.map((g, index) => (
-                    <div key={index} className="">
-                      <img src={g} alt={`Gallery image ${index + 1}`} className="w-[20vw]" />
-                    </div>
-                  ))}
-                </div>
+              {/* gallery glimpse */}
+              <div className="grid grid-cols-2 mx-auto w-[45vw]">
+                {images.map((g, index) => (
+                  <div key={index} className="">
+                    <img
+                      src={g}
+                      alt={`Gallery image ${index + 1}`}
+                      className="w-[20vw]"
+                    />
+                  </div>
+                ))}
+              </div>
 
               {/* events glimpse*/}
               <div className="flex flex-col items-center justify-center gap-6">
@@ -196,45 +215,51 @@ const About = () => {
                   {eventsLoading && <p>Loading events...</p>}
                   {eventsError && <p>Error loading events: {eventsError}</p>}
                   {!eventsLoading && !eventsError && events.length === 0 && (
-                    <p>No events.</p> // shouldnt happen but just in case :P
+                    <p>No events.</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 mx-auto w-[45vw]">
                   {events.map((e, index) => (
                     <div key={index} className="">
-                      <img src={e.image_url} alt={e.title} className="w-[20vw]" />
+                      <img
+                        src={e.image_url}
+                        alt={e.title}
+                        className="w-[20vw] aspect-4/5"
+                      />
                     </div>
                   ))}
                 </div>
               </div>
-              </div>
-              <div className="flex flex-row w-screen items-center justify-center gap-[25vw] mt-4">
-                  
-                <button className="
+            </div>
+            <div className="flex flex-row w-screen items-center justify-center gap-[25vw] mt-4">
+              <button
+                className="
                 w-[25vw]
                 font-silkscreen text-2xl 
                 transition-colors duration-200 
                 cursor-pointer  
                 bg-linear-to-br from-purple-900 to-purple-600 px-5 py-3 rounded-4xl 
                 hover:bg-linear-to-br hover:from-purple-700 hover:to-purple-500
-                " 
-                onClick={() => window.location.href = "/gallery"}>
-                  Check Out Our Gallery →
-                </button>
+                "
+                onClick={() => (window.location.href = "/gallery")}
+              >
+                Check Out Our Gallery →
+              </button>
 
-                <button className="
+              <button
+                className="
                 w-[25vw] 
                 font-silkscreen text-2xl 
                 transition-colors duration-200 
                 cursor-pointer  
                 bg-linear-to-br from-purple-900 to-purple-600 px-5 py-3 rounded-4xl 
                 hover:bg-linear-to-br hover:from-purple-700 hover:to-purple-500
-                " 
-                onClick={() => window.location.href = "/events"}>
-                  Join our fun events →
-                </button>
-
+                "
+                onClick={() => (window.location.href = "/events")}
+              >
+                Join our fun events →
+              </button>
             </div>
           </section>
 
@@ -246,7 +271,11 @@ const About = () => {
               </h1>
               <div className="flex flex-row items-center justify-center gap-24">
                 <p className="text-white text-sm max-w-md italic font-rethink p-0">
-                  DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
+                  DEVS is incredibly grateful to our sponsors for their ongoing
+                  support in making our events and initiatives possible. From
+                  event sponsorship to resources and student engagement
+                  opportunities, their partnership enables us to create
+                  meaningful experiences for our community.
                 </p>
                 <PixelatedButton
                   to="/sponsors"
@@ -320,7 +349,13 @@ const About = () => {
                   <p className="text-base font-pixelify">meet our mascot</p>
                   <h1 className="text-8xl font-silkscreen pb-4">DEVA</h1>
                   <p className="text-white text-sm max-w-md italic font-rethink p-0">
-                    Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just any computer—she's curious, clever, and always ready to debug a problem or spark a new idea. Whether it's coding challenges, hackathons, or late-night brainstorming sessions, Deva is here to inspire developers of all levels to think creatively, collaborate fearlessly, and keep building the future—one line of code at a time.
+                    Meet Deva, the official mascot of the Developers Society!
+                    🖥️💡 Deva isn't just any computer—she's curious, clever, and
+                    always ready to debug a problem or spark a new idea. Whether
+                    it's coding challenges, hackathons, or late-night
+                    brainstorming sessions, Deva is here to inspire developers
+                    of all levels to think creatively, collaborate fearlessly,
+                    and keep building the future—one line of code at a time.
                   </p>
                 </div>
               </div>
@@ -366,16 +401,25 @@ const About = () => {
         <BinaryBackground />
         <Header />
         <main className="min-h-screen flex flex-col items-center">
-
-          <h1 className="text-3xl font-silkscreen text-center mt-24">About Us</h1>
+          <h1 className="text-3xl font-silkscreen text-center mt-24">
+            About Us
+          </h1>
           <section className="px-12 py-6 text-center mx-auto font-rethink text-sm leading-tight">
             <h1 className="text-lg font-bold leading-tight py-4">
-              Founded in 2019, DEVS has grown to become the largest tech club in New Zealand.
+              Founded in 2019, DEVS has grown to become the largest tech club in
+              New Zealand.
             </h1>
             <p className="text-xs">
-              DEVS has grown from a small group of curious, passionate students into Auckland's largest tech club. What sets us apart is that we are entirely student-led — built by students, for students. Every workshop, hackathon, and networking event is designed around what our members genuinely want to learn and experience.
-
-              Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
+              DEVS has grown from a small group of curious, passionate students
+              into Auckland's largest tech club. What sets us apart is that we
+              are entirely student-led — built by students, for students. Every
+              workshop, hackathon, and networking event is designed around what
+              our members genuinely want to learn and experience. Our growth
+              reflects the strength and energy of our community. From first-year
+              beginners writing their first lines of code to experienced
+              developers building full-stack projects, DEVS is a space where
+              students support one another, share knowledge openly, and grow
+              together.
             </p>
             <div className="mt-6 flex w-full justify-center overflow-visible pb-2">
               <div className="flex w-max flex-row flex-nowrap items-start justify-center gap-3">
@@ -393,8 +437,12 @@ const About = () => {
                         alt={member.name}
                         className={`h-20 w-20 rounded-full border-2 object-cover ${member.borderClass}`}
                       />
-                      <p className="mt-2 font-rethink text-xs leading-tight">{member.name}</p>
-                      <p className="font-rethink text-[11px] leading-tight text-white/90">{member.role}</p>
+                      <p className="mt-2 font-rethink text-xs leading-tight">
+                        {member.name}
+                      </p>
+                      <p className="font-rethink text-[11px] leading-tight text-white/90">
+                        {member.role}
+                      </p>
                     </div>
                   </a>
                 ))}
@@ -415,19 +463,39 @@ const About = () => {
               }}
             >
               <div className="shrink-0 w-[75vw] snap-center">
-                <img src="/home/slideshow/1.png" alt="REPLACE THIS" className="h-auto" />
+                <img
+                  src="/home/slideshow/1.png"
+                  alt="REPLACE THIS"
+                  className="h-auto"
+                />
               </div>
               <div className="shrink-0 w-[75vw] snap-center">
-                <img src="/home/slideshow/2.png" alt="REPLACE THIS" className="h-auto" />
+                <img
+                  src="/home/slideshow/2.png"
+                  alt="REPLACE THIS"
+                  className="h-auto"
+                />
               </div>
               <div className="shrink-0 w-[75vw] snap-center">
-                <img src="/home/slideshow/3.png" alt="REPLACE THIS" className="h-auto" />
+                <img
+                  src="/home/slideshow/3.png"
+                  alt="REPLACE THIS"
+                  className="h-auto"
+                />
               </div>
               <div className="shrink-0 w-[75vw] snap-center">
-                <img src="/home/slideshow/4.png" alt="REPLACE THIS" className="h-auto" />
+                <img
+                  src="/home/slideshow/4.png"
+                  alt="REPLACE THIS"
+                  className="h-auto"
+                />
               </div>
               <div className="shrink-0 w-[75vw] snap-center">
-                <img src="/home/slideshow/5.png" alt="REPLACE THIS" className="h-auto" />
+                <img
+                  src="/home/slideshow/5.png"
+                  alt="REPLACE THIS"
+                  className="h-auto"
+                />
               </div>
             </div>
           </section>
@@ -435,9 +503,15 @@ const About = () => {
           {/* Sponsors */}
           <section className="w-full flex flex-col items-center justify-center gap-6 my-12">
             <div className="px-12 flex flex-col items-center justify-center gap-6">
-              <h1 className="text-2xl font-silkscreen text-left whitespace-nowrap">&lt; Our Sponsors /&gt;</h1>
+              <h1 className="text-2xl font-silkscreen text-left whitespace-nowrap">
+                &lt; Our Sponsors /&gt;
+              </h1>
               <p className="text-white text-sm max-w-sm italic font-rethink p-0 text-center">
-                DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
+                DEVS is incredibly grateful to our sponsors for their ongoing
+                support in making our events and initiatives possible. From
+                event sponsorship to resources and student engagement
+                opportunities, their partnership enables us to create meaningful
+                experiences for our community.
               </p>
               <PixelatedButton
                 to="/sponsors"
@@ -501,10 +575,18 @@ const About = () => {
           <section className="px-12">
             <div className="flex flex-col items-center gap-3">
               <div className="w-full max-w-md text-center">
-                <p className="text-2xl font-bold font-pixelify text-center">meet our mascot</p>
+                <p className="text-2xl font-bold font-pixelify text-center">
+                  meet our mascot
+                </p>
                 <h1 className="text-8xl font-silkscreen pb-4 -ml-2">DEVA</h1>
                 <p className="text-white text-sm italic font-rethink">
-                  Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just any computer—she's curious, clever, and always ready to debug a problem or spark a new idea. Whether it's coding challenges, hackathons, or late-night brainstorming sessions, Deva is here to inspire developers of all levels to think creatively, collaborate fearlessly, and keep building the future—one line of code at a time.
+                  Meet Deva, the official mascot of the Developers Society! 🖥️💡
+                  Deva isn't just any computer—she's curious, clever, and always
+                  ready to debug a problem or spark a new idea. Whether it's
+                  coding challenges, hackathons, or late-night brainstorming
+                  sessions, Deva is here to inspire developers of all levels to
+                  think creatively, collaborate fearlessly, and keep building
+                  the future—one line of code at a time.
                 </p>
               </div>
               <div className="w-full max-w-md pt-3">
@@ -535,7 +617,6 @@ const About = () => {
               />
             </div>
           </section>
-
         </main>
 
         <Footer />
