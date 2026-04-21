@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function QRCode() {
     useEffect(() => {
-        window.location.href = "https://devsuoa.com/join";
+        window.location.href = "https://events.humanitix.com/sesa-x-devs-x-mecha";
     }, []);
 
     return (
