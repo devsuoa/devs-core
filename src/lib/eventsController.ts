@@ -19,6 +19,7 @@ export interface PublicEvent {
   charge_amount: number | null;
   bank_transfer_enabled: boolean;
   rsvp_questions: RSVPQuestion[];
+  is_active: boolean;
 }
 
 export const formatEventDate = (dateStr: string) => {
@@ -67,10 +68,10 @@ export const useEvents = () => {
           payment_enabled,
           charge_amount,
           bank_transfer_enabled,
-          rsvp_questions
+          rsvp_questions,
+          is_active
         `
         )
-        .eq("is_active", true)
         .order("event_date", { ascending: true });
 
       if (error) {
@@ -95,7 +96,7 @@ export const useEvents = () => {
     (event) => {
       const eventDate = new Date(event.event_date);
       eventDate.setUTCHours(0, 0, 0, 0);
-      return eventDate >= todayUTC;
+      return eventDate >= todayUTC && event.is_active;
     }
   );
   const pastEvents = events.filter(
