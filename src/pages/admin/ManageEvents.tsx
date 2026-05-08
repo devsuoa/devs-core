@@ -259,49 +259,22 @@ const ManageEvents: React.FC = () => {
 
                 <div>
                   <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
-                    Tags
+                    Tag
                   </label>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {formData.tag && formData.tag.split(',').map(tag => tag.trim()).filter(Boolean).map(t => (
-                      <span key={t} className="flex items-center gap-1 border px-2 py-1 rounded text-s text-white">
-                        {t}
-                        <button
-                          type="button"
-                          className="text-white hover:text-red-400 ml-1"
-                          onClick={() => {
-                            const currentTags = formData.tag!.split(',').map(tag => tag.trim()).filter(Boolean);
-                            const newTags = currentTags.filter(tag => tag !== t);
-                            setFormData({ ...formData, tag: newTags.join(', ') });
-                          }}
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
                   <select
                     className="pixel-input w-full cursor-pointer"
+                    value={formData.tag || ''}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      if (!val) return;
-                      const currentTags = formData.tag ? formData.tag.split(',').map(tag => tag.trim()).filter(Boolean) : [];
-                      if (!currentTags.includes(val)) {
-                        setFormData({ ...formData, tag: [...currentTags, val].join(', ') });
-                      }
-                      e.target.value = ''; // Reset select to default
+                      setFormData({ ...formData, tag: e.target.value });
                     }}
-                    defaultValue=""
+                    style={{ marginBottom: '24px' }}
                   >
-                    <option value="" disabled>Add a tag...</option>
-                    {['Social', 'Tech', 'Competitions', 'Industry'].map(t => {
-                      const currentTags = formData.tag ? formData.tag.split(',').map(tag => tag.trim()).filter(Boolean) : [];
-                      if (currentTags.includes(t)) return null; // Hide already selected tags
-                      return (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      );
-                    })}
+                    <option value="" disabled>Select a tag...</option>
+                    {['Industry', 'Social', 'Tech', 'Competition', 'Competitions', 'Workshop'].map(t => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

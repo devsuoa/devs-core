@@ -84,24 +84,42 @@ const Events = () => {
 
   // Extract unique tags from events
   const upcomingTags = useMemo(() => {
-    const tags = new Set(upcomingEvents.map((e) => e.tag).filter(Boolean));
-    return Array.from(tags);
+    const tags = new Set<string>();
+    upcomingEvents.forEach((e) => {
+      if (e.tag) {
+        e.tag.split(',').forEach(t => tags.add(t.trim()));
+      }
+    });
+    return Array.from(tags).filter(Boolean);
   }, [upcomingEvents]);
 
   const pastTags = useMemo(() => {
-    const tags = new Set(pastEvents.map((e) => e.tag).filter(Boolean));
-    return Array.from(tags);
+    const tags = new Set<string>();
+    pastEvents.forEach((e) => {
+      if (e.tag) {
+        e.tag.split(',').forEach(t => tags.add(t.trim()));
+      }
+    });
+    return Array.from(tags).filter(Boolean);
   }, [pastEvents]);
 
   // Filter events by tag
   const filteredUpcomingEvents = useMemo(() => {
     if (!upcomingTagFilter) return upcomingEvents;
-    return upcomingEvents.filter((e) => e.tag === upcomingTagFilter);
+    return upcomingEvents.filter((e) => {
+      if (!e.tag) return false;
+      const eventTags = e.tag.split(',').map(t => t.trim());
+      return eventTags.includes(upcomingTagFilter);
+    });
   }, [upcomingEvents, upcomingTagFilter]);
 
   const filteredPastEvents = useMemo(() => {
     if (!pastTagFilter) return pastEvents;
-    return pastEvents.filter((e) => e.tag === pastTagFilter);
+    return pastEvents.filter((e) => {
+      if (!e.tag) return false;
+      const eventTags = e.tag.split(',').map(t => t.trim());
+      return eventTags.includes(pastTagFilter);
+    });
   }, [pastEvents, pastTagFilter]);
 
   // state for number of events loaded per page based on screen size

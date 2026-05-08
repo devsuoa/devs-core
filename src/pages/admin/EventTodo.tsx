@@ -568,11 +568,31 @@ export default function EventTodo() {
   const [upcomingTagFilter, setUpcomingTagFilter] = useState<string | null>(null);
   const [pastTagFilter, setPastTagFilter] = useState<string | null>(null);
 
-  const upcomingTags = useMemo(() => Array.from(new Set(upcomingEvents.map((e) => e.tag).filter(Boolean))), [upcomingEvents]);
-  const pastTags = useMemo(() => Array.from(new Set(pastEvents.map((e) => e.tag).filter(Boolean))), [pastEvents]);
+  const upcomingTags = useMemo(() => {
+    const tags = new Set<string>();
+    upcomingEvents.forEach((e) => {
+      if (e.tag) e.tag.split(',').forEach(t => tags.add(t.trim()));
+    });
+    return Array.from(tags).filter(Boolean);
+  }, [upcomingEvents]);
 
-  const filteredUpcoming = useMemo(() => upcomingTagFilter ? upcomingEvents.filter((e) => e.tag === upcomingTagFilter) : upcomingEvents, [upcomingEvents, upcomingTagFilter]);
-  const filteredPast = useMemo(() => pastTagFilter ? pastEvents.filter((e) => e.tag === pastTagFilter) : pastEvents, [pastEvents, pastTagFilter]);
+  const pastTags = useMemo(() => {
+    const tags = new Set<string>();
+    pastEvents.forEach((e) => {
+      if (e.tag) e.tag.split(',').forEach(t => tags.add(t.trim()));
+    });
+    return Array.from(tags).filter(Boolean);
+  }, [pastEvents]);
+
+  const filteredUpcoming = useMemo(() => {
+    if (!upcomingTagFilter) return upcomingEvents;
+    return upcomingEvents.filter((e) => e.tag && e.tag.split(',').map(t => t.trim()).includes(upcomingTagFilter));
+  }, [upcomingEvents, upcomingTagFilter]);
+
+  const filteredPast = useMemo(() => {
+    if (!pastTagFilter) return pastEvents;
+    return pastEvents.filter((e) => e.tag && e.tag.split(',').map(t => t.trim()).includes(pastTagFilter));
+  }, [pastEvents, pastTagFilter]);
 
   // Swipe state
   const [upcomingTouchStart, setUpcomingTouchStart] = useState<number | null>(null);
