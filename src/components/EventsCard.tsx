@@ -2,13 +2,12 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
 import { assertCanSubmitRSVP, rsvpToEvent, startPaidEventCheckout } from "../lib/eventsRSVPController";
-import { NotMemberError } from "../lib/eventsRSVPController";
 import { uploadBankPaymentProofScreenshot } from "../lib/manageEventsController";
-import { setNeedSignupIntent } from "../lib/eventRsvpMemberFlowStorage";
 import { showSiteToast } from "./SiteToast";
-import { useNavigate } from "react-router-dom";
 import { formatEventDate } from "../lib/eventsController";
 import { RSVPQuestion } from "../lib/eventRsvpTypes";
+import { submitSignupForm } from "../lib/signupController";
+import { University } from "../lib/memberSignup";
 
 type EventsCardProps = {
   /** Event ID */
@@ -92,8 +91,6 @@ type EventsCardProps = {
    */
   onFlipChange?: (flipped: boolean) => void;
 
-  /** After returning from /join signup — prefill and open RSVP (from parent). */
-  postJoinRsvpEmail?: string;
 };
 
 const EventsCard = ({
@@ -115,17 +112,11 @@ const EventsCard = ({
   className,
   isFlipped: controlledFlipped,
   onFlipChange,
-  postJoinRsvpEmail,
 }: EventsCardProps) => {
   const [internalFlipped, setInternalFlipped] = useState(false);
   const [rsvpOpen, setRsvpOpen] = useState(false);
   const [frontHeight, setFrontHeight] = useState(0);
   const frontRef = useRef<HTMLDivElement>(null);
-  const resumeHandledRef = useRef(false);
-  const navigate = useNavigate();
-  const [resumeRsvpEmail, setResumeRsvpEmail] = useState<string | undefined>(
-    undefined,
-  );
 
   // Track front face height so back face can use it as min-height
   useEffect(() => {
@@ -137,11 +128,11 @@ const EventsCard = ({
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-  
+
   // Use controlled state if provided, otherwise use internal state
   const isControlled = controlledFlipped !== undefined;
   const flipped = isControlled ? controlledFlipped : internalFlipped;
-  
+
   const setFlipped = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
     const newValue = typeof value === 'function' ? value(flipped) : value;
     if (isControlled) {
@@ -150,18 +141,6 @@ const EventsCard = ({
       setInternalFlipped(newValue);
     }
   }, [isControlled, flipped, onFlipChange]);
-
-  useEffect(() => {
-    resumeHandledRef.current = false;
-  }, [id]);
-
-  useEffect(() => {
-    if (!postJoinRsvpEmail || resumeHandledRef.current) return;
-    resumeHandledRef.current = true;
-    setResumeRsvpEmail(postJoinRsvpEmail);
-    setRsvpOpen(true);
-    setFlipped(true);
-  }, [postJoinRsvpEmail, setFlipped]);
 
   const eventDate = new Date(date).getTime()/1000;
   const today = Date.now()/1000;
@@ -418,9 +397,7 @@ const EventsCard = ({
         onClose={() => {
           setRsvpOpen(false);
           setFlipped(false);
-          setResumeRsvpEmail(undefined);
         }}
-        initialLeaderEmail={resumeRsvpEmail}
         groupRSVPEnabled={groupRSVPEnabled}
         groupRSVPMaxEmails={groupRSVPMaxEmails}
         paymentEnabled={paymentEnabled}
@@ -434,50 +411,65 @@ const EventsCard = ({
           answers,
           paymentMethod,
           bankPaymentProofFile,
+          signupInfo,
         }) => {
-          try {
-            const basePayload = {
-              eventId: id,
-              leaderEmail,
-              groupEmails,
-              dietaryRequirements: dietaryRequirements || null,
-              answers,
-            };
+          if (signupInfo) {
+            const { status, error } = await submitSignupForm({
+              email: leaderEmail,
+              firstName: signupInfo.firstName,
+              lastName: signupInfo.lastName,
+              gender: signupInfo.gender!,
+              university: signupInfo.university as University,
+              universityYear: signupInfo.year!,
+              upi: signupInfo.upi,
+              studentId: signupInfo.studentId!,
+              degreeBlocks: signupInfo.degreeBlocks,
+            });
 
-            if (paymentEnabled && chargeAmount !== null && chargeAmount > 0) {
-              if (paymentMethod === "bank_transfer") {
-                if (!bankPaymentProofFile) {
-                  throw new Error("Payment confirmation screenshot is required.");
-                }
-                await assertCanSubmitRSVP(basePayload);
-                const proofPath = await uploadBankPaymentProofScreenshot(
-                  title,
-                  bankPaymentProofFile,
-                  leaderEmail,
+            if (!status) {
+              const pgError = error as { code?: string };
+              if (pgError?.code === "23505") {
+                // Member already exists for that email/student id; safe to continue with RSVP.
+              } else {
+                console.error(error);
+                throw new Error(
+                  "Could not register. Please try again.",
                 );
-                await rsvpToEvent({
-                  ...basePayload,
-                  paymentMethod: "bank_transfer",
-                  bankPaymentProofPath: proofPath,
-                });
-                return;
               }
-              await startPaidEventCheckout(basePayload);
+            }
+          }
+
+          const basePayload = {
+            eventId: id,
+            leaderEmail,
+            groupEmails,
+            dietaryRequirements: dietaryRequirements || null,
+            answers,
+          };
+
+          if (paymentEnabled && chargeAmount !== null && chargeAmount > 0) {
+            if (paymentMethod === "bank_transfer") {
+              if (!bankPaymentProofFile) {
+                throw new Error("Payment confirmation screenshot is required.");
+              }
+              await assertCanSubmitRSVP(basePayload);
+              const proofPath = await uploadBankPaymentProofScreenshot(
+                title,
+                bankPaymentProofFile,
+                leaderEmail,
+              );
+              await rsvpToEvent({
+                ...basePayload,
+                paymentMethod: "bank_transfer",
+                bankPaymentProofPath: proofPath,
+              });
               return;
             }
-
-            await rsvpToEvent(basePayload);
-          } catch (error) {
-            if (error instanceof NotMemberError) {
-              setNeedSignupIntent(id, leaderEmail);
-              showSiteToast("Please sign up first", {
-                position: "top-center",
-              });
-              navigate("/join");
-              throw error;
-            }
-            throw error;
+            await startPaidEventCheckout(basePayload);
+            return;
           }
+
+          await rsvpToEvent(basePayload);
         }}
       />
     </div>

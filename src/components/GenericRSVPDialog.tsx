@@ -6,6 +6,7 @@ import {
     attendeeSeatCount,
     EventFullError,
     GroupRSVPSizeExceededError,
+    NotMemberError,
     RSVPAnswers,
 } from "../lib/eventsRSVPController";
 import { RSVPQuestion } from "../lib/eventRsvpTypes";
@@ -18,6 +19,76 @@ import {
     SITE_BANK_ACCOUNT_NAME,
     SITE_BANK_ACCOUNT_NUMBER,
 } from "../lib/bankTransferDetails";
+import { DegreeOrMajor, fetchDegrees, fetchMajorsForDegree } from "../lib/degreeData";
+import { Gender, University } from "../lib/memberSignup";
+
+export type RSVPSignupDegreeBlock = {
+    degree: DegreeOrMajor | null;
+    majors: (DegreeOrMajor | null)[];
+};
+
+export type RSVPSignupValues = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: Gender | undefined;
+    university: University | "";
+    upi: string | null;
+    studentId: number | null;
+    year: number | undefined;
+    degreeBlocks: RSVPSignupDegreeBlock[];
+};
+
+const EMPTY_SIGNUP_VALUES: RSVPSignupValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: undefined,
+    university: "",
+    upi: null,
+    studentId: null,
+    year: undefined,
+    degreeBlocks: [{ degree: null, majors: [null] }],
+};
+
+const MAX_SIGNUP_DEGREES = 2;
+const MAX_SIGNUP_MAJORS = 2;
+
+const GENDER_OPTIONS: { value: Gender; label: string }[] = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "prefer-not-to-say", label: "Prefer not to say" },
+];
+
+const UNIVERSITY_OPTIONS: { value: University; label: string }[] = [
+    { value: "UOA", label: "UOA" },
+    { value: "AUT", label: "AUT" },
+    { value: "Other", label: "Other" },
+];
+
+const YEAR_OPTIONS: { value: number; label: string }[] = [
+    { value: 1, label: "1st" },
+    { value: 2, label: "2nd" },
+    { value: 3, label: "3rd" },
+    { value: 4, label: "4th" },
+    { value: 5, label: "5th+" },
+];
+
+function validateSignupValues(values: RSVPSignupValues): string | null {
+    if (!values.firstName.trim()) return "Please enter your first name";
+    if (!values.lastName.trim()) return "Please enter your last name";
+    if (!values.gender) return "Please select a gender";
+    if (!values.university) return "Please select a university";
+    if (!values.year) return "Please select your year";
+    if (!values.studentId) return "Please enter your student ID";
+    const formattedDegrees = values.degreeBlocks.filter(
+        (b) => b.degree && b.majors.some(Boolean),
+    );
+    if (formattedDegrees.length === 0) {
+        return "Please select at least one degree and major";
+    }
+    return null;
+}
 
 const PaymentProofDropZone: React.FC<{
     disabled: boolean;
@@ -134,6 +205,62 @@ const CopyIcon = () => (
     </svg>
 );
 
+const SignupChoiceGroup: React.FC<{
+    label: string;
+    required?: boolean;
+    rightAction?: React.ReactNode;
+    children: React.ReactNode;
+}> = ({ label, required, rightAction, children }) => (
+    <div className="mb-4">
+        <div className="flex items-center justify-between mb-2">
+            <label className="font-pixelify block">
+                {label}
+                {required ? <span className="text-red-400">*</span> : null}
+            </label>
+            {rightAction}
+        </div>
+        {children}
+    </div>
+);
+
+const SignupOptionGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div className="flex flex-wrap gap-2">{children}</div>
+);
+
+const SignupOption: React.FC<{
+    name: string;
+    checked: boolean;
+    onChange: () => void;
+    disabled?: boolean;
+    label: string;
+}> = ({ name, checked, onChange, disabled, label }) => (
+    <label
+        className={`font-silkscreen text-xs tracking-wide flex items-center gap-2 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
+            checked
+                ? "border-white bg-white/12 text-white"
+                : "border-white/40 bg-transparent text-white/85 hover:border-white/70"
+        } ${disabled ? "pointer-events-none opacity-60" : ""}`}
+    >
+        <input
+            type="radio"
+            name={name}
+            checked={checked}
+            onChange={onChange}
+            disabled={disabled}
+            className="sr-only"
+        />
+        <span
+            aria-hidden="true"
+            className={`inline-flex h-4 w-4 items-center justify-center border-2 rounded-full ${
+                checked ? "border-white bg-white text-black" : "border-white/60 bg-transparent"
+            }`}
+        >
+            {checked ? "•" : ""}
+        </span>
+        <span>{label}</span>
+    </label>
+);
+
 type GenericRSVPDialogProps = {
     open: boolean;
     onClose: () => void;
@@ -151,6 +278,7 @@ type GenericRSVPDialogProps = {
         answers: RSVPAnswers;
         paymentMethod?: "stripe" | "bank_transfer";
         bankPaymentProofFile?: File | null;
+        signupInfo?: RSVPSignupValues;
     }) => Promise<void> | void;
 };
 
@@ -175,6 +303,10 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     const [answers, setAnswers] = useState<RSVPAnswers>({});
     const [paymentChoice, setPaymentChoice] = useState<"stripe" | "bank_transfer">("stripe");
     const [bankProofFile, setBankProofFile] = useState<File | null>(null);
+    const [needsSignup, setNeedsSignup] = useState(false);
+    const [signupValues, setSignupValues] = useState<RSVPSignupValues>(EMPTY_SIGNUP_VALUES);
+    const [allDegrees, setAllDegrees] = useState<DegreeOrMajor[]>([]);
+    const [majorsMap, setMajorsMap] = useState<Record<string, DegreeOrMajor[]>>({});
     /** Desktop / mouse-primary: allow tap-outside to close. Touch-primary (typical phones): off — avoids Android/iOS stray events while typing or scrolling. */
     const [backdropTapDismiss, setBackdropTapDismiss] = useState(
         () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches,
@@ -197,7 +329,30 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         if (!open) return;
         setPaymentChoice("stripe");
         setBankProofFile(null);
+        setNeedsSignup(false);
+        setSignupValues(EMPTY_SIGNUP_VALUES);
     }, [open]);
+
+    // Load degree list on demand the first time the signup step is revealed.
+    useEffect(() => {
+        if (!needsSignup || allDegrees.length > 0) return;
+        fetchDegrees([])
+            .then((all) => {
+                setAllDegrees(all);
+                all.forEach((degree) => {
+                    fetchMajorsForDegree(degree.id, [])
+                        .then((majors) =>
+                            setMajorsMap((prev) => ({ ...prev, [degree.id]: majors })),
+                        )
+                        .catch(() => {});
+                });
+            })
+            .catch(() =>
+                showSiteToast("Failed to load degrees. Please refresh.", {
+                    variant: "error",
+                }),
+            );
+    }, [needsSignup, allDegrees.length]);
 
     useEffect(() => {
         const mq = window.matchMedia("(pointer: fine)");
@@ -223,24 +378,19 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
         const body = document.body;
         const prevHtmlOverflow = html.style.overflow;
         const prevBodyOverflow = body.style.overflow;
-        const prevBodyPosition = body.style.position;
-        const prevBodyTop = body.style.top;
-        const prevBodyWidth = body.style.width;
-        const scrollY = window.scrollY;
+        const prevHtmlOverscroll = html.style.overscrollBehavior;
+        const prevBodyOverscroll = body.style.overscrollBehavior;
 
         html.style.overflow = "hidden";
         body.style.overflow = "hidden";
-        body.style.position = "fixed";
-        body.style.top = `-${scrollY}px`;
-        body.style.width = "100%";
+        html.style.overscrollBehavior = "none";
+        body.style.overscrollBehavior = "none";
 
         return () => {
             html.style.overflow = prevHtmlOverflow;
             body.style.overflow = prevBodyOverflow;
-            body.style.position = prevBodyPosition;
-            body.style.top = prevBodyTop;
-            body.style.width = prevBodyWidth;
-            window.scrollTo(0, scrollY);
+            html.style.overscrollBehavior = prevHtmlOverscroll;
+            body.style.overscrollBehavior = prevBodyOverscroll;
         };
     }, [open]);
 
@@ -321,14 +471,28 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                 ? paymentChoice
                 : undefined;
 
+            const normalizedLeaderEmail = leaderEmail.trim().toLowerCase();
+
+            let signupInfo: RSVPSignupValues | undefined;
+            if (needsSignup) {
+                const signupValidationError = validateSignupValues(signupValues);
+                if (signupValidationError) {
+                    setError(signupValidationError);
+                    setLoading(false);
+                    return;
+                }
+                signupInfo = { ...signupValues, email: normalizedLeaderEmail };
+            }
+
             await onConfirm({
-                leaderEmail: leaderEmail.trim().toLowerCase(),
+                leaderEmail: normalizedLeaderEmail,
                 groupEmails: groupRSVPEnabled ? normalizedGroupEmails : [],
                 dietaryRequirements,
                 answers,
                 paymentMethod: resolvedPaymentMethod,
                 bankPaymentProofFile:
                     showCost && paymentChoice === "bank_transfer" ? bankProofFile : null,
+                signupInfo,
             });
 
             setLoading(false);
@@ -340,10 +504,19 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                 setGroupEmails([]);
                 setDietaryRequirements("");
                 setAnswers({});
+                setNeedsSignup(false);
+                setSignupValues(EMPTY_SIGNUP_VALUES);
                 onClose();
             }, 3000);
         } catch (err) {
             setLoading(false);
+
+            // Non-member: reveal signup fields inline and keep all RSVP data in place.
+            if (err instanceof NotMemberError) {
+                setNeedsSignup(true);
+                setError(null);
+                return;
+            }
 
             let reason = "unknown";
             if (err instanceof AlreadyRSVPedError) {
@@ -428,6 +601,11 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
     };
 
     const confirmLabel = (() => {
+        if (needsSignup) {
+            if (!showCost) return "Sign up & RSVP";
+            if (paymentChoice === "bank_transfer") return "Sign up & confirm RSVP";
+            return "Sign up, pay & confirm";
+        }
         if (!showCost) return "confirm";
         if (paymentChoice === "bank_transfer") return "confirm RSVP";
         return "Pay & Confirm";
@@ -478,8 +656,13 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                             id="rsvp-dialog-title"
                             className="font-silkscreen text-xl sm:text-2xl text-white text-center mb-6 tracking-wide"
                         >
-                            RSVP
+                            {needsSignup ? "Almost there, just a few more details" : "RSVP"}
                         </h2>
+                        {needsSignup && (
+                            <p className="font-pixelify text-sm text-white/75 text-center mb-6 leading-relaxed">
+                                We couldn't find a DEVS account for that email.
+                            </p>
+                        )}
                         <div className="mb-6 text-left">
                             <label
                                 htmlFor="email"
@@ -848,6 +1031,319 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 </div>
                             )}
                         </div>
+
+                        {needsSignup && (
+                            <div className="mt-2 mb-6 border-t-2 border-white/20 pt-6 text-left">
+                                <SignupChoiceGroup
+                                    label="First name"
+                                    required
+                                >
+                                    <input
+                                        type="text"
+                                        className="pixel-input font-rethink w-full"
+                                        value={signupValues.firstName}
+                                        onChange={(e) =>
+                                            setSignupValues((prev) => ({
+                                                ...prev,
+                                                firstName: e.target.value,
+                                            }))
+                                        }
+                                        maxLength={30}
+                                        disabled={loading}
+                                    />
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="Last name" required>
+                                    <input
+                                        type="text"
+                                        className="pixel-input font-rethink w-full"
+                                        value={signupValues.lastName}
+                                        onChange={(e) =>
+                                            setSignupValues((prev) => ({
+                                                ...prev,
+                                                lastName: e.target.value,
+                                            }))
+                                        }
+                                        maxLength={30}
+                                        disabled={loading}
+                                    />
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="Gender" required>
+                                    <SignupOptionGrid>
+                                        {GENDER_OPTIONS.map((option) => (
+                                            <SignupOption
+                                                key={option.value}
+                                                name="signup-gender"
+                                                checked={signupValues.gender === option.value}
+                                                onChange={() =>
+                                                    setSignupValues((prev) => ({
+                                                        ...prev,
+                                                        gender: option.value,
+                                                    }))
+                                                }
+                                                disabled={loading}
+                                                label={option.label}
+                                            />
+                                        ))}
+                                    </SignupOptionGrid>
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="University" required>
+                                    <SignupOptionGrid>
+                                        {UNIVERSITY_OPTIONS.map((option) => (
+                                            <SignupOption
+                                                key={option.value}
+                                                name="signup-university"
+                                                checked={signupValues.university === option.value}
+                                                onChange={() =>
+                                                    setSignupValues((prev) => ({
+                                                        ...prev,
+                                                        university: option.value,
+                                                    }))
+                                                }
+                                                disabled={loading}
+                                                label={option.label}
+                                            />
+                                        ))}
+                                    </SignupOptionGrid>
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="Year of study" required>
+                                    <SignupOptionGrid>
+                                        {YEAR_OPTIONS.map((option) => (
+                                            <SignupOption
+                                                key={option.value}
+                                                name="signup-year"
+                                                checked={signupValues.year === option.value}
+                                                onChange={() =>
+                                                    setSignupValues((prev) => ({
+                                                        ...prev,
+                                                        year: option.value,
+                                                    }))
+                                                }
+                                                disabled={loading}
+                                                label={option.label}
+                                            />
+                                        ))}
+                                    </SignupOptionGrid>
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="Student ID" required>
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        maxLength={12}
+                                        className="pixel-input font-rethink w-full"
+                                        value={signupValues.studentId !== null ? String(signupValues.studentId) : ""}
+                                        onChange={(e) => {
+                                            const digitsOnly = e.target.value.replace(/\D/g, "");
+                                            setSignupValues((prev) => ({
+                                                ...prev,
+                                                studentId: digitsOnly ? Number(digitsOnly) : null,
+                                            }));
+                                        }}
+                                        disabled={loading}
+                                    />
+                                </SignupChoiceGroup>
+
+                                <SignupChoiceGroup label="UPI">
+                                    <input
+                                        type="text"
+                                        className="pixel-input font-rethink w-full"
+                                        value={signupValues.upi ?? ""}
+                                        onChange={(e) =>
+                                            setSignupValues((prev) => ({
+                                                ...prev,
+                                                upi: e.target.value || null,
+                                            }))
+                                        }
+                                        maxLength={7}
+                                        disabled={loading}
+                                    />
+                                </SignupChoiceGroup>
+
+                                {signupValues.degreeBlocks.map((block, dIdx) => {
+                                    const usedDegreeIds = signupValues.degreeBlocks
+                                        .map((b, i) => (i === dIdx ? null : b.degree?.id))
+                                        .filter(Boolean) as string[];
+                                    const availableDegrees = allDegrees.filter(
+                                        (d) => !usedDegreeIds.includes(d.id),
+                                    );
+                                    const blockMajors = block.degree
+                                        ? majorsMap[block.degree.id] ?? []
+                                        : [];
+
+                                    return (
+                                        <div key={dIdx} className="mb-4">
+                                            <SignupChoiceGroup
+                                                label={`Degree${signupValues.degreeBlocks.length > 1 ? ` ${dIdx + 1}` : ""}`}
+                                                required
+                                                rightAction={
+                                                    dIdx > 0 ? (
+                                                        <button
+                                                            type="button"
+                                                            disabled={loading}
+                                                            className="font-pixelify text-xs text-white/60 hover:text-red-400 transition"
+                                                            onClick={() =>
+                                                                setSignupValues((prev) => ({
+                                                                    ...prev,
+                                                                    degreeBlocks: prev.degreeBlocks.filter(
+                                                                        (_, i) => i !== dIdx,
+                                                                    ),
+                                                                }))
+                                                            }
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    ) : null
+                                                }
+                                            >
+                                                <select
+                                                    className="pixel-input font-rethink w-full"
+                                                    value={block.degree?.id ?? ""}
+                                                    disabled={loading}
+                                                    onChange={(e) => {
+                                                        const id = e.target.value;
+                                                        const next = availableDegrees.find((d) => d.id === id) ?? null;
+                                                        setSignupValues((prev) => {
+                                                            const copy = [...prev.degreeBlocks];
+                                                            copy[dIdx] = { degree: next, majors: [null] };
+                                                            return { ...prev, degreeBlocks: copy };
+                                                        });
+                                                        if (next && !majorsMap[next.id]) {
+                                                            fetchMajorsForDegree(next.id, [])
+                                                                .then((majors) =>
+                                                                    setMajorsMap((prev) => ({
+                                                                        ...prev,
+                                                                        [next.id]: majors,
+                                                                    })),
+                                                                )
+                                                                .catch(() => {});
+                                                        }
+                                                    }}
+                                                >
+                                                    <option value="">Select a degree</option>
+                                                    {block.degree && !availableDegrees.some((d) => d.id === block.degree!.id) && (
+                                                        <option value={block.degree.id}>{block.degree.name}</option>
+                                                    )}
+                                                    {availableDegrees.map((d) => (
+                                                        <option key={d.id} value={d.id}>
+                                                            {d.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </SignupChoiceGroup>
+
+                                            {block.majors.map((m, mIdx) => {
+                                                const otherSelected = block.majors
+                                                    .map((x, i) => (i === mIdx ? null : x?.id))
+                                                    .filter(Boolean) as string[];
+                                                const availableMajors = blockMajors.filter(
+                                                    (mm) => !otherSelected.includes(mm.id),
+                                                );
+                                                return (
+                                                    <SignupChoiceGroup
+                                                        key={mIdx}
+                                                        label={`Major${block.majors.length > 1 ? ` ${mIdx + 1}` : ""}`}
+                                                        required={mIdx === 0}
+                                                        rightAction={
+                                                            mIdx > 0 ? (
+                                                                <button
+                                                                    type="button"
+                                                                    disabled={loading}
+                                                                    className="font-pixelify text-xs text-white/60 hover:text-red-400 transition"
+                                                                    onClick={() =>
+                                                                        setSignupValues((prev) => {
+                                                                            const copy = [...prev.degreeBlocks];
+                                                                            copy[dIdx] = {
+                                                                                ...copy[dIdx],
+                                                                                majors: copy[dIdx].majors.filter(
+                                                                                    (_, i) => i !== mIdx,
+                                                                                ),
+                                                                            };
+                                                                            return { ...prev, degreeBlocks: copy };
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    Remove
+                                                                </button>
+                                                            ) : null
+                                                        }
+                                                    >
+                                                        <select
+                                                            className="pixel-input font-rethink w-full"
+                                                            value={m?.id ?? ""}
+                                                            disabled={loading || !block.degree}
+                                                            onChange={(e) => {
+                                                                const id = e.target.value;
+                                                                const next = availableMajors.find((mm) => mm.id === id) ?? null;
+                                                                setSignupValues((prev) => {
+                                                                    const copy = [...prev.degreeBlocks];
+                                                                    const majors = [...copy[dIdx].majors];
+                                                                    majors[mIdx] = next;
+                                                                    copy[dIdx] = { ...copy[dIdx], majors };
+                                                                    return { ...prev, degreeBlocks: copy };
+                                                                });
+                                                            }}
+                                                        >
+                                                            <option value="">
+                                                                {block.degree ? "Select a major" : "Select a degree first"}
+                                                            </option>
+                                                            {availableMajors.map((mm) => (
+                                                                <option key={mm.id} value={mm.id}>
+                                                                    {mm.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </SignupChoiceGroup>
+                                                );
+                                            })}
+
+                                            {block.degree && block.majors.length < MAX_SIGNUP_MAJORS && (
+                                                <button
+                                                    type="button"
+                                                    disabled={loading}
+                                                    className="pixel-button text-xs px-3 py-2"
+                                                    onClick={() =>
+                                                        setSignupValues((prev) => {
+                                                            const copy = [...prev.degreeBlocks];
+                                                            copy[dIdx] = {
+                                                                ...copy[dIdx],
+                                                                majors: [...copy[dIdx].majors, null],
+                                                            };
+                                                            return { ...prev, degreeBlocks: copy };
+                                                        })
+                                                    }
+                                                >
+                                                    Add major
+                                                </button>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+
+                                {signupValues.degreeBlocks.length < MAX_SIGNUP_DEGREES && (
+                                    <button
+                                        type="button"
+                                        disabled={loading}
+                                        className="pixel-button text-xs px-3 py-2"
+                                        onClick={() =>
+                                            setSignupValues((prev) => ({
+                                                ...prev,
+                                                degreeBlocks: [
+                                                    ...prev.degreeBlocks,
+                                                    { degree: null, majors: [null] },
+                                                ],
+                                            }))
+                                        }
+                                    >
+                                        Add another degree
+                                    </button>
+                                )}
+                            </div>
+                        )}
 
                         {error && (
                             <p className="text-red-400 font-pixelify text-sm mb-4 text-center sm:text-left">
