@@ -11,9 +11,10 @@ import { onPageNotFound } from "../lib/pageNotFoundController";
 import { useEvents } from "../lib/eventsController";
 import { showSiteToast } from "../components/SiteToast";
 import BinaryBackground from "../components/BinaryBackground";
- 
+
 const Events = () => {
   const { upcomingEvents, pastEvents, loading, error } = useEvents();
+  pastEvents.reverse().slice();
 
   // Screen size helpers
   const getScreenSize = () => {
@@ -48,7 +49,9 @@ const Events = () => {
   const [pastPage, setPastPage] = useState(0);
 
   // state for tag filters
-  const [upcomingTagFilter, setUpcomingTagFilter] = useState<string | null>(null);
+  const [upcomingTagFilter, setUpcomingTagFilter] = useState<string | null>(
+    null,
+  );
   const [pastTagFilter, setPastTagFilter] = useState<string | null>(null);
 
   // state for focused event card (for overlay)
@@ -82,7 +85,7 @@ const Events = () => {
     const tags = new Set<string>();
     upcomingEvents.forEach((e) => {
       if (e.tag) {
-        e.tag.split(',').forEach(t => tags.add(t.trim()));
+        e.tag.split(",").forEach((t) => tags.add(t.trim()));
       }
     });
     return Array.from(tags).filter(Boolean);
@@ -92,7 +95,7 @@ const Events = () => {
     const tags = new Set<string>();
     pastEvents.forEach((e) => {
       if (e.tag) {
-        e.tag.split(',').forEach(t => tags.add(t.trim()));
+        e.tag.split(",").forEach((t) => tags.add(t.trim()));
       }
     });
     return Array.from(tags).filter(Boolean);
@@ -103,7 +106,7 @@ const Events = () => {
     if (!upcomingTagFilter) return upcomingEvents;
     return upcomingEvents.filter((e) => {
       if (!e.tag) return false;
-      const eventTags = e.tag.split(',').map(t => t.trim());
+      const eventTags = e.tag.split(",").map((t) => t.trim());
       return eventTags.includes(upcomingTagFilter);
     });
   }, [upcomingEvents, upcomingTagFilter]);
@@ -112,20 +115,24 @@ const Events = () => {
     if (!pastTagFilter) return pastEvents;
     return pastEvents.filter((e) => {
       if (!e.tag) return false;
-      const eventTags = e.tag.split(',').map(t => t.trim());
+      const eventTags = e.tag.split(",").map((t) => t.trim());
       return eventTags.includes(pastTagFilter);
     });
   }, [pastEvents, pastTagFilter]);
 
   // state for number of events loaded per page based on screen size
-  const [upcomingPerPage, setUpcomingPerPage] = useState(() => getEventsPerPage(true));
+  const [upcomingPerPage, setUpcomingPerPage] = useState(() =>
+    getEventsPerPage(true),
+  );
   const [pastPerPage, setPastPerPage] = useState(() => getEventsPerPage(false));
   // state for animation direction
   const [upcomingDirection, setUpcomingDirection] = useState(1);
   const [pastDirection, setPastDirection] = useState(1);
 
   // Swipe state
-  const [upcomingTouchStart, setUpcomingTouchStart] = useState<number | null>(null);
+  const [upcomingTouchStart, setUpcomingTouchStart] = useState<number | null>(
+    null,
+  );
   const [upcomingTouchEnd, setUpcomingTouchEnd] = useState<number | null>(null);
   const [pastTouchStart, setPastTouchStart] = useState<number | null>(null);
   const [pastTouchEnd, setPastTouchEnd] = useState<number | null>(null);
@@ -145,7 +152,10 @@ const Events = () => {
         if (prev === nextUpcoming) return prev;
         setUpcomingPage((p) => {
           // clamps current page so that it doesnt exceed total pages after perPage change
-          const maxPage = Math.max(0, Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1);
+          const maxPage = Math.max(
+            0,
+            Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1,
+          );
           return Math.min(p, maxPage);
         });
         return nextUpcoming;
@@ -154,7 +164,10 @@ const Events = () => {
       setPastPerPage((prev) => {
         if (prev === nextPast) return prev;
         setPastPage((p) => {
-          const maxPage = Math.max(0, Math.ceil(filteredPastEvents.length / nextPast) - 1);
+          const maxPage = Math.max(
+            0,
+            Math.ceil(filteredPastEvents.length / nextPast) - 1,
+          );
           return Math.min(p, maxPage);
         });
         return nextPast;
@@ -183,7 +196,9 @@ const Events = () => {
 
         // Determine which section and page the event is on
         const isUpcoming = upcomingEvents.some((e) => e.id === hash);
-        const eventList = isUpcoming ? filteredUpcomingEvents : filteredPastEvents;
+        const eventList = isUpcoming
+          ? filteredUpcomingEvents
+          : filteredPastEvents;
         const eventIndex = eventList.findIndex((e) => e.id === hash);
         const perPage = isUpcoming ? upcomingPerPage : pastPerPage;
         const targetPage = Math.floor(eventIndex / perPage);
@@ -221,7 +236,11 @@ const Events = () => {
   const handleOverlayClick = useCallback(() => {
     setFocusedEventId(null);
     // Clear the hash from URL without page reload
-    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
   }, []);
 
   useEffect(() => {
@@ -235,20 +254,27 @@ const Events = () => {
   }, [focusedEventId, handleOverlayClick]);
 
   // Handler for card flip changes
-  const handleCardFlipChange = useCallback((eventId: string, flipped: boolean) => {
-    if (flipped) {
-      setFocusedEventId(eventId);
-      // Update URL hash
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}${window.location.search}#${eventId}`
-      );
-    } else {
-      setFocusedEventId(null);
-      window.history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-  }, []);
+  const handleCardFlipChange = useCallback(
+    (eventId: string, flipped: boolean) => {
+      if (flipped) {
+        setFocusedEventId(eventId);
+        // Update URL hash
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}#${eventId}`,
+        );
+      } else {
+        setFocusedEventId(null);
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search,
+        );
+      }
+    },
+    [],
+  );
 
   // Pagination helper
   const paginate = (items: any[], page: number, perPage: number) => {
@@ -259,15 +285,12 @@ const Events = () => {
     };
   };
 
-  const { items: paginatedUpcomingEvents, totalPages: upcomingTotalPages } = paginate(
-    filteredUpcomingEvents,
-    upcomingPage,
-    upcomingPerPage
-  );
+  const { items: paginatedUpcomingEvents, totalPages: upcomingTotalPages } =
+    paginate(filteredUpcomingEvents, upcomingPage, upcomingPerPage);
   const { items: paginatedPastEvents, totalPages: pastTotalPages } = paginate(
     filteredPastEvents,
     pastPage,
-    pastPerPage
+    pastPerPage,
   );
 
   // Handlers for page animation direction
@@ -340,7 +363,7 @@ const Events = () => {
   if (loading) {
     return (
       <>
-      <BinaryBackground/>
+        <BinaryBackground />
         <Header />
         <section className="min-h-[80vh]">
           <div className="flex justify-center mt-[20vh]">
@@ -355,7 +378,7 @@ const Events = () => {
   if (error) {
     return (
       <>
-      <BinaryBackground/>
+        <BinaryBackground />
         <Header />
         <div className="flex justify-center mt-[20vh] min-h-[80vh]">
           <p className="font-pixelify text-red-400">{error}</p>
@@ -393,20 +416,16 @@ const Events = () => {
       {/* UPCOMING EVENTS */}
       {/* Mobile title */}
       <div className="lg:hidden min-h-[10vh]">
-        <PageTitle
-          title="Upcoming Events"
-          className="scale-110 ml-5"
-        />
+        <PageTitle title="Upcoming Events" className="scale-110 ml-5" />
       </div>
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
-        <PageTitle
-          title="Upcoming Events"
-          className="pl-0! ml-20! scale-110"
-        />
+        <PageTitle title="Upcoming Events" className="pl-0! ml-20! scale-110" />
         <div className="flex items-center gap-3 mr-[4.725vw]">
-          <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
+          <span className="font-silkscreen text-white/60 text-base mr-2">
+            Filter:
+          </span>
           <button
             onClick={() => {
               setUpcomingTagFilter(null);
@@ -483,7 +502,9 @@ const Events = () => {
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
-                      onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      onFlipChange={(flipped) =>
+                        handleCardFlipChange(event.id, flipped)
+                      }
                     />
                   </motion.div>
                 ))}
@@ -510,12 +531,11 @@ const Events = () => {
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
-        <PageTitle
-          title="Past Events"
-          className="pl-0! ml-20! scale-110"
-        />
+        <PageTitle title="Past Events" className="pl-0! ml-20! scale-110" />
         <div className="flex items-center gap-3 mr-[4.725vw]">
-          <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
+          <span className="font-silkscreen text-white/60 text-base mr-2">
+            Filter:
+          </span>
           <button
             onClick={() => {
               setPastTagFilter(null);
@@ -592,7 +612,9 @@ const Events = () => {
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
-                      onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      onFlipChange={(flipped) =>
+                        handleCardFlipChange(event.id, flipped)
+                      }
                     />
                   </motion.div>
                 ))}
