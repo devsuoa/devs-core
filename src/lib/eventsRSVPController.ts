@@ -127,8 +127,9 @@ async function isEventAtCapacity(eventId: string, requestedSeats: number, maxAtt
 }
 
 async function assertLeaderIsMember(leaderEmail: string) {
+  const normalizedEmail = leaderEmail.trim().toLowerCase();
   const { data, error: memberError } = await supabase.functions.invoke("member-exists", {
-    body: { email: leaderEmail },
+    body: { email: normalizedEmail },
   });
 
   if (memberError) {

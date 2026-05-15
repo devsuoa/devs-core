@@ -39,7 +39,7 @@ export async function signupMember(payload: SignupPayload) {
   
   
   const { error: memberError } = await supabase.from("members").insert({
-    email,
+    email: email.trim().toLowerCase(),
     first_name: firstName,
     last_name: lastName,
     gender,
