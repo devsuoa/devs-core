@@ -35,7 +35,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/home" className="flex items-center">
-            <img className="h-[40px] lg:max-w-[8vw] pixelated" src={logo} alt="Logo" />
+            <img
+              className="h-[40px] lg:max-w-[8vw] pixelated"
+              src={logo}
+              alt="Logo"
+            />
           </Link>
 
           <div className="hidden xl:flex items-center gap-[10vw] font-silkscreen text-[20px] whitespace-nowrap">
@@ -114,31 +118,51 @@ const Header = () => {
 
           <div className="flex flex-1 flex-col items-center justify-center gap-10 font-silkscreen text-[26px]">
             {isFeatureEnabled("about_us_page_is_enabled") && (
-              <Link to="/about" className="link-white" onClick={() => closeMenu()}>
+              <Link
+                to="/about"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
                 ABOUT
               </Link>
             )}
 
             {isFeatureEnabled("team_page_is_enabled") && (
-              <Link to="/team" className="link-white" onClick={() => closeMenu()}>
+              <Link
+                to="/team"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
                 TEAM
               </Link>
             )}
 
             {isFeatureEnabled("events_page_is_enabled") && (
-              <Link to="/events" className="link-white" onClick={() => closeMenu()}>
+              <Link
+                to="/events"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
                 EVENTS
               </Link>
             )}
 
             {isFeatureEnabled("sponsors_page_is_enabled") && (
-              <Link to="/sponsors" className="link-white" onClick={() => closeMenu()}>
+              <Link
+                to="/sponsors"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
                 SPONSORS
               </Link>
             )}
 
             {isFeatureEnabled("contact_page_is_enabled") && (
-              <Link to="/contact" className="link-white" onClick={() => closeMenu()}>
+              <Link
+                to="/contact"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
                 CONTACT US
               </Link>
             )}

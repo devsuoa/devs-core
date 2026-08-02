@@ -80,10 +80,12 @@ export async function uploadBankPaymentProofScreenshot(
   const slug = sanitizeEventTitleForStoragePath(eventTitle);
   const filename = `${sanitizeEmailForFilename(payerEmail)}.png`;
   const path = `events/payments/${slug}/${filename}`;
-  const { error } = await supabase.storage.from("event-payments").upload(path, file, {
-    upsert: true,
-    contentType: file.type || "image/png",
-  });
+  const { error } = await supabase.storage
+    .from("event-payments")
+    .upload(path, file, {
+      upsert: true,
+      contentType: file.type || "image/png",
+    });
   if (error) throw error;
   return path;
 }

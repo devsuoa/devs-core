@@ -89,7 +89,9 @@ export const useEvents = () => {
       } else {
         const normalized = (data || []).map((event) => ({
           ...event,
-          rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
+          rsvp_questions: Array.isArray(event.rsvp_questions)
+            ? event.rsvp_questions
+            : [],
         }));
         setEvents(normalized);
       }

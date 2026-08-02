@@ -26,7 +26,9 @@ export default function TaskCard({ task }: { task: Task }) {
   return (
     <div className="rounded-xl md:rounded-2xl border-2 border-[#6E80DA] bg-black/40 p-2 md:p-4 hover:bg-black/60 transition">
       <div className="flex justify-between gap-1">
-        <span className="text-[10px] md:text-xs text-white/60 truncate">#{task.id}</span>
+        <span className="text-[10px] md:text-xs text-white/60 truncate">
+          #{task.id}
+        </span>
         <span className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded bg-[#6E80DA]/30 text-white shrink-0">
           {task.label}
         </span>

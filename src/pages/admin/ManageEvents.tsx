@@ -98,7 +98,7 @@ const ImageDropZone: React.FC<{
         onDrop={onDrop}
       >
         {uploading ? (
-          <p className="font-pixelify text-xs text-white/70">Uploading...</p>
+          <p className="font-sans text-xs text-white/70">Uploading...</p>
         ) : imageUrl ? (
           <>
             <img
@@ -107,12 +107,18 @@ const ImageDropZone: React.FC<{
               className="max-h-32 max-w-full object-contain"
               style={{ imageRendering: "auto" }}
             />
-            <p className="font-pixelify text-xs text-white/50">Click or drop to replace</p>
+            <p className="font-sans text-xs text-white/50">
+              Click or drop to replace
+            </p>
           </>
         ) : (
           <>
-            <p className="font-pixelify text-xs text-white/70">Drag & drop or click to upload</p>
-            <p className="font-pixelify text-xs text-white/40">PNG, JPG, GIF, WEBP</p>
+            <p className="font-sans text-xs text-white/70">
+              Drag & drop or click to upload
+            </p>
+            <p className="font-sans text-xs text-white/40">
+              PNG, JPG, GIF, WEBP
+            </p>
           </>
         )}
       </div>
@@ -137,7 +143,9 @@ const ManageEvents: React.FC = () => {
   const [autoCreateLink, setAutoCreateLink] = useState(false);
   const [linkWarning, setLinkWarning] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<EventFormData>(buildEmptyEventFormData());
+  const [formData, setFormData] = useState<EventFormData>(
+    buildEmptyEventFormData(),
+  );
 
   if (authLoading || loading) {
     return (
@@ -145,7 +153,7 @@ const ManageEvents: React.FC = () => {
         <Header />
         <PageTitle title="Manage Events" className="mt-[5vh]" />
         <div className="flex justify-center min-h-[50vh]">
-          <p className="font-pixelify text-white">Loading...</p>
+          <p className="font-sans text-white">Loading...</p>
         </div>
         <Footer />
       </>
@@ -223,7 +231,7 @@ const ManageEvents: React.FC = () => {
       <div className="px-[8vw] pt-4 sm:pt-6">
         <Link
           to="/admin/dashboard"
-          className="font-silkscreen text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
+          className="font-sans text-sm sm:text-base text-white/80 hover:text-white py-2 touch-manipulation w-fit"
         >
           ← Back to dashboard
         </Link>
@@ -238,7 +246,9 @@ const ManageEvents: React.FC = () => {
         <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px] min-w-0">
           {(error || uploadError) && (
             <div className="pixel-panel mb-6 p-4 sm:p-5">
-              <p className="font-pixelify text-red-400 text-xs">{error || uploadError}</p>
+              <p className="font-sans text-red-400 text-xs">
+                {error || uploadError}
+              </p>
             </div>
           )}
 
@@ -266,7 +276,7 @@ const ManageEvents: React.FC = () => {
                 {editingEvent ? "Edit Event" : "Add Event"}
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-6 font-pixelify">
+              <form onSubmit={handleSubmit} className="space-y-6 font-sans">
                 <input
                   className="pixel-input w-full"
                   style={{ marginBottom: "24px" }}
@@ -294,7 +304,7 @@ const ManageEvents: React.FC = () => {
                 />
 
                 <div>
-                  <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                  <label className="font-sans block mb-2 text-xs sm:text-sm text-white/80">
                     Tag
                   </label>
                   <select
@@ -308,13 +318,17 @@ const ManageEvents: React.FC = () => {
                     <option value="" disabled>
                       Select a tag...
                     </option>
-                    {["Industry", "Social", "Tech", "Competition", "Competitions", "Workshop"].map(
-                      (t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ),
-                    )}
+                    {[
+                      "Industry",
+                      "Social",
+                      "Tech",
+                      "Competitions",
+                      "Workshop",
+                    ].map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -366,9 +380,10 @@ const ManageEvents: React.FC = () => {
                   />
                   <label
                     htmlFor="is-active-toggle"
-                    className="font-pixelify text-s sm:text-sm text-white/90"
+                    className="font-sans text-s sm:text-sm text-white/90"
                   >
-                    Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM THE PUBLIC)
+                    Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM
+                    THE PUBLIC)
                   </label>
                 </div>
 
@@ -391,7 +406,7 @@ const ManageEvents: React.FC = () => {
                     RSVP Settings
                   </h3>
 
-                  <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                  <label className="font-sans block mb-2 text-xs sm:text-sm text-white/80">
                     Max attendees (optional)
                   </label>
                   <input
@@ -426,7 +441,7 @@ const ManageEvents: React.FC = () => {
                     />
                     <label
                       htmlFor="group-rsvp-toggle"
-                      className="font-pixelify text-xs sm:text-sm text-white/90"
+                      className="font-sans text-xs sm:text-sm text-white/90"
                     >
                       Enable group RSVP
                     </label>
@@ -434,7 +449,7 @@ const ManageEvents: React.FC = () => {
 
                   {formData.group_rsvp_enabled && (
                     <>
-                      <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                      <label className="font-sans block mb-2 text-xs sm:text-sm text-white/80">
                         Max emails per RSVP submission
                       </label>
                       <input
@@ -473,7 +488,7 @@ const ManageEvents: React.FC = () => {
                     />
                     <label
                       htmlFor="payment-toggle"
-                      className="font-pixelify text-xs sm:text-sm text-white/90"
+                      className="font-sans text-xs sm:text-sm text-white/90"
                     >
                       Enable payment
                     </label>
@@ -481,7 +496,7 @@ const ManageEvents: React.FC = () => {
 
                   {formData.payment_enabled && (
                     <>
-                      <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
+                      <label className="font-sans block mb-2 text-xs sm:text-sm text-white/80">
                         Charge amount per person (NZD)
                       </label>
                       <input
@@ -514,7 +529,7 @@ const ManageEvents: React.FC = () => {
                         />
                         <label
                           htmlFor="bank-transfer-toggle"
-                          className="font-pixelify text-xs sm:text-sm text-white/90"
+                          className="font-sans text-xs sm:text-sm text-white/90"
                         >
                           Offer bank transfer
                         </label>
@@ -524,7 +539,7 @@ const ManageEvents: React.FC = () => {
 
                   <div className="mt-4">
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <p className="font-silkscreen text-white text-xs sm:text-sm">
+                      <p className="font-sans text-white text-xs sm:text-sm">
                         Additional RSVP questions
                       </p>
                       <button
@@ -533,7 +548,10 @@ const ManageEvents: React.FC = () => {
                         onClick={() =>
                           setFormData((prev) => ({
                             ...prev,
-                            rsvp_questions: [...prev.rsvp_questions, createNewQuestion()],
+                            rsvp_questions: [
+                              ...prev.rsvp_questions,
+                              createNewQuestion(),
+                            ],
                           }))
                         }
                       >
@@ -542,13 +560,16 @@ const ManageEvents: React.FC = () => {
                     </div>
 
                     {formData.rsvp_questions.length === 0 ? (
-                      <p className="font-pixelify text-xs text-white/60">
+                      <p className="font-sans text-xs text-white/60">
                         No additional questions configured.
                       </p>
                     ) : (
                       <div className="flex flex-col gap-4">
                         {formData.rsvp_questions.map((question) => (
-                          <div key={question.id} className="rounded border border-white/20 p-3">
+                          <div
+                            key={question.id}
+                            className="rounded border border-white/20 p-3"
+                          >
                             <div className="flex flex-col sm:flex-row gap-3 mb-3">
                               <input
                                 className="pixel-input w-full"
@@ -589,13 +610,17 @@ const ManageEvents: React.FC = () => {
                                 }
                               >
                                 <option value="text">Short text</option>
-                                <option value="single_select">Single select</option>
-                                <option value="multi_select">Multi select</option>
+                                <option value="single_select">
+                                  Single select
+                                </option>
+                                <option value="multi_select">
+                                  Multi select
+                                </option>
                               </select>
                             </div>
 
                             <div className="flex flex-wrap items-center gap-4 mb-3">
-                              <label className="font-pixelify text-xs flex items-center gap-2">
+                              <label className="font-sans text-xs flex items-center gap-2">
                                 <input
                                   type="checkbox"
                                   checked={question.required}
@@ -646,12 +671,15 @@ const ManageEvents: React.FC = () => {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          rsvp_questions: prev.rsvp_questions.map((item) => {
-                                            if (item.id !== question.id) return item;
-                                            const options = [...item.options];
-                                            options[optionIndex] = e.target.value;
-                                            return { ...item, options };
-                                          }),
+                                          rsvp_questions:
+                                            prev.rsvp_questions.map((item) => {
+                                              if (item.id !== question.id)
+                                                return item;
+                                              const options = [...item.options];
+                                              options[optionIndex] =
+                                                e.target.value;
+                                              return { ...item, options };
+                                            }),
                                         }))
                                       }
                                     />
@@ -710,7 +738,7 @@ const ManageEvents: React.FC = () => {
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                   <button
-                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
+                    className="pixel-button font-sans min-h-[44px] touch-manipulation"
                     type="submit"
                   >
                     {editingEvent ? "Update Event" : "Add Event"}
@@ -718,7 +746,7 @@ const ManageEvents: React.FC = () => {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
+                    className="pixel-button font-sans min-h-[44px] touch-manipulation"
                   >
                     Cancel
                   </button>
@@ -739,7 +767,7 @@ const ManageEvents: React.FC = () => {
                   className="pixel-panel p-4 sm:p-6 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 min-w-0"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-pixelify text-white wrap-break-word">
+                    <p className="font-sans text-white wrap-break-word">
                       {event.title}
                       {!event.is_active && (
                         <span className="ml-2 text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded">
@@ -747,7 +775,7 @@ const ManageEvents: React.FC = () => {
                         </span>
                       )}
                     </p>
-                    <p className="font-pixelify text-gray-400 text-xs mt-1">
+                    <p className="font-sans text-gray-400 text-xs mt-1">
                       {new Date(event.event_date).toDateString()}
                     </p>
                   </div>

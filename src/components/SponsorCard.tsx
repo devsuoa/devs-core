@@ -5,7 +5,12 @@ interface SponsorCardProps {
   tier: "gold" | "silver" | "bronze";
 }
 
-export default function SponsorCard({ name, image, desc, tier }: SponsorCardProps) {
+export default function SponsorCard({
+  name,
+  image,
+  desc,
+  tier,
+}: SponsorCardProps) {
   const tierColor =
     tier === "gold" ? "text-yellow-400" : tier === "silver" ? "text-gray-300" : "text-amber-700";
 
@@ -25,9 +30,15 @@ export default function SponsorCard({ name, image, desc, tier }: SponsorCardProp
 
           <div className="w-full shrink-0 rounded-lg px-7 mt-0 mb-0 flex items-center justify-center h-24 sm:h-28 md:h-32">
             {image ? (
-              <img src={image} alt={name} className="max-w-full max-h-full object-contain" />
+              <img
+                src={image}
+                alt={name}
+                className="max-w-full max-h-full object-contain"
+              />
             ) : (
-              <span className="font-pixelify text-white text-xl sm:text-2xl">{name}</span>
+              <span className="font-pixelify text-white text-xl sm:text-2xl">
+                {name}
+              </span>
             )}
           </div>
 

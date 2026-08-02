@@ -26,7 +26,9 @@ export const PageTitle: React.FC<PageTitleProps> = ({
   className = "max-w-4xl",
 }) => {
   return (
-    <div className={`flex flex-col justify-center px-[8vw] py-12 mx-auto ${className}`}>
+    <div
+      className={`flex flex-col justify-center px-[8vw] py-12 mx-auto ${className}`}
+    >
       <div className="flex items-center justify-center gap-1 mt-10 md:gap-4  mb-8">
         <div className="flex items-center justify-center ">
           <p className="text-2xl md:text-5xl text-center font-normal text-white font-silkscreen">

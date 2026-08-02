@@ -11,7 +11,9 @@ export function cardCheckoutTotalFromBaseAmount(base: number): number {
   if (!Number.isFinite(base) || base <= 0) return 0;
   return (
     Math.round(
-      (base * (1 + DEFAULT_STRIPE_CARD_FEE_PERCENT) + DEFAULT_STRIPE_CARD_FEE_FIXED_NZD) * 100,
+      (base * (1 + DEFAULT_STRIPE_CARD_FEE_PERCENT) +
+        DEFAULT_STRIPE_CARD_FEE_FIXED_NZD) *
+        100,
     ) / 100
   );
 }

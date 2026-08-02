@@ -126,20 +126,20 @@ function TodoItemSidebar({
 
   return (
     <aside className="fixed right-0 top-0 w-full sm:w-[400px] max-w-full h-full bg-black border-l-2 border-[#6E80DA] p-4 sm:p-6 z-60 overflow-y-auto shadow-2xl flex flex-col gap-5">
-      <button onClick={onClose} className="text-white/70 font-silkscreen text-sm self-start">
+      <button onClick={onClose} className="text-white/70 font-sans text-sm self-start">
         ← Back
       </button>
 
       <div>
-        <p className="text-xs text-white/50 font-silkscreen mb-1 uppercase tracking-widest">Task</p>
+        <p className="text-xs text-white/50 font-sans mb-1 uppercase tracking-widest">Task</p>
         {item.is_default ? (
-          <h2 className="font-silkscreen text-white text-base leading-relaxed">{item.label}</h2>
+          <h2 className="font-sans text-white text-base leading-relaxed">{item.label}</h2>
         ) : (
           <input
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             onBlur={handleLabelBlur}
-            className="w-full p-2 rounded bg-black border border-white/30 text-white font-silkscreen text-sm focus:outline-none focus:border-[#6E80DA]"
+            className="w-full p-2 rounded bg-black border border-white/30 text-white font-sans text-sm focus:outline-none focus:border-[#6E80DA]"
           />
         )}
       </div>
@@ -154,7 +154,7 @@ function TodoItemSidebar({
         />
         <label
           htmlFor="item-completed"
-          className="font-silkscreen text-white/80 text-sm cursor-pointer select-none"
+          className="font-sans text-white/80 text-sm cursor-pointer select-none"
         >
           Mark as completed
         </label>
@@ -162,8 +162,8 @@ function TodoItemSidebar({
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-white/50 font-silkscreen uppercase tracking-widest">Notes</p>
-          {saving && <span className="text-xs text-white/30 font-silkscreen">Saving…</span>}
+          <p className="text-xs text-white/50 font-sans uppercase tracking-widest">Notes</p>
+          {saving && <span className="text-xs text-white/30 font-sans">Saving…</span>}
         </div>
         <textarea
           value={notes}
@@ -177,19 +177,19 @@ function TodoItemSidebar({
       <div className="border-t border-white/10" />
 
       <div className="flex flex-col gap-3">
-        <p className="text-xs text-white/50 font-silkscreen uppercase tracking-widest">Comments</p>
+        <p className="text-xs text-white/50 font-sans uppercase tracking-widest">Comments</p>
 
         {commentsLoading ? (
-          <p className="font-silkscreen text-white/30 text-xs">Loading…</p>
+          <p className="font-sans text-white/30 text-xs">Loading…</p>
         ) : comments.length === 0 ? (
-          <p className="font-silkscreen text-white/20 text-xs">No comments yet.</p>
+          <p className="font-sans text-white/20 text-xs">No comments yet.</p>
         ) : (
           <ul className="flex flex-col gap-3">
             {comments.map((c) => (
               <li key={c.id} className="flex flex-col gap-0.5">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-silkscreen text-[#6E80DA] text-xs">{c.author_name}</span>
-                  <span className="font-silkscreen text-white/30 text-xs">
+                  <span className="font-sans text-[#6E80DA] text-xs">{c.author_name}</span>
+                  <span className="font-sans text-white/30 text-xs">
                     {formatNZDate(c.created_at)}
                   </span>
                 </div>
@@ -215,7 +215,7 @@ function TodoItemSidebar({
         <button
           onClick={handleAddComment}
           disabled={!commentText.trim() || commentSubmitting}
-          className="w-full py-2 border border-[#6E80DA] rounded font-silkscreen text-white text-sm hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-full py-2 border border-[#6E80DA] rounded font-sans text-white text-sm hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {commentSubmitting ? "Posting…" : "Post Comment"}
         </button>
@@ -363,18 +363,16 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
           <div className="flex flex-col gap-0.5 min-w-0">
             <button
               onClick={onClose}
-              className="text-white/40 font-silkscreen text-xs hover:text-white transition-colors self-start mb-1"
+              className="text-white/40 font-sans text-xs hover:text-white transition-colors self-start mb-1"
             >
               ← All Events
             </button>
-            <h2 className="font-silkscreen text-white text-sm leading-snug">{event.title}</h2>
-            <p className="font-silkscreen text-white/40 text-xs">
-              {formatEventDate(event.event_date)}
-            </p>
+            <h2 className="font-sans text-white text-sm leading-snug">{event.title}</h2>
+            <p className="font-sans text-white/40 text-xs">{formatEventDate(event.event_date)}</p>
           </div>
           {!loading && (
             <span
-              className={`shrink-0 mt-1 px-2 py-1 rounded font-silkscreen text-xs border ${
+              className={`shrink-0 mt-1 px-2 py-1 rounded font-sans text-xs border ${
                 completedCount === todos.length && todos.length > 0
                   ? "border-green-500/60 text-green-400"
                   : "border-white/20 text-white/50"
@@ -393,7 +391,7 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
           <div className="flex flex-col gap-8 px-5 py-6">
             {/* Checklist */}
             <section>
-              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">
+              <p className="text-xs text-white/40 font-sans uppercase tracking-widest mb-3">
                 Checklist
               </p>
               <ul className="flex flex-col gap-2">
@@ -418,12 +416,12 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                       className="w-4 h-4 accent-[#6E80DA] cursor-pointer shrink-0"
                     />
                     <span
-                      className={`flex-1 font-silkscreen text-xs leading-relaxed ${todo.completed ? "line-through text-white/25" : "text-white"}`}
+                      className={`flex-1 font-sans text-xs leading-relaxed ${todo.completed ? "line-through text-white/25" : "text-white"}`}
                     >
                       {todo.label}
                     </span>
                     {todo.item_notes && (
-                      <span className="text-white/25 text-xs font-silkscreen shrink-0">notes</span>
+                      <span className="text-white/25 text-xs font-sans shrink-0">notes</span>
                     )}
                     {!todo.is_default && (
                       <button
@@ -447,12 +445,12 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                   onChange={(e) => setNewTaskLabel(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
                   placeholder="Add a task…"
-                  className="flex-1 p-2 rounded bg-black border border-white/15 text-white text-xs font-silkscreen focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
+                  className="flex-1 p-2 rounded bg-black border border-white/15 text-white text-xs font-sans focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
                 />
                 <button
                   onClick={handleAddTask}
                   disabled={!newTaskLabel.trim()}
-                  className="px-3 py-2 border border-[#6E80DA] rounded font-silkscreen text-white text-xs hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-3 py-2 border border-[#6E80DA] rounded font-sans text-white text-xs hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Add
                 </button>
@@ -462,12 +460,8 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
             {/* General Notes */}
             <section>
               <div className="flex items-center gap-3 mb-3">
-                <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest">
-                  Notes
-                </p>
-                {noteSaving && (
-                  <span className="text-xs text-white/25 font-silkscreen">Saving…</span>
-                )}
+                <p className="text-xs text-white/40 font-sans uppercase tracking-widest">Notes</p>
+                {noteSaving && <span className="text-xs text-white/25 font-sans">Saving…</span>}
               </div>
               <textarea
                 value={eventNote}
@@ -480,7 +474,7 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
 
             {/* Linked Documents */}
             <section>
-              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">
+              <p className="text-xs text-white/40 font-sans uppercase tracking-widest mb-3">
                 Linked Documents
               </p>
 
@@ -495,7 +489,7 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 font-silkscreen text-[#6E80DA] hover:text-white text-xs transition-colors truncate"
+                        className="flex-1 font-sans text-[#6E80DA] hover:text-white text-xs transition-colors truncate"
                       >
                         {link.title}
                       </a>
@@ -510,9 +504,7 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                   ))}
                 </ul>
               ) : (
-                <p className="font-silkscreen text-white/25 text-xs mb-3">
-                  No documents linked yet.
-                </p>
+                <p className="font-sans text-white/25 text-xs mb-3">No documents linked yet.</p>
               )}
 
               <div className="flex flex-col gap-2">
@@ -520,7 +512,7 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                   value={newLinkTitle}
                   onChange={(e) => setNewLinkTitle(e.target.value)}
                   placeholder="Link title (e.g. Meeting Minutes)"
-                  className="w-full p-2 rounded bg-black border border-white/15 text-white text-xs font-silkscreen focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
+                  className="w-full p-2 rounded bg-black border border-white/15 text-white text-xs font-sans focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
                 />
                 <div className="flex gap-2">
                   <input
@@ -528,12 +520,12 @@ function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () =>
                     onChange={(e) => setNewLinkUrl(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddLink()}
                     placeholder="https://docs.google.com/…"
-                    className="flex-1 p-2 rounded bg-black border border-white/15 text-white text-xs font-silkscreen focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
+                    className="flex-1 p-2 rounded bg-black border border-white/15 text-white text-xs font-sans focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
                   />
                   <button
                     onClick={handleAddLink}
                     disabled={!newLinkTitle.trim() || !newLinkUrl.trim()}
-                    className="px-3 py-2 border border-[#6E80DA] rounded font-silkscreen text-white text-xs hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-3 py-2 border border-[#6E80DA] rounded font-sans text-white text-xs hover:bg-[#6E80DA]/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     Add
                   </button>

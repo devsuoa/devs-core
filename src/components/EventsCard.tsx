@@ -94,6 +94,13 @@ type EventsCardProps = {
    * Called with the new flip state
    */
   onFlipChange?: (flipped: boolean) => void;
+
+  /**
+   * Render card in compact embedded preview mode.
+   * Uses container width and disables flip scale-up.
+   */
+  previewMode?: boolean;
+
 };
 
 const EventsCard = ({
@@ -115,6 +122,7 @@ const EventsCard = ({
   className,
   isFlipped: controlledFlipped,
   onFlipChange,
+  previewMode = false,
 }: EventsCardProps) => {
   const [internalFlipped, setInternalFlipped] = useState(false);
   const [rsvpOpen, setRsvpOpen] = useState(false);
@@ -152,7 +160,8 @@ const EventsCard = ({
   const today = Date.now() / 1000;
   const isPastEvent = eventDate < today;
   const formattedDate = formatEventDate(date);
-  const showCostDisclaimer = paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
+  const showCostDisclaimer =
+    paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
   const formattedChargeAmount = showCostDisclaimer
     ? new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -178,13 +187,15 @@ const EventsCard = ({
   return (
     <div
       id={`event-card-${id}`}
-      className={`relative transition-transform duration-300 ease-out cursor-pointer ${
-        flipped ? "lg:scale-115 z-50" : ""
-      } ${className || ""}`}
+      className={`relative transition-transform duration-300 ease-out ${
+        previewMode ? "cursor-default" : "cursor-pointer"
+      } ${flipped && !previewMode ? "lg:scale-115 z-50" : ""} ${
+        className || ""
+      }`}
       onClick={handleCardClick}
     >
       <div
-        className={`relative w-[75vw] sm:w-[44vw] md:w-[40vw] lg:w-[28vw] xl:w-[26vw] 2xl:w-[22vw] aspect-4/5 perspective transition-all duration-500 preserve-3d overflow-visible
+        className={`relative ${previewMode ? "w-full" : "w-[75vw] sm:w-[44vw] md:w-[40vw] lg:w-[28vw] xl:w-[26vw] 2xl:w-[22vw]"} aspect-4/5 perspective transition-all duration-500 preserve-3d overflow-visible
         ${flipped ? "rotate-y-180" : ""}`}
       >
         {/* FRONT */}
@@ -237,7 +248,7 @@ const EventsCard = ({
             </div>
 
             {/* Date row */}
-            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-silkscreen text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
+            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-sans text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
               {/* Hover accent line */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-purple-400/0 group-hover:bg-purple-400/60 transition-colors" />
               <svg
@@ -257,15 +268,36 @@ const EventsCard = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" strokeLinecap="round" />
-                <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" strokeLinecap="round" />
-                <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" strokeLinecap="round" />
+                <line
+                  x1="16"
+                  y1="2"
+                  x2="16"
+                  y2="6"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="8"
+                  y1="2"
+                  x2="8"
+                  y2="6"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="3"
+                  y1="10"
+                  x2="21"
+                  y2="10"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
               <span>{formattedDate}</span>
             </div>
 
             {/* Time row */}
-            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-silkscreen text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
+            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-sans text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
               {/* Hover accent line */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-indigo-400/0 group-hover:bg-indigo-400/60 transition-colors" />
               <svg
@@ -286,7 +318,7 @@ const EventsCard = ({
             </div>
 
             {/* location */}
-            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-silkscreen text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
+            <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-sans text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
               {/* Hover accent line */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-cyan-400/0 group-hover:bg-cyan-400/60 transition-colors" />
               <svg
@@ -307,7 +339,7 @@ const EventsCard = ({
             </div>
 
             {showCostDisclaimer && (
-              <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-silkscreen text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
+              <div className="relative p-2 sm:p-2.5 md:p-3 lg:p-3.5 border-b-2 border-white/60 font-sans text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white flex items-center justify-start gap-2 group">
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-amber-400/0 group-hover:bg-amber-400/60 transition-colors" />
                 <svg
                   className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-400 shrink-0"

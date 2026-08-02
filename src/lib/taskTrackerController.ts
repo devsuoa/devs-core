@@ -42,6 +42,38 @@ export async function getCurrentUserTeam(): Promise<string> {
   return data?.team ?? "";
 }
 
+export async function getCurrentUserId(): Promise<string> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return user?.id ?? "";
+}
+
+export async function getCurrentUserRole(): Promise<{
+  role: string;
+  isSuperuser: boolean;
+}> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { role: "", isSuperuser: false };
+  }
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("role, is_superuser")
+    .eq("id", user.id)
+    .single();
+
+  return {
+    role: data?.role ?? "",
+    isSuperuser: data?.is_superuser ?? false,
+  };
+}
+
 export async function loadTasks(): Promise<Task[]> {
   const { data, error } = await supabase
     .from("tasks")
@@ -136,6 +168,24 @@ export async function addComment(taskId: string, message: string) {
 
   if (error) throw error;
   return data;
+}
+
+export async function updateComment(commentId: string, message: string) {
+  const { data, error } = await supabase
+    .from("task_comments")
+    .update({ message })
+    .eq("id", commentId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteComment(commentId: string) {
+  const { error } = await supabase.from("task_comments").delete().eq("id", commentId);
+
+  if (error) throw error;
 }
 
 export function formatNZDate(utcDate: string) {

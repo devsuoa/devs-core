@@ -92,9 +92,15 @@ function App() {
           {/* Admin pages */}
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+          <Route
+            path="/admin/reset-password"
+            element={<AdminResetPassword />}
+          />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/marketing-request" element={<MarketingPortal />} />
+          <Route
+            path="/admin/marketing-request"
+            element={<MarketingPortal />}
+          />
           <Route path="/admin/manage-links" element={<ManageLinks />} />
           <Route path="/admin/manage-events" element={<ManageEvents />} />
           <Route path="/admin/members" element={<MemberRegistry />} />

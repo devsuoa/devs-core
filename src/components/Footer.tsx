@@ -64,7 +64,8 @@ const Footer = () => {
           {/* Copyright */}
           <div className="flex flex-col gap-3 mt-12">
             <p className="font-silkscreen text-xs">
-              &copy; {new Date().getFullYear()} Developers Society. All rights reserved.
+              &copy; {new Date().getFullYear()} Developers Society. All rights
+              reserved.
             </p>
           </div>
         </div>
