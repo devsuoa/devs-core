@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from './supabase';
+import React, { useState, useEffect } from "react";
+import { supabase } from "./supabase";
 
 // Apps Script URL which handles the form submission to Google Sheets
 // Google sheets handles email automations, everything else goes to tasks
 const APPS_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbz2__ivp8VWFCQZg5WaB-b3QDmxO5fWavFvmodkk7kstYzmKaCEymmIhzlKXF_ofxM3/exec';
+  "https://script.google.com/macros/s/AKfycbz2__ivp8VWFCQZg5WaB-b3QDmxO5fWavFvmodkk7kstYzmKaCEymmIhzlKXF_ofxM3/exec";
 
 export interface MarketingFormData {
-  postType: 'event' | 'sponsorship' | '';
+  postType: "event" | "sponsorship" | "";
   // Event fields
   eventName?: string;
   eventDate?: string;
@@ -28,7 +28,7 @@ export interface MarketingFormData {
 }
 
 export interface MarketingFormState {
-  postType: 'event' | 'sponsorship' | '';
+  postType: "event" | "sponsorship" | "";
   showDialog: boolean;
   // Event fields
   eventName: string;
@@ -50,7 +50,7 @@ export interface MarketingFormState {
 }
 
 export interface MarketingFormSetters {
-  setPostType: (value: 'event' | 'sponsorship' | '') => void;
+  setPostType: (value: "event" | "sponsorship" | "") => void;
   setShowDialog: (value: boolean) => void;
   setEventName: (value: string) => void;
   setEventDate: (value: string) => void;
@@ -70,21 +70,21 @@ export interface MarketingFormSetters {
 
 async function submitToGoogle(formData: MarketingFormData): Promise<void> {
   try {
-    console.log('Submitting to Google Spreadsheet:', formData);
+    console.log("Submitting to Google Spreadsheet:", formData);
 
     // use the Apps Script to handle sheets manipulation
     await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
+      method: "POST",
+      mode: "no-cors",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
 
-    console.log('Form submitted to Google Spreadsheet successfully');
+    console.log("Form submitted to Google Spreadsheet successfully");
   } catch (error) {
-    console.error('Error submitting to Google Spreadsheet:', error);
+    console.error("Error submitting to Google Spreadsheet:", error);
     throw error;
   }
 }
@@ -97,13 +97,13 @@ async function submitToSupabase(formData: MarketingFormData): Promise<void> {
     } = await supabase.auth.getUser();
 
     if (authError) throw authError;
-    if (!user) throw new Error('Not authenticated');
+    if (!user) throw new Error("Not authenticated");
 
     if (!formData.postType) {
-      throw new Error('postType is required');
+      throw new Error("postType is required");
     }
 
-    const { error } = await supabase.from('marketing_requests').insert({
+    const { error } = await supabase.from("marketing_requests").insert({
       post_type: formData.postType,
 
       // Event fields
@@ -116,12 +116,8 @@ async function submitToSupabase(formData: MarketingFormData): Promise<void> {
 
       // Sponsorship fields
       sponsor_name: formData.sponsorName ?? null,
-      sponsorship_email_date: formData.sponsorshipEmailDate
-        ? formData.sponsorshipEmailDate
-        : null,
-      sponsorship_post_date: formData.sponsorshipPostDate
-        ? formData.sponsorshipPostDate
-        : null,
+      sponsorship_email_date: formData.sponsorshipEmailDate ? formData.sponsorshipEmailDate : null,
+      sponsorship_post_date: formData.sponsorshipPostDate ? formData.sponsorshipPostDate : null,
       sponsorship_event_name: formData.sponsorshipEventName ?? null,
       sponsorship_links: formData.sponsorshipLinks ?? null,
       sponsorship_description: formData.sponsorshipDescription ?? null,
@@ -136,43 +132,40 @@ async function submitToSupabase(formData: MarketingFormData): Promise<void> {
 
     if (error) throw error;
 
-    console.log('Form submitted to Supabase successfully');
+    console.log("Form submitted to Supabase successfully");
 
     const functionResponse = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-marketing-task`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${
-            (await supabase.auth.getSession()).data.session?.access_token
-          }`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
         body: JSON.stringify(formData),
-      }
+      },
     );
 
     if (!functionResponse.ok) {
-        const errorText = await functionResponse.text();
-        throw new Error(`Failed to create task: ${errorText}`);
-      }
-
+      const errorText = await functionResponse.text();
+      throw new Error(`Failed to create task: ${errorText}`);
+    }
   } catch (error) {
-    console.error('Error submitting to Supabase:', error);
+    console.error("Error submitting to Supabase:", error);
     throw error;
-  }  
+  }
 }
 
 export async function handleMarketingSubmit(
   e: React.FormEvent,
   state: MarketingFormState,
-  setters: MarketingFormSetters
+  setters: MarketingFormSetters,
 ) {
   e.preventDefault();
 
   const formData: MarketingFormData = {
     postType: state.postType,
-    ...(state.postType === 'event' && {
+    ...(state.postType === "event" && {
       eventName: state.eventName,
       eventDate: state.eventDate,
       eventTime: state.eventTime,
@@ -180,7 +173,7 @@ export async function handleMarketingSubmit(
       eventDescription: state.eventDescription,
       eventSuggestions: state.eventSuggestions,
     }),
-    ...(state.postType === 'sponsorship' && {
+    ...(state.postType === "sponsorship" && {
       sponsorName: state.sponsorName,
       sponsorshipEmailDate: state.sponsorshipEmailDate,
       sponsorshipPostDate: state.sponsorshipPostDate,
@@ -192,7 +185,7 @@ export async function handleMarketingSubmit(
     preWrittenCaptions: state.preWrittenCaptions,
   };
 
-  console.log('Marketing Request Data:', formData);
+  console.log("Marketing Request Data:", formData);
 
   try {
     // Submit to both supabase and google sheets
@@ -200,31 +193,31 @@ export async function handleMarketingSubmit(
 
     // Show dialog and reset form on submit
     setters.setShowDialog(true);
-    setters.setPostType('');
-    setters.setEventName('');
-    setters.setEventDate('');
-    setters.setEventTime('');
-    setters.setEventLocation('');
-    setters.setEventDescription('');
-    setters.setEventSuggestions('');
-    setters.setSponsorName('');
-    setters.setSponsorshipEmailDate('');
-    setters.setSponsorshipPostDate('');
-    setters.setSponsorshipEventName('');
-    setters.setSponsorshipLinks('');
-    setters.setSponsorshipDescription('');
-    setters.setMarketingDescription('');
-    setters.setPreWrittenCaptions('');
+    setters.setPostType("");
+    setters.setEventName("");
+    setters.setEventDate("");
+    setters.setEventTime("");
+    setters.setEventLocation("");
+    setters.setEventDescription("");
+    setters.setEventSuggestions("");
+    setters.setSponsorName("");
+    setters.setSponsorshipEmailDate("");
+    setters.setSponsorshipPostDate("");
+    setters.setSponsorshipEventName("");
+    setters.setSponsorshipLinks("");
+    setters.setSponsorshipDescription("");
+    setters.setMarketingDescription("");
+    setters.setPreWrittenCaptions("");
   } catch (error: any) {
-    console.error('Failed to submit form:', error);
+    console.error("Failed to submit form:", error);
 
     // If user somehow reaches page without admin role
-    if (error?.code === '42501') {
-      alert('You do not have permission to submit marketing requests.');
+    if (error?.code === "42501") {
+      alert("You do not have permission to submit marketing requests.");
       return;
     }
 
-    alert('Failed to submit form. Please try again.');
+    alert("Failed to submit form. Please try again.");
   }
 }
 
@@ -233,29 +226,29 @@ export function closeMarketingDialog(setShowDialog: (value: boolean) => void) {
 }
 
 export function useMarketingPortal() {
-  const [postType, setPostType] = useState<'event' | 'sponsorship' | ''>('');
+  const [postType, setPostType] = useState<"event" | "sponsorship" | "">("");
   const [showDialog, setShowDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Event fields
-  const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [eventTime, setEventTime] = useState('');
-  const [eventLocation, setEventLocation] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [eventSuggestions, setEventSuggestions] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventTime, setEventTime] = useState("");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [eventSuggestions, setEventSuggestions] = useState("");
 
   // Sponsorship fields
-  const [sponsorName, setSponsorName] = useState('');
-  const [sponsorshipEmailDate, setSponsorshipEmailDate] = useState('');
-  const [sponsorshipPostDate, setSponsorshipPostDate] = useState('');
-  const [sponsorshipEventName, setSponsorshipEventName] = useState('');
-  const [sponsorshipLinks, setSponsorshipLinks] = useState('');
-  const [sponsorshipDescription, setSponsorshipDescription] = useState('');
+  const [sponsorName, setSponsorName] = useState("");
+  const [sponsorshipEmailDate, setSponsorshipEmailDate] = useState("");
+  const [sponsorshipPostDate, setSponsorshipPostDate] = useState("");
+  const [sponsorshipEventName, setSponsorshipEventName] = useState("");
+  const [sponsorshipLinks, setSponsorshipLinks] = useState("");
+  const [sponsorshipDescription, setSponsorshipDescription] = useState("");
 
   // Common fields
-  const [marketingDescription, setMarketingDescription] = useState('');
-  const [preWrittenCaptions, setPreWrittenCaptions] = useState('');
+  const [marketingDescription, setMarketingDescription] = useState("");
+  const [preWrittenCaptions, setPreWrittenCaptions] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     if (isSubmitting) return;
@@ -298,7 +291,7 @@ export function useMarketingPortal() {
           setSponsorshipDescription,
           setMarketingDescription,
           setPreWrittenCaptions,
-        }
+        },
       );
     } finally {
       setIsSubmitting(false);

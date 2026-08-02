@@ -12,27 +12,13 @@ import {
   MemberRow,
 } from "../../lib/memberRegistryController";
 
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#6E80DA", "#FF8C42", "#4CAF50", "#E91E63", "#00BCD4"];
 
-const PieCard = ({
-  title,
-  data,
-}: {
-  title: string;
-  data: { name: string; value: number }[];
-}) => (
+const PieCard = ({ title, data }: { title: string; data: { name: string; value: number }[] }) => (
   <div className="border border-white/20 rounded-xl p-4 sm:p-6 min-w-0">
-    <p className="font-silkscreen text-white text-base sm:text-lg mb-4">
-      {title}
-    </p>
+    <p className="font-silkscreen text-white text-base sm:text-lg mb-4">{title}</p>
     <div className="w-full h-[220px] sm:h-[280px] min-h-[180px]">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
@@ -43,13 +29,12 @@ const PieCard = ({
             outerRadius="75%"
             cx="50%"
             cy="50%"
-            label={({ name, percent }) => (percent != null && percent >= 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : null)}
+            label={({ name, percent }) =>
+              percent != null && percent >= 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : null
+            }
           >
             {data.map((_, i) => (
-              <Cell
-                key={i}
-                fill={COLORS[i % COLORS.length]}
-              />
+              <Cell key={i} fill={COLORS[i % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip />
@@ -84,7 +69,7 @@ const MemberRegistry: React.FC = () => {
       (m) =>
         m.first_name.toLowerCase().includes(q) ||
         m.last_name.toLowerCase().includes(q) ||
-        m.email.toLowerCase().includes(q)
+        m.email.toLowerCase().includes(q),
     );
   }, [members, search]);
 
@@ -108,9 +93,7 @@ const MemberRegistry: React.FC = () => {
         <Header />
         <PageTitle title="Member Registry" className="mt-[5vh]" />
         <div className="flex items-center justify-center min-h-[50vh]">
-          <p className="font-silkscreen text-[1.25rem] text-white">
-            Loading...
-          </p>
+          <p className="font-silkscreen text-[1.25rem] text-white">Loading...</p>
         </div>
         <Footer />
       </>
@@ -133,35 +116,18 @@ const MemberRegistry: React.FC = () => {
         </Link>
       </div>
 
-      <PageTitle
-        title="Member Registry"
-        className="mt-[5vh]"
-      />
+      <PageTitle title="Member Registry" className="mt-[5vh]" />
 
       <div className="px-4 sm:px-6 lg:px-[6vw] pb-12 sm:pb-24 text-white max-w-full min-w-0">
         {/* TOTAL */}
-        <p className="font-silkscreen text-xl sm:text-2xl mb-6">
-          Total Members: {members.length}
-        </p>
+        <p className="font-silkscreen text-xl sm:text-2xl mb-6">Total Members: {members.length}</p>
 
         {/* CHARTS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <PieCard
-            title="Universities"
-            data={groupBy(members, "university")}
-          />
-          <PieCard
-            title="Degrees"
-            data={groupBy(members, "degrees")}
-          />
-          <PieCard
-            title="Majors"
-            data={groupBy(members, "majors")}
-          />
-          <PieCard
-            title="Year Level"
-            data={yearLevelData}
-          />
+          <PieCard title="Universities" data={groupBy(members, "university")} />
+          <PieCard title="Degrees" data={groupBy(members, "degrees")} />
+          <PieCard title="Majors" data={groupBy(members, "majors")} />
+          <PieCard title="Year Level" data={yearLevelData} />
         </div>
 
         {/* SEARCH */}
@@ -186,14 +152,13 @@ const MemberRegistry: React.FC = () => {
             </thead>
             <tbody>
               {filtered.map((m, idx) => (
-                <tr
-                  key={`${m.student_id}-${idx}`}
-                  className="border-t border-white/10"
-                >
+                <tr key={`${m.student_id}-${idx}`} className="border-t border-white/10">
                   <td className="p-3 text-left font-pixelify">
                     {m.first_name} {m.last_name}
                   </td>
-                  <td className="p-3 text-left sm:text-center font-pixelify break-all">{m.email}</td>
+                  <td className="p-3 text-left sm:text-center font-pixelify break-all">
+                    {m.email}
+                  </td>
                   <td className="p-3 text-left sm:text-center font-pixelify">{m.university}</td>
                   <td className="p-3 text-left sm:text-center font-pixelify">
                     {m.degrees?.length ? m.degrees.join(", ") : "—"}

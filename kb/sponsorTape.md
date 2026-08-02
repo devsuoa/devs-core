@@ -18,7 +18,7 @@ The **SponsorTape** renders a **horizontally scrolling strip** of sponsor logos 
 ```tsx
 import SponsorTape from "./components/SponsorTape";
 
-<SponsorTape />
+<SponsorTape />;
 ```
 
 No props. Update **`src/data/current_sponsors.json`** (and any mirrored **`public/`** data if your deploy pipeline uses it) to change logos.

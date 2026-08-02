@@ -1,7 +1,10 @@
 const getPaginationItems = (currentPage: number, totalPages: number) => {
   if (totalPages <= (window.innerWidth <= 1024 ? 4 : 7)) {
     // If total pages <= 4, show all pages without ellipsis
-    return Array.from({ length: totalPages }, (_, i) => ({ type: "page" as const, value: i }));
+    return Array.from({ length: totalPages }, (_, i) => ({
+      type: "page" as const,
+      value: i,
+    }));
   }
 
   const lastPageIndex = totalPages - 1;

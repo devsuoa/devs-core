@@ -56,18 +56,12 @@ export default function TaskListView({
                 onClick={() => onTaskClick(task)}
                 className="border-b border-white/10 hover:bg-black/50 cursor-pointer transition"
               >
-                <td className="p-3 font-silkscreen uppercase">
-                  {task.name}
-                </td>
+                <td className="p-3 font-silkscreen uppercase">{task.name}</td>
                 <td className="p-3">{task.assignee}</td>
                 <td className="p-3">
-                  <span className="px-2 py-1 text-xs rounded bg-[#6E80DA]/30">
-                    {task.status}
-                  </span>
+                  <span className="px-2 py-1 text-xs rounded bg-[#6E80DA]/30">{task.status}</span>
                 </td>
-                <td className="p-3 text-white/70">
-                  {task.due_date ?? "—"}
-                </td>
+                <td className="p-3 text-white/70">{task.due_date ?? "—"}</td>
                 <td className="p-3">{task.label}</td>
                 <td className="p-3 text-white/50">{task.team}</td>
               </tr>

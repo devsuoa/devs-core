@@ -27,11 +27,10 @@ export function useSlideShowController() {
 
   useEffect(() => {
     if (paused) return;
-  
+
     const interval = setInterval(next, intervalMs);
     return () => clearInterval(interval);
   }, [paused, intervalMs]);
-  
 
   return {
     slide: SLIDES[index],

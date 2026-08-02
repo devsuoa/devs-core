@@ -47,7 +47,7 @@ const KartikGlazer: React.FC = () => {
           video.pause();
         }
       },
-      { threshold: 0.28, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.28, rootMargin: "0px 0px -5% 0px" },
     );
 
     observer.observe(section);
@@ -101,10 +101,7 @@ const KartikGlazer: React.FC = () => {
 
       <div className="relative isolate min-h-screen overflow-x-hidden bg-[#06030a] text-white font-rethink selection:bg-fuchsia-500/40 selection:text-white">
         {/* Wash out global body wallpaper for this route */}
-        <div
-          className="pointer-events-none fixed inset-0 z-0 bg-[#06030a]"
-          aria-hidden
-        />
+        <div className="pointer-events-none fixed inset-0 z-0 bg-[#06030a]" aria-hidden />
 
         <div
           className="pointer-events-none fixed -top-32 left-1/2 z-1 h-[min(90vw,520px)] w-[min(90vw,520px)] -translate-x-1/2 rounded-full kartik-hero-glow"
@@ -159,8 +156,8 @@ const KartikGlazer: React.FC = () => {
               </p>
               <div className="ml-1 max-w-xl space-y-5 text-base text-white/85 sm:text-lg md:ml-3">
                 <p className="font-rethink italic text-amber-100/90">
-                  Hot take: this page is what happens when the DEVS Team opens
-                  Photoshop in their hearts.
+                  Hot take: this page is what happens when the DEVS Team opens Photoshop in their
+                  hearts.
                 </p>
                 <p className="text-sm uppercase tracking-[0.35em] text-white/50">
                   Not a portfolio. A phenomenon.
@@ -195,9 +192,9 @@ const KartikGlazer: React.FC = () => {
                   field notes
                 </h2>
                 <p className="mt-6 text-[clamp(1.35rem,4vw,2.25rem)] font-medium leading-snug text-white text-balance">
-                  There are two kinds of people: the politely interested, and
-                  the ones who make the whole room lean in. Kartik is the second
-                  kind — loud in the best way, soft where it counts.
+                  There are two kinds of people: the politely interested, and the ones who make the
+                  whole room lean in. Kartik is the second kind — loud in the best way, soft where
+                  it counts.
                 </p>
               </div>
               <div className="md:text-right">
@@ -264,18 +261,14 @@ const KartikGlazer: React.FC = () => {
               GLAZE RESPONSIBLY
             </p>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">
-              (Translation: hype your friends with the same energy you&apos;d
-              use to describe a perfect slice of pizza. Generous. Specific.
-              Slightly unhinged.)
+              (Translation: hype your friends with the same energy you&apos;d use to describe a
+              perfect slice of pizza. Generous. Specific. Slightly unhinged.)
             </p>
           </div>
         </section>
 
         {/* FINALE — audio un-mutes when this section is on screen */}
-        <section
-          ref={jennieSectionRef}
-          className="relative z-2 min-h-[75svh] overflow-hidden"
-        >
+        <section ref={jennieSectionRef} className="relative z-2 min-h-[75svh] overflow-hidden">
           <div className="absolute inset-0">
             <video
               ref={jennieVideoRef}
@@ -301,9 +294,7 @@ const KartikGlazer: React.FC = () => {
               <h3 className="mt-4 font-rethink text-3xl font-semibold leading-tight text-white sm:text-4xl">
                 kartik isn&apos;t &quot;nice to have&quot;.
                 <br />
-                <span className="text-amber-200">
-                  he&apos;s the whole moodboard.
-                </span>
+                <span className="text-amber-200">he&apos;s the whole moodboard.</span>
               </h3>
               <ul className="mt-6 space-y-2 font-pixelify text-sm text-white/75">
                 <li>✦ charisma density: off the charts</li>
@@ -323,8 +314,8 @@ const KartikGlazer: React.FC = () => {
             This page is a compliment wrapped in a joke wrapped in CSS.
           </p>
           <p className="mt-2 text-xs text-white/35">
-            If you&apos;re Kartik: pretend you never saw this. If you&apos;re
-            not Kartik: you still don&apos;t have clearance.
+            If you&apos;re Kartik: pretend you never saw this. If you&apos;re not Kartik: you still
+            don&apos;t have clearance.
           </p>
         </footer>
       </div>

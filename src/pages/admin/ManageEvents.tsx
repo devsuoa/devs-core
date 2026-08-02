@@ -1,26 +1,26 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { PageTitle } from '../../components/PageTitle';
-import { useAdminDashboard } from '../../lib/adminDashboardController';
+import React, { useCallback, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { PageTitle } from "../../components/PageTitle";
+import { useAdminDashboard } from "../../lib/adminDashboardController";
 import {
   useEventsManagement,
   uploadEventImage,
   Event,
   EventFormData,
-} from '../../lib/manageEventsController';
-import { RSVPQuestion, RSVPQuestionType } from '../../lib/eventRsvpTypes';
+} from "../../lib/manageEventsController";
+import { RSVPQuestion, RSVPQuestionType } from "../../lib/eventRsvpTypes";
 
 const buildEmptyEventFormData = (): EventFormData => ({
-  title: '',
-  description: '',
-  image_url: '',
-  tag: '',
-  event_date: '',
-  event_time: '',
-  location: '',
-  register_url: '',
+  title: "",
+  description: "",
+  image_url: "",
+  tag: "",
+  event_date: "",
+  event_time: "",
+  location: "",
+  register_url: "",
   is_active: true,
   max_attendees: null,
   group_rsvp_enabled: false,
@@ -33,8 +33,8 @@ const buildEmptyEventFormData = (): EventFormData => ({
 
 const createNewQuestion = (): RSVPQuestion => ({
   id: crypto.randomUUID(),
-  prompt: '',
-  type: 'text',
+  prompt: "",
+  type: "text",
   required: false,
   options: [],
 });
@@ -48,42 +48,51 @@ const ImageDropZone: React.FC<{
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = useCallback(async (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      onError('Only image files are supported.');
-      return;
-    }
-    setUploading(true);
-    try {
-      const url = await uploadEventImage(file);
-      onUpload(url);
-    } catch (err: unknown) {
-      onError(err instanceof Error ? err.message : 'Image upload failed.');
-    } finally {
-      setUploading(false);
-    }
-  }, [onUpload, onError]);
+  const handleFile = useCallback(
+    async (file: File) => {
+      if (!file.type.startsWith("image/")) {
+        onError("Only image files are supported.");
+        return;
+      }
+      setUploading(true);
+      try {
+        const url = await uploadEventImage(file);
+        onUpload(url);
+      } catch (err: unknown) {
+        onError(err instanceof Error ? err.message : "Image upload failed.");
+      } finally {
+        setUploading(false);
+      }
+    },
+    [onUpload, onError],
+  );
 
-  const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  }, [handleFile]);
+  const onDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setDragOver(false);
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    },
+    [handleFile],
+  );
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) handleFile(file);
-    e.target.value = '';
+    e.target.value = "";
   };
 
   return (
-    <div style={{ marginBottom: '24px' }}>
+    <div style={{ marginBottom: "24px" }}>
       <div
-        className={`pixel-input w-full flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors ${dragOver ? 'opacity-70' : ''}`}
-        style={{ minHeight: '120px', borderStyle: 'dashed', padding: '16px' }}
+        className={`pixel-input w-full flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors ${dragOver ? "opacity-70" : ""}`}
+        style={{ minHeight: "120px", borderStyle: "dashed", padding: "16px" }}
         onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
       >
@@ -95,7 +104,7 @@ const ImageDropZone: React.FC<{
               src={imageUrl}
               alt="Event preview"
               className="max-h-32 max-w-full object-contain"
-              style={{ imageRendering: 'auto' }}
+              style={{ imageRendering: "auto" }}
             />
             <p className="font-pixelify text-xs text-white/50">Click or drop to replace</p>
           </>
@@ -119,8 +128,7 @@ const ImageDropZone: React.FC<{
 
 const ManageEvents: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
-  const { events, loading, error, addEvent, editEvent, removeEvent } =
-    useEventsManagement();
+  const { events, loading, error, addEvent, editEvent, removeEvent } = useEventsManagement();
 
   const [showForm, setShowForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
@@ -158,7 +166,7 @@ const ManageEvents: React.FC = () => {
           ...question,
           prompt: question.prompt.trim(),
           options:
-            question.type === 'text'
+            question.type === "text"
               ? []
               : question.options.map((option) => option.trim()).filter(Boolean),
         }))
@@ -168,11 +176,9 @@ const ManageEvents: React.FC = () => {
         ...formData,
         max_attendees: formData.max_attendees ?? null,
         group_rsvp_max_emails: formData.group_rsvp_enabled
-          ? formData.group_rsvp_max_emails ?? null
+          ? (formData.group_rsvp_max_emails ?? null)
           : null,
-        charge_amount: formData.payment_enabled
-          ? formData.charge_amount ?? null
-          : null,
+        charge_amount: formData.payment_enabled ? (formData.charge_amount ?? null) : null,
         bank_transfer_enabled: formData.payment_enabled ? formData.bank_transfer_enabled : false,
         rsvp_questions: normalizedQuestions,
       };
@@ -207,7 +213,6 @@ const ManageEvents: React.FC = () => {
 
       <div className="flex justify-center px-4 sm:px-6 py-8 sm:py-12 mb-8 sm:mb-[10vh]">
         <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px] min-w-0">
-
           {(error || uploadError) && (
             <div className="pixel-panel mb-6 p-4 sm:p-5">
               <p className="font-pixelify text-red-400 text-xs">{error || uploadError}</p>
@@ -226,34 +231,33 @@ const ManageEvents: React.FC = () => {
           {showForm && (
             <div className="pixel-panel p-6 sm:p-8 md:p-10 mb-6 sm:mb-8">
               <h2 className="font-silkscreen text-white text-sm sm:text-base mb-6">
-                {editingEvent ? 'Edit Event' : 'Add Event'}
+                {editingEvent ? "Edit Event" : "Add Event"}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6 font-pixelify">
                 <input
                   className="pixel-input w-full"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   placeholder="Title"
                   required
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 />
 
                 <textarea
                   className="pixel-input w-full min-h-[100px] resize-y"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   placeholder="Description"
-                  value={formData.description || ''}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  value={formData.description || ""}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
 
                 <ImageDropZone
                   imageUrl={formData.image_url || null}
-                  onUpload={(url) => { setUploadError(null); setFormData({ ...formData, image_url: url }); }}
+                  onUpload={(url) => {
+                    setUploadError(null);
+                    setFormData({ ...formData, image_url: url });
+                  }}
                   onError={(msg) => setUploadError(msg)}
                 />
 
@@ -263,61 +267,57 @@ const ManageEvents: React.FC = () => {
                   </label>
                   <select
                     className="pixel-input w-full cursor-pointer"
-                    value={formData.tag || ''}
+                    value={formData.tag || ""}
                     onChange={(e) => {
                       setFormData({ ...formData, tag: e.target.value });
                     }}
-                    style={{ marginBottom: '24px' }}
+                    style={{ marginBottom: "24px" }}
                   >
-                    <option value="" disabled>Select a tag...</option>
-                    {['Industry', 'Social', 'Tech', 'Competition', 'Competitions', 'Workshop'].map(t => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
+                    <option value="" disabled>
+                      Select a tag...
+                    </option>
+                    {["Industry", "Social", "Tech", "Competition", "Competitions", "Workshop"].map(
+                      (t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
 
                 <input
                   type="date"
                   className="pixel-input w-full"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   required
                   value={formData.event_date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, event_date: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
                 />
 
                 <input
                   className="pixel-input w-full"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   placeholder="Time (e.g. 6:00 PM)"
-                  value={formData.event_time || ''}
-                  onChange={(e) =>
-                    setFormData({ ...formData, event_time: e.target.value })
-                  }
+                  value={formData.event_time || ""}
+                  onChange={(e) => setFormData({ ...formData, event_time: e.target.value })}
                 />
 
                 <input
                   className="pixel-input w-full"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   placeholder="Location"
-                  value={formData.location || ''}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
+                  value={formData.location || ""}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 />
 
                 <input
                   type="url"
                   className="pixel-input w-full"
-                  style={{ marginBottom: '24px' }}
+                  style={{ marginBottom: "24px" }}
                   placeholder="Register URL (https://...)"
-                  value={formData.register_url || ''}
-                  onChange={(e) =>
-                    setFormData({ ...formData, register_url: e.target.value })
-                  }
+                  value={formData.register_url || ""}
+                  onChange={(e) => setFormData({ ...formData, register_url: e.target.value })}
                 />
 
                 <div className="flex items-center gap-2 mb-6 p-4 rounded">
@@ -328,17 +328,22 @@ const ManageEvents: React.FC = () => {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        is_active: e.target.checked
+                        is_active: e.target.checked,
                       })
                     }
                   />
-                  <label htmlFor="is-active-toggle" className="font-pixelify text-s sm:text-sm text-white/90">
+                  <label
+                    htmlFor="is-active-toggle"
+                    className="font-pixelify text-s sm:text-sm text-white/90"
+                  >
                     Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM THE PUBLIC)
                   </label>
                 </div>
 
                 <div className="pixel-panel p-4 sm:p-5 mb-6">
-                  <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4">RSVP Settings</h3>
+                  <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4">
+                    RSVP Settings
+                  </h3>
 
                   <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
                     Max attendees (optional)
@@ -347,13 +352,13 @@ const ManageEvents: React.FC = () => {
                     type="number"
                     min={1}
                     className="pixel-input w-full"
-                    style={{ marginBottom: '24px' }}
+                    style={{ marginBottom: "24px" }}
                     placeholder="Leave blank for unlimited"
-                    value={formData.max_attendees ?? ''}
+                    value={formData.max_attendees ?? ""}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        max_attendees: e.target.value === '' ? null : Number(e.target.value),
+                        max_attendees: e.target.value === "" ? null : Number(e.target.value),
                       })
                     }
                   />
@@ -373,7 +378,10 @@ const ManageEvents: React.FC = () => {
                         })
                       }
                     />
-                    <label htmlFor="group-rsvp-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                    <label
+                      htmlFor="group-rsvp-toggle"
+                      className="font-pixelify text-xs sm:text-sm text-white/90"
+                    >
                       Enable group RSVP
                     </label>
                   </div>
@@ -387,13 +395,14 @@ const ManageEvents: React.FC = () => {
                         type="number"
                         min={2}
                         className="pixel-input w-full"
-                        style={{ marginBottom: '24px' }}
+                        style={{ marginBottom: "24px" }}
                         placeholder="e.g. 5"
-                        value={formData.group_rsvp_max_emails ?? ''}
+                        value={formData.group_rsvp_max_emails ?? ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            group_rsvp_max_emails: e.target.value === '' ? null : Number(e.target.value),
+                            group_rsvp_max_emails:
+                              e.target.value === "" ? null : Number(e.target.value),
                           })
                         }
                       />
@@ -409,19 +418,22 @@ const ManageEvents: React.FC = () => {
                         setFormData({
                           ...formData,
                           payment_enabled: e.target.checked,
-                          charge_amount: e.target.checked
-                            ? formData.charge_amount
-                            : null,
-                          bank_transfer_enabled: e.target.checked ? formData.bank_transfer_enabled : false,
+                          charge_amount: e.target.checked ? formData.charge_amount : null,
+                          bank_transfer_enabled: e.target.checked
+                            ? formData.bank_transfer_enabled
+                            : false,
                         })
                       }
                     />
-                    <label htmlFor="payment-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                    <label
+                      htmlFor="payment-toggle"
+                      className="font-pixelify text-xs sm:text-sm text-white/90"
+                    >
                       Enable payment
                     </label>
                   </div>
 
-                      {formData.payment_enabled && (
+                  {formData.payment_enabled && (
                     <>
                       <label className="font-pixelify block mb-2 text-xs sm:text-sm text-white/80">
                         Charge amount per person (NZD)
@@ -431,13 +443,13 @@ const ManageEvents: React.FC = () => {
                         min={0}
                         step="0.01"
                         className="pixel-input w-full"
-                        style={{ marginBottom: '24px' }}
+                        style={{ marginBottom: "24px" }}
                         placeholder="e.g. 15.00"
-                        value={formData.charge_amount ?? ''}
+                        value={formData.charge_amount ?? ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            charge_amount: e.target.value === '' ? null : Number(e.target.value),
+                            charge_amount: e.target.value === "" ? null : Number(e.target.value),
                           })
                         }
                       />
@@ -454,7 +466,10 @@ const ManageEvents: React.FC = () => {
                             })
                           }
                         />
-                        <label htmlFor="bank-transfer-toggle" className="font-pixelify text-xs sm:text-sm text-white/90">
+                        <label
+                          htmlFor="bank-transfer-toggle"
+                          className="font-pixelify text-xs sm:text-sm text-white/90"
+                        >
                           Offer bank transfer
                         </label>
                       </div>
@@ -463,7 +478,9 @@ const ManageEvents: React.FC = () => {
 
                   <div className="mt-4">
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <p className="font-silkscreen text-white text-xs sm:text-sm">Additional RSVP questions</p>
+                      <p className="font-silkscreen text-white text-xs sm:text-sm">
+                        Additional RSVP questions
+                      </p>
                       <button
                         type="button"
                         className="pixel-button text-xs px-3 py-2"
@@ -495,7 +512,9 @@ const ManageEvents: React.FC = () => {
                                   setFormData((prev) => ({
                                     ...prev,
                                     rsvp_questions: prev.rsvp_questions.map((item) =>
-                                      item.id === question.id ? { ...item, prompt: e.target.value } : item
+                                      item.id === question.id
+                                        ? { ...item, prompt: e.target.value }
+                                        : item,
                                     ),
                                   }))
                                 }
@@ -512,7 +531,12 @@ const ManageEvents: React.FC = () => {
                                       return {
                                         ...item,
                                         type: nextType,
-                                        options: nextType === 'text' ? [] : item.options.length ? item.options : [''],
+                                        options:
+                                          nextType === "text"
+                                            ? []
+                                            : item.options.length
+                                              ? item.options
+                                              : [""],
                                       };
                                     }),
                                   }))
@@ -533,7 +557,12 @@ const ManageEvents: React.FC = () => {
                                     setFormData((prev) => ({
                                       ...prev,
                                       rsvp_questions: prev.rsvp_questions.map((item) =>
-                                        item.id === question.id ? { ...item, required: e.target.checked } : item
+                                        item.id === question.id
+                                          ? {
+                                              ...item,
+                                              required: e.target.checked,
+                                            }
+                                          : item,
                                       ),
                                     }))
                                   }
@@ -547,7 +576,9 @@ const ManageEvents: React.FC = () => {
                                 onClick={() =>
                                   setFormData((prev) => ({
                                     ...prev,
-                                    rsvp_questions: prev.rsvp_questions.filter((item) => item.id !== question.id),
+                                    rsvp_questions: prev.rsvp_questions.filter(
+                                      (item) => item.id !== question.id,
+                                    ),
                                   }))
                                 }
                               >
@@ -555,10 +586,13 @@ const ManageEvents: React.FC = () => {
                               </button>
                             </div>
 
-                            {question.type !== 'text' && (
+                            {question.type !== "text" && (
                               <div className="flex flex-col gap-2">
                                 {question.options.map((option, optionIndex) => (
-                                  <div key={`${question.id}-option-${optionIndex}`} className="flex items-center gap-2">
+                                  <div
+                                    key={`${question.id}-option-${optionIndex}`}
+                                    className="flex items-center gap-2"
+                                  >
                                     <input
                                       className="pixel-input w-full"
                                       placeholder={`Option ${optionIndex + 1}`}
@@ -587,8 +621,10 @@ const ManageEvents: React.FC = () => {
                                               ...item,
                                               options:
                                                 item.options.length <= 1
-                                                  ? ['']
-                                                  : item.options.filter((_, idx) => idx !== optionIndex),
+                                                  ? [""]
+                                                  : item.options.filter(
+                                                      (_, idx) => idx !== optionIndex,
+                                                    ),
                                             };
                                           }),
                                         }))
@@ -606,8 +642,11 @@ const ManageEvents: React.FC = () => {
                                       ...prev,
                                       rsvp_questions: prev.rsvp_questions.map((item) =>
                                         item.id === question.id
-                                          ? { ...item, options: [...item.options, ''] }
-                                          : item
+                                          ? {
+                                              ...item,
+                                              options: [...item.options, ""],
+                                            }
+                                          : item,
                                       ),
                                     }))
                                   }
@@ -628,7 +667,7 @@ const ManageEvents: React.FC = () => {
                     className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
                     type="submit"
                   >
-                    {editingEvent ? 'Update Event' : 'Add Event'}
+                    {editingEvent ? "Update Event" : "Add Event"}
                   </button>
                   <button
                     type="button"
@@ -680,13 +719,13 @@ const ManageEvents: React.FC = () => {
                         setEditingEvent(event);
                         setFormData({
                           title: event.title,
-                          description: event.description || '',
-                          image_url: event.image_url || '',
-                          tag: event.tag || '',
+                          description: event.description || "",
+                          image_url: event.image_url || "",
+                          tag: event.tag || "",
                           event_date: event.event_date,
-                          event_time: event.event_time || '',
-                          location: event.location || '',
-                          register_url: event.register_url || '',
+                          event_time: event.event_time || "",
+                          location: event.location || "",
+                          register_url: event.register_url || "",
                           is_active: event.is_active,
                           max_attendees: event.max_attendees,
                           group_rsvp_enabled: event.group_rsvp_enabled,
@@ -694,7 +733,9 @@ const ManageEvents: React.FC = () => {
                           payment_enabled: event.payment_enabled,
                           charge_amount: event.charge_amount,
                           bank_transfer_enabled: event.bank_transfer_enabled,
-                          rsvp_questions: Array.isArray(event.rsvp_questions) ? event.rsvp_questions : [],
+                          rsvp_questions: Array.isArray(event.rsvp_questions)
+                            ? event.rsvp_questions
+                            : [],
                         });
                         setShowForm(true);
                       }}
@@ -711,7 +752,6 @@ const ManageEvents: React.FC = () => {
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       </div>

@@ -9,12 +9,12 @@ The **SponsorCard** is a **tiered sponsor tile** (gold / silver / bronze) used i
 
 ## Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `name` | `string` | Sponsor name; used for alt text and text fallback |
-| `image` | `string` | Logo URL; if empty, name renders as text |
-| `desc` | `string` | Short blurb under the logo |
-| `tier` | `"gold" \| "silver" \| "bronze"` | Controls accent colour class |
+| Prop    | Type                             | Description                                       |
+| ------- | -------------------------------- | ------------------------------------------------- |
+| `name`  | `string`                         | Sponsor name; used for alt text and text fallback |
+| `image` | `string`                         | Logo URL; if empty, name renders as text          |
+| `desc`  | `string`                         | Short blurb under the logo                        |
+| `tier`  | `"gold" \| "silver" \| "bronze"` | Controls accent colour class                      |
 
 ## Structure
 
@@ -31,7 +31,7 @@ import SponsorCard from "./components/SponsorCard";
   image="/sponsors/gold/example.png"
   desc="Supporting DEVS events and workshops."
   tier="gold"
-/>
+/>;
 ```
 
 ## Related

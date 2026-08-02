@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 type PixelatedButtonProps = {
   /**
@@ -47,8 +47,8 @@ const PixelatedButton: React.FC<PixelatedButtonProps> = ({
   inactive,
   hover,
   clicked,
-  className = 'w-1/4',
-  alt = '',
+  className = "w-1/4",
+  alt = "",
   onClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);

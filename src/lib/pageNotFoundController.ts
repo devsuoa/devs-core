@@ -1,4 +1,4 @@
-import { NavigateFunction } from 'react-router-dom';
+import { NavigateFunction } from "react-router-dom";
 
 let navigateRef: NavigateFunction | null = null;
 
@@ -8,6 +8,6 @@ export function registerNavigator(navigate: NavigateFunction) {
 
 export function onPageNotFound() {
   if (navigateRef) {
-    navigateRef('/404', { replace: true });
+    navigateRef("/404", { replace: true });
   }
 }

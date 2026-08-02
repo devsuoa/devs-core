@@ -1,26 +1,26 @@
-import React from 'react';
-import { SocialLinks } from '../components/SocialLinks';
-import { isFeatureEnabled } from '../lib/featureFlags';
-import { onPageNotFound } from '../lib/pageNotFoundController';
-import BinaryBackground from '../components/BinaryBackground';
-import PixelatedButton from '../components/PixelatedButton';
+import React from "react";
+import { SocialLinks } from "../components/SocialLinks";
+import { isFeatureEnabled } from "../lib/featureFlags";
+import { onPageNotFound } from "../lib/pageNotFoundController";
+import BinaryBackground from "../components/BinaryBackground";
+import PixelatedButton from "../components/PixelatedButton";
 
-const logo = '/branding/text_logo.png';
+const logo = "/branding/text_logo.png";
 
 const Landing: React.FC = () => {
   React.useEffect(() => {
-    if (!isFeatureEnabled('landing_page_is_enabled')) {
+    if (!isFeatureEnabled("landing_page_is_enabled")) {
       onPageNotFound();
     }
   }, []);
 
-  if (!isFeatureEnabled('landing_page_is_enabled')) {
+  if (!isFeatureEnabled("landing_page_is_enabled")) {
     return null;
   }
 
   return (
     <>
-      <BinaryBackground/>
+      <BinaryBackground />
       <div
         className="
           relative
@@ -34,7 +34,6 @@ const Landing: React.FC = () => {
         max-[768px]:items-stretch
       "
       >
-
         {/* CONTENT */}
         <div
           className="
@@ -48,7 +47,6 @@ const Landing: React.FC = () => {
           max-[768px]:justify-center
         "
         >
-
           {/* Logo */}
           <img
             src={logo}
@@ -67,10 +65,8 @@ const Landing: React.FC = () => {
 
           {/* Text + Buttons Wrapper */}
           <div className="w-[460px] max-[768px]:w-[320px] flex flex-col items-center">
-
             {/* Subtitle */}
             <div className="mb-4">
-
               {/* Desktop */}
               <div className="hidden max-[768px]:block">
                 <p className="font-silkscreen text-white tracking-[0.1em] uppercase text-[18px]">
@@ -150,11 +146,9 @@ const Landing: React.FC = () => {
               >
                 SPONSORS
               </Link> */}
-
             </div>
           </div>
         </div>
-
 
         <div
           className="
@@ -173,11 +167,9 @@ const Landing: React.FC = () => {
         >
           <SocialLinks />
         </div>
-
       </div>
     </>
   );
-
 };
 
 export default Landing;

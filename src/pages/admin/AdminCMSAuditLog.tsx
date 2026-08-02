@@ -15,8 +15,18 @@ import {
   restoreAuditEntry,
 } from "../../lib/auditLogController";
 import {
-  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell, Legend,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
 
 const ACTION_COLOURS: Record<string, string> = {
@@ -306,7 +316,11 @@ const AuditLog: React.FC = () => {
                   />
                 ))}
                 <div ref={sentinelRef} className="py-4 text-center text-xs text-gray-500">
-                  {loadingMore ? "Loading more…" : hasMore ? "" : `All ${logs.length} entries loaded`}
+                  {loadingMore
+                    ? "Loading more…"
+                    : hasMore
+                      ? ""
+                      : `All ${logs.length} entries loaded`}
                 </div>
               </>
             )}
@@ -359,7 +373,9 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
   return (
     <div
       className={`rounded-lg border transition-colors ${
-        expanded ? "border-indigo-500/60 bg-gray-800" : "border-gray-700 bg-gray-800/60 hover:border-gray-500"
+        expanded
+          ? "border-indigo-500/60 bg-gray-800"
+          : "border-gray-700 bg-gray-800/60 hover:border-gray-500"
       }`}
     >
       <button
@@ -401,9 +417,7 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
               <span className="text-amber-300 font-mono text-xs">{log.function_name}</span>
             ) : log.target_table ? (
               <>
-                <span className="text-gray-300">
-                  {log.target_id ? `row ${log.target_id}` : ""}
-                </span>{" "}
+                <span className="text-gray-300">{log.target_id ? `row ${log.target_id}` : ""}</span>{" "}
                 <span className="text-gray-400">in</span>{" "}
                 <span className="font-mono text-indigo-300 text-xs">{log.target_table}</span>
               </>
@@ -411,13 +425,14 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
           </p>
 
           <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-gray-400">
-            <span title={new Date(log.created_at).toLocaleString()}>
-              {timeAgo(log.created_at)}
-            </span>
+            <span title={new Date(log.created_at).toLocaleString()}>{timeAgo(log.created_at)}</span>
             <span className="text-gray-600">&middot;</span>
             <span
               className="rounded-full border px-1.5 py-0.5 text-[10px] font-medium"
-              style={{ borderColor: sourceInfo.colour, color: sourceInfo.colour }}
+              style={{
+                borderColor: sourceInfo.colour,
+                color: sourceInfo.colour,
+              }}
             >
               {sourceInfo.label}
             </span>
@@ -446,7 +461,10 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
             <MetaField label="Timestamp" value={new Date(log.created_at).toLocaleString()} />
             <MetaField label="Auth ID" value={log.auth_id ?? "N/A"} mono />
-            <MetaField label="Source" value={`${sourceInfo.label}${log.function_name ? ` — ${log.function_name}` : ""}`} />
+            <MetaField
+              label="Source"
+              value={`${sourceInfo.label}${log.function_name ? ` — ${log.function_name}` : ""}`}
+            />
             <MetaField label="Action" value={`${log.action} (${actionLabel(log.action)})`} />
             <MetaField label="IP Address" value={log.ip_address || "N/A"} mono />
             <MetaField label="User Agent" value={log.user_agent || "N/A"} />
@@ -472,12 +490,20 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
                         <td className="px-3 py-1.5 font-mono text-indigo-300">{c.key}</td>
                         <td className="px-3 py-1.5">
                           <span className="rounded bg-red-900/50 px-1.5 py-0.5 text-red-300 break-all">
-                            {c.before === null ? <em className="text-gray-500">null</em> : String(c.before)}
+                            {c.before === null ? (
+                              <em className="text-gray-500">null</em>
+                            ) : (
+                              String(c.before)
+                            )}
                           </span>
                         </td>
                         <td className="px-3 py-1.5">
                           <span className="rounded bg-green-900/50 px-1.5 py-0.5 text-green-300 break-all">
-                            {c.after === null ? <em className="text-gray-500">null</em> : String(c.after)}
+                            {c.after === null ? (
+                              <em className="text-gray-500">null</em>
+                            ) : (
+                              String(c.after)
+                            )}
                           </span>
                         </td>
                       </tr>
@@ -520,12 +546,16 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
           {restoreAction && restoreInfo && (
             <div className="rounded-lg border border-gray-600 bg-gray-900/60 p-3">
               {restoreSuccess ? (
-                <p className="text-sm font-medium text-green-400">✓ Restored successfully — a new audit entry has been created.</p>
+                <p className="text-sm font-medium text-green-400">
+                  ✓ Restored successfully — a new audit entry has been created.
+                </p>
               ) : !showConfirm ? (
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-gray-300">Restore</p>
-                    <p className="text-[11px] text-gray-500">Roll back this change: {restoreInfo.verb.toLowerCase()}</p>
+                    <p className="text-[11px] text-gray-500">
+                      Roll back this change: {restoreInfo.verb.toLowerCase()}
+                    </p>
                   </div>
                   <button
                     onClick={() => setShowConfirm(true)}
@@ -539,12 +569,16 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
                   <div className="flex items-start gap-2">
                     <span className="text-amber-400 text-base leading-none mt-0.5">⚠</span>
                     <div>
-                      <p className="text-xs font-semibold text-amber-300">Confirm: {restoreInfo.verb}</p>
+                      <p className="text-xs font-semibold text-amber-300">
+                        Confirm: {restoreInfo.verb}
+                      </p>
                       <p className="text-[11px] text-gray-400 mt-0.5">{restoreInfo.warning}</p>
                     </div>
                   </div>
                   {restoreError && (
-                    <p className="text-xs text-red-400 rounded bg-red-900/30 px-2 py-1 break-all">{restoreError}</p>
+                    <p className="text-xs text-red-400 rounded bg-red-900/30 px-2 py-1 break-all">
+                      {restoreError}
+                    </p>
                   )}
                   <div className="flex gap-2">
                     <button
@@ -555,7 +589,10 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
                       {restoring ? "Restoring…" : "Confirm Restore"}
                     </button>
                     <button
-                      onClick={() => { setShowConfirm(false); setRestoreError(null); }}
+                      onClick={() => {
+                        setShowConfirm(false);
+                        setRestoreError(null);
+                      }}
                       disabled={restoring}
                       className="rounded-lg border border-gray-600 px-4 py-1.5 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
@@ -572,11 +609,28 @@ const AuditEntry: React.FC<AuditEntryProps> = ({ log, expanded, onToggle, onRest
   );
 };
 
-const CHART_PALETTE = ["#6366f1", "#22c55e", "#ef4444", "#f59e0b", "#06b6d4", "#f97316", "#8b5cf6", "#ec4899"];
+const CHART_PALETTE = [
+  "#6366f1",
+  "#22c55e",
+  "#ef4444",
+  "#f59e0b",
+  "#06b6d4",
+  "#f97316",
+  "#8b5cf6",
+  "#ec4899",
+];
 
 const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
   const activityByDay = useMemo(() => {
-    const map: Record<string, { dashboard: number; edge_function: number; public: number; system: number }> = {};
+    const map: Record<
+      string,
+      {
+        dashboard: number;
+        edge_function: number;
+        public: number;
+        system: number;
+      }
+    > = {};
     for (const log of logs) {
       const day = log.created_at.slice(0, 10);
       if (!map[day]) map[day] = { dashboard: 0, edge_function: 0, public: 0, system: 0 };
@@ -584,7 +638,11 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
     }
     return Object.entries(map)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, counts]) => ({ date, ...counts, total: counts.dashboard + counts.edge_function + counts.public + counts.system }));
+      .map(([date, counts]) => ({
+        date,
+        ...counts,
+        total: counts.dashboard + counts.edge_function + counts.public + counts.system,
+      }));
   }, [logs]);
 
   const actionBreakdown = useMemo(() => {
@@ -630,12 +688,18 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
       .map(([name, count]) => ({ name, count }));
   }, [logs]);
 
-  const tooltipStyle = { backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" };
+  const tooltipStyle = {
+    backgroundColor: "#1f2937",
+    border: "1px solid #374151",
+    borderRadius: "8px",
+  };
 
   return (
     <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Activity Over Time</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+          Activity Over Time
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <AreaChart data={activityByDay}>
             <defs>
@@ -644,21 +708,49 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
                 <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9ca3af" }} tickFormatter={(v: string) => v.slice(5)} />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
+              tickFormatter={(v: string) => v.slice(5)}
+            />
             <YAxis tick={{ fontSize: 10, fill: "#9ca3af" }} allowDecimals={false} width={30} />
-            <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#d1d5db" }} itemStyle={{ color: "#a5b4fc" }} />
-            <Area type="monotone" dataKey="total" stroke="#6366f1" fill="url(#gradTotal)" strokeWidth={2} />
-            <Area type="monotone" dataKey="public" stroke="#06b6d4" fill="none" strokeWidth={1} strokeDasharray="4 2" />
+            <Tooltip
+              contentStyle={tooltipStyle}
+              labelStyle={{ color: "#d1d5db" }}
+              itemStyle={{ color: "#a5b4fc" }}
+            />
+            <Area
+              type="monotone"
+              dataKey="total"
+              stroke="#6366f1"
+              fill="url(#gradTotal)"
+              strokeWidth={2}
+            />
+            <Area
+              type="monotone"
+              dataKey="public"
+              stroke="#06b6d4"
+              fill="none"
+              strokeWidth={1}
+              strokeDasharray="4 2"
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
       <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Actions Breakdown</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+          Actions Breakdown
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={actionBreakdown} layout="vertical">
             <XAxis type="number" tick={{ fontSize: 10, fill: "#9ca3af" }} allowDecimals={false} />
-            <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#9ca3af" }} width={70} />
+            <YAxis
+              type="category"
+              dataKey="name"
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
+              width={70}
+            />
             <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#d1d5db" }} />
             <Bar dataKey="count" radius={[0, 4, 4, 0]}>
               {actionBreakdown.map((_, i) => (
@@ -670,12 +762,29 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
       </div>
 
       <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Source Distribution</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+          Source Distribution
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <PieChart>
-            <Pie data={sourceBreakdown} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} innerRadius={40} paddingAngle={3} label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ""} ${((percent ?? 0) * 100).toFixed(0)}%`} labelLine={false}>
+            <Pie
+              data={sourceBreakdown}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={70}
+              innerRadius={40}
+              paddingAngle={3}
+              label={({ name, percent }: { name?: string; percent?: number }) =>
+                `${name ?? ""} ${((percent ?? 0) * 100).toFixed(0)}%`
+              }
+              labelLine={false}
+            >
               {sourceBreakdown.map((entry, i) => {
-                const srcColour = Object.values(SOURCE_LABELS).find((s) => s.label === entry.name)?.colour;
+                const srcColour = Object.values(SOURCE_LABELS).find(
+                  (s) => s.label === entry.name,
+                )?.colour;
                 return <Cell key={i} fill={srcColour ?? CHART_PALETTE[i % CHART_PALETTE.length]} />;
               })}
             </Pie>
@@ -686,11 +795,18 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
       </div>
 
       <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Most Active Tables</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+          Most Active Tables
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={tableBreakdown} layout="vertical">
             <XAxis type="number" tick={{ fontSize: 10, fill: "#9ca3af" }} allowDecimals={false} />
-            <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#9ca3af" }} width={100} />
+            <YAxis
+              type="category"
+              dataKey="name"
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
+              width={100}
+            />
             <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#d1d5db" }} />
             <Bar dataKey="count" radius={[0, 4, 4, 0]} fill="#8b5cf6" />
           </BarChart>
@@ -698,10 +814,19 @@ const AuditStats: React.FC<{ logs: AuditLogRow[] }> = ({ logs }) => {
       </div>
 
       <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4 lg:col-span-2">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Top Actors</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+          Top Actors
+        </h3>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={topActors}>
-            <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#9ca3af" }} interval={0} angle={-20} textAnchor="end" height={50} />
+            <XAxis
+              dataKey="name"
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
+              interval={0}
+              angle={-20}
+              textAnchor="end"
+              height={50}
+            />
             <YAxis tick={{ fontSize: 10, fill: "#9ca3af" }} allowDecimals={false} width={30} />
             <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#d1d5db" }} />
             <Bar dataKey="count" radius={[4, 4, 0, 0]}>

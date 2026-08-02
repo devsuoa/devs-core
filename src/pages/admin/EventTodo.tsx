@@ -152,7 +152,10 @@ function TodoItemSidebar({
           onChange={(e) => onToggle(item.id, e.target.checked)}
           className="w-4 h-4 accent-[#6E80DA] cursor-pointer"
         />
-        <label htmlFor="item-completed" className="font-silkscreen text-white/80 text-sm cursor-pointer select-none">
+        <label
+          htmlFor="item-completed"
+          className="font-silkscreen text-white/80 text-sm cursor-pointer select-none"
+        >
           Mark as completed
         </label>
       </div>
@@ -186,9 +189,13 @@ function TodoItemSidebar({
               <li key={c.id} className="flex flex-col gap-0.5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-silkscreen text-[#6E80DA] text-xs">{c.author_name}</span>
-                  <span className="font-silkscreen text-white/30 text-xs">{formatNZDate(c.created_at)}</span>
+                  <span className="font-silkscreen text-white/30 text-xs">
+                    {formatNZDate(c.created_at)}
+                  </span>
                 </div>
-                <p className="text-white/80 text-sm leading-relaxed whitespace-pre-wrap">{c.message}</p>
+                <p className="text-white/80 text-sm leading-relaxed whitespace-pre-wrap">
+                  {c.message}
+                </p>
               </li>
             ))}
             <div ref={commentsEndRef} />
@@ -198,7 +205,9 @@ function TodoItemSidebar({
         <textarea
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleAddComment(); }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleAddComment();
+          }}
           placeholder="Add a comment… (⌘↵ to submit)"
           rows={3}
           className="w-full p-3 rounded bg-black border border-white/20 text-white text-sm resize-none focus:outline-none focus:border-[#6E80DA] placeholder:text-white/20"
@@ -217,13 +226,7 @@ function TodoItemSidebar({
 
 // ── Event Todo Panel ───────────────────────────────────────────────────────────
 
-function EventTodoPanel({
-  event,
-  onClose,
-}: {
-  event: PublicEvent;
-  onClose: () => void;
-}) {
+function EventTodoPanel({ event, onClose }: { event: PublicEvent; onClose: () => void }) {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<EventTodoItem[]>([]);
   const [eventNote, setEventNote] = useState("");
@@ -241,11 +244,7 @@ function EventTodoPanel({
     let cancelled = false;
     setLoading(true);
     setActiveTodo(null);
-    Promise.all([
-      loadEventTodos(event.id),
-      loadEventNote(event.id),
-      loadEventDocLinks(event.id),
-    ])
+    Promise.all([loadEventTodos(event.id), loadEventNote(event.id), loadEventDocLinks(event.id)])
       .then(([todoData, noteData, linkData]) => {
         if (cancelled) return;
         setTodos(todoData);
@@ -257,8 +256,12 @@ function EventTodoPanel({
         console.error("Failed to load event todo data:", err);
         alert("Failed to load data. Please try again.");
       })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [event.id]);
 
   const handleToggle = async (id: string, completed: boolean) => {
@@ -365,14 +368,18 @@ function EventTodoPanel({
               ← All Events
             </button>
             <h2 className="font-silkscreen text-white text-sm leading-snug">{event.title}</h2>
-            <p className="font-silkscreen text-white/40 text-xs">{formatEventDate(event.event_date)}</p>
+            <p className="font-silkscreen text-white/40 text-xs">
+              {formatEventDate(event.event_date)}
+            </p>
           </div>
           {!loading && (
-            <span className={`shrink-0 mt-1 px-2 py-1 rounded font-silkscreen text-xs border ${
-              completedCount === todos.length && todos.length > 0
-                ? "border-green-500/60 text-green-400"
-                : "border-white/20 text-white/50"
-            }`}>
+            <span
+              className={`shrink-0 mt-1 px-2 py-1 rounded font-silkscreen text-xs border ${
+                completedCount === todos.length && todos.length > 0
+                  ? "border-green-500/60 text-green-400"
+                  : "border-white/20 text-white/50"
+              }`}
+            >
               {completedCount}/{todos.length}
             </span>
           )}
@@ -384,10 +391,11 @@ function EventTodoPanel({
           </div>
         ) : (
           <div className="flex flex-col gap-8 px-5 py-6">
-
             {/* Checklist */}
             <section>
-              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">Checklist</p>
+              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">
+                Checklist
+              </p>
               <ul className="flex flex-col gap-2">
                 {todos.map((todo) => (
                   <li
@@ -402,11 +410,16 @@ function EventTodoPanel({
                     <input
                       type="checkbox"
                       checked={todo.completed}
-                      onChange={(e) => { e.stopPropagation(); handleToggle(todo.id, e.target.checked); }}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleToggle(todo.id, e.target.checked);
+                      }}
                       onClick={(e) => e.stopPropagation()}
                       className="w-4 h-4 accent-[#6E80DA] cursor-pointer shrink-0"
                     />
-                    <span className={`flex-1 font-silkscreen text-xs leading-relaxed ${todo.completed ? "line-through text-white/25" : "text-white"}`}>
+                    <span
+                      className={`flex-1 font-silkscreen text-xs leading-relaxed ${todo.completed ? "line-through text-white/25" : "text-white"}`}
+                    >
                       {todo.label}
                     </span>
                     {todo.item_notes && (
@@ -414,7 +427,10 @@ function EventTodoPanel({
                     )}
                     {!todo.is_default && (
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteTask(todo.id); }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTask(todo.id);
+                        }}
                         className="text-white/20 hover:text-red-400 transition-colors shrink-0 text-base leading-none"
                         title="Delete task"
                       >
@@ -446,8 +462,12 @@ function EventTodoPanel({
             {/* General Notes */}
             <section>
               <div className="flex items-center gap-3 mb-3">
-                <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest">Notes</p>
-                {noteSaving && <span className="text-xs text-white/25 font-silkscreen">Saving…</span>}
+                <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest">
+                  Notes
+                </p>
+                {noteSaving && (
+                  <span className="text-xs text-white/25 font-silkscreen">Saving…</span>
+                )}
               </div>
               <textarea
                 value={eventNote}
@@ -460,12 +480,17 @@ function EventTodoPanel({
 
             {/* Linked Documents */}
             <section>
-              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">Linked Documents</p>
+              <p className="text-xs text-white/40 font-silkscreen uppercase tracking-widest mb-3">
+                Linked Documents
+              </p>
 
               {docLinks.length > 0 ? (
                 <ul className="flex flex-col gap-2 mb-3">
                   {docLinks.map((link) => (
-                    <li key={link.id} className="flex items-center gap-3 border border-white/10 rounded px-3 py-2.5">
+                    <li
+                      key={link.id}
+                      className="flex items-center gap-3 border border-white/10 rounded px-3 py-2.5"
+                    >
                       <a
                         href={link.url}
                         target="_blank"
@@ -485,7 +510,9 @@ function EventTodoPanel({
                   ))}
                 </ul>
               ) : (
-                <p className="font-silkscreen text-white/25 text-xs mb-3">No documents linked yet.</p>
+                <p className="font-silkscreen text-white/25 text-xs mb-3">
+                  No documents linked yet.
+                </p>
               )}
 
               <div className="flex flex-col gap-2">
@@ -571,7 +598,7 @@ export default function EventTodo() {
   const upcomingTags = useMemo(() => {
     const tags = new Set<string>();
     upcomingEvents.forEach((e) => {
-      if (e.tag) e.tag.split(',').forEach(t => tags.add(t.trim()));
+      if (e.tag) e.tag.split(",").forEach((t) => tags.add(t.trim()));
     });
     return Array.from(tags).filter(Boolean);
   }, [upcomingEvents]);
@@ -579,19 +606,33 @@ export default function EventTodo() {
   const pastTags = useMemo(() => {
     const tags = new Set<string>();
     pastEvents.forEach((e) => {
-      if (e.tag) e.tag.split(',').forEach(t => tags.add(t.trim()));
+      if (e.tag) e.tag.split(",").forEach((t) => tags.add(t.trim()));
     });
     return Array.from(tags).filter(Boolean);
   }, [pastEvents]);
 
   const filteredUpcoming = useMemo(() => {
     if (!upcomingTagFilter) return upcomingEvents;
-    return upcomingEvents.filter((e) => e.tag && e.tag.split(',').map(t => t.trim()).includes(upcomingTagFilter));
+    return upcomingEvents.filter(
+      (e) =>
+        e.tag &&
+        e.tag
+          .split(",")
+          .map((t) => t.trim())
+          .includes(upcomingTagFilter),
+    );
   }, [upcomingEvents, upcomingTagFilter]);
 
   const filteredPast = useMemo(() => {
     if (!pastTagFilter) return pastEvents;
-    return pastEvents.filter((e) => e.tag && e.tag.split(',').map(t => t.trim()).includes(pastTagFilter));
+    return pastEvents.filter(
+      (e) =>
+        e.tag &&
+        e.tag
+          .split(",")
+          .map((t) => t.trim())
+          .includes(pastTagFilter),
+    );
   }, [pastEvents, pastTagFilter]);
 
   // Swipe state
@@ -613,7 +654,9 @@ export default function EventTodo() {
   }, []);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelectedEvent(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedEvent(null);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -623,8 +666,16 @@ export default function EventTodo() {
     totalPages: Math.ceil(items.length / perPage),
   });
 
-  const { items: paginatedUpcoming, totalPages: upcomingTotalPages } = paginate(filteredUpcoming, upcomingPage, upcomingPerPage);
-  const { items: paginatedPast, totalPages: pastTotalPages } = paginate(filteredPast, pastPage, pastPerPage);
+  const { items: paginatedUpcoming, totalPages: upcomingTotalPages } = paginate(
+    filteredUpcoming,
+    upcomingPage,
+    upcomingPerPage,
+  );
+  const { items: paginatedPast, totalPages: pastTotalPages } = paginate(
+    filteredPast,
+    pastPage,
+    pastPerPage,
+  );
 
   const handleUpcomingPageChange = (newPage: number) => {
     setUpcomingDirection(newPage > upcomingPage ? 1 : -1);
@@ -720,7 +771,10 @@ export default function EventTodo() {
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
-            onClick={() => { setUpcomingTagFilter(null); setUpcomingPage(0); }}
+            onClick={() => {
+              setUpcomingTagFilter(null);
+              setUpcomingPage(0);
+            }}
             className={`px-4 py-2 font-silkscreen text-base border transition-colors ${upcomingTagFilter === null ? "bg-purple-500/30 border-purple-400 text-white" : "border-white/30 text-white/60 hover:border-white/50 hover:text-white"}`}
           >
             All
@@ -728,7 +782,10 @@ export default function EventTodo() {
           {upcomingTags.map((tag) => (
             <button
               key={tag}
-              onClick={() => { setUpcomingTagFilter(tag!); setUpcomingPage(0); }}
+              onClick={() => {
+                setUpcomingTagFilter(tag!);
+                setUpcomingPage(0);
+              }}
               className={`px-4 py-2 font-silkscreen text-base border transition-colors ${upcomingTagFilter === tag ? "bg-purple-500/30 border-purple-400 text-white" : "border-white/30 text-white/60 hover:border-white/50 hover:text-white"}`}
             >
               {tag}
@@ -739,17 +796,23 @@ export default function EventTodo() {
 
       <section
         className="transition-all duration-500 ease-in-out mx-[1vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]"
-        onTouchStart={(e) => { setUpcomingTouchEnd(null); setUpcomingTouchStart(e.targetTouches[0].clientX); }}
+        onTouchStart={(e) => {
+          setUpcomingTouchEnd(null);
+          setUpcomingTouchStart(e.targetTouches[0].clientX);
+        }}
         onTouchMove={(e) => setUpcomingTouchEnd(e.targetTouches[0].clientX)}
         onTouchEnd={() => {
           if (!upcomingTouchStart || !upcomingTouchEnd) return;
           const d = upcomingTouchStart - upcomingTouchEnd;
-          if (d > minSwipe && upcomingPage < upcomingTotalPages - 1) handleUpcomingPageChange(upcomingPage + 1);
+          if (d > minSwipe && upcomingPage < upcomingTotalPages - 1)
+            handleUpcomingPageChange(upcomingPage + 1);
           if (d < -minSwipe && upcomingPage > 0) handleUpcomingPageChange(upcomingPage - 1);
         }}
       >
         {upcomingEvents.length === 0 ? (
-          <p className="font-pixelify text-white text-center text-sm sm:text-base">No upcoming events.</p>
+          <p className="font-pixelify text-white text-center text-sm sm:text-base">
+            No upcoming events.
+          </p>
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-15 gap-x-4 sm:gap-x-6 md:gap-x-8 justify-items-center">
@@ -760,7 +823,11 @@ export default function EventTodo() {
                     initial={{ opacity: 0, x: upcomingDirection * 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: upcomingDirection * -30 }}
-                    transition={{ duration: 0.4, delay: index * 0.1, ease: "easeInOut" }}
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.1,
+                      ease: "easeInOut",
+                    }}
                   >
                     <EventsCard
                       id={event.id}
@@ -784,7 +851,11 @@ export default function EventTodo() {
             </div>
             {upcomingTotalPages > 1 && (
               <div className="flex justify-center items-center mt-6 sm:mt-8 md:mt-10 font-silkscreen">
-                <Pagination currentPage={upcomingPage} totalPages={upcomingTotalPages} onPageChange={handleUpcomingPageChange} />
+                <Pagination
+                  currentPage={upcomingPage}
+                  totalPages={upcomingTotalPages}
+                  onPageChange={handleUpcomingPageChange}
+                />
               </div>
             )}
           </>
@@ -800,7 +871,10 @@ export default function EventTodo() {
         <div className="flex items-center gap-3 mr-[4.725vw]">
           <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
-            onClick={() => { setPastTagFilter(null); setPastPage(0); }}
+            onClick={() => {
+              setPastTagFilter(null);
+              setPastPage(0);
+            }}
             className={`px-4 py-2 font-silkscreen text-base border transition-colors ${pastTagFilter === null ? "bg-purple-500/30 border-purple-400 text-white" : "border-white/30 text-white/60 hover:border-white/50 hover:text-white"}`}
           >
             All
@@ -808,7 +882,10 @@ export default function EventTodo() {
           {pastTags.map((tag) => (
             <button
               key={tag}
-              onClick={() => { setPastTagFilter(tag!); setPastPage(0); }}
+              onClick={() => {
+                setPastTagFilter(tag!);
+                setPastPage(0);
+              }}
               className={`px-4 py-2 font-silkscreen text-base border transition-colors ${pastTagFilter === tag ? "bg-purple-500/30 border-purple-400 text-white" : "border-white/30 text-white/60 hover:border-white/50 hover:text-white"}`}
             >
               {tag}
@@ -819,7 +896,10 @@ export default function EventTodo() {
 
       <section
         className="transition-all duration-500 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]"
-        onTouchStart={(e) => { setPastTouchEnd(null); setPastTouchStart(e.targetTouches[0].clientX); }}
+        onTouchStart={(e) => {
+          setPastTouchEnd(null);
+          setPastTouchStart(e.targetTouches[0].clientX);
+        }}
         onTouchMove={(e) => setPastTouchEnd(e.targetTouches[0].clientX)}
         onTouchEnd={() => {
           if (!pastTouchStart || !pastTouchEnd) return;
@@ -829,7 +909,9 @@ export default function EventTodo() {
         }}
       >
         {pastEvents.length === 0 ? (
-          <p className="font-pixelify text-white text-center text-sm sm:text-base">No past events.</p>
+          <p className="font-pixelify text-white text-center text-sm sm:text-base">
+            No past events.
+          </p>
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-15 gap-x-4 sm:gap-x-6 md:gap-x-8 justify-items-center">
@@ -840,7 +922,11 @@ export default function EventTodo() {
                     initial={{ opacity: 0, x: pastDirection * 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: pastDirection * -30 }}
-                    transition={{ duration: 0.4, delay: index * 0.1, ease: "easeInOut" }}
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.1,
+                      ease: "easeInOut",
+                    }}
                   >
                     <EventsCard
                       id={event.id}
@@ -864,7 +950,11 @@ export default function EventTodo() {
             </div>
             {pastTotalPages > 1 && (
               <div className="flex justify-center items-center mt-6 sm:mt-8 md:mt-10 font-silkscreen">
-                <Pagination currentPage={pastPage} totalPages={pastTotalPages} onPageChange={handlePastPageChange} />
+                <Pagination
+                  currentPage={pastPage}
+                  totalPages={pastTotalPages}
+                  onPageChange={handlePastPageChange}
+                />
               </div>
             )}
           </>
@@ -874,9 +964,7 @@ export default function EventTodo() {
       <Footer />
 
       {/* Event todo panel */}
-      {selectedEvent && (
-        <EventTodoPanel event={selectedEvent} onClose={closePanel} />
-      )}
+      {selectedEvent && <EventTodoPanel event={selectedEvent} onClose={closePanel} />}
     </main>
   );
 }

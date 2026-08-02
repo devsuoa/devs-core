@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from "./supabase";
 
 type LoginParams = {
   email: string;
@@ -12,18 +12,10 @@ type LoginParams = {
 
 export async function handleLoginSubmit(
   e: React.FormEvent,
-  {
-    email,
-    password,
-    setError,
-    setLoading,
-    setEmail,
-    setPassword,
-    navigate,
-  }: LoginParams
+  { email, password, setError, setLoading, setEmail, setPassword, navigate }: LoginParams,
 ): Promise<void> {
   e.preventDefault();
-  setError('');
+  setError("");
   setLoading(true);
 
   try {
@@ -33,43 +25,45 @@ export async function handleLoginSubmit(
     });
 
     if (error || !data.user) {
-      throw new Error('Invalid email or password');
+      throw new Error("Invalid email or password");
     }
 
     // Check if profile exists, create it if it doesn't
     let profile = await supabase
-      .from('profiles')
-      .select('role, username')
-      .eq('id', data.user.id)
+      .from("profiles")
+      .select("role, username")
+      .eq("id", data.user.id)
       .single();
 
     if (profile.error) {
       // Profile doesn't exist - create it
       // Get username from user metadata if available
-      const username = (data.user.user_metadata?.username as string) || data.user.email?.split('@')[0] || '';
-      
-      const { error: createError } = await supabase
-        .from('profiles')
-        .upsert({
+      const username =
+        (data.user.user_metadata?.username as string) || data.user.email?.split("@")[0] || "";
+
+      const { error: createError } = await supabase.from("profiles").upsert(
+        {
           id: data.user.id,
           username: username,
-        }, {
-          onConflict: 'id'
-        });
+        },
+        {
+          onConflict: "id",
+        },
+      );
 
       if (createError) {
-        console.error('Failed to create profile:', createError);
-        throw new Error('Failed to create user profile. Please contact support.');
+        console.error("Failed to create profile:", createError);
+        throw new Error("Failed to create user profile. Please contact support.");
       }
 
       const profileResponse = await supabase
-        .from('profiles')
-        .select('role, username')
-        .eq('id', data.user.id)
+        .from("profiles")
+        .select("role, username")
+        .eq("id", data.user.id)
         .single();
 
       if (profileResponse.error) {
-        throw new Error('Failed to verify user role');
+        throw new Error("Failed to verify user role");
       }
 
       profile = profileResponse;
@@ -77,28 +71,27 @@ export async function handleLoginSubmit(
 
     // Validate user roles
     if (!profile.data) {
-      throw new Error('Failed to verify user role');
+      throw new Error("Failed to verify user role");
     }
 
-    if (profile.data.role !== 'admin') {
+    if (profile.data.role !== "admin") {
       await supabase.auth.signOut();
-      throw new Error('You do not have access');
+      throw new Error("You do not have access");
     }
 
     // On success clear fields
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
 
-    navigate('/admin/dashboard');
-    console.log('Admin login successful');
+    navigate("/admin/dashboard");
+    console.log("Admin login successful");
   } catch (err) {
     if (err instanceof Error) {
       setError(err.message);
     } else {
-      setError('Something went wrong');
+      setError("Something went wrong");
     }
   } finally {
     setLoading(false);
   }
 }
-

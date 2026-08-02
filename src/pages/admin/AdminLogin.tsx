@@ -65,10 +65,7 @@ const AdminLogin: React.FC = () => {
   return (
     <>
       <Header />
-      <PageTitle
-        title="Admin Login"
-        className="mt-[5vh]"
-      />
+      <PageTitle title="Admin Login" className="mt-[5vh]" />
       <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
           <div className="pixel-panel font-pixelify relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
@@ -97,10 +94,7 @@ const AdminLogin: React.FC = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="pixel-label font-pixelify block mb-4"
-                  >
+                  <label htmlFor="password" className="pixel-label font-pixelify block mb-4">
                     password<span className="text-red-400">*</span>
                   </label>
                   <input
@@ -137,7 +131,6 @@ const AdminLogin: React.FC = () => {
                   {loading ? "Logging in..." : "Submit"}
                 </button>
               </div>
-
             </form>
           </div>
         </div>
@@ -152,23 +145,18 @@ const AdminLogin: React.FC = () => {
 
               {resetSuccess ? (
                 <div className="mb-6 p-4 font-pixelify text-green-400 text-sm">
-                  Password reset email sent! Check your inbox for instructions
-                  to reset your password.
+                  Password reset email sent! Check your inbox for instructions to reset your
+                  password.
                 </div>
               ) : (
                 <>
                   {resetError && (
-                    <div className="mb-6 p-4 font-pixelify text-red-400 text-xs">
-                      {resetError}
-                    </div>
+                    <div className="mb-6 p-4 font-pixelify text-red-400 text-xs">{resetError}</div>
                   )}
 
                   <form onSubmit={handleResetSubmit}>
                     <div className="mb-6">
-                      <label
-                        htmlFor="resetEmail"
-                        className="font-pixelify block mb-4"
-                      >
+                      <label htmlFor="resetEmail" className="font-pixelify block mb-4">
                         Enter your email address
                         <span className="text-red-400">*</span>
                       </label>
@@ -183,8 +171,7 @@ const AdminLogin: React.FC = () => {
                         disabled={resetLoading}
                       />
                       <p className="font-pixelify text-xs text-gray-400 mt-2">
-                        We'll send you an email with a link to reset your
-                        password.
+                        We'll send you an email with a link to reset your password.
                       </p>
                     </div>
 

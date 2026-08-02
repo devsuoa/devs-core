@@ -254,27 +254,20 @@ const Events = () => {
   }, [focusedEventId, handleOverlayClick]);
 
   // Handler for card flip changes
-  const handleCardFlipChange = useCallback(
-    (eventId: string, flipped: boolean) => {
-      if (flipped) {
-        setFocusedEventId(eventId);
-        // Update URL hash
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}${window.location.search}#${eventId}`,
-        );
-      } else {
-        setFocusedEventId(null);
-        window.history.replaceState(
-          null,
-          "",
-          window.location.pathname + window.location.search,
-        );
-      }
-    },
-    [],
-  );
+  const handleCardFlipChange = useCallback((eventId: string, flipped: boolean) => {
+    if (flipped) {
+      setFocusedEventId(eventId);
+      // Update URL hash
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}#${eventId}`,
+      );
+    } else {
+      setFocusedEventId(null);
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }, []);
 
   // Pagination helper
   const paginate = (items: any[], page: number, perPage: number) => {
@@ -285,8 +278,11 @@ const Events = () => {
     };
   };
 
-  const { items: paginatedUpcomingEvents, totalPages: upcomingTotalPages } =
-    paginate(filteredUpcomingEvents, upcomingPage, upcomingPerPage);
+  const { items: paginatedUpcomingEvents, totalPages: upcomingTotalPages } = paginate(
+    filteredUpcomingEvents,
+    upcomingPage,
+    upcomingPerPage,
+  );
   const { items: paginatedPastEvents, totalPages: pastTotalPages } = paginate(
     filteredPastEvents,
     pastPage,

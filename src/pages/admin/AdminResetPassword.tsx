@@ -26,9 +26,7 @@ const AdminResetPassword: React.FC = () => {
         } = await supabase.auth.getSession();
 
         if (error || !session) {
-          setError(
-            "Invalid or expired reset link. Please request a new password reset.",
-          );
+          setError("Invalid or expired reset link. Please request a new password reset.");
           setChecking(false);
           return;
         }
@@ -86,16 +84,11 @@ const AdminResetPassword: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle
-          title="Reset Password"
-          className="mt-[5vh]"
-        />
+        <PageTitle title="Reset Password" className="mt-[5vh]" />
         <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
           <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
             <div className="pixel-panel font-pixelify relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
-              <p className="font-pixelify text-white text-center">
-                Verifying reset link...
-              </p>
+              <p className="font-pixelify text-white text-center">Verifying reset link...</p>
             </div>
           </div>
         </div>
@@ -108,16 +101,11 @@ const AdminResetPassword: React.FC = () => {
     return (
       <>
         <Header />
-        <PageTitle
-          title="Reset Password"
-          className="mt-[5vh]"
-        />
+        <PageTitle title="Reset Password" className="mt-[5vh]" />
         <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
           <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
             <div className="pixel-panel font-pixelify relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
-              <div className="mb-6 p-4 font-pixelify text-red-400 text-sm">
-                {error}
-              </div>
+              <div className="mb-6 p-4 font-pixelify text-red-400 text-sm">{error}</div>
               <button
                 onClick={() => navigate("/admin/login")}
                 className="pixel-button font-silkscreen min-h-[44px] min-w-[120px] touch-manipulation"
@@ -135,10 +123,7 @@ const AdminResetPassword: React.FC = () => {
   return (
     <>
       <Header />
-      <PageTitle
-        title="Reset Password"
-        className="mt-[5vh]"
-      />
+      <PageTitle title="Reset Password" className="mt-[5vh]" />
       <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
           <div className="pixel-panel font-pixelify relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12">
@@ -148,20 +133,13 @@ const AdminResetPassword: React.FC = () => {
               </div>
             )}
 
-            {error && (
-              <div className="mb-6 p-4 font-pixelify text-red-400 text-xs">
-                {error}
-              </div>
-            )}
+            {error && <div className="mb-6 p-4 font-pixelify text-red-400 text-xs">{error}</div>}
 
             {!success && (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-14 lg:gap-20 mb-8 sm:mb-12 lg:mb-14">
                   <div>
-                    <label
-                      htmlFor="newPassword"
-                      className="font-pixelify block mb-4"
-                    >
+                    <label htmlFor="newPassword" className="font-pixelify block mb-4">
                       new password<span className="text-red-400">*</span>
                     </label>
                     <input

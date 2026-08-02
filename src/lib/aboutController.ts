@@ -3,10 +3,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initAboutHorizontalScroll(
-  containerEl: HTMLElement,
-  trackEl: HTMLElement
-) {
+export function initAboutHorizontalScroll(containerEl: HTMLElement, trackEl: HTMLElement) {
   const ctx = gsap.context(() => {
     const getDistance = () => {
       const total = trackEl.scrollWidth;

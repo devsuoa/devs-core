@@ -6,19 +6,23 @@ This is to help understand components and guidelines to ensure everyone is on th
 > **AI documentation notice:** Some KB material (including repository-wide docs) was **generated or assisted by AI** and **may contain errors**. Always verify against the codebase. Full wording: [Documentation disclaimer](disclaimer.md).
 
 # Contents
+
 ### Repository
+
 - [Repository overview](repository_overview.md)
 - [Changelog](CHANGELOG.md)
 - [Events & RSVP](events_and_rsvp.md)
 - [Documentation disclaimer](disclaimer.md)
 
 ### Guidelines
+
 - [Commit & Branching Guidelines](commit_guidelines.md)
 - [Universal Design Guidelines](universal_design_guidelines.md)
 - [Setup Guidelines](setup.md)
 - [Feature Flags](feature_flags.md)
 
 ### Components
+
 - [Binary Background Component](binaryBackground.md)
 - [Cookie Disclaimer Component](cookiesDisclaimer.md)
 - [Events Card Component](eventsCard.md)
@@ -37,9 +41,11 @@ This is to help understand components and guidelines to ensure everyone is on th
 - [Task Tracker UI Components](task_tracker_components.md)
 
 ### Pages
+
 - [Auth](auth.md)
 - [Marketing Portal](marketingPortal.md)
 - [Page Not Found](pageNotFound.md)
 
 ### Other
+
 - [Analytics](analytics.md)

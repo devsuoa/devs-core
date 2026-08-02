@@ -1,6 +1,6 @@
 # DEVS Commit & Branching Guidelines
 
-These guidelines define how to write commit messages and name branches for DEVS projects. 
+These guidelines define how to write commit messages and name branches for DEVS projects.
 They exist to keep our Git history **clean, readable, and consistent**. As well as to avoid any breaking changes from being deployed into production
 
 > **Important:**  
@@ -16,7 +16,6 @@ All commit messages **must** follow this format:
 
 ### Commit Types
 
-
 | Type      | Description                            | Example                           |
 | --------- | -------------------------------------- | --------------------------------- |
 | `feat`    | A new feature                          | `feat: add construction page`     |
@@ -24,7 +23,6 @@ All commit messages **must** follow this format:
 | `improve` | Improvements to existing functionality | `improve: refactor landing page`  |
 | `chore`   | Maintenance tasks or updates           | `chore: update dependencies`      |
 | `doc`     | Add or update Documentation            | `doc: add commit guidelines`      |
-
 
 ### Rules
 
@@ -42,13 +40,11 @@ All branches **must** follow this format:
 
 ### Components
 
-
 | Component          | Description                                      | Example                 |
 | ------------------ | ------------------------------------------------ | ----------------------- |
 | `your-name`        | Your first name, lowercase, hyphenated if needed | `baljot`                |
 | `task-id`          | Task ID from the task sheet                      | `DV-11`                 |
 | `task-description` | Brief description, lowercase & hyphenated        | `add-construction-page` |
-
 
 ### Example Branch Name
 
@@ -68,4 +64,3 @@ All branches **must** follow this format:
   - Reference the task ID
   - Be small and focused where possible
 - Do not self-merge unless explicitly approved
-

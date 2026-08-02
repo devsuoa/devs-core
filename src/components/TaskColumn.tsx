@@ -1,21 +1,12 @@
 import TaskCard, { Task, TaskStatus } from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-function SortableTask({
-  task,
-  onClick,
-}: {
-  task: Task;
-  onClick: () => void;
-}) {
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } =
-    useSortable({ id: task.id });
+function SortableTask({ task, onClick }: { task: Task; onClick: () => void }) {
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  });
 
   return (
     <div
@@ -58,16 +49,9 @@ export default function TaskColumn({
           isOver ? "bg-black/50" : "bg-black/30"
         }`}
       >
-        <SortableContext
-          items={tasks.map((t) => t.id)}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
           {tasks.map((task) => (
-            <SortableTask
-              key={task.id}
-              task={task}
-              onClick={() => onTaskClick(task)}
-            />
+            <SortableTask key={task.id} task={task} onClick={() => onTaskClick(task)} />
           ))}
         </SortableContext>
       </div>

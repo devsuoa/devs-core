@@ -30,25 +30,31 @@ git --version
 ## Getting Started
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Gh05stt/devsuoa.git
 cd devsuoa
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
+
 This installs all required dependencies for React, TypeScript, Tailwind, and Vite.
 
 ### 3. Start the Development Server
+
 ```bash
 npm run dev
 ```
+
 The app will be available at:
 http://localhost:5173
 
 ### Project Structure (High level)
+
 ```bash
 src/
   components/     Reusable UI components
@@ -57,7 +63,9 @@ src/
   styles/         Global styles (Tailwind entry)
   main.tsx        App entry point
 ```
+
 > Keep components small, reusable, and typed.
 
 ### 4. Get building
+
 Alanna and Baljot will align tasks to you on a centralised Google sheet. Update this sheet when you start and finish a task.

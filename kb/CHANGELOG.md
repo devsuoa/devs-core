@@ -137,4 +137,4 @@ All notable changes to this project are recorded here from **commit messages on 
 
 ---
 
-*Source: `git log main --pretty=format:%h|%ad|%s --date=short` (newest first). Snapshot tip: **e699834** on `main` (2026-03-26 NZDT). Regenerate this file after significant merges if you want the KB to stay current.*
+_Source: `git log main --pretty=format:%h|%ad|%s --date=short` (newest first). Snapshot tip: **e699834** on `main` (2026-03-26 NZDT). Regenerate this file after significant merges if you want the KB to stay current._

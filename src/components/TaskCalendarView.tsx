@@ -19,18 +19,17 @@ function formatDateKey(date: Date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
   const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;}
+  return `${y}-${m}-${d}`;
+}
 
 export default function TaskCalendarView({
   tasks,
   onTaskClick,
-}: {  
+}: {
   tasks: Task[];
   onTaskClick: (task: Task) => void;
 }) {
-  const [currentMonth, setCurrentMonth] = useState(
-    startOfMonth(new Date())
-  );
+  const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
 
   const days = useMemo(() => {
     const start = startOfMonth(currentMonth);
@@ -76,13 +75,7 @@ export default function TaskCalendarView({
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <button
           onClick={() =>
-            setCurrentMonth(
-              new Date(
-                currentMonth.getFullYear(),
-                currentMonth.getMonth() - 1,
-                1
-              )
-            )
+            setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
           }
           className="px-2 sm:px-3 py-1 border border-white/30 rounded text-white/70 text-sm sm:text-base touch-manipulation"
         >
@@ -98,13 +91,7 @@ export default function TaskCalendarView({
 
         <button
           onClick={() =>
-            setCurrentMonth(
-              new Date(
-                currentMonth.getFullYear(),
-                currentMonth.getMonth() + 1,
-                1
-              )
-            )
+            setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
           }
           className="px-2 sm:px-3 py-1 border border-white/30 rounded text-white/70 text-sm sm:text-base touch-manipulation"
         >
@@ -132,23 +119,20 @@ export default function TaskCalendarView({
       <div className="grid grid-cols-7 gap-1 sm:gap-2 min-w-[280px]">
         {days.map((date, idx) => {
           const key = formatDateKey(date);
-          const isCurrentMonth =
-            date.getMonth() === currentMonth.getMonth();
+          const isCurrentMonth = date.getMonth() === currentMonth.getMonth();
 
           return (
             <div
               key={idx}
               className={`min-h-[60px] sm:min-h-[80px] md:min-h-[120px] rounded border border-white/20 p-0.5 sm:p-1 ${
-                isCurrentMonth
-                  ? "bg-black/40"
-                  : "bg-black/20 opacity-40"
+                isCurrentMonth ? "bg-black/40" : "bg-black/20 opacity-40"
               }`}
             >
               <div className="flex mb-0.5 sm:mb-1">
-                <span 
+                <span
                   className={`text-[10px] sm:text-xs flex items-center justify-center rounded-full ${
-                    formatDateKey(date) === formatDateKey(new Date()) 
-                      ? "bg-[#6E80DA] text-white w-5 h-5 sm:w-6 sm:h-6 font-bold" 
+                    formatDateKey(date) === formatDateKey(new Date())
+                      ? "bg-[#6E80DA] text-white w-5 h-5 sm:w-6 sm:h-6 font-bold"
                       : "text-white/60 w-5 h-5 sm:w-6 sm:h-6"
                   }`}
                 >

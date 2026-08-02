@@ -8,10 +8,10 @@ The **SponsorItem** is a **minimal logo block**: sponsor **name** and **logo** i
 
 ## Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `name` | `string` | Used for accessible **`alt`** text |
-| `logo` | `string` | Image `src` |
+| Prop        | Type                | Description                                     |
+| ----------- | ------------------- | ----------------------------------------------- |
+| `name`      | `string`            | Used for accessible **`alt`** text              |
+| `logo`      | `string`            | Image `src`                                     |
 | `className` | `string` (optional) | Extra classes merged onto the **image** element |
 
 ## Usage
@@ -19,11 +19,7 @@ The **SponsorItem** is a **minimal logo block**: sponsor **name** and **logo** i
 ```tsx
 import SponsorItem from "./components/SponsorItem";
 
-<SponsorItem
-  name="Jane Street"
-  logo="/sponsors/gold/jane_street_logo.png"
-  className="p-2"
-/>
+<SponsorItem name="Jane Street" logo="/sponsors/gold/jane_street_logo.png" className="p-2" />;
 ```
 
 ## Related

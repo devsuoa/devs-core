@@ -1,7 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
 import GenericRSVPDialog from "./GenericRSVPDialog";
-import { assertCanSubmitRSVP, rsvpToEvent, startPaidEventCheckout } from "../lib/eventsRSVPController";
+import {
+  assertCanSubmitRSVP,
+  rsvpToEvent,
+  startPaidEventCheckout,
+} from "../lib/eventsRSVPController";
 import { uploadBankPaymentProofScreenshot } from "../lib/manageEventsController";
 import { showSiteToast } from "./SiteToast";
 import { formatEventDate } from "../lib/eventsController";
@@ -90,7 +94,6 @@ type EventsCardProps = {
    * Called with the new flip state
    */
   onFlipChange?: (flipped: boolean) => void;
-
 };
 
 const EventsCard = ({
@@ -133,17 +136,20 @@ const EventsCard = ({
   const isControlled = controlledFlipped !== undefined;
   const flipped = isControlled ? controlledFlipped : internalFlipped;
 
-  const setFlipped = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
-    const newValue = typeof value === 'function' ? value(flipped) : value;
-    if (isControlled) {
-      onFlipChange?.(newValue);
-    } else {
-      setInternalFlipped(newValue);
-    }
-  }, [isControlled, flipped, onFlipChange]);
+  const setFlipped = useCallback(
+    (value: boolean | ((prev: boolean) => boolean)) => {
+      const newValue = typeof value === "function" ? value(flipped) : value;
+      if (isControlled) {
+        onFlipChange?.(newValue);
+      } else {
+        setInternalFlipped(newValue);
+      }
+    },
+    [isControlled, flipped, onFlipChange],
+  );
 
-  const eventDate = new Date(date).getTime()/1000;
-  const today = Date.now()/1000;
+  const eventDate = new Date(date).getTime() / 1000;
+  const today = Date.now() / 1000;
   const isPastEvent = eventDate < today;
   const formattedDate = formatEventDate(date);
   const showCostDisclaimer = paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
@@ -155,25 +161,26 @@ const EventsCard = ({
       }).format(chargeAmount)
     : "";
 
-  const handleCardClick = useCallback((e: React.MouseEvent) => {
-    // Don't toggle if clicking on interactive elements inside the card
-    const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('a')) {
-      return;
-    }
-    if (!rsvpOpen) {
-      setFlipped(!flipped);
-    }
-  }, [rsvpOpen, flipped, setFlipped]);
+  const handleCardClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Don't toggle if clicking on interactive elements inside the card
+      const target = e.target as HTMLElement;
+      if (target.closest("button") || target.closest("a")) {
+        return;
+      }
+      if (!rsvpOpen) {
+        setFlipped(!flipped);
+      }
+    },
+    [rsvpOpen, flipped, setFlipped],
+  );
 
   return (
     <div
       id={`event-card-${id}`}
       className={`relative transition-transform duration-300 ease-out cursor-pointer ${
-        flipped ? 'lg:scale-115 z-50' : ''
-      } ${
-        className || ""
-      }`}
+        flipped ? "lg:scale-115 z-50" : ""
+      } ${className || ""}`}
       onClick={handleCardClick}
     >
       <div
@@ -186,8 +193,14 @@ const EventsCard = ({
         </div>
 
         {/* BACK */}
-        <div className="absolute left-0 right-0 top-0 backface-hidden rotate-y-180" style={{ minHeight: frontHeight || '100%' }}>
-          <div className="border-2 border-white bg-[#0e1026] flex flex-col relative" style={{ minHeight: frontHeight || '100%' }}>
+        <div
+          className="absolute left-0 right-0 top-0 backface-hidden rotate-y-180"
+          style={{ minHeight: frontHeight || "100%" }}
+        >
+          <div
+            className="border-2 border-white bg-[#0e1026] flex flex-col relative"
+            style={{ minHeight: frontHeight || "100%" }}
+          >
             {/* Subtle diagonal scan lines overlay */}
             <div
               className="absolute inset-0 pointer-events-none opacity-[0.05]"
@@ -201,8 +214,7 @@ const EventsCard = ({
             <div className="absolute bottom-0 right-0 w-16 h-16 bg-indigo-500/10 blur-xl pointer-events-none" />
 
             {/* top row - title */}
-            <div
-              className="relative px-4 sm:px-5 md:px-6 lg:px-8 py-3 sm:py-3 md:py-4 lg:py-5 border-b-2 border-white/60 flex justify-center items-center shrink-0">
+            <div className="relative px-4 sm:px-5 md:px-6 lg:px-8 py-3 sm:py-3 md:py-4 lg:py-5 border-b-2 border-white/60 flex justify-center items-center shrink-0">
               {/* Corner bracket - top left */}
               <div className="absolute top-2 left-2 sm:top-3 sm:left-3 w-3 h-3 sm:w-4 sm:h-4 border-l-2 border-t-2 border-white/40" />
               {/* Corner bracket - top right */}
@@ -216,8 +228,8 @@ const EventsCard = ({
                   title.length > 50
                     ? "text-sm sm:text-base md:text-lg lg:text-xl leading-[1.2]"
                     : title.length > 23
-                    ? "text-base sm:text-lg md:text-xl lg:text-2xl leading-[1.3]"
-                    : "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight"
+                      ? "text-base sm:text-lg md:text-xl lg:text-2xl leading-[1.3]"
+                      : "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight"
                 }`}
               >
                 {title}
@@ -310,9 +322,7 @@ const EventsCard = ({
                     fill="currentColor"
                   />
                 </svg>
-                <span>
-                  {formattedChargeAmount} per person
-                </span>
+                <span>{formattedChargeAmount} per person</span>
               </div>
             )}
 
@@ -388,7 +398,7 @@ const EventsCard = ({
                 <div />
               )}
             </div>
-          </div>  
+          </div>
         </div>
       </div>
 
@@ -432,9 +442,7 @@ const EventsCard = ({
                 // Member already exists for that email/student id; safe to continue with RSVP.
               } else {
                 console.error(error);
-                throw new Error(
-                  "Could not register. Please try again.",
-                );
+                throw new Error("Could not register. Please try again.");
               }
             }
           }
@@ -475,6 +483,5 @@ const EventsCard = ({
     </div>
   );
 };
-
 
 export default EventsCard;

@@ -78,10 +78,14 @@ const Header = () => {
           </div>
 
           {/* Hamburger Menu */}
-          <button className="xl:hidden hover:cursor-pointer flex flex-col gap-1" onClick={() => {
-            setMenuOpen(true);
-            setIsClosing(false);
-          }} aria-label="Open menu">
+          <button
+            className="xl:hidden hover:cursor-pointer flex flex-col gap-1"
+            onClick={() => {
+              setMenuOpen(true);
+              setIsClosing(false);
+            }}
+            aria-label="Open menu"
+          >
             <span className="w-6 h-[2px] bg-white" />
             <span className="w-6 h-[2px] bg-white" />
             <span className="w-6 h-[2px] bg-white" />
@@ -91,7 +95,9 @@ const Header = () => {
 
       {/* Mobile menu*/}
       {menuOpen && (
-        <div className={`fixed inset-0 w-screen h-screen overflow-hidden bg-[#04060f] z-[100] flex flex-col ${isClosing ? 'animate-fadeOut' : 'animate-fadeIn'}`}>
+        <div
+          className={`fixed inset-0 w-screen h-screen overflow-hidden bg-[#04060f] z-[100] flex flex-col ${isClosing ? "animate-fadeOut" : "animate-fadeIn"}`}
+        >
           <div className="flex items-center justify-between px-6 pt-8">
             <Link to="/home" onClick={() => closeMenu()}>
               <img className="w-[50px] pixelated " src={logo} alt="Logo" />

@@ -22,7 +22,7 @@ export function mapYearLevel(year: number | null) {
 
 export function groupBy(
   rows: MemberRow[],
-  key: keyof MemberRow
+  key: keyof MemberRow,
 ): { name: string; value: number }[] {
   const map = new Map<string, number>();
 

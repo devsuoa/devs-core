@@ -33,6 +33,7 @@ The **Links Management** system provides a way to manage and display active link
 **Component:** `src/pages/Links.tsx`
 
 **Features:**
+
 - Displays all currently active links
 - Shows favicons automatically fetched from Google's favicon service
 - Linktree-style layout with clickable link cards
@@ -42,6 +43,7 @@ The **Links Management** system provides a way to manage and display active link
 - Public access (no authentication required)
 
 **Link Activation Logic:**
+
 - A link is considered active if:
   1. `is_active` is `true`
   2. Current date >= `active_from` (if `active_from` is set)
@@ -54,6 +56,7 @@ The **Links Management** system provides a way to manage and display active link
 **Component:** `src/pages/admin/ManageLinks.tsx`
 
 **Features:**
+
 - **Admin authentication required** - Uses `useAdminDashboard` hook
 - Add new links with title, URL, active status, and date ranges
 - Add spacers/dividers between links (with optional title)
@@ -66,6 +69,7 @@ The **Links Management** system provides a way to manage and display active link
 - Proper spacing and layout with overflow prevention
 
 **Form Fields:**
+
 - **This is a spacer/divider** (checkbox): Check to create a spacer instead of a link
 - **Title** (required for links, optional for spacers): Display name for the link or spacer title
 - **URL** (required for links, hidden for spacers): Full URL (must be valid URL format)
@@ -80,6 +84,7 @@ The **Links Management** system provides a way to manage and display active link
 Located at `src/lib/linksController.ts`, provides:
 
 **Functions:**
+
 - `fetchActiveLinks()`: Fetches and filters currently active links (ordered by display_order)
 - `fetchAllLinks()`: Fetches all links (for admin, ordered by display_order)
 - `createLink()`: Creates a new link (auto-assigns display_order if not provided)
@@ -90,12 +95,14 @@ Located at `src/lib/linksController.ts`, provides:
 - `isLinkCurrentlyActive()`: Checks if a link is currently active
 
 **Hooks:**
+
 - `useLinksManagement()`: Hook for admin pages to manage links (includes `reorderLink` function)
 - `useActiveLinks()`: Hook for public pages to display active links
 
 ## Favicon Service
 
 The system uses Google's favicon service to automatically fetch favicons:
+
 ```
 https://www.google.com/s2/favicons?domain={domain}&sz=64
 ```
@@ -132,6 +139,7 @@ Favicons are fetched based on the domain extracted from the link URL.
 ## Spacers/Dividers
 
 Spacers allow you to add visual breaks or section headers between links:
+
 - **Creating a Spacer**: Click "Add Spacer" button or check "This is a spacer/divider" when adding/editing
 - **Spacer Title**: Optional - leave empty for a blank space, or add text like "Photos! 📷" for a section header
 - **Display**: Spacers appear as dashed-border boxes with optional title text
@@ -141,6 +149,7 @@ Spacers allow you to add visual breaks or section headers between links:
 ## Reordering Links
 
 Links and spacers can be reordered using the up/down arrow buttons on the Manage Links page:
+
 - Click the ↑ button to move a link/spacer up in the list
 - Click the ↓ button to move a link/spacer down in the list
 - The first item cannot be moved up, and the last item cannot be moved down
@@ -153,4 +162,3 @@ Links and spacers can be reordered using the up/down arrow buttons on the Manage
 - [ ] Bulk import/export
 - [ ] Link preview/description
 - [ ] Social media link icons
-

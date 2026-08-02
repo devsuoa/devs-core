@@ -146,7 +146,8 @@ async function getNextDisplayOrder(): Promise<number> {
 export async function createLink(linkData: LinkFormData): Promise<Link | null> {
   try {
     // If display_order is not provided, get the next one available
-    const displayOrder = linkData.display_order !== undefined ? linkData.display_order : await getNextDisplayOrder();
+    const displayOrder =
+      linkData.display_order !== undefined ? linkData.display_order : await getNextDisplayOrder();
 
     // For spacers, URL is not required
     const insertData: any = {
@@ -177,9 +178,17 @@ export async function createLink(linkData: LinkFormData): Promise<Link | null> {
 /**
  * Update an existing link
  */
-export async function updateLink(id: string, linkData: Partial<LinkFormData>): Promise<Link | null> {
+export async function updateLink(
+  id: string,
+  linkData: Partial<LinkFormData>,
+): Promise<Link | null> {
   try {
-    const { data, error } = await supabase.from("links").update(linkData).eq("id", id).select().single();
+    const { data, error } = await supabase
+      .from("links")
+      .update(linkData)
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error) {
       console.error("Error updating link:", error);
@@ -214,7 +223,9 @@ export async function deleteLink(id: string): Promise<void> {
  * Update link display order
  */
 
-export async function updateLinkOrder(linksToUpdate: { id: string; display_order: number }[]): Promise<void> {
+export async function updateLinkOrder(
+  linksToUpdate: { id: string; display_order: number }[],
+): Promise<void> {
   try {
     await Promise.all(
       linksToUpdate.map((link) =>
@@ -259,7 +270,10 @@ export async function reorderLinks(linkId1: string, linkId2: string): Promise<vo
 
     if (error1) throw error1;
 
-    const { error: error2 } = await supabase.from("links").update({ display_order: tempOrder }).eq("id", linkId2);
+    const { error: error2 } = await supabase
+      .from("links")
+      .update({ display_order: tempOrder })
+      .eq("id", linkId2);
 
     if (error2) {
       // Attempt to rollback the first update

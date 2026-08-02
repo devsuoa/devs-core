@@ -49,10 +49,7 @@ export default function BinaryBackground() {
     if (!el) return;
 
     const width = forceWidth ?? (document.documentElement.clientWidth || window.innerWidth);
-    const height = Math.max(
-      forceHeight ?? document.body.scrollHeight,
-      window.innerHeight
-    );
+    const height = Math.max(forceHeight ?? document.body.scrollHeight, window.innerHeight);
     const cols = Math.ceil(width / STEP) + 1;
     const rows = Math.ceil(height / STEP) + 1;
 
@@ -94,10 +91,7 @@ export default function BinaryBackground() {
     const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
-        buildGrid(
-          Math.round(width || document.documentElement.clientWidth),
-          Math.round(height)
-        );
+        buildGrid(Math.round(width || document.documentElement.clientWidth), Math.round(height));
       }
     });
     ro.observe(document.body);
@@ -111,9 +105,15 @@ export default function BinaryBackground() {
 
     const draw = (now: number) => {
       const canvas = canvasRef.current;
-      if (!canvas) { rafRef.current = requestAnimationFrame(draw); return; }
+      if (!canvas) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
       const ctx = canvas.getContext("2d");
-      if (!ctx) { rafRef.current = requestAnimationFrame(draw); return; }
+      if (!ctx) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
       const { cols, rows, width, height } = dimsRef.current;
       const cells = cellsRef.current;
       const elapsed = now - startRef.current;
@@ -197,7 +197,10 @@ export default function BinaryBackground() {
         zIndex: -1,
       }}
     >
-      <canvas ref={canvasRef} style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none" }} />
+      <canvas
+        ref={canvasRef}
+        style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none" }}
+      />
 
       {/* Radial vignette */}
       <div

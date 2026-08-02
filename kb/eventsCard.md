@@ -10,15 +10,15 @@ The **EventsCard** is a **flip card** for a single event: the **front** shows th
 
 ## Key props
 
-| Prop | Notes |
-|------|--------|
-| `id` | Event id (passed to RSVP) |
-| `title`, `image`, `imageAlt`, `tag`, `date`, `time`, `location`, `description` | Display; date uses `formatEventDate` from `eventsController` |
-| `registerUrl` | If set, register **PixelatedButton** opens this URL in a new tab instead of RSVP |
-| `groupRSVPEnabled`, `groupRSVPMaxEmails`, `rsvpQuestions` | Forwarded to **`GenericRSVPDialog`** |
-| `className` | Wrapper sizing / layout |
-| `isFlipped`, `onFlipChange` | Optional controlled flip |
-| `postJoinRsvpEmail` | Optional email to prefill **RSVP** after returning from **`/join`**; set by **`Events.tsx`** when **`sessionStorage`** has a completed signup for this **`id`** (see [Events & RSVP](events_and_rsvp.md)) |
+| Prop                                                                           | Notes                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                                                                           | Event id (passed to RSVP)                                                                                                                                                                                 |
+| `title`, `image`, `imageAlt`, `tag`, `date`, `time`, `location`, `description` | Display; date uses `formatEventDate` from `eventsController`                                                                                                                                              |
+| `registerUrl`                                                                  | If set, register **PixelatedButton** opens this URL in a new tab instead of RSVP                                                                                                                          |
+| `groupRSVPEnabled`, `groupRSVPMaxEmails`, `rsvpQuestions`                      | Forwarded to **`GenericRSVPDialog`**                                                                                                                                                                      |
+| `className`                                                                    | Wrapper sizing / layout                                                                                                                                                                                   |
+| `isFlipped`, `onFlipChange`                                                    | Optional controlled flip                                                                                                                                                                                  |
+| `postJoinRsvpEmail`                                                            | Optional email to prefill **RSVP** after returning from **`/join`**; set by **`Events.tsx`** when **`sessionStorage`** has a completed signup for this **`id`** (see [Events & RSVP](events_and_rsvp.md)) |
 
 ## Interaction model
 

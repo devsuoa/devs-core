@@ -8,12 +8,9 @@ export type SiteToastOptions = Pick<ToastOptions, "autoClose" | "position"> & {
 };
 
 const VARIANT_SHELL: Record<SiteToastVariant, string> = {
-  default:
-    "border-white ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]",
-  success:
-    "border-emerald-300/75 ring-emerald-500/45 shadow-[0_0_18px_4px_rgba(52,211,153,0.22)]",
-  error:
-    "border-red-300/75 ring-red-500/45 shadow-[0_0_18px_4px_rgba(248,113,113,0.22)]",
+  default: "border-white ring-[#6E80DA]/60 shadow-[0_0_18px_4px_rgba(110,128,218,0.35)]",
+  success: "border-emerald-300/75 ring-emerald-500/45 shadow-[0_0_18px_4px_rgba(52,211,153,0.22)]",
+  error: "border-red-300/75 ring-red-500/45 shadow-[0_0_18px_4px_rgba(248,113,113,0.22)]",
 };
 
 const defaultToastOptions: ToastOptions = {
@@ -24,8 +21,7 @@ const defaultToastOptions: ToastOptions = {
   pauseOnHover: true,
   draggable: false,
   icon: false,
-  className:
-    "!bg-transparent !p-0 !m-0 !mb-3 !min-h-0 !shadow-none !rounded-none border-0",
+  className: "!bg-transparent !p-0 !m-0 !mb-3 !min-h-0 !shadow-none !rounded-none border-0",
 };
 
 export const SiteToastContent: React.FC<{

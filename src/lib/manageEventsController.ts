@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { supabase } from './supabase';
-import { RSVPQuestion } from './eventRsvpTypes';
+import { useEffect, useState } from "react";
+import { supabase } from "./supabase";
+import { RSVPQuestion } from "./eventRsvpTypes";
 
 export interface Event {
   id: string;
@@ -96,9 +96,9 @@ export const useEventsManagement = () => {
   const fetchEvents = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('event_date', { ascending: false });
+      .from("events")
+      .select("*")
+      .order("event_date", { ascending: false });
 
     if (error) {
       setError(error.message);
@@ -138,7 +138,7 @@ export const useEventsManagement = () => {
   };
 
   const removeEvent = async (id: string) => {
-    const { error } = await supabase.from('events').delete().eq('id', id);
+    const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) throw error;
     await fetchEvents();
   };
@@ -154,12 +154,12 @@ export const useEventsManagement = () => {
 };
 
 export const uploadEventImage = async (file: File): Promise<string> => {
-  const ext = file.name.split('.').pop();
+  const ext = file.name.split(".").pop();
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await supabase.storage
-    .from('event-images')
+    .from("event-images")
     .upload(filename, file, { upsert: false });
   if (error) throw error;
-  const { data } = supabase.storage.from('event-images').getPublicUrl(filename);
+  const { data } = supabase.storage.from("event-images").getPublicUrl(filename);
   return data.publicUrl;
 };

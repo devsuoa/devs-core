@@ -1,4 +1,4 @@
-import rawFlags from '../config/feature-flags.json';
+import rawFlags from "../config/feature-flags.json";
 
 type FeatureFlagMap = Record<string, boolean>;
 

@@ -37,7 +37,8 @@ export default function TaskCard({ task }: { task: Task }) {
       </h3>
 
       <p className="text-[10px] md:text-xs text-white/70 mt-0.5 md:mt-1 truncate">
-        <span className="hidden md:inline">Assignee: </span>{task.assignee}
+        <span className="hidden md:inline">Assignee: </span>
+        {task.assignee}
       </p>
 
       {task.due_date && (

@@ -23,6 +23,7 @@ VITE_PUBLIC_POSTHOG_HOST=your_posthog_host_url
 **Where to find these values:**
 
 For **PostHog Cloud (US)**:
+
 - Go to your PostHog project dashboard
 - Navigate to **Project Settings** → **Project API Key**
 - Copy the **Project API Key** (for `VITE_PUBLIC_POSTHOG_KEY`)
@@ -33,10 +34,12 @@ For **PostHog Cloud (US)**:
 ### 2. Host URL Format
 
 The host URL should:
+
 - Include the `https://` protocol
 - Not have a trailing slash
 
 **Examples:**
+
 ```env
 # PostHog Cloud US
 VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
@@ -44,6 +47,7 @@ VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 # PostHog Cloud EU
 VITE_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
 ```
+
 > **Note:** We use Posthog US Host
 
 ## How Analytics Works
@@ -110,6 +114,7 @@ To filter by specific routes in PostHog:
    - `regex` - for pattern matching
 
 **Example filters:**
+
 - All admin pages: `$current_url contains /admin/`
 - Marketing portal: `$current_url equals /admin/marketing-request`
 - Home page: `$current_url equals /`
@@ -117,6 +122,7 @@ To filter by specific routes in PostHog:
 ### User Sessions and Behavior
 
 PostHog automatically tracks:
+
 - **User Sessions:** Groups pageviews into sessions
 - **User Identification:** Tracks users across sessions (when identified)
 - **Device Information:** Browser, OS, device type
@@ -127,18 +133,18 @@ PostHog automatically tracks:
 You can track custom events throughout the application by importing the PostHog instance:
 
 ```typescript
-import { posthog } from './lib/posthog';
+import { posthog } from "./lib/posthog";
 
 // Track a custom event
-posthog.capture('button_clicked', {
-  button_name: 'Marketing Portal',
-  page: '/admin/dashboard'
+posthog.capture("button_clicked", {
+  button_name: "Marketing Portal",
+  page: "/admin/dashboard",
 });
 
 // Track with user properties
-posthog.capture('form_submitted', {
-  form_type: 'marketing_request',
-  post_type: 'event'
+posthog.capture("form_submitted", {
+  form_type: "marketing_request",
+  post_type: "event",
 });
 ```
 
@@ -210,4 +216,3 @@ If you see CORS errors:
 - [ ] Custom event tracking for button clicks
 - [ ] Funnel analysis for admin workflows
 - [ ] Feature flags integration
-

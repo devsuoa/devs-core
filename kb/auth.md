@@ -21,6 +21,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 **Where to find these values:**
+
 - Go to your Supabase project dashboard
 - Navigate to **Settings** → **API**
 - Copy the **Project URL** (for `VITE_SUPABASE_URL`)
@@ -33,27 +34,32 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 The signup flow (`handleSignupSubmit` in `src/lib/signup.ts`) follows these steps:
 
 ### 1. Client-Side Validation
+
 - **Username validation:** Ensures username is provided and not empty
 - **Password matching:** Verifies password and confirm password match
 - **Password length:** Requires minimum 6 characters
 - **Email format:** Validates email format using regex
 
 ### 2. Email Domain Verification
+
 - Extracts domain from email address
 - Queries Google DNS API to verify the domain has MX records
 - Prevents signup with invalid or non-existent email domains
 
 ### 3. Supabase Account Creation
+
 - Calls `supabase.auth.signUp()` with email and password
 - Includes username in user metadata (`options.data.username`)
 - Handles Supabase-specific errors (e.g., email already exists)
 
 ### 4. Profile Creation
+
 - After successful signup, updates the `profiles` table
 - Sets the `username` field from the signup form
 - Links profile to the authenticated user via `id`
 
 ### 5. Success Handling
+
 - Displays success message prompting user to check email
 - Clears all form fields
 - User must confirm email before logging in (if email confirmation is enabled)
@@ -79,15 +85,18 @@ Success: Clear form, show success message
 The login flow (`handleLoginSubmit` in `src/lib/login.ts`) follows these steps:
 
 ### 1. Authentication
+
 - Calls `supabase.auth.signInWithPassword()` with email and password
 - Validates credentials against Supabase Auth
 
 ### 2. Role Verification
+
 - Queries the `profiles` table to fetch user's role
 - Verifies the role is `'admin'`
 - If role is not `'admin'`, signs out the user and shows error
 
 ### 3. Success Handling
+
 - Clears form fields
 - Currently logs success
 - User is now authenticated and can access protected routes
@@ -115,6 +124,7 @@ Success: Clear form, redirect to dashboard (TODO)
 **Component:** `src/pages/admin/AdminSignup.tsx`
 
 **Features:**
+
 - Two-column form layout (name/email, password/confirm password)
 - Real-time password matching validation
 - Email domain verification
@@ -128,6 +138,7 @@ Success: Clear form, redirect to dashboard (TODO)
 **Component:** `src/pages/admin/AdminLogin.tsx`
 
 **Features:**
+
 - Role-based access control (admin only)
 - Error handling for invalid credentials
 - Loading states during authentication
@@ -137,6 +148,7 @@ Success: Clear form, redirect to dashboard (TODO)
 Both signup and login handlers provide error messages:
 
 **Common Signup Errors:**
+
 - `"Please enter your name"` - Username validation failed
 - `"Passwords do not match"` - Password confirmation mismatch
 - `"Password must be at least 6 characters long"` - Password too short
@@ -145,6 +157,7 @@ Both signup and login handlers provide error messages:
 - Supabase-specific errors (e.g., email already exists)
 
 **Common Login Errors:**
+
 - `"Invalid email or password"` - Authentication failed
 - `"Failed to verify user role"` - Profile lookup failed
 - `"You do not have access"` - User does not have admin role
@@ -158,6 +171,7 @@ Both signup and login handlers provide error messages:
 5. **Rate Limiting:** Supabase provides built-in rate limiting for auth endpoints
 
 ## Future Enhancements
+
 - [ ] Password reset functionality
 - [ ] Two-factor authentication (2FA)
 - [ ] Stronger password requirements (uppercase, numbers, special characters)

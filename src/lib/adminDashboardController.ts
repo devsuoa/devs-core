@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { checkAdminAuthorization, handleLogout } from './auth';
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { checkAdminAuthorization, handleLogout } from "./auth";
 
 export function useAdminDashboard() {
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export function useAdminDashboard() {
       const isAuthorized = await checkAdminAuthorization();
       if (!isAuthorized) {
         setLoading(false);
-        navigate('/admin/login');
+        navigate("/admin/login");
         return;
       }
       setAuthorized(true);
@@ -25,9 +25,9 @@ export function useAdminDashboard() {
   const onLogout = async () => {
     try {
       await handleLogout();
-      navigate('/admin/login');
+      navigate("/admin/login");
     } catch (err) {
-      console.error('Logout failed:', err);
+      console.error("Logout failed:", err);
     }
   };
 
@@ -37,4 +37,3 @@ export function useAdminDashboard() {
     onLogout,
   };
 }
-

@@ -34,9 +34,7 @@ const Pb: React.FC = () => {
             <p className="uppercase tracking-[0.25em] text-xs sm:text-sm opacity-80">
               Elegance, Clarity, Grace
             </p>
-            <p className="italic opacity-70 text-sm sm:text-base">
-              Est. effortlessly
-            </p>
+            <p className="italic opacity-70 text-sm sm:text-base">Est. effortlessly</p>
           </div>
         </div>
       </section>

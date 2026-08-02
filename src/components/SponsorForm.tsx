@@ -49,9 +49,7 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
 
   const currentConfig = config[formType];
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -67,11 +65,7 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
       await sendEmail({
         to: "contact@devsuoa.com",
         subject: currentConfig.emailSubject(formData.name),
-        html: currentConfig.emailBody(
-          formData.name,
-          formData.email,
-          formData.message,
-        ),
+        html: currentConfig.emailBody(formData.name, formData.email, formData.message),
       });
 
       showSiteToast("Thank you! We'll get back to you soon.", {
@@ -149,11 +143,7 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
 
           {/* Submit Button */}
           <div className="flex flex-col items-center pt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-32 mx-auto"
-            >
+            <button type="submit" disabled={isSubmitting} className="w-32 mx-auto">
               <PixelatedButton
                 inactive="/buttons/submit/submit_inactive.png"
                 hover="/buttons/submit/submit_hover.png"
@@ -164,9 +154,7 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
               />
             </button>
             {isSubmitting && (
-              <p className="text-white font-silkscreen text-sm mt-4 animate-pulse">
-                SUBMITTING...
-              </p>
+              <p className="text-white font-silkscreen text-sm mt-4 animate-pulse">SUBMITTING...</p>
             )}
           </div>
         </form>

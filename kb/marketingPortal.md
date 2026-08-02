@@ -24,6 +24,7 @@ The portal supports two distinct post types, each with different field requireme
 ### Event Posts
 
 Event posts are used for marketing requests related to club events. They require:
+
 - Event name
 - Event date
 - Event time
@@ -34,6 +35,7 @@ Event posts are used for marketing requests related to club events. They require
 ### Sponsorship Posts
 
 Sponsorship posts are used for marketing requests related to sponsor content. They require:
+
 - Sponsor name
 - Sponsorship email request received date
 - Optional post date deadline
@@ -44,6 +46,7 @@ Sponsorship posts are used for marketing requests related to sponsor content. Th
 ### Common Fields
 
 Both post types share these optional fields:
+
 - Marketing description/purpose
 - Pre-written captions (if provided by sponsors)
 
@@ -52,25 +55,30 @@ Both post types share these optional fields:
 The submission flow follows these architectural steps:
 
 ### 1. Form Selection and Completion
+
 - User selects post type (event or sponsorship)
 - Form dynamically displays relevant fields based on selection
 - User fills in required and optional fields
 - Form validates required fields before submission
 
 ### 2. Data Submission
+
 - Form data is serialised into JSON format
 - Data is sent via HTTP POST to Google Apps Script endpoint
 - Request uses `no-cors` mode for cross-origin submission
 
 ### 3. Google Apps Script Processing
+
 - Apps Script receives the form data
 - Validates and processes the data structure
 - Writes the data to the configured Google Sheet
 
 ### 4. Google Sheets
+
 - All marketing requests are stored in a Google Sheet
 
 ### 5. Zapier Automation
+
 - Zapier monitors the Google Sheet for new rows
 - When a new request is detected, Zapier creates an Asana task
 - Task includes relevant details from the marketing request
@@ -81,6 +89,7 @@ The submission flow follows these architectural steps:
 ### Google Apps Script Endpoint
 
 The portal communicates with a Google Apps Script web app that:
+
 - Accepts POST requests with JSON form data
 - Validates incoming data structure
 - Writes data to the configured Google Sheet
@@ -89,6 +98,7 @@ The portal communicates with a Google Apps Script web app that:
 ### Google Sheets Structure
 
 The Google Sheet maintains a structured format with columns for:
+
 - Post type
 - Event-specific fields
 - Sponsorship-specific fields
@@ -98,6 +108,7 @@ The Google Sheet maintains a structured format with columns for:
 ### Zapier Integration
 
 Zapier automation:
+
 - Monitors Google Sheets for new rows
 - Extracts relevant data from the new rows
 - Maps data to Asana task fields

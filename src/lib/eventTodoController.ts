@@ -81,28 +81,19 @@ async function _fetchAndSeed(eventId: string): Promise<EventTodoItem[]> {
 }
 
 export async function toggleTodoItem(id: string, completed: boolean): Promise<void> {
-  const { error } = await supabase
-    .from("event_todo_items")
-    .update({ completed })
-    .eq("id", id);
+  const { error } = await supabase.from("event_todo_items").update({ completed }).eq("id", id);
 
   if (error) throw error;
 }
 
 export async function updateTodoItemNotes(id: string, item_notes: string): Promise<void> {
-  const { error } = await supabase
-    .from("event_todo_items")
-    .update({ item_notes })
-    .eq("id", id);
+  const { error } = await supabase.from("event_todo_items").update({ item_notes }).eq("id", id);
 
   if (error) throw error;
 }
 
 export async function updateTodoItemLabel(id: string, label: string): Promise<void> {
-  const { error } = await supabase
-    .from("event_todo_items")
-    .update({ label })
-    .eq("id", id);
+  const { error } = await supabase.from("event_todo_items").update({ label }).eq("id", id);
 
   if (error) throw error;
 }
@@ -136,10 +127,7 @@ export async function addTodoItem(eventId: string, label: string): Promise<Event
 }
 
 export async function deleteTodoItem(id: string): Promise<void> {
-  const { error } = await supabase
-    .from("event_todo_items")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("event_todo_items").delete().eq("id", id);
 
   if (error) throw error;
 }
@@ -161,7 +149,7 @@ export async function saveEventNote(eventId: string, content: string): Promise<v
     .from("event_notes")
     .upsert(
       { event_id: eventId, content, updated_at: new Date().toISOString() },
-      { onConflict: "event_id" }
+      { onConflict: "event_id" },
     );
 
   if (error) throw error;
@@ -182,7 +170,7 @@ export async function loadEventDocLinks(eventId: string): Promise<EventDocLink[]
 export async function addDocLink(
   eventId: string,
   title: string,
-  url: string
+  url: string,
 ): Promise<EventDocLink> {
   const { data, error } = await supabase
     .from("event_doc_links")
@@ -196,10 +184,7 @@ export async function addDocLink(
 }
 
 export async function deleteDocLink(id: string): Promise<void> {
-  const { error } = await supabase
-    .from("event_doc_links")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("event_doc_links").delete().eq("id", id);
 
   if (error) throw error;
 }
@@ -227,10 +212,7 @@ export async function loadTodoComments(todoItemId: string): Promise<TodoComment[
   return (data ?? []) as TodoComment[];
 }
 
-export async function addTodoComment(
-  todoItemId: string,
-  message: string
-): Promise<TodoComment> {
+export async function addTodoComment(todoItemId: string, message: string): Promise<TodoComment> {
   const {
     data: { user },
   } = await supabase.auth.getUser();

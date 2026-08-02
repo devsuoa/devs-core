@@ -38,8 +38,7 @@ function parseStored(raw: string | null): RsvpMemberFlowStored | null {
 function clearCorrupted(): void {
   try {
     sessionStorage.removeItem(STORAGE_KEY);
-  } catch {
-  }
+  } catch {}
 }
 
 /** Called when redirecting from RSVP after the user is not yet a member. */
@@ -51,8 +50,7 @@ export function setNeedSignupIntent(eventId: string, email: string): void {
       email: normalizeEmail(email),
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  } catch {
-  }
+  } catch {}
 }
 
 /** Read current flow without mutating (e.g. Signup prefill). */
@@ -80,8 +78,7 @@ export function setSignupComplete(eventId: string, email: string): void {
       email: normalizeEmail(email),
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  } catch {
-  }
+  } catch {}
 }
 
 /**

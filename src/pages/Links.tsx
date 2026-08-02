@@ -36,7 +36,9 @@ const Links: React.FC = () => {
       <>
         <Header />
         <div className="flex items-center justify-center mt-[20vh]">
-          <p className="font-pixelify text-red-400">An unknown error occurred. Please try again later.</p>
+          <p className="font-pixelify text-red-400">
+            An unknown error occurred. Please try again later.
+          </p>
         </div>
       </>
     );

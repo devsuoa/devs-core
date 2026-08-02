@@ -16,7 +16,8 @@ const EventsDashboard: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
   const [searchParams] = useSearchParams();
   const eventIdFilter = searchParams.get("eventId");
-  const { grouped, loading, error, reload, setAttendeePresentLocal } = useEventAttendees(eventIdFilter);
+  const { grouped, loading, error, reload, setAttendeePresentLocal } =
+    useEventAttendees(eventIdFilter);
 
   const [query, setQuery] = useState("");
   const [showAttendee, setShowAttendee] = useState(false);
@@ -29,9 +30,13 @@ const EventsDashboard: React.FC = () => {
       attendees: [...ev.attendees].sort((a, b) => {
         // Memoize the length check inside the sort to avoid repeated lowercasing
         const valA =
-          (a.dietary_requirements || "").toLowerCase() === "none" ? 0 : (a.dietary_requirements?.length ?? 0);
+          (a.dietary_requirements || "").toLowerCase() === "none"
+            ? 0
+            : (a.dietary_requirements?.length ?? 0);
         const valB =
-          (b.dietary_requirements || "").toLowerCase() === "none" ? 0 : (b.dietary_requirements?.length ?? 0);
+          (b.dietary_requirements || "").toLowerCase() === "none"
+            ? 0
+            : (b.dietary_requirements?.length ?? 0);
         return valB - valA;
       }),
     }));
@@ -75,8 +80,12 @@ const EventsDashboard: React.FC = () => {
   if (!authorized) return null;
 
   const handlePresentToggle = async (
-    attendee: { rsvp_id: string | null; event_id: string; member_email: string },
-    present: boolean
+    attendee: {
+      rsvp_id: string | null;
+      event_id: string;
+      member_email: string;
+    },
+    present: boolean,
   ) => {
     const key = attendee.rsvp_id ?? `${attendee.event_id}::${attendee.member_email}`;
     const previousValue = grouped
@@ -84,12 +93,16 @@ const EventsDashboard: React.FC = () => {
       .find(
         (row) =>
           (attendee.rsvp_id && row.rsvp_id === attendee.rsvp_id) ||
-          (row.event_id === attendee.event_id && row.member_email === attendee.member_email)
+          (row.event_id === attendee.event_id && row.member_email === attendee.member_email),
       )?.present;
 
     setAttendeePresentLocal(
-      { rsvpId: attendee.rsvp_id, eventId: attendee.event_id, memberEmail: attendee.member_email },
-      present
+      {
+        rsvpId: attendee.rsvp_id,
+        eventId: attendee.event_id,
+        memberEmail: attendee.member_email,
+      },
+      present,
     );
     setUpdatingRowKey(key);
     try {
@@ -103,8 +116,12 @@ const EventsDashboard: React.FC = () => {
       console.error("Failed to update attendance status:", err);
       if (typeof previousValue === "boolean") {
         setAttendeePresentLocal(
-          { rsvpId: attendee.rsvp_id, eventId: attendee.event_id, memberEmail: attendee.member_email },
-          previousValue
+          {
+            rsvpId: attendee.rsvp_id,
+            eventId: attendee.event_id,
+            memberEmail: attendee.member_email,
+          },
+          previousValue,
         );
       }
     } finally {
@@ -123,7 +140,11 @@ const EventsDashboard: React.FC = () => {
           ← Back to dashboard
         </Link>
       </div>
-      <PageTitle title="Event Attendees" subtext="Confirmed RSVPs grouped by event" className="mt-[5vh]" />
+      <PageTitle
+        title="Event Attendees"
+        subtext="Confirmed RSVPs grouped by event"
+        className="mt-[5vh]"
+      />
 
       <div className="flex justify-center px-4 sm:px-6 py-8 sm:py-12 mb-8 sm:mb-[10vh] min-h-[80vh]">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[70vw] lg:min-w-[650px] lg:max-w-[1100px] min-w-0">
@@ -175,16 +196,21 @@ const EventsDashboard: React.FC = () => {
                   <div key={ev.event_id} className="pixel-panel p-6 sm:p-8">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
                       <div className="min-w-0">
-                        <p className="font-silkscreen text-white text-lg sm:text-[1.25rem]">{ev.title}</p>
+                        <p className="font-silkscreen text-white text-lg sm:text-[1.25rem]">
+                          {ev.title}
+                        </p>
                         <p className="font-pixelify text-gray-400 text-xs mt-1">
                           {formatNZDate(ev.event_date)} • {ev.attendees.length} attendee
-                          {ev.attendees.length === 1 ? "" : "s"} • {presentCount}/{ev.attendees.length} present
+                          {ev.attendees.length === 1 ? "" : "s"} • {presentCount}/
+                          {ev.attendees.length} present
                         </p>
                       </div>
                       <div>
                         <button
                           className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
-                          onClick={() => downloadEventAttendeesCSV(ev.title, ev.event_date, ev.attendees)}
+                          onClick={() =>
+                            downloadEventAttendeesCSV(ev.title, ev.event_date, ev.attendees)
+                          }
                         >
                           Download CSV
                         </button>
@@ -206,8 +232,12 @@ const EventsDashboard: React.FC = () => {
                               key={`${a.rsvp_id ?? "na"}::${a.member_email}`}
                               className="rounded-lg border border-white/20 bg-white/5 p-4"
                             >
-                              <p className="font-silkscreen text-white text-sm">{memberFullName(a)}</p>
-                              <p className="font-pixelify text-gray-400 text-xs mt-1 break-all">{a.member_email}</p>
+                              <p className="font-silkscreen text-white text-sm">
+                                {memberFullName(a)}
+                              </p>
+                              <p className="font-pixelify text-gray-400 text-xs mt-1 break-all">
+                                {a.member_email}
+                              </p>
                               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 font-pixelify text-xs text-white/80">
                                 <span>ID: {a.member_student_id ?? "—"}</span>
                                 <span>UPI: {a.member_upi ?? "—"}</span>
@@ -228,10 +258,11 @@ const EventsDashboard: React.FC = () => {
                                   aria-label={`Toggle attendance for ${memberFullName(a)}`}
                                   className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
                                   checked={a.present}
-                                  disabled={updatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
-                                  onChange={(e) =>
-                                    handlePresentToggle(a, e.target.checked)
+                                  disabled={
+                                    updatingRowKey ===
+                                    (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)
                                   }
+                                  onChange={(e) => handlePresentToggle(a, e.target.checked)}
                                 />
                               </label>
                             </div>
@@ -243,26 +274,47 @@ const EventsDashboard: React.FC = () => {
                           <table className="w-full border-collapse">
                             <thead>
                               <tr className="border-b border-white/20">
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Member</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Email</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Student ID</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">UPI</th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Group</th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  Member
+                                </th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  Email
+                                </th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  Student ID
+                                </th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  UPI
+                                </th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  Group
+                                </th>
                                 <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
                                   Dietary Requirements
                                 </th>
-                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">Present</th>
+                                <th className="text-left py-3 pr-4 font-silkscreen text-sm text-white">
+                                  Present
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
                               {ev.attendees.map((a) => (
-                                <tr key={`${a.rsvp_id ?? "na"}::${a.member_email}`} className="border-b border-white/10">
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{memberFullName(a)}</td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_email}</td>
+                                <tr
+                                  key={`${a.rsvp_id ?? "na"}::${a.member_email}`}
+                                  className="border-b border-white/10"
+                                >
+                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
+                                    {memberFullName(a)}
+                                  </td>
+                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
+                                    {a.member_email}
+                                  </td>
                                   <td className="py-3 pr-4 font-pixelify text-sm text-white">
                                     {a.member_student_id ?? "—"}
                                   </td>
-                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">{a.member_upi ?? "—"}</td>
+                                  <td className="py-3 pr-4 font-pixelify text-sm text-white">
+                                    {a.member_upi ?? "—"}
+                                  </td>
                                   <td className="py-3 pr-4 font-pixelify text-sm text-white">
                                     {a.group_emails.length > 0 ? a.group_emails.join(", ") : "—"}
                                   </td>
@@ -276,10 +328,11 @@ const EventsDashboard: React.FC = () => {
                                         aria-label={`Toggle attendance for ${memberFullName(a)}`}
                                         className="h-5 w-5 cursor-pointer rounded-sm border border-white/40 bg-[#0e1026] accent-purple-300 transition disabled:opacity-50"
                                         checked={a.present}
-                                        disabled={updatingRowKey === (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)}
-                                        onChange={(e) =>
-                                          handlePresentToggle(a, e.target.checked)
+                                        disabled={
+                                          updatingRowKey ===
+                                          (a.rsvp_id ?? `${a.event_id}::${a.member_email}`)
                                         }
+                                        onChange={(e) => handlePresentToggle(a, e.target.checked)}
                                       />
                                     </label>
                                   </td>

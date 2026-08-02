@@ -1,17 +1,17 @@
 import { supabase } from "./supabase";
 
 export class NotMemberError extends Error {
-    constructor() {
+  constructor() {
     super("User is not a member");
     this.name = "NotMemberError";
-    }
+  }
 }
 
 export class AlreadyRSVPedError extends Error {
-    constructor() {
+  constructor() {
     super("User has already RSVP'd to this event");
     this.name = "AlreadyRSVPedError";
-    }
+  }
 }
 
 export class EventFullError extends Error {
@@ -85,11 +85,7 @@ function seatCountForGroup(raw: unknown): number {
 export function emailsFromStoredRsvp(leaderEmail: string, groupEmails: unknown): string[] {
   if (Array.isArray(groupEmails) && groupEmails.length > 0) {
     const deduped = Array.from(
-      new Set(
-        groupEmails
-          .map((e) => String(e).trim().toLowerCase())
-          .filter(Boolean),
-      ),
+      new Set(groupEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean)),
     );
     return deduped.length ? deduped : [leaderEmail.trim().toLowerCase()];
   }
@@ -110,7 +106,11 @@ async function fetchEventRSVPConfig(eventId: string): Promise<EventRSVPConfig> {
   return data;
 }
 
-async function isEventAtCapacity(eventId: string, requestedSeats: number, maxAttendees: number | null) {
+async function isEventAtCapacity(
+  eventId: string,
+  requestedSeats: number,
+  maxAttendees: number | null,
+) {
   if (maxAttendees == null) return false;
 
   const { data, error } = await supabase
@@ -122,7 +122,10 @@ async function isEventAtCapacity(eventId: string, requestedSeats: number, maxAtt
     throw error;
   }
 
-  const currentSeats = (data ?? []).reduce((total, row) => total + seatCountForGroup(row.group_emails), 0);
+  const currentSeats = (data ?? []).reduce(
+    (total, row) => total + seatCountForGroup(row.group_emails),
+    0,
+  );
   return currentSeats + requestedSeats > maxAttendees;
 }
 
@@ -167,7 +170,11 @@ async function validateRsvpRules(payload: RSVPSubmissionPayload, config: EventRS
     throw new GroupRSVPDisabledError();
   }
 
-  if (config.group_rsvp_enabled && config.group_rsvp_max_emails != null && requestedSeats > config.group_rsvp_max_emails) {
+  if (
+    config.group_rsvp_enabled &&
+    config.group_rsvp_max_emails != null &&
+    requestedSeats > config.group_rsvp_max_emails
+  ) {
     throw new GroupRSVPSizeExceededError();
   }
 
@@ -221,22 +228,20 @@ export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
   await assertCanSubmitRSVP(payload);
   const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
 
-  const { error } = await supabase
-    .from("events_rsvp")
-    .insert({
-      event_id: payload.eventId,
-      email: payload.leaderEmail.trim().toLowerCase(),
-      dietary_requirements: payload.dietaryRequirements || null,
-      group_emails: normalizedGroupEmails,
-      rsvp_answers: payload.answers ?? {},
-      payment_method: payload.paymentMethod ?? null,
-      bank_payment_proof_path: payload.bankPaymentProofPath ?? null,
-    });
+  const { error } = await supabase.from("events_rsvp").insert({
+    event_id: payload.eventId,
+    email: payload.leaderEmail.trim().toLowerCase(),
+    dietary_requirements: payload.dietaryRequirements || null,
+    group_emails: normalizedGroupEmails,
+    rsvp_answers: payload.answers ?? {},
+    payment_method: payload.paymentMethod ?? null,
+    bank_payment_proof_path: payload.bankPaymentProofPath ?? null,
+  });
 
   if (error) {
     // Prevent duplicate RSVPs
     if (error.code === "23505") {
-      throw new AlreadyRSVPedError()
+      throw new AlreadyRSVPedError();
     }
 
     const message = error.message?.toLowerCase() ?? "";

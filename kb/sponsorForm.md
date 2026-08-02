@@ -9,8 +9,8 @@ The **SponsorForm** is a **contact-style form** that emails **`contact@devsuoa.c
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop       | Type                     | Default     | Description                         |
+| ---------- | ------------------------ | ----------- | ----------------------------------- |
 | `formType` | `"sponsor" \| "contact"` | `"sponsor"` | Switches labels and HTML email body |
 
 ## Behaviour

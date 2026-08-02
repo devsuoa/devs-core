@@ -27,10 +27,7 @@ const About = () => {
     if (isMobile) return;
     if (!containerRef.current || !trackRef.current) return;
 
-    cleanupRef.current = initAboutHorizontalScroll(
-      containerRef.current,
-      trackRef.current,
-    );
+    cleanupRef.current = initAboutHorizontalScroll(containerRef.current, trackRef.current);
 
     return () => {
       cleanupRef.current?.();
@@ -73,19 +70,19 @@ const About = () => {
         <Header />
         <main className="min-h-screen">
           {/* Title */}
-          <PageTitle
-            title="About Us"
-            className="p-0"
-          />
+          <PageTitle title="About Us" className="p-0" />
           <section className="lg:px-0 px-20 py-6 -mb-20 text-center max-w-4xl mx-auto font-rethink">
             <h1 className="text-2xl mb-5 font-bold">
-              Founded in 2019, DEVS grown to become one of the largest tech clubs in
-              Auckland.
+              Founded in 2019, DEVS grown to become one of the largest tech clubs in Auckland.
             </h1>
             <p>
-              DEVS has grown from a small group of curious, passionate students into Auckland's largest tech club. What sets us apart is that we are entirely student-led — built by students, for students. Every workshop, hackathon, and networking event is designed around what our members genuinely want to learn and experience.
-
-              Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
+              DEVS has grown from a small group of curious, passionate students into Auckland's
+              largest tech club. What sets us apart is that we are entirely student-led — built by
+              students, for students. Every workshop, hackathon, and networking event is designed
+              around what our members genuinely want to learn and experience. Our growth reflects
+              the strength and energy of our community. From first-year beginners writing their
+              first lines of code to experienced developers building full-stack projects, DEVS is a
+              space where students support one another, share knowledge openly, and grow together.
             </p>
           </section>
 
@@ -119,12 +116,13 @@ const About = () => {
           {/* Sponsors */}
           <section>
             <div className="flex flex-col items-center justify-center gap-3">
-              <h1 className="text-4xl font-silkscreen text-center pb-12">
-                Our Sponsors
-              </h1>
+              <h1 className="text-4xl font-silkscreen text-center pb-12">Our Sponsors</h1>
               <div className="flex flex-row items-center justify-center gap-24">
                 <p className="text-white text-sm max-w-md italic font-rethink p-0">
-                  DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
+                  DEVS is incredibly grateful to our sponsors for their ongoing support in making
+                  our events and initiatives possible. From event sponsorship to resources and
+                  student engagement opportunities, their partnership enables us to create
+                  meaningful experiences for our community.
                 </p>
                 <PixelatedButton
                   to="/sponsors"
@@ -146,9 +144,7 @@ const About = () => {
             <div className="flex flex-row items-center justify-center p-20 lg:p-0 gap-x-16">
               <div className="flex flex-col gap-3 mt-4">
                 <div className="pb-12">
-                  <h1 className="text-4xl text-left font-silkscreen">
-                    Why Join Us?
-                  </h1>
+                  <h1 className="text-4xl text-left font-silkscreen">Why Join Us?</h1>
                 </div>
                 <div className="h-12 w-72 rounded-lg bg-pink-400/80 border-2 border-white flex items-center justify-center font-pixelify text-lg">
                   connect with industry
@@ -198,7 +194,12 @@ const About = () => {
                   <p className="text-base font-pixelify">meet our mascot</p>
                   <h1 className="text-8xl font-silkscreen pb-4">DEVA</h1>
                   <p className="text-white text-sm max-w-md italic font-rethink p-0">
-                    Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just any computer—she's curious, clever, and always ready to debug a problem or spark a new idea. Whether it's coding challenges, hackathons, or late-night brainstorming sessions, Deva is here to inspire developers of all levels to think creatively, collaborate fearlessly, and keep building the future—one line of code at a time.
+                    Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just
+                    any computer—she's curious, clever, and always ready to debug a problem or spark
+                    a new idea. Whether it's coding challenges, hackathons, or late-night
+                    brainstorming sessions, Deva is here to inspire developers of all levels to
+                    think creatively, collaborate fearlessly, and keep building the future—one line
+                    of code at a time.
                   </p>
                 </div>
               </div>
@@ -244,16 +245,19 @@ const About = () => {
         <BinaryBackground />
         <Header />
         <main className="min-h-screen flex flex-col items-center">
-
           <h1 className="text-3xl font-silkscreen text-center mt-24">About Us</h1>
           <section className="px-12 py-6 text-center mx-auto font-rethink text-sm leading-tight">
             <h1 className="text-lg font-bold leading-tight py-4">
               Founded in 2019, DEVS has grown to become the largest tech club in New Zealand.
             </h1>
             <p className="text-xs">
-              DEVS has grown from a small group of curious, passionate students into Auckland's largest tech club. What sets us apart is that we are entirely student-led — built by students, for students. Every workshop, hackathon, and networking event is designed around what our members genuinely want to learn and experience.
-
-              Our growth reflects the strength and energy of our community. From first-year beginners writing their first lines of code to experienced developers building full-stack projects, DEVS is a space where students support one another, share knowledge openly, and grow together.
+              DEVS has grown from a small group of curious, passionate students into Auckland's
+              largest tech club. What sets us apart is that we are entirely student-led — built by
+              students, for students. Every workshop, hackathon, and networking event is designed
+              around what our members genuinely want to learn and experience. Our growth reflects
+              the strength and energy of our community. From first-year beginners writing their
+              first lines of code to experienced developers building full-stack projects, DEVS is a
+              space where students support one another, share knowledge openly, and grow together.
             </p>
           </section>
 
@@ -290,9 +294,14 @@ const About = () => {
           {/* Sponsors */}
           <section className="w-full flex flex-col items-center justify-center gap-6 my-12">
             <div className="px-12 flex flex-col items-center justify-center gap-6">
-              <h1 className="text-2xl font-silkscreen text-left whitespace-nowrap">&lt; Our Sponsors /&gt;</h1>
+              <h1 className="text-2xl font-silkscreen text-left whitespace-nowrap">
+                &lt; Our Sponsors /&gt;
+              </h1>
               <p className="text-white text-sm max-w-sm italic font-rethink p-0 text-center">
-                DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
+                DEVS is incredibly grateful to our sponsors for their ongoing support in making our
+                events and initiatives possible. From event sponsorship to resources and student
+                engagement opportunities, their partnership enables us to create meaningful
+                experiences for our community.
               </p>
               <PixelatedButton
                 to="/sponsors"
@@ -311,9 +320,7 @@ const About = () => {
           <section className="mt-12 mb-12">
             <div className="flex flex-col gap-3 items-center justify-center">
               <div className="flex pb-4 justify-center">
-                <h1 className="text-2xl text-center font-silkscreen">
-                  Why Join Us?
-                </h1>
+                <h1 className="text-2xl text-center font-silkscreen">Why Join Us?</h1>
               </div>
               <div className="h-12 w-72 rounded-lg bg-pink-400/80 border-2 border-white flex items-center justify-center font-pixelify text-lg">
                 connect with industry
@@ -359,7 +366,11 @@ const About = () => {
                 <p className="text-2xl font-bold font-pixelify text-center">meet our mascot</p>
                 <h1 className="text-8xl font-silkscreen pb-4 -ml-2">DEVA</h1>
                 <p className="text-white text-sm italic font-rethink">
-                  Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just any computer—she's curious, clever, and always ready to debug a problem or spark a new idea. Whether it's coding challenges, hackathons, or late-night brainstorming sessions, Deva is here to inspire developers of all levels to think creatively, collaborate fearlessly, and keep building the future—one line of code at a time.
+                  Meet Deva, the official mascot of the Developers Society! 🖥️💡 Deva isn't just any
+                  computer—she's curious, clever, and always ready to debug a problem or spark a new
+                  idea. Whether it's coding challenges, hackathons, or late-night brainstorming
+                  sessions, Deva is here to inspire developers of all levels to think creatively,
+                  collaborate fearlessly, and keep building the future—one line of code at a time.
                 </p>
               </div>
               <div className="w-full max-w-md pt-3">
@@ -390,7 +401,6 @@ const About = () => {
               />
             </div>
           </section>
-
         </main>
 
         <Footer />

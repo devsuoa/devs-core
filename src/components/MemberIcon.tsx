@@ -1,14 +1,14 @@
 import React from "react";
 
 export enum Team {
-    Presidents = "Presidents",
-    SeniorAdvisor = "Senior Advisor",
-    Admin = "Admin",
-    Tech = "Tech",
-    Industry = "Industry",
-    Comps = "Comps",
-    Social = "Social",
-    Marketing = "Marketing",
+  Presidents = "Presidents",
+  SeniorAdvisor = "Senior Advisor",
+  Admin = "Admin",
+  Tech = "Tech",
+  Industry = "Industry",
+  Comps = "Comps",
+  Social = "Social",
+  Marketing = "Marketing",
 }
 
 type MemberIconProps = {
@@ -72,37 +72,33 @@ export const MemberIcon: React.FC<MemberIconProps> = ({
     <div className={`p-4 ${className}`}>
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
-        {image && (
+          {image && (
             <img
-            src={image}
-            alt={name}
-            className={`max-h-[100px] max-w-[100px] shrink-0 object-contain rounded-full border-2 hover:scale-103 transition-all duration-300 ease-in-out ${
+              src={image}
+              alt={name}
+              className={`max-h-[100px] max-w-[100px] shrink-0 object-contain rounded-full border-2 hover:scale-103 transition-all duration-300 ease-in-out ${
                 team ? TEAM_BORDER_CLASSES[team] : "border-white"
-              }`}              
+              }`}
             />
-        )}
+          )}
 
-        {lead && (
+          {lead && (
             <img
-            src="/team/lead_star.png"
-            alt="Lead"
-            className="absolute -top-1 -right-1 w-5 h-5 pixelated"
+              src="/team/lead_star.png"
+              alt="Lead"
+              className="absolute -top-1 -right-1 w-5 h-5 pixelated"
             />
-        )}
+          )}
         </div>
 
         <div className="flex text-center">
-          <p className="text-m font-normal text-white font-rethink">
-            {name}
-          </p>
+          <p className="text-m font-normal text-white font-rethink">{name}</p>
         </div>
 
         {role && (
           <div className="flex text-center p-0">
-          <p className="text-sm font-normal text-white font-rethink">
-            {role}
-          </p>
-        </div>
+            <p className="text-sm font-normal text-white font-rethink">{role}</p>
+          </div>
         )}
       </div>
     </div>

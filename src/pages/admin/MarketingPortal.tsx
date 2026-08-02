@@ -93,8 +93,7 @@ const MarketingPortal: React.FC = () => {
                   Request submitted!
                 </div>
                 <p className="font-rethink text-gray-300 text-sm text-center max-w-sm">
-                  Your marketing request has been received. The marketing team
-                  will be notified.
+                  Your marketing request has been received. The marketing team will be notified.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 mt-4">
                   <button
@@ -133,15 +132,11 @@ const MarketingPortal: React.FC = () => {
                         name="postType"
                         value="event"
                         checked={postType === "event"}
-                        onChange={(e) =>
-                          setPostType(e.target.value as "event" | "sponsorship")
-                        }
+                        onChange={(e) => setPostType(e.target.value as "event" | "sponsorship")}
                         className="sr-only"
                         required
                       />
-                      <span className="font-pixelify text-sm sm:text-base text-white">
-                        Event
-                      </span>
+                      <span className="font-pixelify text-sm sm:text-base text-white">Event</span>
                     </label>
                     <label
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer touch-manipulation transition-colors ${
@@ -155,9 +150,7 @@ const MarketingPortal: React.FC = () => {
                         name="postType"
                         value="sponsorship"
                         checked={postType === "sponsorship"}
-                        onChange={(e) =>
-                          setPostType(e.target.value as "event" | "sponsorship")
-                        }
+                        onChange={(e) => setPostType(e.target.value as "event" | "sponsorship")}
                         className="sr-only"
                         required
                       />
@@ -172,10 +165,7 @@ const MarketingPortal: React.FC = () => {
                 {postType === "event" && (
                   <div className="space-y-8 sm:space-y-10">
                     <div>
-                      <label
-                        htmlFor="eventName"
-                        className="pixel-label font-pixelify block mb-4"
-                      >
+                      <label htmlFor="eventName" className="pixel-label font-pixelify block mb-4">
                         Name of the Event<span className="text-red-400">*</span>
                       </label>
                       <input
@@ -190,10 +180,7 @@ const MarketingPortal: React.FC = () => {
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="eventDate"
-                        className="pixel-label font-pixelify block mb-4"
-                      >
+                      <label htmlFor="eventDate" className="pixel-label font-pixelify block mb-4">
                         Date of Event<span className="text-red-400">*</span>
                       </label>
                       <input
@@ -207,10 +194,7 @@ const MarketingPortal: React.FC = () => {
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="eventTime"
-                        className="pixel-label font-pixelify block mb-4"
-                      >
+                      <label htmlFor="eventTime" className="pixel-label font-pixelify block mb-4">
                         Time of Event<span className="text-red-400">*</span>
                       </label>
                       <input
@@ -282,10 +266,7 @@ const MarketingPortal: React.FC = () => {
                 {postType === "sponsorship" && (
                   <div className="space-y-8 sm:space-y-10">
                     <div>
-                      <label
-                        htmlFor="sponsorName"
-                        className="pixel-label font-pixelify block mb-4"
-                      >
+                      <label htmlFor="sponsorName" className="pixel-label font-pixelify block mb-4">
                         Name of the Sponsor
                         <span className="text-red-400">*</span>
                       </label>
@@ -312,9 +293,7 @@ const MarketingPortal: React.FC = () => {
                         id="sponsorshipEmailDate"
                         type="date"
                         value={sponsorshipEmailDate}
-                        onChange={(e) =>
-                          setSponsorshipEmailDate(e.target.value)
-                        }
+                        onChange={(e) => setSponsorshipEmailDate(e.target.value)}
                         className="pixel-input font-pixelify w-full"
                         required
                       />
@@ -348,9 +327,7 @@ const MarketingPortal: React.FC = () => {
                         id="sponsorshipEventName"
                         type="text"
                         value={sponsorshipEventName}
-                        onChange={(e) =>
-                          setSponsorshipEventName(e.target.value)
-                        }
+                        onChange={(e) => setSponsorshipEventName(e.target.value)}
                         className="pixel-input font-pixelify w-full"
                         required
                       />
@@ -385,9 +362,7 @@ const MarketingPortal: React.FC = () => {
                       <textarea
                         id="sponsorshipDescription"
                         value={sponsorshipDescription}
-                        onChange={(e) =>
-                          setSponsorshipDescription(e.target.value)
-                        }
+                        onChange={(e) => setSponsorshipDescription(e.target.value)}
                         className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                         required
                       />
@@ -408,9 +383,7 @@ const MarketingPortal: React.FC = () => {
                       <textarea
                         id="marketingDescription"
                         value={marketingDescription}
-                        onChange={(e) =>
-                          setMarketingDescription(e.target.value)
-                        }
+                        onChange={(e) => setMarketingDescription(e.target.value)}
                         className="pixel-input font-pixelify w-full min-h-[100px] resize-y"
                       />
                     </div>
@@ -438,7 +411,7 @@ const MarketingPortal: React.FC = () => {
                     disabled={!postType || isSubmitting}
                     className="pixel-button font-silkscreen min-h-[44px] min-w-[120px] touch-manipulation"
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                    {isSubmitting ? "Submitting..." : "Submit"}
                   </button>
                 </div>
               </form>

@@ -3,7 +3,13 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { PageTitle } from "../../components/PageTitle";
 import { useAdminDashboard } from "../../lib/adminDashboardController";
-import { useLinksManagement, uploadLinkIcon, Link, LinkFormData, getFaviconUrl } from "../../lib/linksController";
+import {
+  useLinksManagement,
+  uploadLinkIcon,
+  Link,
+  LinkFormData,
+  getFaviconUrl,
+} from "../../lib/linksController";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
@@ -95,12 +101,20 @@ const ImageDropZone: React.FC<{
           </>
         ) : (
           <>
-            <p className="font-pixelify text-xs text-white/70">Drag & drop or click to upload icon</p>
+            <p className="font-pixelify text-xs text-white/70">
+              Drag & drop or click to upload icon
+            </p>
             <p className="font-pixelify text-xs text-white/40">PNG, JPG, SVG, WEBP</p>
           </>
         )}
       </div>
-      <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onInputChange} />
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onInputChange}
+      />
     </div>
   );
 };
@@ -111,7 +125,9 @@ const SortableLinkItem: React.FC<{
   onEdit: (link: Link) => void;
   onDelete: (id: string) => void;
 }> = ({ link, isCurrentlyActive, onEdit, onDelete }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: link.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -239,7 +255,8 @@ const SortableLinkItem: React.FC<{
 
 const ManageLinks: React.FC = () => {
   const { loading: authLoading, authorized } = useAdminDashboard();
-  const { links, loading, error, addLink, editLink, removeLink, reorderLink } = useLinksManagement();
+  const { links, loading, error, addLink, editLink, removeLink, reorderLink } =
+    useLinksManagement();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingLink, setEditingLink] = useState<Link | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -305,7 +322,11 @@ const ManageLinks: React.FC = () => {
     }
 
     // Validate date range
-    if (formData.active_from && formData.active_to && new Date(formData.active_from) > new Date(formData.active_to)) {
+    if (
+      formData.active_from &&
+      formData.active_to &&
+      new Date(formData.active_from) > new Date(formData.active_to)
+    ) {
       alert("Active From date must be before or equal to Active To date");
       return;
     }
@@ -405,12 +426,18 @@ const ManageLinks: React.FC = () => {
           ← Back to dashboard
         </RouterLink>
       </div>
-      <PageTitle title="Manage Links" subtext="Add, edit, and manage active links" className="mt-[5vh]" />
+      <PageTitle
+        title="Manage Links"
+        subtext="Add, edit, and manage active links"
+        className="mt-[5vh]"
+      />
       <div className="flex items-center justify-center mb-8 sm:mb-[10vh] px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px]">
           {(error || uploadError) && (
             <div className="pixel-panel font-pixelify mb-4 p-4 sm:p-5">
-              <p className="font-pixelify text-red-400 text-xs sm:text-[10px]">{error || uploadError}</p>
+              <p className="font-pixelify text-red-400 text-xs sm:text-[10px]">
+                {error || uploadError}
+              </p>
             </div>
           )}
 
@@ -521,7 +548,9 @@ const ManageLinks: React.FC = () => {
                     </div>
 
                     <div className="mb-6">
-                      <label className="pixel-label font-pixelify block mb-4">Custom Icon (optional)</label>
+                      <label className="pixel-label font-pixelify block mb-4">
+                        Custom Icon (optional)
+                      </label>
                       <ImageDropZone
                         imageUrl={formData.custom_icon || null}
                         onUpload={(url) => {
@@ -542,7 +571,12 @@ const ManageLinks: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={formData.is_active}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          is_active: e.target.checked,
+                        })
+                      }
                       className="w-4 h-4 min-w-[16px] min-h-[16px]"
                     />
                     <span className="font-pixelify text-xs">Active</span>
@@ -557,7 +591,12 @@ const ManageLinks: React.FC = () => {
                     id="active_from"
                     type="date"
                     value={formData.active_from || ""}
-                    onChange={(e) => setFormData({ ...formData, active_from: e.target.value || null })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        active_from: e.target.value || null,
+                      })
+                    }
                     className="pixel-input font-pixelify w-full"
                   />
                 </div>
@@ -570,13 +609,21 @@ const ManageLinks: React.FC = () => {
                     id="active_to"
                     type="date"
                     value={formData.active_to || ""}
-                    onChange={(e) => setFormData({ ...formData, active_to: e.target.value || null })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        active_to: e.target.value || null,
+                      })
+                    }
                     className="pixel-input font-pixelify w-full"
                   />
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
-                  <button type="submit" className="pixel-button font-silkscreen min-h-[44px] touch-manipulation">
+                  <button
+                    type="submit"
+                    className="pixel-button font-silkscreen min-h-[44px] touch-manipulation"
+                  >
                     {editingLink
                       ? formData.is_spacer
                         ? "Update Spacer"
@@ -598,14 +645,23 @@ const ManageLinks: React.FC = () => {
           )}
 
           <div className="pixel-panel relative p-6 sm:p-8 md:p-10 lg:px-10 lg:py-12 min-w-0">
-            <h2 className="font-pixelify text-white mb-6 text-sm sm:text-xs">All Links ({links.length})</h2>
+            <h2 className="font-pixelify text-white mb-6 text-sm sm:text-xs">
+              All Links ({links.length})
+            </h2>
             {links.length === 0 ? (
               <p className="font-pixelify text-white text-center text-xs sm:text-[10px]">
                 No links yet. Add your first link!
               </p>
             ) : (
-              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={links.map((l) => l.id)}
+                  strategy={verticalListSortingStrategy}
+                >
                   <div className="flex flex-col gap-4">
                     {links.map((link) => {
                       const isCurrentlyActive =

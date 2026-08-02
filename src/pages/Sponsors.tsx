@@ -33,9 +33,7 @@ const Sponsors: React.FC = () => {
   const dragProxyRef = useRef<HTMLDivElement>(null);
   const scrubRef = useRef<any>(null);
   const spacingRef = useRef<number>(0.1);
-  const autoScrollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
-    null,
-  );
+  const autoScrollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAutoScrollActiveRef = useRef<boolean>(true);
 
@@ -97,8 +95,7 @@ const Sponsors: React.FC = () => {
   ];
 
   useLayoutEffect(() => {
-    if (!cardsRef.current || !galleryRef.current || !dragProxyRef.current)
-      return;
+    if (!cardsRef.current || !galleryRef.current || !dragProxyRef.current) return;
 
     const ctx = gsap.context(() => {
       const cards = gsap.utils.toArray<HTMLLIElement>(".sponsor-card");
@@ -265,13 +262,10 @@ const Sponsors: React.FC = () => {
 
   return (
     <>
-    <BinaryBackground/>
+      <BinaryBackground />
       <Header />
       <main className="min-h-screen overflow-x-hidden">
-        <PageTitle
-          title="Our Sponsors"
-          className="p-0"
-        />
+        <PageTitle title="Our Sponsors" className="p-0" />
 
         {/* Carousel Section */}
         <div className="flex flex-col items-center w-full gap-5 -mt-20 md:mt-5 pt-5 sm:pt-0">
@@ -322,9 +316,10 @@ const Sponsors: React.FC = () => {
 
         <div className="flex flex-col items-center justify-center px-6 mt-10 sm:px-8 md:px-4">
           <p className="text-white text-sm sm:text-md max-w-lg font-rethink text-center py-10 sm:py-12">
-            DEVS is incredibly grateful to our sponsors for their ongoing support in making our events and initiatives possible. From event sponsorship to resources and student engagement opportunities, their partnership enables us to create meaningful experiences for our community.
-
-
+            DEVS is incredibly grateful to our sponsors for their ongoing support in making our
+            events and initiatives possible. From event sponsorship to resources and student
+            engagement opportunities, their partnership enables us to create meaningful experiences
+            for our community.
           </p>
         </div>
 

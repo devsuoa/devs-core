@@ -16,18 +16,18 @@ Primarily from **`EventsCard`** on the public events flow. The parent passes `on
 
 ## Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `open` | `boolean` | When true, the dialog is rendered |
-| `onClose` | `() => void` | Called to dismiss (also used after success timeout) |
-| `initialLeaderEmail` | `string` (optional) | When **`open`** and set, normalises into the leader email field |
-| `groupRSVPEnabled` | `boolean` | Enables group email fields and validation |
-| `groupRSVPMaxEmails` | `number \| null` | Caps how many group email inputs apply; `null` uses current list length |
-| `paymentEnabled` | `boolean` (optional) | Toggles the cost/payment section |
-| `chargeAmount` | `number \| null` (optional) | Per-person price when paid |
-| `bankTransferEnabled` | `boolean` (optional) | Enables the bank-transfer option in the payment picker |
-| `rsvpQuestions` | `RSVPQuestion[]` | Custom questions from the event (`eventRsvpTypes`) |
-| `onConfirm` | `(payload) => Promise<void> \| void` | Async-friendly; receives `leaderEmail`, `groupEmails`, `dietaryRequirements`, `answers`, `paymentMethod`, `bankPaymentProofFile`, and optionally `signupInfo` when the inline signup step was filled in |
+| Prop                  | Type                                 | Description                                                                                                                                                                                             |
+| --------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `open`                | `boolean`                            | When true, the dialog is rendered                                                                                                                                                                       |
+| `onClose`             | `() => void`                         | Called to dismiss (also used after success timeout)                                                                                                                                                     |
+| `initialLeaderEmail`  | `string` (optional)                  | When **`open`** and set, normalises into the leader email field                                                                                                                                         |
+| `groupRSVPEnabled`    | `boolean`                            | Enables group email fields and validation                                                                                                                                                               |
+| `groupRSVPMaxEmails`  | `number \| null`                     | Caps how many group email inputs apply; `null` uses current list length                                                                                                                                 |
+| `paymentEnabled`      | `boolean` (optional)                 | Toggles the cost/payment section                                                                                                                                                                        |
+| `chargeAmount`        | `number \| null` (optional)          | Per-person price when paid                                                                                                                                                                              |
+| `bankTransferEnabled` | `boolean` (optional)                 | Enables the bank-transfer option in the payment picker                                                                                                                                                  |
+| `rsvpQuestions`       | `RSVPQuestion[]`                     | Custom questions from the event (`eventRsvpTypes`)                                                                                                                                                      |
+| `onConfirm`           | `(payload) => Promise<void> \| void` | Async-friendly; receives `leaderEmail`, `groupEmails`, `dietaryRequirements`, `answers`, `paymentMethod`, `bankPaymentProofFile`, and optionally `signupInfo` when the inline signup step was filled in |
 
 ### `onConfirm` payload
 
@@ -69,11 +69,14 @@ import { rsvpToEvent } from "./lib/eventsRSVPController";
   rsvpQuestions={event.rsvp_questions}
   onConfirm={async ({ signupInfo, ...payload }) => {
     if (signupInfo) {
-      await submitSignupForm({ ...signupInfo, email: payload.leaderEmail, /* ... */ });
+      await submitSignupForm({
+        ...signupInfo,
+        email: payload.leaderEmail /* ... */,
+      });
     }
     await rsvpToEvent({ eventId: event.id, ...payload });
   }}
-/>
+/>;
 ```
 
 ## Related

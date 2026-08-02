@@ -32,20 +32,20 @@ As declared in `package.json` and used in practice:
 
 ## Top-level layout
 
-| Path | Role |
-|------|------|
-| `src/main.tsx` | React root, `BrowserRouter`, global CSS import |
-| `src/App.tsx` | Routes, `ToastContainer`, cookie banner, PostHog page views |
-| `src/components/` | Reusable UI (header, footer, dialogs, task views, etc.) |
-| `src/pages/` | Route-level screens (public, admin, legal, utility) |
-| `src/pages/admin/` | Admin-only flows (dashboard, CMS-style tools) |
-| `src/pages/hidden/` | Non-marketed routes (e.g. easter-egg page) |
-| `src/lib/` | Data access, auth helpers, hooks, feature logic (“controllers”) |
-| `src/config/` | Static config (e.g. `feature-flags.json`) |
-| `src/data/` | Bundled JSON (e.g. sponsor data mirror) |
-| `public/` | Static assets served as-is; includes sponsor JSON used by the site |
-| `kb/` | Knowledge base (this documentation) |
-| `vercel.json` | SPA rewrite: all paths → `index.html` |
+| Path                | Role                                                               |
+| ------------------- | ------------------------------------------------------------------ |
+| `src/main.tsx`      | React root, `BrowserRouter`, global CSS import                     |
+| `src/App.tsx`       | Routes, `ToastContainer`, cookie banner, PostHog page views        |
+| `src/components/`   | Reusable UI (header, footer, dialogs, task views, etc.)            |
+| `src/pages/`        | Route-level screens (public, admin, legal, utility)                |
+| `src/pages/admin/`  | Admin-only flows (dashboard, CMS-style tools)                      |
+| `src/pages/hidden/` | Non-marketed routes (e.g. easter-egg page)                         |
+| `src/lib/`          | Data access, auth helpers, hooks, feature logic (“controllers”)    |
+| `src/config/`       | Static config (e.g. `feature-flags.json`)                          |
+| `src/data/`         | Bundled JSON (e.g. sponsor data mirror)                            |
+| `public/`           | Static assets served as-is; includes sponsor JSON used by the site |
+| `kb/`               | Knowledge base (this documentation)                                |
+| `vercel.json`       | SPA rewrite: all paths → `index.html`                              |
 
 The README at the repo root links to [Home](home.md) for documentation entry.
 
@@ -62,49 +62,49 @@ Routes are defined in `src/App.tsx`. Approximate grouping:
 
 ### Public and marketing
 
-| Path | Page component |
-|------|----------------|
-| `/` | `Landing` |
-| `/home` | `Home` |
-| `/landing` | `Landing` |
-| `/join` | `Signup` (member signup) |
-| `/links` | `Links` |
-| `/events` | `Events` |
-| `/team` | `Team` |
-| `/contact` | `Contact` |
-| `/about` | `About` |
-| `/sponsors` | `Sponsors` |
+| Path        | Page component           |
+| ----------- | ------------------------ |
+| `/`         | `Landing`                |
+| `/home`     | `Home`                   |
+| `/landing`  | `Landing`                |
+| `/join`     | `Signup` (member signup) |
+| `/links`    | `Links`                  |
+| `/events`   | `Events`                 |
+| `/team`     | `Team`                   |
+| `/contact`  | `Contact`                |
+| `/about`    | `About`                  |
+| `/sponsors` | `Sponsors`               |
 
 ### Legal and utility
 
-| Path | Page component |
-|------|----------------|
-| `/privacy-policy` | `PrivacyPolicy` |
-| `/terms` | `TermsAndConditions` |
-| `/qr-code` | `QRCode` |
-| `/404` and `*` | `PageNotFound` |
+| Path              | Page component       |
+| ----------------- | -------------------- |
+| `/privacy-policy` | `PrivacyPolicy`      |
+| `/terms`          | `TermsAndConditions` |
+| `/qr-code`        | `QRCode`             |
+| `/404` and `*`    | `PageNotFound`       |
 
 ### Admin (Supabase `admin` role)
 
-| Path | Page component |
-|------|----------------|
-| `/admin/signup` | `AdminSignup` |
-| `/admin/login` | `AdminLogin` |
-| `/admin/reset-password` | `AdminResetPassword` |
-| `/admin/dashboard` | `AdminDashboard` |
-| `/admin/marketing-request` | `MarketingPortal` |
-| `/admin/manage-links` | `ManageLinks` |
-| `/admin/manage-events` | `ManageEvents` |
-| `/admin/members` | `MemberRegistry` |
-| `/admin/tasks` | `TaskTracker` |
-| `/admin/event-attendees` | `EventsDashboard` |
-| `/admin/audit-log` | `AdminCMSAuditLog` |
-| `/admin/*` | Fallback to `AdminDashboard` |
+| Path                       | Page component               |
+| -------------------------- | ---------------------------- |
+| `/admin/signup`            | `AdminSignup`                |
+| `/admin/login`             | `AdminLogin`                 |
+| `/admin/reset-password`    | `AdminResetPassword`         |
+| `/admin/dashboard`         | `AdminDashboard`             |
+| `/admin/marketing-request` | `MarketingPortal`            |
+| `/admin/manage-links`      | `ManageLinks`                |
+| `/admin/manage-events`     | `ManageEvents`               |
+| `/admin/members`           | `MemberRegistry`             |
+| `/admin/tasks`             | `TaskTracker`                |
+| `/admin/event-attendees`   | `EventsDashboard`            |
+| `/admin/audit-log`         | `AdminCMSAuditLog`           |
+| `/admin/*`                 | Fallback to `AdminDashboard` |
 
 ### Hidden
 
-| Path | Notes |
-|------|--------|
+| Path       | Notes                              |
+| ---------- | ---------------------------------- |
 | `/p/b/6/7` | `Pb` – intentionally obscure route |
 
 Admin layout: many admin screens use shared chrome (`Header`, `PageTitle`, `Footer`) and **`useAdminDashboard`** or equivalent checks (`checkAdminAuthorization` in `auth.ts`) before showing content.
@@ -119,19 +119,19 @@ The Supabase client is created in `src/lib/supabase.ts` from **`VITE_SUPABASE_UR
 
 Tables and resources referenced from `src/lib` (names as in code; RLS and schemas live in Supabase, not in this repo):
 
-| Name | Typical use |
-|------|----------------|
-| `profiles` | Auth-linked profiles; `role` (e.g. `admin`), `is_superuser` for audit log access |
-| `events` | Event listings, RSVP settings, active flag |
-| `events_rsvp` | RSVP rows (email, group, answers, attendance, links to members/events) |
-| `members` | Member signup inserts |
-| `student_degree`, `student_major` | Degree/major relations after signup |
-| `degrees`, `degree_major` | Reference data for signup (`degreeData.ts`) |
-| `links` | Manageable links CRUD |
-| `member_registry` | Read model for admin member registry |
-| `tasks`, `task_comments` | Task tracker |
-| `marketing_requests` | Marketing portal persistence (alongside external Google Sheet flow) |
-| `admin_audit_log` | CMS audit entries; superuser-gated UI |
+| Name                              | Typical use                                                                      |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| `profiles`                        | Auth-linked profiles; `role` (e.g. `admin`), `is_superuser` for audit log access |
+| `events`                          | Event listings, RSVP settings, active flag                                       |
+| `events_rsvp`                     | RSVP rows (email, group, answers, attendance, links to members/events)           |
+| `members`                         | Member signup inserts                                                            |
+| `student_degree`, `student_major` | Degree/major relations after signup                                              |
+| `degrees`, `degree_major`         | Reference data for signup (`degreeData.ts`)                                      |
+| `links`                           | Manageable links CRUD                                                            |
+| `member_registry`                 | Read model for admin member registry                                             |
+| `tasks`, `task_comments`          | Task tracker                                                                     |
+| `marketing_requests`              | Marketing portal persistence (alongside external Google Sheet flow)              |
+| `admin_audit_log`                 | CMS audit entries; superuser-gated UI                                            |
 
 **Storage buckets (from code):** `event-images` (public URLs for event images), and link-related uploads as implemented in `linksController` (bucket naming in code should be treated as the source of truth).
 
@@ -162,9 +162,9 @@ Naming is not uniform (`*Controller.ts` vs `use*` hooks in the same file); when 
 
 The client invokes Supabase Edge Functions by name or URL. Examples referenced in this repo:
 
-| Function | Invoked from |
-|----------|----------------|
-| `send-email` | `src/lib/emailController.ts` via `supabase.functions.invoke` |
+| Function                | Invoked from                                                                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `send-email`            | `src/lib/emailController.ts` via `supabase.functions.invoke`                                                                 |
 | `create-marketing-task` | `src/lib/marketingPortalController.ts` via authenticated `fetch` to `{VITE_SUPABASE_URL}/functions/v1/create-marketing-task` |
 
 Implementation and secrets (e.g. email provider such as Resend) live in the **Supabase project**, not necessarily in this repository.
@@ -191,12 +191,12 @@ Both paths must succeed for the handler to complete without throwing; see the co
 
 ## Environment variables (summary)
 
-| Variable | Used for |
-|----------|-----------|
-| `VITE_SUPABASE_URL` | Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anon client key |
-| `VITE_PUBLIC_POSTHOG_KEY` | PostHog project key (optional) |
-| `VITE_PUBLIC_POSTHOG_HOST` | PostHog API host (optional) |
+| Variable                   | Used for                       |
+| -------------------------- | ------------------------------ |
+| `VITE_SUPABASE_URL`        | Supabase project URL           |
+| `VITE_SUPABASE_ANON_KEY`   | Supabase anon client key       |
+| `VITE_PUBLIC_POSTHOG_KEY`  | PostHog project key (optional) |
+| `VITE_PUBLIC_POSTHOG_HOST` | PostHog API host (optional)    |
 
 Admin signup/login and any serverless pieces may require additional configuration in Supabase (Auth URLs, email templates, Edge Function secrets). Those settings are **not** stored in this repo.
 

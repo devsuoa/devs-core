@@ -26,7 +26,7 @@ const Home: React.FC = () => {
     <>
       <BinaryBackground />
       <div className="mb-8">
-      <Header/>
+        <Header />
       </div>
 
       {/* HERO SECTION */}
@@ -42,24 +42,26 @@ const Home: React.FC = () => {
                 alt="DEVS Logo"
                 className="w-[50vw] lg:w-[40vw] mb-5"
               />
-
             </div>
             <p className="text-white text-sm md:text-m max-w-xl font-rethink text-center xs:text-left px-10 md:px-0">
-              Developers Society (DEVS) is Auckland’s leading university technology club, serving students from the University of Auckland and Auckland University of Technology.
+              Developers Society (DEVS) is Auckland’s leading university technology club, serving
+              students from the University of Auckland and Auckland University of Technology.
             </p>
             <p className="text-white text-sm mb-10 md:text-m max-w-xl font-rethink text-center xs:text-left px-10 md:px-0">
-              We bridge the gap between academia and industry by running hands-on workshops, hackathons, and networking events that help students grow their technical skills, prepare for the workplace, and connect with leading organisations. Through strong industry partnerships, we create meaningful opportunities that empower and shape the next generation of technology talent in Auckland.
+              We bridge the gap between academia and industry by running hands-on workshops,
+              hackathons, and networking events that help students grow their technical skills,
+              prepare for the workplace, and connect with leading organisations. Through strong
+              industry partnerships, we create meaningful opportunities that empower and shape the
+              next generation of technology talent in Auckland.
             </p>
             {/* Learn more button (absolute in hero) */}
-
           </div>
-
         </div>
         <div className="hidden [@media(min-height:750px)]:flex absolute left-1/2 transform -translate-x-1/2 bottom-7 flex-col items-center">
           <button
             onClick={() => {
-              const el = document.getElementById('next-section');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
+              const el = document.getElementById("next-section");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
             }}
             className="font-silkscreen uppercase text-white px-6 py-3 hover:cursor-pointer rounded-lg animate-bounce"
             aria-label="Learn more"
@@ -124,25 +126,34 @@ const Home: React.FC = () => {
             </p>
 
             <p className="text-white font-rethink text-sm lg:text-m leading-relaxed">
-              DEVS is Auckland's largest tech club, at both the University of Auckland and Auckland University of Technology. We're
-              a community of software enthusiasts who build, learn, and grow
-              together.
+              DEVS is Auckland's largest tech club, at both the University of Auckland and Auckland
+              University of Technology. We're a community of software enthusiasts who build, learn,
+              and grow together.
             </p>
 
             <div className="flex flex-col gap-3 mt-4 items-center lg:items-start">
-              <Link to="/join" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-pink-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link
+                to="/join"
+                className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-pink-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center"
+              >
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   1000+ members
                 </span>
               </Link>
 
-              <Link to="/events" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-blue-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link
+                to="/events"
+                className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-blue-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center"
+              >
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   25+ events per year
                 </span>
               </Link>
 
-              <Link to="/team" className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-purple-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center">
+              <Link
+                to="/team"
+                className="h-10 w-full md:w-70 max-w-xs px-4 rounded-lg bg-purple-400/80 border-2 border-white hover:scale-102 transition flex items-center justify-center"
+              >
                 <span className="text-white font-silkscreen text-sm md:text-m text-center">
                   27 student executives
                 </span>
@@ -179,11 +190,7 @@ const Home: React.FC = () => {
         </p>
         <div className="flex flex-col lg:flex-row flex-wrap items-center justify-evenly w-full gap-4">
           {silverSponsors.map((sponsor) => (
-            <SponsorItem
-              key={sponsor.name}
-              name={sponsor.name}
-              logo={sponsor.image}
-            />
+            <SponsorItem key={sponsor.name} name={sponsor.name} logo={sponsor.image} />
           ))}
         </div>
       </section>
@@ -196,7 +203,9 @@ const Home: React.FC = () => {
               stay connected with us!
             </p>
             <p className="text-white font-rethink text-center text-sm md:text-m">
-              Follow us on social media to stay up to date with our latest news, events, and opportunities. Join our community and never miss out on the exciting things happening at DEVS!
+              Follow us on social media to stay up to date with our latest news, events, and
+              opportunities. Join our community and never miss out on the exciting things happening
+              at DEVS!
             </p>
             <SocialLinks className="gap-4 mt-4" />
           </div>
@@ -229,9 +238,8 @@ const Home: React.FC = () => {
               */}
               <div className=" inset-0 flex items-center justify-center px-8 md:px-16 text-center">
                 <p className="text-white text-sm md:text-sm leading-relaxed max-w-md">
-                  We're always excited to meet motivated individuals who love
-                  technology! Sign up now to join the DEVS community and explore
-                  more opportunities with us.
+                  We're always excited to meet motivated individuals who love technology! Sign up
+                  now to join the DEVS community and explore more opportunities with us.
                 </p>
               </div>
             </div>
@@ -249,7 +257,6 @@ const Home: React.FC = () => {
           </div>
 
           {/* RIGHT SIDE */}
-
         </div>
       </section>
 

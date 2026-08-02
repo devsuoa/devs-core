@@ -7,11 +7,7 @@ interface SponsorCardProps {
 
 export default function SponsorCard({ name, image, desc, tier }: SponsorCardProps) {
   const tierColor =
-    tier === "gold"
-      ? "text-yellow-400"
-      : tier === "silver"
-        ? "text-gray-300"
-        : "text-amber-700";
+    tier === "gold" ? "text-yellow-400" : tier === "silver" ? "text-gray-300" : "text-amber-700";
 
   return (
     <li
@@ -21,7 +17,9 @@ export default function SponsorCard({ name, image, desc, tier }: SponsorCardProp
     >
       <div className="relative w-full justify-center items-center flex flex-col h-full">
         <div className="w-full h-full flex flex-col justify-center items-center bg-black/50 p-4 sm:p-5 md:p-6 rounded-lg">
-          <div className={`font-silkscreen text-center text-base pt-7 sm:text-lg tracking-wider ${tierColor} mt-3 sm:mt-4`}>
+          <div
+            className={`font-silkscreen text-center text-base pt-7 sm:text-lg tracking-wider ${tierColor} mt-3 sm:mt-4`}
+          >
             {tier.toUpperCase()} SPONSOR
           </div>
 

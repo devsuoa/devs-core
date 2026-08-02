@@ -23,22 +23,32 @@ export interface PublicEvent {
 }
 
 export const formatEventDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-      return 'Invalid date';
-    }
-    const day = date.getUTCDate();
-  
-    const suffix =
-      day % 10 === 1 && day !== 11 ? "st" :
-      day % 10 === 2 && day !== 12 ? "nd" :
-      day % 10 === 3 && day !== 13 ? "rd" : "th";
-  
-    const weekday = date.toLocaleDateString("en-NZ", { weekday: "long", timeZone: "UTC" });
-    const month = date.toLocaleDateString("en-NZ", { month: "long", timeZone: "UTC" });
-  
-    return `${weekday} ${day}${suffix} ${month}`;
-  };  
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+  const day = date.getUTCDate();
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
+
+  const weekday = date.toLocaleDateString("en-NZ", {
+    weekday: "long",
+    timeZone: "UTC",
+  });
+  const month = date.toLocaleDateString("en-NZ", {
+    month: "long",
+    timeZone: "UTC",
+  });
+
+  return `${weekday} ${day}${suffix} ${month}`;
+};
 
 export const useEvents = () => {
   const [events, setEvents] = useState<PublicEvent[]>([]);
@@ -70,7 +80,7 @@ export const useEvents = () => {
           bank_transfer_enabled,
           rsvp_questions,
           is_active
-        `
+        `,
         )
         .order("event_date", { ascending: true });
 
@@ -92,20 +102,16 @@ export const useEvents = () => {
 
   const todayUTC = new Date();
   todayUTC.setUTCHours(0, 0, 0, 0);
-  const upcomingEvents = events.filter(
-    (event) => {
-      const eventDate = new Date(event.event_date);
-      eventDate.setUTCHours(0, 0, 0, 0);
-      return eventDate >= todayUTC && event.is_active;
-    }
-  );
-  const pastEvents = events.filter(
-    (event) => {
-      const eventDate = new Date(event.event_date);
-      eventDate.setUTCHours(0, 0, 0, 0);
-      return eventDate < todayUTC;
-    }
-  );
+  const upcomingEvents = events.filter((event) => {
+    const eventDate = new Date(event.event_date);
+    eventDate.setUTCHours(0, 0, 0, 0);
+    return eventDate >= todayUTC && event.is_active;
+  });
+  const pastEvents = events.filter((event) => {
+    const eventDate = new Date(event.event_date);
+    eventDate.setUTCHours(0, 0, 0, 0);
+    return eventDate < todayUTC;
+  });
 
   return {
     upcomingEvents,

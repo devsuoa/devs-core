@@ -7,12 +7,9 @@ const Footer = () => {
     <footer className="bg-gradient-to-t from-black/50 to-transparent text-white py-8">
       {/* Mobile Layout */}
       <div className="md:hidden flex flex-col items-center px-6">
-
         {/* Contact Section - Centered */}
         <div className="flex flex-col items-center gap-3 mb-12">
-          <p className="font-silkscreen text-sm uppercase tracking-wide">
-            CONTACT US
-          </p>
+          <p className="font-silkscreen text-sm uppercase tracking-wide">CONTACT US</p>
           <a
             href="mailto:contact@devsuoa.com"
             className="font-silkscreen text-xs no-underline text-[#ffffff] transition-all duration-300 ease-in-out hover:text-[#b1b1b1]"
@@ -74,9 +71,7 @@ const Footer = () => {
 
         {/* Center Section - Contact & Newsletter */}
         <div className="flex flex-col gap-3">
-          <p className="font-silkscreen text-sm uppercase tracking-wide">
-            CONTACT US
-          </p>
+          <p className="font-silkscreen text-sm uppercase tracking-wide">CONTACT US</p>
           <a
             href="mailto:contact@devsuoa.com"
             className="font-silkscreen text-xs no-underline text-[#ffffff] transition-all duration-300 ease-in-out hover:text-[#b1b1b1]"
@@ -147,26 +142,26 @@ const Footer = () => {
 
 const MobileFooterLinks = ({
   divClassName,
-  linkClassName
+  linkClassName,
 }: {
   divClassName: string;
   linkClassName: string;
 }) => {
   return (
     <div className={divClassName}>
-      {isFeatureEnabled('links_page_is_enabled') && (
+      {isFeatureEnabled("links_page_is_enabled") && (
         <Link to="/links" className={linkClassName}>
           LINKS
         </Link>
       )}
 
-      {isFeatureEnabled('privacy_policy_page_is_enabled') && (
+      {isFeatureEnabled("privacy_policy_page_is_enabled") && (
         <Link to="/privacy-policy" className={linkClassName}>
           PRIVACY POLICY
         </Link>
       )}
 
-      {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
+      {isFeatureEnabled("terms_and_conditions_page_is_enabled") && (
         <Link to="/terms" className={linkClassName}>
           TERMS AND CONDITIONS
         </Link>
@@ -175,65 +170,64 @@ const MobileFooterLinks = ({
   );
 };
 
-
 const FooterLinks = ({
   divClassName,
-  linkClassName
+  linkClassName,
 }: {
   divClassName: string;
   linkClassName: string;
 }) => {
   return (
     <div className={divClassName}>
-      {isFeatureEnabled('home_page_is_enabled') && (
+      {isFeatureEnabled("home_page_is_enabled") && (
         <Link to="/" className={linkClassName}>
           HOME
         </Link>
       )}
 
-      {isFeatureEnabled('links_page_is_enabled') && (
+      {isFeatureEnabled("links_page_is_enabled") && (
         <Link to="/links" className={linkClassName}>
           LINKS
         </Link>
       )}
 
-      {isFeatureEnabled('about_us_page_is_enabled') && (
+      {isFeatureEnabled("about_us_page_is_enabled") && (
         <Link to="/about" className={linkClassName}>
           ABOUT US
         </Link>
       )}
 
-      {isFeatureEnabled('team_page_is_enabled') && (
+      {isFeatureEnabled("team_page_is_enabled") && (
         <Link to="/team" className={linkClassName}>
           MEET OUR TEAM
         </Link>
       )}
 
-      {isFeatureEnabled('sponsors_page_is_enabled') && (
+      {isFeatureEnabled("sponsors_page_is_enabled") && (
         <Link to="/sponsors" className={linkClassName}>
           SPONSORS
         </Link>
       )}
 
-      {isFeatureEnabled('events_page_is_enabled') && (
+      {isFeatureEnabled("events_page_is_enabled") && (
         <Link to="/events" className={linkClassName}>
           EVENTS
         </Link>
       )}
 
-      {isFeatureEnabled('resources_page_is_enabled') && (
+      {isFeatureEnabled("resources_page_is_enabled") && (
         <Link to="/resources" className={linkClassName}>
           RESOURCES
         </Link>
       )}
 
-      {isFeatureEnabled('privacy_policy_page_is_enabled') && (
+      {isFeatureEnabled("privacy_policy_page_is_enabled") && (
         <Link to="/privacy-policy" className={linkClassName}>
           PRIVACY POLICY
         </Link>
       )}
 
-      {isFeatureEnabled('terms_and_conditions_page_is_enabled') && (
+      {isFeatureEnabled("terms_and_conditions_page_is_enabled") && (
         <Link to="/terms" className={linkClassName}>
           TERMS AND CONDITIONS
         </Link>

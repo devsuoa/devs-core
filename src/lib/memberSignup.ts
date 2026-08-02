@@ -36,8 +36,6 @@ export async function signupMember(payload: SignupPayload) {
     throw new Error("No degrees provided");
   }
 
-  
-  
   const { error: memberError } = await supabase.from("members").insert({
     email: email.trim().toLowerCase(),
     first_name: firstName,
@@ -56,18 +54,14 @@ export async function signupMember(payload: SignupPayload) {
   }
 
   try {
-    const uniqueDegreeIds = Array.from(
-      new Set(degrees.map((d) => d.degreeId))
-    );
+    const uniqueDegreeIds = Array.from(new Set(degrees.map((d) => d.degreeId)));
 
     const studentDegreeRows = uniqueDegreeIds.map((degreeId) => ({
       student_id: studentId,
       degree_id: degreeId,
     }));
 
-    const { error: degreeError } = await supabase
-      .from("student_degree")
-      .insert(studentDegreeRows);
+    const { error: degreeError } = await supabase.from("student_degree").insert(studentDegreeRows);
 
     const degreeIsDuplicate = (degreeError as { code?: string })?.code === "23505";
     if (degreeError && !degreeIsDuplicate) {
@@ -88,13 +82,11 @@ export async function signupMember(payload: SignupPayload) {
           student_id: studentId,
           degree_id: d.degreeId,
           major_id: majorId,
-        }))
+        })),
     );
 
     if (studentMajorRows.length > 0) {
-      const { error: majorError } = await supabase
-        .from("student_major")
-        .insert(studentMajorRows);
+      const { error: majorError } = await supabase.from("student_major").insert(studentMajorRows);
 
       const majorIsDuplicate = (majorError as { code?: string })?.code === "23505";
       if (majorError && !majorIsDuplicate) {

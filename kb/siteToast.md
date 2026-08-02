@@ -13,21 +13,21 @@
 
 Presentational building block. Safe to embed for layout experiments; for live notifications use **`showSiteToast`**.
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `message` | `string` | Copy to display |
-| `closeToast` | `() => void` (optional) | When set, renders the **×** control; omit to hide the button |
-| `variant` | **`SiteToastVariant`** (optional) | `"default"` \| `"success"` \| `"error"` — defaults to **`default`** (purple ring / white border) |
+| Prop         | Type                              | Description                                                                                      |
+| ------------ | --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `message`    | `string`                          | Copy to display                                                                                  |
+| `closeToast` | `() => void` (optional)           | When set, renders the **×** control; omit to hide the button                                     |
+| `variant`    | **`SiteToastVariant`** (optional) | `"default"` \| `"success"` \| `"error"` — defaults to **`default`** (purple ring / white border) |
 
 **Layout:** Three-column **CSS grid** (`2.5rem` / `1fr` / `2.5rem`) keeps the message **visually centered** in the bar while the close control sits in the right column.
 
 ### `showSiteToast(message, options?)`
 
-| Option | Description |
-|--------|-------------|
-| `variant` | **`default`** (purple), **`success`** (emerald accent), **`error`** (red accent) |
-| `autoClose` | ms, or **`false`** to stay until **×** (default **4500**) |
-| `position` | Any **`ToastPosition`**; default **`top-right`** (matches **`App`** container). RSVP prompts use **`top-center`**; **“Link copied!”** uses **`bottom-center`**. |
+| Option      | Description                                                                                                                                                     |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`   | **`default`** (purple), **`success`** (emerald accent), **`error`** (red accent)                                                                                |
+| `autoClose` | ms, or **`false`** to stay until **×** (default **4500**)                                                                                                       |
+| `position`  | Any **`ToastPosition`**; default **`top-right`** (matches **`App`** container). RSVP prompts use **`top-center`**; **“Link copied!”** uses **`bottom-center`**. |
 
 **Implementation:** Pass **JSX** (`<SiteToastContent />`) as the toast body—**not** a render callback—so the toast reliably mounts. **`toast.dismiss(toastId)`** powers the **×**.
 

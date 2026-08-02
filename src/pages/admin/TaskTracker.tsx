@@ -9,7 +9,14 @@ import TaskListView from "../../components/TaskListView";
 import { Task, TaskStatus } from "../../components/TaskCard";
 import TaskCalendarView from "../../components/TaskCalendarView";
 
-import { DndContext, PointerSensor, useSensor, useSensors, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  DragEndEvent,
+} from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useAdminDashboard } from "../../lib/adminDashboardController";
 import {
@@ -86,7 +93,9 @@ export default function TaskTracker() {
 
       const team = moving.team;
 
-      const sourceLane = sortByOrder(prev.filter((t) => t.team === team && t.status === sourceStatus));
+      const sourceLane = sortByOrder(
+        prev.filter((t) => t.team === team && t.status === sourceStatus),
+      );
 
       const destLane =
         sourceStatus === destStatus
@@ -95,24 +104,35 @@ export default function TaskTracker() {
 
       const sourceIndex = sourceLane.findIndex((t) => t.id === moving.id);
 
-      const destIndex = isStatus(over.id) ? destLane.length : destLane.findIndex((t) => t.id === over.id);
+      const destIndex = isStatus(over.id)
+        ? destLane.length
+        : destLane.findIndex((t) => t.id === over.id);
 
       if (sourceStatus === destStatus) {
         const reordered = reindex(arrayMove(sourceLane, sourceIndex, destIndex));
         lanesToPersist = [reordered];
-        return [...prev.filter((t) => !(t.team === team && t.status === sourceStatus)), ...reordered];
+        return [
+          ...prev.filter((t) => !(t.team === team && t.status === sourceStatus)),
+          ...reordered,
+        ];
       }
 
       const newSource = reindex(sourceLane.filter((t) => t.id !== moving.id));
 
       const movedTask = { ...moving, status: destStatus };
 
-      const newDest = reindex([...destLane.slice(0, destIndex), movedTask, ...destLane.slice(destIndex)]);
+      const newDest = reindex([
+        ...destLane.slice(0, destIndex),
+        movedTask,
+        ...destLane.slice(destIndex),
+      ]);
 
       lanesToPersist = [newSource, newDest];
 
       return [
-        ...prev.filter((t) => !(t.team === team && (t.status === sourceStatus || t.status === destStatus))),
+        ...prev.filter(
+          (t) => !(t.team === team && (t.status === sourceStatus || t.status === destStatus)),
+        ),
         ...newSource,
         ...newDest,
       ];
@@ -165,7 +185,9 @@ export default function TaskTracker() {
                 key={v.key}
                 onClick={() => setViewMode(v.key as any)}
                 className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 border rounded font-silkscreen text-sm sm:text-base ${
-                  viewMode === v.key ? "border-[#6E80DA] text-white" : "border-white/30 text-white/50"
+                  viewMode === v.key
+                    ? "border-[#6E80DA] text-white"
+                    : "border-white/30 text-white/50"
                 }`}
               >
                 {v.label}
@@ -176,7 +198,11 @@ export default function TaskTracker() {
 
         {/* BOARD VIEW */}
         {viewMode === "board" && (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
             <div className="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 md:grid md:grid-cols-4 md:gap-8 md:overflow-visible snap-x snap-mandatory">
               {STATUSES.map((status) => (
                 <TaskColumn

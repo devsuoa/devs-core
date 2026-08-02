@@ -20,15 +20,12 @@ const Contact: React.FC = () => {
 
   return (
     <>
-      <BinaryBackground/>
-      
+      <BinaryBackground />
+
       <Header />
 
       <main className="min-h-screen">
-        <PageTitle
-          title="Contact Us"
-          className="p-0"
-        />
+        <PageTitle title="Contact Us" className="p-0" />
 
         {/* ===== MAIN CONTENT ===== */}
         <section className="px-12 -mt-10 mb-20">
@@ -37,8 +34,7 @@ const Contact: React.FC = () => {
             <div className="hidden lg:flex flex-1 items-center justify-center">
               <div>
                 <p className="pb-4">
-                  Got a question? Get in touch and we'll get back to you as soon
-                  as possible.
+                  Got a question? Get in touch and we'll get back to you as soon as possible.
                 </p>
                 <img
                   src="/branding/deva_wave.png"
@@ -51,8 +47,7 @@ const Contact: React.FC = () => {
             {/* RIGHT — FORM + MOBILE IMAGE */}
             <div className="flex flex-1 flex-col items-center justify-center w-full">
               <p className="pb-8 text-center lg:hidden">
-                Got a question? Get in touch and we'll get back to you as soon
-                as possible.
+                Got a question? Get in touch and we'll get back to you as soon as possible.
               </p>
 
               {/* Use the refactored SponsorForm component in contact mode */}
