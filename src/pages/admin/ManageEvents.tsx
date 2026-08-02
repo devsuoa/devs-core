@@ -9,8 +9,9 @@ import {
   uploadEventImage,
   Event,
   EventFormData,
-} from "../../lib/manageEventsController";
-import { RSVPQuestion, RSVPQuestionType } from "../../lib/eventRsvpTypes";
+} from '../../lib/manageEventsController';
+import { createLink } from '../../lib/linksController';
+import { RSVPQuestion, RSVPQuestionType } from '../../lib/eventRsvpTypes';
 
 const buildEmptyEventFormData = (): EventFormData => ({
   title: "",
@@ -133,6 +134,8 @@ const ManageEvents: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [autoCreateLink, setAutoCreateLink] = useState(false);
+  const [linkWarning, setLinkWarning] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<EventFormData>(buildEmptyEventFormData());
 
@@ -156,10 +159,12 @@ const ManageEvents: React.FC = () => {
     setEditingEvent(null);
     setShowForm(false);
     setUploadError(null);
+    setAutoCreateLink(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLinkWarning(null);
     try {
       const normalizedQuestions = formData.rsvp_questions
         .map((question) => ({
@@ -186,7 +191,25 @@ const ManageEvents: React.FC = () => {
       if (editingEvent) {
         await editEvent(editingEvent.id, payload);
       } else {
-        await addEvent(payload);
+        const createdEvent = await addEvent(payload);
+
+        if (autoCreateLink) {
+          try {
+            const registerUrl = payload.register_url?.trim();
+            await createLink({
+              title: payload.title,
+              url: registerUrl || `${window.location.origin}/events#${createdEvent.id}`,
+              is_active: payload.is_active,
+              active_from: null,
+              active_to: null,
+            });
+          } catch (linkErr) {
+            console.error(linkErr);
+            setLinkWarning(
+              'Event was created, but adding it to the Links page failed. Add it manually from Manage Links.',
+            );
+          }
+        }
       }
       resetForm();
     } catch (err) {
@@ -219,9 +242,18 @@ const ManageEvents: React.FC = () => {
             </div>
           )}
 
+          {linkWarning && (
+            <div className="pixel-panel mb-6 p-4 sm:p-5">
+              <p className="font-pixelify text-amber-400 text-xs">{linkWarning}</p>
+            </div>
+          )}
+
           {!showForm && (
             <button
-              onClick={() => setShowForm(true)}
+              onClick={() => {
+                setLinkWarning(null);
+                setShowForm(true);
+              }}
               className="pixel-button font-silkscreen text-base sm:text-lg mb-6 min-h-[44px] touch-manipulation"
             >
               Add New Event
@@ -339,6 +371,20 @@ const ManageEvents: React.FC = () => {
                     Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM THE PUBLIC)
                   </label>
                 </div>
+
+                {!editingEvent && (
+                  <div className="flex items-center gap-2 mb-6 p-4 rounded">
+                    <input
+                      id="auto-create-link-toggle"
+                      type="checkbox"
+                      checked={autoCreateLink}
+                      onChange={(e) => setAutoCreateLink(e.target.checked)}
+                    />
+                    <label htmlFor="auto-create-link-toggle" className="font-pixelify text-s sm:text-sm text-white/90">
+                      Also add this event to the Links page (creates a link automatically — no need to add it manually in Manage Links)
+                    </label>
+                  </div>
+                )}
 
                 <div className="pixel-panel p-4 sm:p-5 mb-6">
                   <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4">
@@ -716,6 +762,7 @@ const ManageEvents: React.FC = () => {
                     <button
                       className="pixel-button text-xs px-4 py-2 min-h-[40px] touch-manipulation"
                       onClick={() => {
+                        setLinkWarning(null);
                         setEditingEvent(event);
                         setFormData({
                           title: event.title,

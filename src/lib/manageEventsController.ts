@@ -112,16 +112,21 @@ export const useEventsManagement = () => {
     fetchEvents();
   }, []);
 
-  const addEvent = async (event: EventFormData) => {
-    const { error } = await supabase.from("events").insert([
-      {
-        ...event,
-        bank_account_name: null,
-        bank_account_number: null,
-      },
-    ]);
+  const addEvent = async (event: EventFormData): Promise<Event> => {
+    const { data, error } = await supabase
+      .from("events")
+      .insert([
+        {
+          ...event,
+          bank_account_name: null,
+          bank_account_number: null,
+        },
+      ])
+      .select()
+      .single();
     if (error) throw error;
     await fetchEvents();
+    return data;
   };
 
   const editEvent = async (id: string, event: EventFormData) => {
