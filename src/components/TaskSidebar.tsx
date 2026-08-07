@@ -555,6 +555,6 @@ export default function TaskSidebar({
         confirmLabel={isArchiving ? "Archiving..." : "Archive Task"}
         disableConfirm={isArchiving}
       />
-    </>
+    </> 
   );
 }
