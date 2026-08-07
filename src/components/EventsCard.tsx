@@ -100,7 +100,6 @@ type EventsCardProps = {
    * Uses container width and disables flip scale-up.
    */
   previewMode?: boolean;
-
 };
 
 const EventsCard = ({
@@ -158,10 +157,10 @@ const EventsCard = ({
 
   const eventDate = new Date(date).getTime() / 1000;
   const today = Date.now() / 1000;
-  const isPastEvent = eventDate < today;
+  const eventDayEnd = eventDate + 24 * 60 * 60;
+  const isPastEvent = eventDayEnd <= today;
   const formattedDate = formatEventDate(date);
-  const showCostDisclaimer =
-    paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
+  const showCostDisclaimer = paymentEnabled && chargeAmount !== null && chargeAmount >= 0;
   const formattedChargeAmount = showCostDisclaimer
     ? new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -189,9 +188,7 @@ const EventsCard = ({
       id={`event-card-${id}`}
       className={`relative transition-transform duration-300 ease-out ${
         previewMode ? "cursor-default" : "cursor-pointer"
-      } ${flipped && !previewMode ? "lg:scale-115 z-50" : ""} ${
-        className || ""
-      }`}
+      } ${flipped && !previewMode ? "lg:scale-115 z-50" : ""} ${className || ""}`}
       onClick={handleCardClick}
     >
       <div
@@ -268,30 +265,9 @@ const EventsCard = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <line
-                  x1="16"
-                  y1="2"
-                  x2="16"
-                  y2="6"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="8"
-                  y1="2"
-                  x2="8"
-                  y2="6"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="3"
-                  y1="10"
-                  x2="21"
-                  y2="10"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+                <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" strokeLinecap="round" />
+                <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" strokeLinecap="round" />
+                <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" strokeLinecap="round" />
               </svg>
               <span>{formattedDate}</span>
             </div>
