@@ -20,8 +20,20 @@ const EventsDashboard: React.FC = () => {
     useEventAttendees(eventIdFilter);
 
   const [query, setQuery] = useState("");
-  const [showAttendee, setShowAttendee] = useState(false);
+  const [expandedEventIds, setExpandedEventIds] = useState<Set<string>>(new Set());
   const [updatingRowKey, setUpdatingRowKey] = useState<string | null>(null);
+
+  const toggleEventExpanded = (eventId: string) => {
+    setExpandedEventIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(eventId)) {
+        next.delete(eventId);
+      } else {
+        next.add(eventId);
+      }
+      return next;
+    });
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -192,6 +204,7 @@ const EventsDashboard: React.FC = () => {
             ) : (
               filtered.map((ev) => {
                 const presentCount = ev.attendees.filter((attendee) => attendee.present).length;
+                const isExpanded = expandedEventIds.has(ev.event_id);
                 return (
                   <div key={ev.event_id} className="pixel-panel p-6 sm:p-8">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
@@ -216,14 +229,14 @@ const EventsDashboard: React.FC = () => {
                         </button>
                         <button
                           className="pixel-button text-xs font-silkscreen min-h-[40px] touch-manipulation shrink-0"
-                          onClick={() => setShowAttendee((prev) => !prev)}
+                          onClick={() => toggleEventExpanded(ev.event_id)}
                         >
-                          {showAttendee ? "<" : ">"}
+                          {isExpanded ? "<" : ">"}
                         </button>
                       </div>
                     </div>
 
-                    {showAttendee && (
+                    {isExpanded && (
                       <>
                         {/* Mobile: card layout */}
                         <div className="flex flex-col gap-3 md:hidden">

@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import { RSVPQuestion } from "./eventRsvpTypes";
+import { prepareImageForUpload } from "./imageProcessing";
+
+const EVENT_IMAGES_BUCKET = "event-images";
+
+function extractEventImageFilename(imageUrl: string | null): string | null {
+  if (!imageUrl) return null;
+  const marker = `/${EVENT_IMAGES_BUCKET}/`;
+  const idx = imageUrl.indexOf(marker);
+  if (idx === -1) return null;
+  return imageUrl.slice(idx + marker.length);
+}
 
 export interface Event {
   id: string;
@@ -145,8 +156,22 @@ export const useEventsManagement = () => {
   };
 
   const removeEvent = async (id: string) => {
+    const event = events.find((e) => e.id === id);
     const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) throw error;
+
+    const filename = extractEventImageFilename(event?.image_url ?? null);
+    if (filename) {
+      const { error: storageError } = await supabase.storage
+        .from(EVENT_IMAGES_BUCKET)
+        .remove([filename]);
+      if (storageError) {
+        // Event row is already gone; don't fail the delete over a
+        // best-effort image cleanup.
+        console.error("Failed to remove event image from storage:", storageError);
+      }
+    }
+
     await fetchEvents();
   };
 
@@ -161,12 +186,13 @@ export const useEventsManagement = () => {
 };
 
 export const uploadEventImage = async (file: File): Promise<string> => {
-  const ext = file.name.split(".").pop();
+  const processed = await prepareImageForUpload(file);
+  const ext = processed.name.split(".").pop();
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await supabase.storage
-    .from("event-images")
-    .upload(filename, file, { upsert: false });
+    .from(EVENT_IMAGES_BUCKET)
+    .upload(filename, processed, { upsert: false, cacheControl: "3600" });
   if (error) throw error;
-  const { data } = supabase.storage.from("event-images").getPublicUrl(filename);
+  const { data } = supabase.storage.from(EVENT_IMAGES_BUCKET).getPublicUrl(filename);
   return data.publicUrl;
 };

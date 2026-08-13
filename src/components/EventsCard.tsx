@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import PixelatedButton from "./PixelatedButton";
+import CachedImage from "./CachedImage";
 import GenericRSVPDialog from "./GenericRSVPDialog";
 import {
   assertCanSubmitRSVP,
@@ -100,6 +101,13 @@ type EventsCardProps = {
    * Uses container width and disables flip scale-up.
    */
   previewMode?: boolean;
+
+  /**
+   * Email to prefill in the RSVP dialog after the user returns from
+   * signing up mid-RSVP (see eventRsvpMemberFlowStorage). When set, the
+   * card flips and opens the RSVP dialog automatically.
+   */
+  postJoinRsvpEmail?: string;
 };
 
 const EventsCard = ({
@@ -122,6 +130,7 @@ const EventsCard = ({
   isFlipped: controlledFlipped,
   onFlipChange,
   previewMode = false,
+  postJoinRsvpEmail,
 }: EventsCardProps) => {
   const [internalFlipped, setInternalFlipped] = useState(false);
   const [rsvpOpen, setRsvpOpen] = useState(false);
@@ -154,6 +163,15 @@ const EventsCard = ({
     },
     [isControlled, flipped, onFlipChange],
   );
+
+  // Resume RSVP after the user returns from signing up mid-RSVP
+  useEffect(() => {
+    if (postJoinRsvpEmail) {
+      setFlipped(true);
+      setRsvpOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postJoinRsvpEmail]);
 
   const eventDate = new Date(date).getTime() / 1000;
   const today = Date.now() / 1000;
@@ -197,7 +215,7 @@ const EventsCard = ({
       >
         {/* FRONT */}
         <div ref={frontRef} className="absolute inset-0 backface-hidden">
-          <img src={image} alt={imageAlt} className="w-full h-full pixelated" />
+          <CachedImage src={image} alt={imageAlt} className="w-full h-full pixelated" />
         </div>
 
         {/* BACK */}
@@ -422,6 +440,7 @@ const EventsCard = ({
         chargeAmount={chargeAmount}
         bankTransferEnabled={bankTransferEnabled}
         rsvpQuestions={rsvpQuestions}
+        initialLeaderEmail={postJoinRsvpEmail}
         onConfirm={async ({
           leaderEmail,
           groupEmails,

@@ -153,18 +153,18 @@ const PaymentProofDropZone: React.FC<{
               className="max-h-32 max-w-full object-contain"
               style={{ imageRendering: "auto" }}
             />
-            <p className="font-pixelify text-xs text-white/50 md:hidden">Click to replace</p>
-            <p className="font-pixelify text-xs text-white/50 hidden md:block">
+            <p className="font-rethink text-xs text-white/50 md:hidden">Click to replace</p>
+            <p className="font-rethink text-xs text-white/50 hidden md:block">
               Click or drop to replace
             </p>
           </>
         ) : (
           <>
-            <p className="font-pixelify text-xs text-white/70 md:hidden">Click to upload</p>
-            <p className="font-pixelify text-xs text-white/70 hidden md:block">
+            <p className="font-rethink text-xs text-white/70 md:hidden">Click to upload</p>
+            <p className="font-rethink text-xs text-white/70 hidden md:block">
               Drag & drop or click to upload
             </p>
-            <p className="font-pixelify text-xs text-white/40">PNG, JPG, GIF, WEBP</p>
+            <p className="font-rethink text-xs text-white/40">PNG, JPG, GIF, WEBP</p>
           </>
         )}
       </div>
@@ -205,7 +205,7 @@ const SignupChoiceGroup: React.FC<{
 }> = ({ label, required, rightAction, children }) => (
   <div className="mb-4">
     <div className="flex items-center justify-between mb-2">
-      <label className="font-pixelify block">
+      <label className="font-rethink block">
         {label}
         {required ? <span className="text-red-400">*</span> : null}
       </label>
@@ -227,7 +227,7 @@ const SignupOption: React.FC<{
   label: string;
 }> = ({ name, checked, onChange, disabled, label }) => (
   <label
-    className={`font-silkscreen text-xs tracking-wide flex items-center gap-2 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
+    className={`font-rethink text-xs tracking-wide flex items-center gap-2 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
       checked
         ? "border-white bg-white/12 text-white"
         : "border-white/40 bg-transparent text-white/85 hover:border-white/70"
@@ -651,14 +651,14 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
               {needsSignup ? "Almost there, just a few more details" : "RSVP"}
             </h2>
             {needsSignup && (
-              <p className="font-pixelify text-sm text-white/75 text-center mb-6 leading-relaxed">
+              <p className="font-rethink text-sm text-white/75 text-center mb-6 leading-relaxed">
                 We couldn't find a DEVS account for that email.
               </p>
             )}
             <div className="mb-6 text-left">
               <label
                 htmlFor="email"
-                className="font-pixelify block"
+                className="font-rethink block"
                 style={{ marginBottom: "16px" }}
               >
                 Email address<span className="text-red-400">*</span>
@@ -676,7 +676,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
               {groupRSVPEnabled && (
                 <div className="mt-4">
-                  <label className="font-pixelify block mb-3">
+                  <label className="font-rethink block mb-3">
                     Group emails
                     {groupRSVPMaxEmails !== null && (
                       <span className="text-white/60"> (up to {groupRSVPMaxEmails})</span>
@@ -725,7 +725,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                 </div>
               )}
 
-              <label htmlFor="dietaryRequirements" className="font-pixelify block my-4">
+              <label htmlFor="dietaryRequirements" className="font-rethink block my-4">
                 Dietary requirements
               </label>
               <textarea
@@ -738,13 +738,13 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
               {rsvpQuestions.length > 0 && (
                 <div className="mt-2 text-left">
-                  <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4 tracking-wide">
+                  <h3 className="font-rethink text-white text-xs sm:text-sm mb-4 tracking-wide">
                     Additional questions
                   </h3>
                   <div className="flex flex-col gap-4">
                     {rsvpQuestions.map((question) => (
                       <div key={question.id}>
-                        <label className="font-pixelify block mb-2">
+                        <label className="font-rethink block mb-2">
                           {question.prompt}
                           {question.required ? <span className="text-red-400">*</span> : null}
                         </label>
@@ -778,7 +778,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 <label
                                   key={inputId}
                                   htmlFor={inputId}
-                                  className={`font-silkscreen text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
+                                  className={`font-rethink text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
                                     checked
                                       ? "border-white bg-white/12 text-white"
                                       : "border-white/40 bg-transparent text-white/85 hover:border-white/70"
@@ -841,13 +841,13 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
 
               {showCost && (
                 <div className="mt-8 border border-white/20 rounded-lg p-4 sm:p-5 bg-black/20">
-                  <h3 className="font-silkscreen text-white text-xs sm:text-sm mb-4 tracking-wide">
+                  <h3 className="font-rethink text-white text-xs sm:text-sm mb-4 tracking-wide">
                     Payment method
                   </h3>
                   <div className="flex flex-col gap-2 mb-4">
                     <label
                       htmlFor="payment-method-stripe"
-                      className={`font-silkscreen text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
+                      className={`font-rethink text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition cursor-pointer ${
                         paymentChoice === "stripe"
                           ? "border-white bg-white/12 text-white"
                           : "border-white/40 bg-transparent text-white/85 hover:border-white/70"
@@ -910,7 +910,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                     )}
                     <label
                       htmlFor="payment-method-bank"
-                      className={`font-silkscreen text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition ${
+                      className={`font-rethink text-xs tracking-wide flex items-center gap-3 rounded-md border-2 px-3 py-2 transition ${
                         bankDetailsReady ? "cursor-pointer" : "cursor-not-allowed opacity-60"
                       } ${
                         paymentChoice === "bank_transfer"
@@ -940,7 +940,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                       <span>Bank transfer</span>
                     </label>
                     {!bankDetailsReady && (
-                      <p className="font-pixelify text-[10px] text-amber-200/90 ml-1">
+                      <p className="font-rethink text-[10px] text-amber-200/90 ml-1">
                         Bank transfer is not enabled for this event.
                       </p>
                     )}
@@ -969,7 +969,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                         reference so we can match your payment.
                       </p>
                       <div>
-                        <p className="font-pixelify text-xs text-white/60 mb-2">Account name</p>
+                        <p className="font-rethink text-xs text-white/60 mb-2">Account name</p>
                         <div className="relative pixel-input flex min-h-[44px] items-center py-2 pl-3 pr-11">
                           <span className="font-rethink text-sm text-white min-w-0 flex-1 break-all text-left">
                             {SITE_BANK_ACCOUNT_NAME}
@@ -986,7 +986,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                         </div>
                       </div>
                       <div>
-                        <p className="font-pixelify text-xs text-white/60 mb-2">Account number</p>
+                        <p className="font-rethink text-xs text-white/60 mb-2">Account number</p>
                         <div className="relative pixel-input flex min-h-[44px] items-center py-2 pl-3 pr-11">
                           <span className="font-rethink text-sm text-white min-w-0 flex-1 break-all text-left tracking-wide">
                             {SITE_BANK_ACCOUNT_NUMBER}
@@ -1005,7 +1005,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                         </div>
                       </div>
                       <div>
-                        <label className="font-pixelify block mb-2 text-xs text-white/80">
+                        <label className="font-rethink block mb-2 text-xs text-white/80">
                           Payment confirmation screenshot
                           <span className="text-red-400">*</span>
                         </label>
@@ -1174,7 +1174,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                             <button
                               type="button"
                               disabled={loading}
-                              className="font-pixelify text-xs text-white/60 hover:text-red-400 transition"
+                              className="font-rethink text-xs text-white/60 hover:text-red-400 transition"
                               onClick={() =>
                                 setSignupValues((prev) => ({
                                   ...prev,
@@ -1241,7 +1241,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                                 <button
                                   type="button"
                                   disabled={loading}
-                                  className="font-pixelify text-xs text-white/60 hover:text-red-400 transition"
+                                  className="font-rethink text-xs text-white/60 hover:text-red-400 transition"
                                   onClick={() =>
                                     setSignupValues((prev) => {
                                       const copy = [...prev.degreeBlocks];
@@ -1329,7 +1329,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
             )}
 
             {error && (
-              <p className="text-red-400 font-pixelify text-sm mb-4 text-center sm:text-left">
+              <p className="text-red-400 font-rethink text-sm mb-4 text-center sm:text-left">
                 {error}
               </p>
             )}
@@ -1339,7 +1339,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                 type="button"
                 onClick={onClose}
                 disabled={loading}
-                className="font-pixelify hover:cursor-pointer px-4 py-2 rounded-lg border-2 border-white/40 hover:border-white transition"
+                className="font-rethink hover:cursor-pointer px-4 py-2 rounded-lg border-2 border-white/40 hover:border-white transition"
               >
                 cancel
               </button>
@@ -1348,7 +1348,7 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
                 type="button"
                 onClick={handleConfirm}
                 disabled={loading}
-                className="hover:cursor-pointer font-pixelify px-4 py-2 rounded-lg border-2 border-white bg-white text-black hover:bg-gray-200 transition"
+                className="hover:cursor-pointer font-rethink px-4 py-2 rounded-lg border-2 border-white bg-white text-black hover:bg-gray-200 transition"
               >
                 {loading ? "submitting..." : confirmLabel}
               </button>
@@ -1356,8 +1356,8 @@ const GenericRSVPDialog: React.FC<GenericRSVPDialogProps> = ({
           </>
         ) : (
           <div className="py-12 text-center">
-            <p className="font-silkscreen text-xl text-white mb-2">Response submitted</p>
-            <p className="font-pixelify text-sm text-white/70">See you there!</p>
+            <p className="font-rethink text-xl text-white mb-2">Response submitted</p>
+            <p className="font-rethink text-sm text-white/70">See you there!</p>
           </div>
         )}
       </div>

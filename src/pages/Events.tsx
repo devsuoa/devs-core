@@ -8,9 +8,23 @@ import EventsCard from "../components/EventsCard";
 import Pagination from "../components/Pagination";
 import { isFeatureEnabled } from "../lib/featureFlags";
 import { onPageNotFound } from "../lib/pageNotFoundController";
-import { useEvents } from "../lib/eventsController";
+import { useEvents, PublicEvent } from "../lib/eventsController";
 import { showSiteToast } from "../components/SiteToast";
 import BinaryBackground from "../components/BinaryBackground";
+import { consumeSignupCompleteForEvent } from "../lib/eventRsvpMemberFlowStorage";
+import { getCachedImageUrl } from "../lib/imageCache";
+
+// Resolves every event's image into the cache before a page transition
+// starts, so cards never mount with a blank/alt-text image mid-animation.
+// Capped so a slow network can't stall pagination indefinitely.
+const PREFETCH_TIMEOUT_MS = 1200;
+const prefetchEventImages = (events: PublicEvent[]) =>
+  Promise.race([
+    Promise.all(
+      events.map((e) => getCachedImageUrl(e.image_url || "/events/placeholder_event.png")),
+    ),
+    new Promise((resolve) => setTimeout(resolve, PREFETCH_TIMEOUT_MS)),
+  ]);
 
 const Events = () => {
   const { upcomingEvents, pastEvents, loading, error } = useEvents();
@@ -49,15 +63,19 @@ const Events = () => {
   const [pastPage, setPastPage] = useState(0);
 
   // state for tag filters
-  const [upcomingTagFilter, setUpcomingTagFilter] = useState<string | null>(
-    null,
-  );
+  const [upcomingTagFilter, setUpcomingTagFilter] = useState<string | null>(null);
   const [pastTagFilter, setPastTagFilter] = useState<string | null>(null);
 
   // state for focused event card (for overlay)
   const [focusedEventId, setFocusedEventId] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Email to prefill in RSVP dialog after returning from /join mid-RSVP
+  const [postJoinRsvp, setPostJoinRsvp] = useState<{
+    eventId: string;
+    email: string;
+  } | null>(null);
 
   // Stripe Checkout success: show confirmation after return (webhook completes RSVP in background)
   useEffect(() => {
@@ -121,18 +139,14 @@ const Events = () => {
   }, [pastEvents, pastTagFilter]);
 
   // state for number of events loaded per page based on screen size
-  const [upcomingPerPage, setUpcomingPerPage] = useState(() =>
-    getEventsPerPage(true),
-  );
+  const [upcomingPerPage, setUpcomingPerPage] = useState(() => getEventsPerPage(true));
   const [pastPerPage, setPastPerPage] = useState(() => getEventsPerPage(false));
   // state for animation direction
   const [upcomingDirection, setUpcomingDirection] = useState(1);
   const [pastDirection, setPastDirection] = useState(1);
 
   // Swipe state
-  const [upcomingTouchStart, setUpcomingTouchStart] = useState<number | null>(
-    null,
-  );
+  const [upcomingTouchStart, setUpcomingTouchStart] = useState<number | null>(null);
   const [upcomingTouchEnd, setUpcomingTouchEnd] = useState<number | null>(null);
   const [pastTouchStart, setPastTouchStart] = useState<number | null>(null);
   const [pastTouchEnd, setPastTouchEnd] = useState<number | null>(null);
@@ -152,10 +166,7 @@ const Events = () => {
         if (prev === nextUpcoming) return prev;
         setUpcomingPage((p) => {
           // clamps current page so that it doesnt exceed total pages after perPage change
-          const maxPage = Math.max(
-            0,
-            Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1,
-          );
+          const maxPage = Math.max(0, Math.ceil(filteredUpcomingEvents.length / nextUpcoming) - 1);
           return Math.min(p, maxPage);
         });
         return nextUpcoming;
@@ -164,10 +175,7 @@ const Events = () => {
       setPastPerPage((prev) => {
         if (prev === nextPast) return prev;
         setPastPage((p) => {
-          const maxPage = Math.max(
-            0,
-            Math.ceil(filteredPastEvents.length / nextPast) - 1,
-          );
+          const maxPage = Math.max(0, Math.ceil(filteredPastEvents.length / nextPast) - 1);
           return Math.min(p, maxPage);
         });
         return nextPast;
@@ -176,7 +184,7 @@ const Events = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [onPageNotFound]);
+  }, [onPageNotFound, filteredUpcomingEvents.length, filteredPastEvents.length]);
 
   // Handle URL hash to auto-focus an event card (only on initial load)
   const initialHashProcessed = useRef(false);
@@ -194,11 +202,15 @@ const Events = () => {
       if (targetEvent) {
         initialHashProcessed.current = true;
 
+        // Resume RSVP after a signup completed as part of the RSVP flow
+        const joinEmail = consumeSignupCompleteForEvent(hash);
+        if (joinEmail) {
+          setPostJoinRsvp({ eventId: hash, email: joinEmail });
+        }
+
         // Determine which section and page the event is on
         const isUpcoming = upcomingEvents.some((e) => e.id === hash);
-        const eventList = isUpcoming
-          ? filteredUpcomingEvents
-          : filteredPastEvents;
+        const eventList = isUpcoming ? filteredUpcomingEvents : filteredPastEvents;
         const eventIndex = eventList.findIndex((e) => e.id === hash);
         const perPage = isUpcoming ? upcomingPerPage : pastPerPage;
         const targetPage = Math.floor(eventIndex / perPage);
@@ -236,11 +248,7 @@ const Events = () => {
   const handleOverlayClick = useCallback(() => {
     setFocusedEventId(null);
     // Clear the hash from URL without page reload
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + window.location.search,
-    );
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
   }, []);
 
   useEffect(() => {
@@ -293,17 +301,19 @@ const Events = () => {
   const handleUpcomingPageChange = (newPage: number) => {
     const newDirection = newPage > upcomingPage ? 1 : -1;
     setUpcomingDirection(newDirection);
-    setTimeout(() => {
+    const { items } = paginate(filteredUpcomingEvents, newPage, upcomingPerPage);
+    prefetchEventImages(items).then(() => {
       setUpcomingPage(newPage);
-    }, 0);
+    });
   };
 
   const handlePastPageChange = (newPage: number) => {
     const newDirection = newPage > pastPage ? 1 : -1;
     setPastDirection(newDirection);
-    setTimeout(() => {
+    const { items } = paginate(filteredPastEvents, newPage, pastPerPage);
+    prefetchEventImages(items).then(() => {
       setPastPage(newPage);
-    }, 0);
+    });
   };
 
   // Swipe handlers for upcoming events
@@ -317,7 +327,7 @@ const Events = () => {
   };
 
   const onUpcomingTouchEnd = () => {
-    if (!upcomingTouchStart || !upcomingTouchEnd) return;
+    if (upcomingTouchStart === null || upcomingTouchEnd === null) return;
     const distance = upcomingTouchStart - upcomingTouchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -340,7 +350,7 @@ const Events = () => {
   };
 
   const onPastTouchEnd = () => {
-    if (!pastTouchStart || !pastTouchEnd) return;
+    if (pastTouchStart === null || pastTouchEnd === null) return;
     const distance = pastTouchStart - pastTouchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -411,17 +421,15 @@ const Events = () => {
 
       {/* UPCOMING EVENTS */}
       {/* Mobile title */}
-      <div className="lg:hidden min-h-[10vh]">
-        <PageTitle title="Upcoming Events" className="scale-110 ml-5" />
+      <div className="lg:hidden mt-[5vh]">
+        <PageTitle title="Upcoming Events" className="scale-110 ml-5" compact />
       </div>
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
         <PageTitle title="Upcoming Events" className="pl-0! ml-20! scale-110" />
         <div className="flex items-center gap-3 mr-[4.725vw]">
-          <span className="font-silkscreen text-white/60 text-base mr-2">
-            Filter:
-          </span>
+          <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
             onClick={() => {
               setUpcomingTagFilter(null);
@@ -471,12 +479,12 @@ const Events = () => {
                 {paginatedUpcomingEvents.map((event, index) => (
                   <motion.div
                     key={`${event.id}-${upcomingPage}`}
-                    initial={{ opacity: 0, x: upcomingDirection * 30 }}
+                    initial={{ opacity: 0, x: upcomingDirection * 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: upcomingDirection * -30 }}
+                    exit={{ opacity: 0, x: upcomingDirection * -10 }}
                     transition={{
-                      duration: 0.4,
-                      delay: index * 0.1,
+                      duration: 0.2,
+                      delay: index * 0.025,
                       ease: "easeInOut",
                     }}
                   >
@@ -498,8 +506,11 @@ const Events = () => {
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
-                      onFlipChange={(flipped) =>
-                        handleCardFlipChange(event.id, flipped)
+                      onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
                       }
                     />
                   </motion.div>
@@ -522,16 +533,14 @@ const Events = () => {
       {/* PAST EVENTS */}
       {/* Mobile title */}
       <div className="lg:hidden">
-        <PageTitle title="Past Events" className="scale-110 ml-5" />
+        <PageTitle title="Past Events" className="scale-110 ml-5" compact />
       </div>
 
       {/* Desktop title with filter */}
       <div className="hidden lg:flex mx-auto w-[88.75vw] justify-between">
         <PageTitle title="Past Events" className="pl-0! ml-20! scale-110" />
         <div className="flex items-center gap-3 mr-[4.725vw]">
-          <span className="font-silkscreen text-white/60 text-base mr-2">
-            Filter:
-          </span>
+          <span className="font-silkscreen text-white/60 text-base mr-2">Filter:</span>
           <button
             onClick={() => {
               setPastTagFilter(null);
@@ -564,7 +573,7 @@ const Events = () => {
         </div>
       </div>
 
-      <section className="transition-all duration-500 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
+      <section className="transition-all duration-100 ease-in-out mx-[6.5vw] sm:mx-[5vw] md:mx-[6vw] lg:mx-[7.5vw] mb-[3vh] sm:mb-[4vh] md:mb-[5vh] min-h-[20vh]">
         {pastEvents.length === 0 ? (
           <p className="font-pixelify text-white text-center text-sm sm:text-base">
             No past events.
@@ -581,12 +590,12 @@ const Events = () => {
                 {paginatedPastEvents.map((event, index) => (
                   <motion.div
                     key={`${event.id}-${pastPage}`}
-                    initial={{ opacity: 0, x: pastDirection * 30 }}
+                    initial={{ opacity: 0, x: pastDirection * 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: pastDirection * -30 }}
+                    exit={{ opacity: 0, x: pastDirection * -10 }}
                     transition={{
-                      duration: 0.4,
-                      delay: index * 0.1,
+                      duration: 0.2,
+                      delay: index * 0.025,
                       ease: "easeInOut",
                     }}
                   >
@@ -608,8 +617,11 @@ const Events = () => {
                       groupRSVPMaxEmails={event.group_rsvp_max_emails}
                       rsvpQuestions={event.rsvp_questions}
                       isFlipped={focusedEventId === event.id}
-                      onFlipChange={(flipped) =>
-                        handleCardFlipChange(event.id, flipped)
+                      onFlipChange={(flipped) => handleCardFlipChange(event.id, flipped)}
+                      postJoinRsvpEmail={
+                        postJoinRsvp && postJoinRsvp.eventId === event.id
+                          ? postJoinRsvp.email
+                          : undefined
                       }
                     />
                   </motion.div>

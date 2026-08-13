@@ -12,9 +12,6 @@ dist
 dist-ssr
 *.local
 
-# This project uses pnpm (pnpm-lock.yaml is the source of truth for installs
-# and the Vercel build). Ignore lockfiles from other package managers so they
-# don't get committed by accident.
 package-lock*.json
 yarn.lock
 
