@@ -26,6 +26,7 @@ import Team from "./pages/Team";
 import Pb from "./pages/hidden/Pb";
 import KartikGlazer from "./pages/hidden/KartikGlazer";
 import Landing from "./pages/Landing";
+import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import MemberRegistry from "./pages/admin/MemberRegistry";
 import About from "./pages/About";
@@ -88,6 +89,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/sponsors" element={<Sponsors />} />
+          <Route path="/projects" element={<Projects />} />
 
           {/* Admin pages */}
           <Route path="/admin/signup" element={<AdminSignup />} />

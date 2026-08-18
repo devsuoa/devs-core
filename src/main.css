@@ -50,6 +50,16 @@ html {
   image-rendering: crisp-edges;
 }
 
+/* Keeps an area scrollable while hiding the scrollbar chrome. */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
 .pixel-input {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;

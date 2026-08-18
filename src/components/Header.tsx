@@ -55,6 +55,12 @@ const Header = () => {
               </Link>
             )}
 
+            {isFeatureEnabled("projects_page_is_enabled") && (
+              <Link to="/projects" className="link-white">
+                PROJECTS
+              </Link>
+            )}
+
             {isFeatureEnabled("sponsors_page_is_enabled") && (
               <Link to="/sponsors" className="link-white">
                 SPONSORS
@@ -144,6 +150,16 @@ const Header = () => {
                 onClick={() => closeMenu()}
               >
                 EVENTS
+              </Link>
+            )}
+
+            {isFeatureEnabled("projects_page_is_enabled") && (
+              <Link
+                to="/projects"
+                className="link-white"
+                onClick={() => closeMenu()}
+              >
+                PROJECTS
               </Link>
             )}
 

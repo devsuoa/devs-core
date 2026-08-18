@@ -216,6 +216,12 @@ const FooterLinks = ({
         </Link>
       )}
 
+      {isFeatureEnabled("projects_page_is_enabled") && (
+        <Link to="/projects" className={linkClassName}>
+          PROJECTS
+        </Link>
+      )}
+
       {isFeatureEnabled("resources_page_is_enabled") && (
         <Link to="/resources" className={linkClassName}>
           RESOURCES

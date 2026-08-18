@@ -36,6 +36,10 @@
     "value": true
   },
   {
+    "name": "projects_page_is_enabled",
+    "value": true
+  },
+  {
     "name": "join_us_page_is_enabled",
     "value": true
   },
