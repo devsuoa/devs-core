@@ -36,13 +36,19 @@ const headingVariants = {
 
 type SectionProps = {
   title: string;
-  gridClass?: string;
+  itemClass?: string;
+  /** Caps the row width so cards don't stretch out on wide screens. */
+  maxWidthClass?: string;
   children: React.ReactNode[];
 };
 
-const TeamSection: React.FC<SectionProps> = ({ title, gridClass = "grid-cols-3", children }) => {
+const TeamSection: React.FC<SectionProps> = ({
+  title,
+  itemClass = "w-[calc(33.333%-1.334rem)]",
+  maxWidthClass = "max-w-3xl",
+  children,
+}) => {
   const childArray = React.Children.toArray(children);
-  const count = childArray.length;
 
   return (
     <section className="px-10 pb-10 text-center">
@@ -57,9 +63,7 @@ const TeamSection: React.FC<SectionProps> = ({ title, gridClass = "grid-cols-3",
           {title}
         </motion.p>
       )}
-      <div
-        className={`grid ${gridClass} gap-8 justify-items-center place-content-center max-w-fit mx-auto`}
-      >
+      <div className={`flex flex-wrap gap-8 justify-center ${maxWidthClass} mx-auto`}>
         {childArray.map((child, i) => (
           <motion.div
             key={i}
@@ -68,7 +72,7 @@ const TeamSection: React.FC<SectionProps> = ({ title, gridClass = "grid-cols-3",
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.3 }}
-            className={count === 4 && i === count - 1 ? "col-start-2 md:col-start-auto" : undefined}
+            className={itemClass}
           >
             {child}
           </motion.div>
@@ -97,7 +101,11 @@ const Team: React.FC = () => {
         <PageTitle title="Meet Our Team" className="p-0" />
 
         {/* Presidents */}
-        <TeamSection title="Co-Presidents" gridClass="grid-cols-2 md:grid-cols-2">
+        <TeamSection
+          title="Co-Presidents"
+          itemClass="w-[calc(50%-1rem)]"
+          maxWidthClass="max-w-sm"
+        >
           <a
             href="https://www.linkedin.com/in/alannasantoso/"
             target="_blank"
@@ -125,19 +133,11 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Senior Advisors */}
-        <TeamSection title="Senior Advisors" gridClass="grid-cols-2 md:grid-cols-2">
-          <a
-            href="https://www.linkedin.com/in/phoebe-fung-/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/pb.jpg"
-              name="Phoebe Fung"
-              team={TeamEnum.SeniorAdvisor}
-            />
-          </a>
+        <TeamSection
+          title="Senior Advisors"
+          itemClass="w-[calc(50%-1rem)]"
+          maxWidthClass="max-w-sm"
+        >
           <a
             href="https://www.linkedin.com/in/kartik-malik-285681221/"
             target="_blank"
@@ -150,10 +150,26 @@ const Team: React.FC = () => {
               team={TeamEnum.SeniorAdvisor}
             />
           </a>
+          <a
+            href="https://www.linkedin.com/in/phoebe-fung-/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/pb.jpg"
+              name="Phoebe Fung"
+              team={TeamEnum.SeniorAdvisor}
+            />
+          </a>
         </TeamSection>
 
         {/* Admin */}
-        <TeamSection title="Admin" gridClass="grid-cols-3 md:grid-cols-3">
+        <TeamSection
+          title="Admin"
+          itemClass="w-[calc(25%-1.5rem)]"
+          maxWidthClass="max-w-3xl"
+        >
           <a
             href="https://www.linkedin.com/in/julia-venice-escoto-23a166328/"
             target="_blank"
@@ -164,6 +180,19 @@ const Team: React.FC = () => {
               image="/team/execs/julia.jpg"
               name="Julia Escoto"
               role="Secretary"
+              team={TeamEnum.Admin}
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/emmanuel-araba77/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/emmanuel.jpg"
+              name="Emmanuel Araba"
+              role="Sponsorship Manager"
               team={TeamEnum.Admin}
             />
           </a>
@@ -181,22 +210,26 @@ const Team: React.FC = () => {
             />
           </a>
           <a
-            href="https://www.linkedin.com/in/emmanuel-araba77/"
+            href="https://www.linkedin.com/in/terrence-wu-5657a0376/"
             target="_blank"
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
             <MemberIcon
-              image="/team/execs/emmanuel.jpg"
-              name="Emmanuel Araba"
-              role="Sponsorship Manager"
+              image="/team/execs/terrence.jpg"
+              name="Terrence Wu"
+              role="Admin Exec"
               team={TeamEnum.Admin}
             />
           </a>
         </TeamSection>
 
         {/* Tech */}
-        <TeamSection title="Tech" gridClass="grid-cols-3 md:grid-cols-4">
+        <TeamSection
+          title="Tech"
+          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(25%-1.5rem)]"
+          maxWidthClass="max-w-xl md:max-w-3xl"
+        >
           <a
             href="https://www.linkedin.com/in/kim-ngor/"
             target="_blank"
@@ -232,7 +265,11 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Comps */}
-        <TeamSection title="Comps" gridClass="grid-cols-3 md:grid-cols-3">
+        <TeamSection
+          title="Comps"
+          itemClass="w-[calc(25%-1.5rem)]"
+          maxWidthClass="max-w-3xl"
+        >
           <a
             href="https://www.linkedin.com/in/victor-qiu-dev/"
             target="_blank"
@@ -255,6 +292,18 @@ const Team: React.FC = () => {
             <MemberIcon image="/team/execs/anatol.jpg" name="Anatol Coen" team={TeamEnum.Comps} />
           </a>
           <a
+            href="https://www.linkedin.com/in/tushar-shaji-33b77b178/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/tushar.jpeg"
+              name="Tushar Shaji"
+              team={TeamEnum.Comps}
+            />
+          </a>
+          <a
             href="https://www.linkedin.com/in/williamhuangg/"
             target="_blank"
             rel="noopener noreferrer"
@@ -269,16 +318,20 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Industry */}
-        <TeamSection title="Industry" gridClass="grid-cols-3 md:grid-cols-3">
+        <TeamSection
+          title="Industry"
+          itemClass="w-[calc(20%-1.6rem)]"
+          maxWidthClass="max-w-4xl"
+        >
           <a
-            href="https://www.linkedin.com/in/youyang-fu/"
+            href="https://www.linkedin.com/in/eric-zheng-nz/"
             target="_blank"
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
             <MemberIcon
-              image="/team/execs/frank.jpg"
-              name="Frank Fu"
+              image="/team/execs/eric.jpeg"
+              name="Eric Zheng"
               lead
               team={TeamEnum.Industry}
             />
@@ -289,18 +342,53 @@ const Team: React.FC = () => {
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon image="/team/execs/ann.jpg" name="Ann Lowe" team={TeamEnum.Industry} />
+            <MemberIcon
+              image="/team/execs/ann.jpg" 
+              name="Ann Lowe" 
+              team={TeamEnum.Industry} />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/youyang-fu/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/frank.jpg"
+              name="Frank Fu"
+              team={TeamEnum.Industry}
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/jackyzchen/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon 
+            image="/team/execs/jacky.png" 
+            name="Jacky Chen" 
+            team={TeamEnum.Industry} />
           </a>
           <a
             href="https://www.linkedin.com/in/joyce-liu-265920357"
+            target="_blank"
+            rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon image="/team/execs/joyce.jpg" name="Joyce Liu" team={TeamEnum.Industry} />
+            <MemberIcon 
+            image="/team/execs/joyce.jpg" 
+            name="Joyce Liu" 
+            team={TeamEnum.Industry} />
           </a>
         </TeamSection>
 
         {/* Social */}
-        <TeamSection title="Social" gridClass="grid-cols-3 md:grid-cols-4">
+        <TeamSection
+          title="Social"
+          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(25%-1.5rem)]"
+          maxWidthClass="max-w-xl md:max-w-3xl"
+        >
           <a
             href="https://www.linkedin.com/in/marcus-chan-nz/"
             target="_blank"
@@ -313,14 +401,6 @@ const Team: React.FC = () => {
               lead
               team={TeamEnum.Social}
             />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/kelly-hunt-98a521358/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/kelly.jpg" name="Kelly Hunt" team={TeamEnum.Social} />
           </a>
           <a
             href="https://www.linkedin.com/in/ayemyatthu04/"
@@ -338,10 +418,22 @@ const Team: React.FC = () => {
           >
             <MemberIcon image="/team/execs/eileen.jpg" name="Eileen Qiu" team={TeamEnum.Social} />
           </a>
+          <a
+            href="https://www.linkedin.com/in/kelly-hunt-98a521358/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon image="/team/execs/kelly.jpg" name="Kelly Hunt" team={TeamEnum.Social} />
+          </a>
         </TeamSection>
 
         {/* Marketing */}
-        <TeamSection title="Marketing" gridClass="grid-cols-3 md:grid-cols-6">
+        <TeamSection
+          title="Marketing"
+          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(16.666%-1.667rem)]"
+          maxWidthClass="max-w-xl md:max-w-6xl"
+        >
           <a
             href="https://www.linkedin.com/in/john-andrei-vergara-3b9921285/"
             target="_blank"
@@ -356,14 +448,27 @@ const Team: React.FC = () => {
             />
           </a>
           <a
-            href="https://www.linkedin.com/in/tylerhyoung/"
+            href="https://www.linkedin.com/in/avishai-narsey/"
             target="_blank"
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
             <MemberIcon
-              image="/team/execs/tyler.jpg"
-              name="Tyler Young"
+              image="/team/execs/avishai.jpg"
+              name="Avishai Narsey"
+              role="Content Manager"
+              team={TeamEnum.Marketing}
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/jacob-gray-87888a332/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/jacob.jpg"
+              name="Jacob Gray"
               role="Content Manager"
               team={TeamEnum.Marketing}
             />
@@ -382,14 +487,27 @@ const Team: React.FC = () => {
             />
           </a>
           <a
-            href="https://www.linkedin.com/in/chaeeunlee0215/"
+            href="https://www.linkedin.com/in/tylerhyoung/"
             target="_blank"
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
             <MemberIcon
-              image="/team/execs/ava.jpg"
-              name="Ava Lee"
+              image="/team/execs/tyler.jpg"
+              name="Tyler Young"
+              role="Content Manager"
+              team={TeamEnum.Marketing}
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/aeryn-lao/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/aeryn.jpeg"
+              name="Aeryn Elizabeth Lao"
               role="Designer"
               team={TeamEnum.Marketing}
             />
@@ -408,6 +526,19 @@ const Team: React.FC = () => {
             />
           </a>
           <a
+            href="https://www.linkedin.com/in/chaeeunlee0215/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/ava.jpg"
+              name="Ava Lee"
+              role="Designer"
+              team={TeamEnum.Marketing}
+            />
+          </a>
+          <a
             href="https://www.linkedin.com/in/bryanna-y/"
             target="_blank"
             rel="noopener noreferrer"
@@ -417,6 +548,19 @@ const Team: React.FC = () => {
               image="/team/execs/bryanna.jpg"
               name="Bryanna Yeo"
               role="Designer"
+              team={TeamEnum.Marketing}
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/nicole-lai-in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scale-90 md:scale-100"
+          >
+            <MemberIcon
+              image="/team/execs/nicole.png"
+              name="Nicole Lai"
+              role="Photographer"
               team={TeamEnum.Marketing}
             />
           </a>
