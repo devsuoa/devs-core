@@ -32,6 +32,13 @@ function lerpColor(opacity: number) {
   return `rgb(${r},${g},${b})`;
 }
 
+// Precomputed so the draw loop never allocates a color string per cell per frame.
+const COLOR_STEPS = 100;
+const COLOR_TABLE = Array.from({ length: COLOR_STEPS + 1 }, (_, i) => lerpColor(i / COLOR_STEPS));
+function colorFor(opacity: number) {
+  return COLOR_TABLE[Math.round(Math.min(1, Math.max(0, opacity)) * COLOR_STEPS)];
+}
+
 export default function BinaryBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: -9999, y: -9999 });
@@ -42,38 +49,30 @@ export default function BinaryBackground() {
   const cellsRef = useRef<Cell[]>([]);
   const dimsRef = useRef({ cols: 0, rows: 0, width: 0, height: 0 });
 
-  // buildGrid accepts explicit dimensions so ResizeObserver can pass the
-  // freshly-measured values directly, bypassing the stale scrollHeight problem.
-  const buildGrid = useCallback((forceWidth?: number, forceHeight?: number) => {
-    const el = containerRef.current;
-    if (!el) return;
+  // Sized to the viewport, not the full document — this is a fixed decorative
+  // layer, so per-frame draw cost stays constant regardless of page length.
+  const buildGrid = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const width = forceWidth ?? (document.documentElement.clientWidth || window.innerWidth);
-    const height = Math.max(forceHeight ?? document.body.scrollHeight, window.innerHeight);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
     const cols = Math.ceil(width / STEP) + 1;
     const rows = Math.ceil(height / STEP) + 1;
 
-    // Skip if the grid cell count hasn't changed — avoids resetting animation
-    // phases on every scroll event while still catching real size changes.
     if (dimsRef.current.cols === cols && dimsRef.current.rows === rows) {
       return;
     }
 
     dimsRef.current = { cols, rows, width, height };
     cellsRef.current = generateCells(cols, rows);
-
-    const canvas = canvasRef.current;
-    if (canvas) {
-      canvas.width = width;
-      canvas.height = height;
-      el.style.width = "100%";
-      el.style.height = `${height}px`;
-    }
+    canvas.width = width;
+    canvas.height = height;
   }, []);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    const x = (e.clientX || 0) + (window.scrollX || window.pageXOffset || 0);
-    const y = (e.clientY || 0) + (window.scrollY || window.pageYOffset || 0);
+    const x = e.clientX || 0;
+    const y = e.clientY || 0;
     if (mouseRef.current.x < 0) {
       smoothMouseRef.current.x = x;
       smoothMouseRef.current.y = y;
@@ -88,15 +87,6 @@ export default function BinaryBackground() {
   useEffect(() => {
     buildGrid();
 
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        buildGrid(Math.round(width || document.documentElement.clientWidth), Math.round(height));
-      }
-    });
-    ro.observe(document.body);
-
-    // Also handle viewport resize (window width changes etc.)
     const onResize = () => buildGrid();
     window.addEventListener("resize", onResize);
 
@@ -163,7 +153,7 @@ export default function BinaryBackground() {
           }
 
           ctx.globalAlpha = opacity;
-          ctx.fillStyle = lerpColor(opacity);
+          ctx.fillStyle = colorFor(opacity);
           ctx.fillText(cell.value, cx, cy);
         }
       }
@@ -176,7 +166,6 @@ export default function BinaryBackground() {
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-      ro.disconnect();
       window.removeEventListener("resize", onResize);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
@@ -187,7 +176,7 @@ export default function BinaryBackground() {
     <div
       ref={containerRef}
       style={{
-        position: "absolute",
+        position: "fixed",
         top: 0,
         left: 0,
         width: "100%",

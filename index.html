@@ -12,8 +12,110 @@
     <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script> 
     <script>new Lenis({ autoRaf: true, autoToggle: true, anchors: true, allowNestedScroll: true, naiveDimensions: true, stopInertiaOnNavigate: true, lerp: 0.15, wheelMultiplier: 1.2 })</script>
     <title>Developers Society</title>
+    <style>
+      #boot-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99998;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        background: #0d0a12;
+        transition: opacity 0.4s ease;
+      }
+      #boot-loader.boot-loader--hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #boot-loader img {
+        width: 160px;
+        image-rendering: pixelated;
+      }
+      #boot-loader .boot-loader__label {
+        font-family: "Press Start 2P", "Silkscreen", monospace;
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        color: #ffffff;
+        text-transform: uppercase;
+      }
+      #boot-loader .boot-loader__track {
+        width: 200px;
+        height: 18px;
+        border: 2px solid #ffffff;
+        padding: 3px;
+      }
+      #boot-loader .boot-loader__fill {
+        height: 100%;
+        width: 0%;
+        background-color: #6e80da;
+        background-image: repeating-linear-gradient(
+          90deg,
+          rgba(13, 10, 18, 0.6) 0px,
+          rgba(13, 10, 18, 0.6) 2px,
+          transparent 2px,
+          transparent 12px
+        );
+        animation: boot-loader-fill 1.4s steps(12, end) forwards;
+      }
+      #boot-loader.boot-loader--ready .boot-loader__fill {
+        animation: none;
+        width: 100%;
+        transition: width 0.2s steps(2, end);
+      }
+      @keyframes boot-loader-fill {
+        to {
+          width: 90%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot-loader,
+        #boot-loader .boot-loader__fill {
+          animation: none !important;
+          transition: none !important;
+        }
+        #boot-loader .boot-loader__fill {
+          width: 90%;
+        }
+        #boot-loader.boot-loader--ready .boot-loader__fill {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="boot-loader" role="status" aria-live="polite" aria-label="Loading">
+      <img src="/branding/text_logo.png" alt="" />
+      <div class="boot-loader__track">
+        <div class="boot-loader__fill"></div>
+      </div>
+      <p class="boot-loader__label">Loading</p>
+    </div>
+    <script>
+      (function () {
+        var loader = document.getElementById("boot-loader");
+        if (!loader) return;
+        var hidden = false;
+        function hideLoader() {
+          if (hidden) return;
+          hidden = true;
+          loader.classList.add("boot-loader--ready");
+          setTimeout(function () {
+            loader.classList.add("boot-loader--hidden");
+            loader.addEventListener(
+              "transitionend",
+              function () {
+                loader.remove();
+              },
+              { once: true },
+            );
+          }, 250);
+        }
+        window.addEventListener("app-ready", hideLoader, { once: true });
+        setTimeout(hideLoader, 8000);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

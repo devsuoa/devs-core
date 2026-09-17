@@ -13,3 +13,12 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </StrictMode>,
 );
+
+Promise.all([
+  document.fonts ? document.fonts.ready : Promise.resolve(),
+  new Promise<void>((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+  ),
+]).then(() => {
+  window.dispatchEvent(new Event("app-ready"));
+});
