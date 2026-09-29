@@ -359,7 +359,7 @@ const Team: React.FC = () => {
               team={TeamEnum.Industry}
             />
           </a>
-          <a
+          <a 
             href="https://www.linkedin.com/in/jackyzchen/"
             target="_blank"
             rel="noopener noreferrer"
