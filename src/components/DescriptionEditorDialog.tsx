@@ -82,8 +82,7 @@ export default function DescriptionEditorDialog({
                 },
                 {
                   label: "Underline",
-                  onClick: () =>
-                    editor?.chain().focus().toggleUnderline().run(),
+                  onClick: () => editor?.chain().focus().toggleUnderline().run(),
                   active: editor?.isActive("underline") ?? false,
                 },
                 {
@@ -96,9 +95,7 @@ export default function DescriptionEditorDialog({
                   key={action.label}
                   onClick={action.onClick}
                   className={`rounded px-1.5 py-0.5 text-[10px] font-sans transition hover:bg-white/10 hover:text-white/75 ${
-                    action.active
-                      ? "bg-white/10 text-white/80"
-                      : "text-white/40"
+                    action.active ? "bg-white/10 text-white/80" : "text-white/40"
                   }`}
                 >
                   {action.label}

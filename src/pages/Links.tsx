@@ -49,10 +49,7 @@ const Links: React.FC = () => {
       <BinaryBackground />
       <div className="p-8 lg:p-0">
         <div className="flex items-center flex-col justify-center mt-[10vh] mb-[2rem] gap-4">
-          <img
-            src="/branding/deva_head.png"
-            className="object-cover h-20 sm:h-24 rounded-lg"
-          />
+          <img src="/branding/deva_head.png" className="object-cover h-20 sm:h-24 rounded-lg" />
           <p
             className="font-silkscreen font-bold text-[2rem] text-white text-center"
             style={{ marginBottom: "0.5rem" }}
@@ -69,10 +66,7 @@ const Links: React.FC = () => {
         <div className="flex items-center justify-center mt-6 mb-16 px-4 sm:mb-24">
           <div className="w-full max-w-[680px] mx-auto">
             {links.length === 0 ? (
-              <div
-                className="pixel-panel relative"
-                style={{ padding: "48px 40px" }}
-              >
+              <div className="pixel-panel relative" style={{ padding: "48px 40px" }}>
                 <p className="font-pixelify text-white text-center text-[1rem]">
                   Nothing here at the moment. Check back soon!
                 </p>
@@ -134,9 +128,7 @@ const Links: React.FC = () => {
                       <span className="font-rethink text-white flex-1 min-w-0 text-center text-[1rem] break-words">
                         {link.title}
                       </span>
-                      <span className="text-white opacity-50 flex-shrink-0 text-[8px]">
-                        →
-                      </span>
+                      <span className="text-white opacity-50 flex-shrink-0 text-[8px]">→</span>
                     </a>
                   );
                 })}

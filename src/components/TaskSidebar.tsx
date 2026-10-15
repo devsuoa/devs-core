@@ -43,11 +43,8 @@ export default function TaskSidebar({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingCommentText, setEditingCommentText] = useState("");
   const [showDescriptionEditor, setShowDescriptionEditor] = useState(false);
-  const [showMobileDescriptionEditor, setShowMobileDescriptionEditor] =
-    useState(false);
-  const [isTaskLoading, setIsTaskLoading] = useState(
-    mode === "edit" && Boolean(task),
-  );
+  const [showMobileDescriptionEditor, setShowMobileDescriptionEditor] = useState(false);
+  const [isTaskLoading, setIsTaskLoading] = useState(mode === "edit" && Boolean(task));
 
   const [form, setForm] = useState({
     name: task?.name ?? "",
@@ -115,8 +112,7 @@ export default function TaskSidebar({
     const previousOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
     const previousBodyOverscroll = document.body.style.overscrollBehavior;
-    const previousHtmlOverscroll =
-      document.documentElement.style.overscrollBehavior;
+    const previousHtmlOverscroll = document.documentElement.style.overscrollBehavior;
 
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
@@ -126,8 +122,7 @@ export default function TaskSidebar({
     return () => {
       document.documentElement.style.overflow = previousHtmlOverflow;
       document.body.style.overflow = previousOverflow;
-      document.documentElement.style.overscrollBehavior =
-        previousHtmlOverscroll;
+      document.documentElement.style.overscrollBehavior = previousHtmlOverscroll;
       document.body.style.overscrollBehavior = previousBodyOverscroll;
     };
   }, []);
@@ -178,8 +173,7 @@ export default function TaskSidebar({
     if (!form.name.trim() || !form.assignee) return;
 
     const payload: Task = {
-      id:
-        task?.id ?? `TASK-${crypto.randomUUID().substring(0, 4).toUpperCase()}`,
+      id: task?.id ?? `TASK-${crypto.randomUUID().substring(0, 4).toUpperCase()}`,
       name: form.name.trim(),
       label: form.label.trim() || "general",
       assignee: form.assignee,
@@ -231,10 +225,7 @@ export default function TaskSidebar({
     if (!editingCommentId || !editingCommentText.trim()) return;
 
     try {
-      const updatedComment = await updateComment(
-        editingCommentId,
-        editingCommentText.trim(),
-      );
+      const updatedComment = await updateComment(editingCommentId, editingCommentText.trim());
       setComments((previousComments) =>
         previousComments.map((comment) =>
           comment.id === editingCommentId ? updatedComment : comment,
@@ -263,18 +254,12 @@ export default function TaskSidebar({
   };
 
   const canModerateAllComments =
-    currentUserIsSuperuser ||
-    currentUserRole === "admin" ||
-    currentUserRole === "president";
+    currentUserIsSuperuser || currentUserRole === "admin" || currentUserRole === "president";
 
   return (
     <>
       {/* Mobile backdrop - tap to close */}
-      <div
-        onClick={requestClose}
-        className="fixed inset-0 bg-black/60 z-40 "
-        aria-hidden="true"
-      />
+      <div onClick={requestClose} className="fixed inset-0 bg-black/60 z-40 " aria-hidden="true" />
       <aside className="fixed right-0 top-0 w-full sm:w-105 max-w-full h-full bg-black border-l-2 border-[#6E80DA] z-50 overflow-visible shadow-lg">
         <div className="relative h-full overflow-y-auto p-4 sm:p-6">
           <h2 className="font-sans text-white uppercase mb-6">
@@ -283,9 +268,7 @@ export default function TaskSidebar({
 
           {isTaskLoading ? (
             <div className="flex h-[calc(100%-3rem)] items-center justify-center">
-              <p className="font-sans text-sm uppercase tracking-wide text-white/80">
-                Loading...
-              </p>
+              <p className="font-sans text-sm uppercase tracking-wide text-white/80">Loading...</p>
             </div>
           ) : (
             <>
@@ -352,19 +335,13 @@ export default function TaskSidebar({
 
               <div className="mb-4 md:hidden">
                 <div className="mb-1 flex items-center justify-between gap-3">
-                  <p className="text-sm text-white/80 font-sans">
-                    {" "}
-                    Description
-                  </p>
+                  <p className="text-sm text-white/80 font-sans"> Description</p>
                 </div>
                 <button
-                  onClick={() =>
-                    setShowMobileDescriptionEditor((previous) => !previous)
-                  }
+                  onClick={() => setShowMobileDescriptionEditor((previous) => !previous)}
                   className="w-full rounded border border-white/30 bg-black px-3 py-2 text-left text-sm font-sans text-white/70 transition hover:bg-white/10 hover:text-white"
                 >
-                  Description Editor{" "}
-                  {showMobileDescriptionEditor ? "(Collapse)" : "(Expand)"}
+                  Description Editor {showMobileDescriptionEditor ? "(Collapse)" : "(Expand)"}
                 </button>
 
                 {showMobileDescriptionEditor && (
@@ -433,10 +410,7 @@ export default function TaskSidebar({
               {mode === "edit" && task && (
                 <>
                   <div className="mt-6">
-                    <p className="text-sm text-white/80 font-sans mb-1">
-                      {" "}
-                      Comments
-                    </p>
+                    <p className="text-sm text-white/80 font-sans mb-1"> Comments</p>
 
                     {comments.map((c) => {
                       const canEditOwnComment =
@@ -451,21 +425,16 @@ export default function TaskSidebar({
                           <div className="flex items-start gap-3">
                             <div className="min-w-0 flex-1">
                               <div className="mb-1 text-xs text-white/50">
-                                {formatNZDate(c.created_at)} -{" "}
-                                <strong>{c.author_name}</strong>
+                                {formatNZDate(c.created_at)} - <strong>{c.author_name}</strong>
                               </div>
                               {isEditing ? (
                                 <textarea
                                   value={editingCommentText}
-                                  onChange={(e) =>
-                                    setEditingCommentText(e.target.value)
-                                  }
+                                  onChange={(e) => setEditingCommentText(e.target.value)}
                                   className="w-full h-20 p-2 rounded bg-black border border-white/30 text-white"
                                 />
                               ) : (
-                                <p className="wrap-break-word text-white/80">
-                                  {c.message}
-                                </p>
+                                <p className="wrap-break-word text-white/80">{c.message}</p>
                               )}
                             </div>
 
@@ -555,6 +524,6 @@ export default function TaskSidebar({
         confirmLabel={isArchiving ? "Archiving..." : "Archive Task"}
         disableConfirm={isArchiving}
       />
-    </> 
+    </>
   );
 }

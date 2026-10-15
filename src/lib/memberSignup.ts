@@ -63,8 +63,7 @@ export async function signupMember(payload: SignupPayload) {
 
     const { error: degreeError } = await supabase.from("student_degree").insert(studentDegreeRows);
 
-    const degreeIsDuplicate =
-      (degreeError as { code?: string })?.code === "23505";
+    const degreeIsDuplicate = (degreeError as { code?: string })?.code === "23505";
     if (degreeError && !degreeIsDuplicate) {
       return { status: false, error: degreeError };
     }
@@ -89,8 +88,7 @@ export async function signupMember(payload: SignupPayload) {
     if (studentMajorRows.length > 0) {
       const { error: majorError } = await supabase.from("student_major").insert(studentMajorRows);
 
-      const majorIsDuplicate =
-        (majorError as { code?: string })?.code === "23505";
+      const majorIsDuplicate = (majorError as { code?: string })?.code === "23505";
       if (majorError && !majorIsDuplicate) {
         return { status: false, error: majorError };
       }

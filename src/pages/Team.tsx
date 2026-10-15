@@ -101,11 +101,7 @@ const Team: React.FC = () => {
         <PageTitle title="Meet Our Team" className="p-0" />
 
         {/* Presidents */}
-        <TeamSection
-          title="Co-Presidents"
-          itemClass="w-[calc(50%-1rem)]"
-          maxWidthClass="max-w-sm"
-        >
+        <TeamSection title="Co-Presidents" itemClass="w-[calc(50%-1rem)]" maxWidthClass="max-w-sm">
           <a
             href="https://www.linkedin.com/in/alannasantoso/"
             target="_blank"
@@ -165,11 +161,7 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Admin */}
-        <TeamSection
-          title="Admin"
-          itemClass="w-[calc(25%-1.5rem)]"
-          maxWidthClass="max-w-3xl"
-        >
+        <TeamSection title="Admin" itemClass="w-[calc(25%-1.5rem)]" maxWidthClass="max-w-3xl">
           <a
             href="https://www.linkedin.com/in/julia-venice-escoto-23a166328/"
             target="_blank"
@@ -265,11 +257,7 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Comps */}
-        <TeamSection
-          title="Comps"
-          itemClass="w-[calc(25%-1.5rem)]"
-          maxWidthClass="max-w-3xl"
-        >
+        <TeamSection title="Comps" itemClass="w-[calc(25%-1.5rem)]" maxWidthClass="max-w-3xl">
           <a
             href="https://www.linkedin.com/in/victor-qiu-dev/"
             target="_blank"
@@ -297,11 +285,7 @@ const Team: React.FC = () => {
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon
-              image="/team/execs/tushar.jpeg"
-              name="Tushar Shaji"
-              team={TeamEnum.Comps}
-            />
+            <MemberIcon image="/team/execs/tushar.jpeg" name="Tushar Shaji" team={TeamEnum.Comps} />
           </a>
           <a
             href="https://www.linkedin.com/in/williamhuangg/"
@@ -318,11 +302,7 @@ const Team: React.FC = () => {
         </TeamSection>
 
         {/* Industry */}
-        <TeamSection
-          title="Industry"
-          itemClass="w-[calc(20%-1.6rem)]"
-          maxWidthClass="max-w-4xl"
-        >
+        <TeamSection title="Industry" itemClass="w-[calc(20%-1.6rem)]" maxWidthClass="max-w-4xl">
           <a
             href="https://www.linkedin.com/in/eric-zheng-nz/"
             target="_blank"
@@ -342,10 +322,7 @@ const Team: React.FC = () => {
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon
-              image="/team/execs/ann.jpg" 
-              name="Ann Lowe" 
-              team={TeamEnum.Industry} />
+            <MemberIcon image="/team/execs/ann.jpg" name="Ann Lowe" team={TeamEnum.Industry} />
           </a>
           <a
             href="https://www.linkedin.com/in/youyang-fu/"
@@ -353,22 +330,15 @@ const Team: React.FC = () => {
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon
-              image="/team/execs/frank.jpg"
-              name="Frank Fu"
-              team={TeamEnum.Industry}
-            />
+            <MemberIcon image="/team/execs/frank.jpg" name="Frank Fu" team={TeamEnum.Industry} />
           </a>
-          <a 
+          <a
             href="https://www.linkedin.com/in/jackyzchen/"
             target="_blank"
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon 
-            image="/team/execs/jacky.png" 
-            name="Jacky Chen" 
-            team={TeamEnum.Industry} />
+            <MemberIcon image="/team/execs/jacky.png" name="Jacky Chen" team={TeamEnum.Industry} />
           </a>
           <a
             href="https://www.linkedin.com/in/joyce-liu-265920357"
@@ -376,10 +346,7 @@ const Team: React.FC = () => {
             rel="noopener noreferrer"
             className="scale-90 md:scale-100"
           >
-            <MemberIcon 
-            image="/team/execs/joyce.jpg" 
-            name="Joyce Liu" 
-            team={TeamEnum.Industry} />
+            <MemberIcon image="/team/execs/joyce.jpg" name="Joyce Liu" team={TeamEnum.Industry} />
           </a>
         </TeamSection>
 

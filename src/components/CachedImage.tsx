@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCachedImageUrl, peekCachedImageUrl } from "../lib/imageCache";
 
-type CachedImageProps = Omit<
-  React.ImgHTMLAttributes<HTMLImageElement>,
-  "src"
-> & {
+type CachedImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src: string;
 };
 
@@ -13,9 +10,7 @@ type CachedImageProps = Omit<
 // remount for a source already resolved this session (e.g. paginating back to a
 // previously-seen page) paints it immediately instead of re-resolving async.
 const CachedImage = ({ src, ...rest }: CachedImageProps) => {
-  const [resolvedSrc, setResolvedSrc] = useState<string | null>(() =>
-    peekCachedImageUrl(src),
-  );
+  const [resolvedSrc, setResolvedSrc] = useState<string | null>(() => peekCachedImageUrl(src));
 
   useEffect(() => {
     const known = peekCachedImageUrl(src);

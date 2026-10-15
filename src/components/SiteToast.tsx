@@ -55,10 +55,7 @@ export const SiteToastContent: React.FC<{
   </div>
 );
 
-export function showSiteToast(
-  message: string,
-  options?: SiteToastOptions,
-): void {
+export function showSiteToast(message: string, options?: SiteToastOptions): void {
   const variant = options?.variant ?? "default";
   const toastId = `site-toast-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
   toast(

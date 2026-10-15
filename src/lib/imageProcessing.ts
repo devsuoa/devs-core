@@ -32,10 +32,7 @@ export async function prepareImageForUpload(file: File): Promise<File> {
     if (await shouldSkipProcessing(file)) return file;
 
     const bitmap = await createImageBitmap(file);
-    const scale = Math.min(
-      1,
-      MAX_DIMENSION / Math.max(bitmap.width, bitmap.height),
-    );
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
     const width = Math.round(bitmap.width * scale);
     const height = Math.round(bitmap.height * scale);
 

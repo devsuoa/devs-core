@@ -9,9 +9,9 @@ import {
   uploadEventImage,
   Event,
   EventFormData,
-} from '../../lib/manageEventsController';
-import { createLink } from '../../lib/linksController';
-import { RSVPQuestion, RSVPQuestionType } from '../../lib/eventRsvpTypes';
+} from "../../lib/manageEventsController";
+import { createLink } from "../../lib/linksController";
+import { RSVPQuestion, RSVPQuestionType } from "../../lib/eventRsvpTypes";
 
 const buildEmptyEventFormData = (): EventFormData => ({
   title: "",
@@ -107,18 +107,12 @@ const ImageDropZone: React.FC<{
               className="max-h-32 max-w-full object-contain"
               style={{ imageRendering: "auto" }}
             />
-            <p className="font-sans text-xs text-white/50">
-              Click or drop to replace
-            </p>
+            <p className="font-sans text-xs text-white/50">Click or drop to replace</p>
           </>
         ) : (
           <>
-            <p className="font-sans text-xs text-white/70">
-              Drag & drop or click to upload
-            </p>
-            <p className="font-sans text-xs text-white/40">
-              PNG, JPG, GIF, WEBP
-            </p>
+            <p className="font-sans text-xs text-white/70">Drag & drop or click to upload</p>
+            <p className="font-sans text-xs text-white/40">PNG, JPG, GIF, WEBP</p>
           </>
         )}
       </div>
@@ -143,9 +137,7 @@ const ManageEvents: React.FC = () => {
   const [autoCreateLink, setAutoCreateLink] = useState(false);
   const [linkWarning, setLinkWarning] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<EventFormData>(
-    buildEmptyEventFormData(),
-  );
+  const [formData, setFormData] = useState<EventFormData>(buildEmptyEventFormData());
 
   if (authLoading || loading) {
     return (
@@ -214,7 +206,7 @@ const ManageEvents: React.FC = () => {
           } catch (linkErr) {
             console.error(linkErr);
             setLinkWarning(
-              'Event was created, but adding it to the Links page failed. Add it manually from Manage Links.',
+              "Event was created, but adding it to the Links page failed. Add it manually from Manage Links.",
             );
           }
         }
@@ -246,9 +238,7 @@ const ManageEvents: React.FC = () => {
         <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[75%] lg:w-[50vw] lg:max-w-[900px] min-w-0">
           {(error || uploadError) && (
             <div className="pixel-panel mb-6 p-4 sm:p-5">
-              <p className="font-sans text-red-400 text-xs">
-                {error || uploadError}
-              </p>
+              <p className="font-sans text-red-400 text-xs">{error || uploadError}</p>
             </div>
           )}
 
@@ -318,13 +308,7 @@ const ManageEvents: React.FC = () => {
                     <option value="" disabled>
                       Select a tag...
                     </option>
-                    {[
-                      "Industry",
-                      "Social",
-                      "Tech",
-                      "Competitions",
-                      "Workshop",
-                    ].map((t) => (
+                    {["Industry", "Social", "Tech", "Competitions", "Workshop"].map((t) => (
                       <option key={t} value={t}>
                         {t}
                       </option>
@@ -382,8 +366,7 @@ const ManageEvents: React.FC = () => {
                     htmlFor="is-active-toggle"
                     className="font-sans text-s sm:text-sm text-white/90"
                   >
-                    Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM
-                    THE PUBLIC)
+                    Active (IF THIS IS NOT ACTIVE, THE EVENT WILL BE HIDDEN FROM THE PUBLIC)
                   </label>
                 </div>
 
@@ -395,8 +378,12 @@ const ManageEvents: React.FC = () => {
                       checked={autoCreateLink}
                       onChange={(e) => setAutoCreateLink(e.target.checked)}
                     />
-                    <label htmlFor="auto-create-link-toggle" className="font-pixelify text-s sm:text-sm text-white/90">
-                      Also add this event to the Links page (creates a link automatically — no need to add it manually in Manage Links)
+                    <label
+                      htmlFor="auto-create-link-toggle"
+                      className="font-pixelify text-s sm:text-sm text-white/90"
+                    >
+                      Also add this event to the Links page (creates a link automatically — no need
+                      to add it manually in Manage Links)
                     </label>
                   </div>
                 )}
@@ -548,10 +535,7 @@ const ManageEvents: React.FC = () => {
                         onClick={() =>
                           setFormData((prev) => ({
                             ...prev,
-                            rsvp_questions: [
-                              ...prev.rsvp_questions,
-                              createNewQuestion(),
-                            ],
+                            rsvp_questions: [...prev.rsvp_questions, createNewQuestion()],
                           }))
                         }
                       >
@@ -566,10 +550,7 @@ const ManageEvents: React.FC = () => {
                     ) : (
                       <div className="flex flex-col gap-4">
                         {formData.rsvp_questions.map((question) => (
-                          <div
-                            key={question.id}
-                            className="rounded border border-white/20 p-3"
-                          >
+                          <div key={question.id} className="rounded border border-white/20 p-3">
                             <div className="flex flex-col sm:flex-row gap-3 mb-3">
                               <input
                                 className="pixel-input w-full"
@@ -610,12 +591,8 @@ const ManageEvents: React.FC = () => {
                                 }
                               >
                                 <option value="text">Short text</option>
-                                <option value="single_select">
-                                  Single select
-                                </option>
-                                <option value="multi_select">
-                                  Multi select
-                                </option>
+                                <option value="single_select">Single select</option>
+                                <option value="multi_select">Multi select</option>
                               </select>
                             </div>
 
@@ -671,15 +648,12 @@ const ManageEvents: React.FC = () => {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          rsvp_questions:
-                                            prev.rsvp_questions.map((item) => {
-                                              if (item.id !== question.id)
-                                                return item;
-                                              const options = [...item.options];
-                                              options[optionIndex] =
-                                                e.target.value;
-                                              return { ...item, options };
-                                            }),
+                                          rsvp_questions: prev.rsvp_questions.map((item) => {
+                                            if (item.id !== question.id) return item;
+                                            const options = [...item.options];
+                                            options[optionIndex] = e.target.value;
+                                            return { ...item, options };
+                                          }),
                                         }))
                                       }
                                     />

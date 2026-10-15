@@ -29,9 +29,7 @@ export default function CloseConfirmDialog({
         aria-label={title}
         className="w-full max-w-sm rounded-2xl border border-white/20 bg-[#090909] p-5 shadow-2xl"
       >
-        <h3 className="text-white font-sans text-base uppercase tracking-wide">
-          {title}
-        </h3>
+        <h3 className="text-white font-sans text-base uppercase tracking-wide">{title}</h3>
         <p className="mt-2 text-sm text-white/80 font-sans">{description}</p>
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">

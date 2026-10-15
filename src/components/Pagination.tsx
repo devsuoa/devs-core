@@ -49,9 +49,7 @@ const Pagination = ({
           onClick={() => !isFirstPage && onPageChange(currentPage - 1)}
           disabled={isFirstPage}
           className={`pagination-link px-3 sm:px-3 md:px-4 lg:px-5 py-2 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg lg:text-xl ${
-            isFirstPage
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:text-[#6b7fd7]"
+            isFirstPage ? "opacity-50 cursor-not-allowed" : "hover:text-[#6b7fd7]"
           }`}
           aria-label="Previous page"
         >
@@ -85,9 +83,7 @@ const Pagination = ({
           onClick={() => !isLastPage && onPageChange(currentPage + 1)}
           disabled={isLastPage}
           className={`pagination-link px-3 sm:px-3 md:px-4 lg:px-5 py-2 sm:py-2 md:py-2.5 text-sm sm:text-base md:text-lg lg:text-xl ${
-            isLastPage
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:text-[#6b7fd7]"
+            isLastPage ? "opacity-50 cursor-not-allowed" : "hover:text-[#6b7fd7]"
           }`}
           aria-label="Next page"
         >
@@ -101,9 +97,7 @@ const Pagination = ({
           onClick={() => !isFirstPage && onPageChange(0)}
           disabled={isFirstPage}
           className={`pagination-link px-3 sm:px-4 md:px-5 lg:px-6 py-0.5 sm:py-1 text-xs sm:text-sm md:text-base lg:text-lg ${
-            isFirstPage
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:text-[#6b7fd7]"
+            isFirstPage ? "opacity-50 cursor-not-allowed" : "hover:text-[#6b7fd7]"
           }`}
           aria-label="First page"
         >
@@ -114,9 +108,7 @@ const Pagination = ({
           onClick={() => !isLastPage && onPageChange(totalPages - 1)}
           disabled={isLastPage}
           className={`pagination-link px-3 sm:px-4 md:px-5 lg:px-6 py-0.5 sm:py-1 text-xs sm:text-sm md:text-base lg:text-lg ${
-            isLastPage
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:text-[#6b7fd7]"
+            isLastPage ? "opacity-50 cursor-not-allowed" : "hover:text-[#6b7fd7]"
           }`}
           aria-label="Last page"
         >
