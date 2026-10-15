@@ -10,20 +10,22 @@ This document explains how to set up the project locally and get it running for 
 - **Vite** – Development server and build tool
 - **Tailwind CSS** – Utility-first styling
 - **ESLint** – Code linting
+- **Prettier** – Code formatting
+- **Husky + lint-staged + commitlint** – Git hooks that check your code and commit messages
 
 ## Prerequisites
 
 Make sure you have the following installed:
 
-- **Node.js** (LTS recommended)
-- **npm** or **pnpm** (npm assumed below)
+- **Node.js** 22 or 24
+- **pnpm** (`corepack enable` sets up the right version automatically). Don't use npm: it ignores `pnpm-lock.yaml`
 - **Git**
 
 Check versions:
 
 ```bash
 node -v
-npm -v
+pnpm -v
 git --version
 ```
 
@@ -32,22 +34,22 @@ git --version
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Gh05stt/devsuoa.git
-cd devsuoa
+git clone https://github.com/devsuoa/devsuoa-website.git
+cd devsuoa-website
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
-This installs all required dependencies for React, TypeScript, Tailwind, and Vite.
+This installs all dependencies and sets up the Git hooks.
 
 ### 3. Start the Development Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The app will be available at:
@@ -66,6 +68,22 @@ src/
 
 > Keep components small, reusable, and typed.
 
-### 4. Get building
+### 4. Git hooks and useful scripts
+
+These hooks run automatically when you commit:
+
+- **pre-commit**: runs ESLint and Prettier on your staged files (auto-fixing what it can), then regenerates `kb/assets/dependency-graph.svg`
+- **commit-msg**: checks your message follows the [commit guidelines](commit_guidelines.md), e.g. `feat: add construction page`
+
+| Script           | What it does                                      |
+| ---------------- | ------------------------------------------------- |
+| `pnpm lint`      | Lint the whole repo (`pnpm lint:fix` to auto-fix) |
+| `pnpm format`    | Format the whole repo with Prettier               |
+| `pnpm typecheck` | Type-check without building                       |
+| `pnpm graph`     | Regenerate the module dependency graph            |
+
+If `kb/assets/dependency-graph.svg` has a merge conflict, run `pnpm graph` and stage the result instead of resolving it by hand.
+
+### 5. Get building
 
 Alanna and Baljot will align tasks to you on a centralised Google sheet. Update this sheet when you start and finish a task.
