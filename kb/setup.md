@@ -58,13 +58,20 @@ http://localhost:5173
 ### Project Structure (High level)
 
 ```bash
-src/
-  components/     Reusable UI components
-  pages/          Page-level components
-  assets/         Images and static assets
-  styles/         Global styles (Tailwind entry)
-  main.tsx        App entry point
+apps/
+  web/              This website
+    src/
+      components/   Reusable UI components
+      pages/        Page-level components
+      lib/          Data access and feature logic
+      main.tsx      App entry point
+    public/         Static assets
+    .env            Your local environment variables (ask an exec for the values)
+kb/                 Documentation (you are here)
+scripts/            Repo tooling
 ```
+
+Run `pnpm` scripts from the repo root. They forward to the right app.
 
 > Keep components small, reusable, and typed.
 

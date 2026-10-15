@@ -28,7 +28,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["scripts/**", "*.config.{js,ts}"],
+    files: ["*.config.{js,ts}"],
     languageOptions: { globals: globals.node },
   },
   // Must stay last: turns off rules that would fight Prettier's formatting.

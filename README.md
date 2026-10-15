@@ -10,6 +10,6 @@ Find all documentation, including a setup guide in the [Knowledge Base](kb/home.
 
 ## Dependency Graph
 
-Every module in `src/` and what it imports. The pre-commit hook regenerates this on each commit, so it stays up to date as the code changes. Run `pnpm graph` to regenerate it manually.
+Every module in the website (`apps/web/src`) and what it imports. The pre-commit hook regenerates this on each commit, so it stays up to date as the code changes. Run `pnpm graph` to regenerate it manually.
 
-[![Dependency graph of src/](kb/assets/dependency-graph.svg)](kb/assets/dependency-graph.svg)
+[![Dependency graph of apps/web/src](kb/assets/dependency-graph.svg)](kb/assets/dependency-graph.svg)
