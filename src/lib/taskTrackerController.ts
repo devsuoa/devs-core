@@ -1,7 +1,8 @@
-import { supabase } from "./supabase";
+import { api, fetchMe } from "./api";
 import { Task, TaskStatus } from "../components/TaskCard";
 
 export const STATUSES: TaskStatus[] = ["todo", "doing", "review", "done"];
+
 export const GLOBAL_TEAMS = ["president", "senior_advisor"];
 
 export function toDbTask(task: Task) {
@@ -32,84 +33,51 @@ export function isStatus(id: unknown): id is TaskStatus {
 }
 
 export async function getCurrentUserTeam(): Promise<string> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return "";
-
-  const { data } = await supabase.from("profiles").select("team").eq("id", user.id).single();
-
-  return data?.team ?? "";
+  try {
+    return (await fetchMe()).team ?? "";
+  } catch {
+    return "";
+  }
 }
 
 export async function getCurrentUserId(): Promise<string> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return user?.id ?? "";
+  try {
+    return (await fetchMe()).id;
+  } catch {
+    return "";
+  }
 }
 
 export async function getCurrentUserRole(): Promise<{
   role: string;
   isSuperuser: boolean;
 }> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  try {
+    const me = await fetchMe();
+    return { role: me.role, isSuperuser: me.is_superuser };
+  } catch {
     return { role: "", isSuperuser: false };
   }
-
-  const { data } = await supabase
-    .from("profiles")
-    .select("role, is_superuser")
-    .eq("id", user.id)
-    .single();
-
-  return {
-    role: data?.role ?? "",
-    isSuperuser: data?.is_superuser ?? false,
-  };
 }
 
+/** Tasks the logged-in exec can see: their team's, or every team's for the president and senior advisor. */
 export async function loadTasks(): Promise<Task[]> {
-  const { data, error } = await supabase
-    .from("tasks")
-    .select("*")
-    .order("order", { ascending: true });
-
-  if (error) throw error;
-
-  return (
-    data?.map((t: any) => ({
-      ...t,
-      archived: t.archived ?? false,
-      due_date: t.due_date ?? null,
-      comments: [],
-    })) ?? []
-  );
+  const data = await api<any[]>("/api/admin/tasks");
+  return data.map((t) => ({
+    ...t,
+    archived: t.archived ?? false,
+    due_date: t.due_date ?? null,
+    comments: [],
+  }));
 }
 
+/** Saves a lane's new order (and status, after a drag between lanes) in one request. */
 export async function persistLane(lane: Task[]) {
-  const updates = lane.map((t) => ({
-    id: t.id,
-    status: t.status,
-    order: t.order,
-  }));
   try {
-    const results = await Promise.allSettled(
-      updates.map((u) =>
-        supabase.from("tasks").update({ status: u.status, order: u.order }).eq("id", u.id),
-      ),
-    );
-
-    const failed = results.filter((r) => r.status === "rejected");
-    if (failed.length > 0) {
-      console.error("Some updates failed:", failed);
-      throw new Error(`Failed to update ${failed.length} tasks`);
-    }
+    await api("/api/admin/tasks/lanes", {
+      method: "PUT",
+      body: { updates: lane.map((t) => ({ id: t.id, status: t.status, order: t.order })) },
+    });
   } catch (error) {
     console.error("persistLane failed:", error);
     throw error;
@@ -117,15 +85,15 @@ export async function persistLane(lane: Task[]) {
 }
 
 export async function createTask(task: Task) {
-  await supabase.from("tasks").insert(toDbTask(task));
+  await api("/api/admin/tasks", { method: "POST", body: toDbTask(task) });
 }
 
 export async function updateTask(task: Task) {
-  await supabase.from("tasks").update(toDbTask(task)).eq("id", task.id);
+  await api(`/api/admin/tasks/${encodeURIComponent(task.id)}`, { method: "PUT", body: toDbTask(task) });
 }
 
 export async function archiveTask(taskId: string) {
-  await supabase.from("tasks").update({ archived: true }).eq("id", taskId);
+  await api(`/api/admin/tasks/${encodeURIComponent(taskId)}/archive`, { method: "POST" });
 }
 
 export type AdminUser = {
@@ -134,58 +102,40 @@ export type AdminUser = {
 };
 
 export async function loadAdmins(): Promise<AdminUser[]> {
-  const { data } = await supabase.from("profiles").select("id, username").eq("role", "admin");
-
-  return data ?? [];
+  try {
+    return await api<AdminUser[]>("/api/admin/admins");
+  } catch {
+    return [];
+  }
 }
 
 export async function loadComments(taskId: string) {
-  const { data } = await supabase
-    .from("task_comments")
-    .select("*")
-    .eq("task_id", taskId)
-    .order("created_at");
-
-  return data ?? [];
+  try {
+    return await api<any[]>(`/api/admin/tasks/${encodeURIComponent(taskId)}/comments`);
+  } catch {
+    return [];
+  }
 }
 
-export async function addComment(taskId: string, message: string) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const { data, error } = await supabase
-    .from("task_comments")
-    .insert({
-      task_id: taskId,
-      author_id: user.id,
-      author_name: user.user_metadata?.username ?? user.email ?? "Unknown",
-      message,
-    })
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+/** The API records the logged-in exec as the author. */
+export function addComment(taskId: string, message: string) {
+  return api<any>(`/api/admin/tasks/${encodeURIComponent(taskId)}/comments`, {
+    method: "POST",
+    body: { message },
+  });
 }
 
-export async function updateComment(commentId: string, message: string) {
-  const { data, error } = await supabase
-    .from("task_comments")
-    .update({ message })
-    .eq("id", commentId)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+/** Only the author can edit a comment. */
+export function updateComment(commentId: string, message: string) {
+  return api<any>(`/api/admin/task-comments/${encodeURIComponent(commentId)}`, {
+    method: "PATCH",
+    body: { message },
+  });
 }
 
+/** The author or a superuser can delete a comment. */
 export async function deleteComment(commentId: string) {
-  const { error } = await supabase.from("task_comments").delete().eq("id", commentId);
-
-  if (error) throw error;
+  await api(`/api/admin/task-comments/${encodeURIComponent(commentId)}`, { method: "DELETE" });
 }
 
 export function formatNZDate(utcDate: string) {

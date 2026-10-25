@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { fetchMe } from "./api";
 
 type LoginParams = {
   email: string;
@@ -28,53 +29,9 @@ export async function handleLoginSubmit(
       throw new Error("Invalid email or password");
     }
 
-    // Check if profile exists, create it if it doesn't
-    let profile = await supabase
-      .from("profiles")
-      .select("role, username")
-      .eq("id", data.user.id)
-      .single();
-
-    if (profile.error) {
-      // Profile doesn't exist - create it
-      // Get username from user metadata if available
-      const username =
-        (data.user.user_metadata?.username as string) || data.user.email?.split("@")[0] || "";
-
-      const { error: createError } = await supabase.from("profiles").upsert(
-        {
-          id: data.user.id,
-          username: username,
-        },
-        {
-          onConflict: "id",
-        },
-      );
-
-      if (createError) {
-        console.error("Failed to create profile:", createError);
-        throw new Error("Failed to create user profile. Please contact support.");
-      }
-
-      const profileResponse = await supabase
-        .from("profiles")
-        .select("role, username")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileResponse.error) {
-        throw new Error("Failed to verify user role");
-      }
-
-      profile = profileResponse;
-    }
-
-    // Validate user roles
-    if (!profile.data) {
-      throw new Error("Failed to verify user role");
-    }
-
-    if (profile.data.role !== "admin") {
+    // Exec access is decided by the API from the database, not by anything the browser can set.
+    const me = await fetchMe();
+    if (me.role !== "admin") {
       await supabase.auth.signOut();
       throw new Error("You do not have access");
     }

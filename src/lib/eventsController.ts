@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabase";
+import { api } from "./api";
 import { RSVPQuestion } from "./eventRsvpTypes";
 
 export interface PublicEvent {
@@ -59,41 +59,17 @@ export const useEvents = () => {
     const fetchEvents = async () => {
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from("events")
-        .select(
-          `
-          id,
-          title,
-          description,
-          image_url,
-          tag,
-          event_date,
-          event_time,
-          location,
-          register_url,
-          max_attendees,
-          group_rsvp_enabled,
-          group_rsvp_max_emails,
-          payment_enabled,
-          charge_amount,
-          bank_transfer_enabled,
-          rsvp_questions,
-          is_active
-        `,
-        )
-        .order("event_date", { ascending: true });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        const normalized = (data || []).map((event) => ({
+      try {
+        const data = await api<PublicEvent[]>("/api/events");
+        const normalized = data.map((event) => ({
           ...event,
           rsvp_questions: Array.isArray(event.rsvp_questions)
             ? event.rsvp_questions
             : [],
         }));
         setEvents(normalized);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load events");
       }
 
       setLoading(false);

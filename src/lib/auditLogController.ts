@@ -1,9 +1,9 @@
-import { supabase } from "./supabase";
+import { api, fetchMe } from "./api";
 
 export type AuditSource = "dashboard" | "edge_function" | "system" | "public";
 
 export type AuditLogRow = {
-  id: number;
+  id: string;
   created_at: string;
 
   admin_name: string;
@@ -73,7 +73,7 @@ function normaliseRow(raw: Record<string, unknown>): AuditLogRow {
   }
 
   return {
-    id: raw.id as number,
+    id: String(raw.id),
     created_at: raw.created_at as string,
 
     admin_name: adminName,
@@ -160,20 +160,13 @@ export function diffFields(
 }
 
 export async function isAllowedAccess(): Promise<boolean> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id, is_superuser")
-    .eq("id", user?.id)
-    .eq("is_superuser", true);
-
-  if (error) {
+  try {
+    const me = await fetchMe();
+    return me.role === "admin" && me.is_superuser;
+  } catch (error) {
     console.error("Error validating access:", error);
     return false;
   }
-  return data.length > 0;
 }
 
 export const AUDIT_PAGE_SIZE = 5000;
@@ -182,21 +175,15 @@ export async function fetchAuditLogs(
   page = 0,
   pageSize = AUDIT_PAGE_SIZE,
 ): Promise<{ rows: AuditLogRow[]; hasMore: boolean }> {
-  const from = page * pageSize;
-  const to = from + pageSize - 1;
-
-  const { data, error } = await supabase
-    .from("admin_audit_log")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .range(from, to);
-
-  if (error) {
+  let data: Record<string, unknown>[];
+  try {
+    data = await api<Record<string, unknown>[]>(`/api/admin/audit-log?page=${page}&page_size=${pageSize}`);
+  } catch (error) {
     console.error("Error fetching audit logs:", error);
     throw error;
   }
 
-  const rows = (data as Record<string, unknown>[]).map(normaliseRow);
+  const rows = data.map(normaliseRow);
   return { rows, hasMore: rows.length === pageSize };
 }
 
@@ -246,71 +233,11 @@ export function getRestoreDescription(action: RestoreAction): {
   }
 }
 
-function detectPkColumn(log: AuditLogRow): string {
-  const snap = log.target_old ?? log.target_new;
-  if (snap) {
-    if ("id" in snap) return "id";
-    if ("student_id" in snap) return "student_id";
-  }
-  return "id";
-}
-
-// Execute an undo operation against the target table via PostgREST.
-
+/**
+ * Undoes one audit entry. The API checks the table is restorable and that the row hasn't
+ * changed since this entry, then applies the undo and logs it as an undo of this entry.
+ */
 export async function restoreAuditEntry(log: AuditLogRow): Promise<void> {
-  const action = getRestoreAction(log);
-  if (!action) throw new Error("This entry cannot be restored");
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.access_token) throw new Error("Not authenticated — please log in again");
-
-  const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  const headers: Record<string, string> = {
-    apikey: apiKey,
-    Authorization: `Bearer ${session.access_token}`,
-    "Content-Type": "application/json",
-    Prefer: "return=minimal",
-    "x-audit-undo": String(log.id),
-  };
-
-  const table = encodeURIComponent(log.target_table);
-  const pkCol = detectPkColumn(log);
-  const pkVal = encodeURIComponent(String(log.target_id));
-
-  let res: Response;
-
-  switch (action) {
-    case "revert_insert": {
-      res = await fetch(`${baseUrl}/rest/v1/${table}?${pkCol}=eq.${pkVal}`, {
-        method: "DELETE",
-        headers,
-      });
-      break;
-    }
-    case "revert_delete": {
-      res = await fetch(`${baseUrl}/rest/v1/${table}`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(log.target_old),
-      });
-      break;
-    }
-    case "revert_update": {
-      res = await fetch(`${baseUrl}/rest/v1/${table}?${pkCol}=eq.${pkVal}`, {
-        method: "PATCH",
-        headers,
-        body: JSON.stringify(log.target_old),
-      });
-      break;
-    }
-  }
-
-  if (!res!.ok) {
-    const body = await res!.text();
-    throw new Error(body || `Restore failed (HTTP ${res!.status})`);
-  }
+  if (!getRestoreAction(log)) throw new Error("This entry cannot be restored");
+  await api(`/api/admin/audit-log/${encodeURIComponent(String(log.id))}/restore`, { method: "POST" });
 }

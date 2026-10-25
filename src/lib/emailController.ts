@@ -1,23 +1,19 @@
-import { supabase } from "./supabase";
+import { api } from "./api";
 
-export interface EmailData {
-  to: string;
-  subject: string;
-  html: string;
+export interface ContactMessage {
+  kind: "contact" | "sponsor";
+  name: string;
+  email: string;
+  message: string;
 }
 
-export async function sendEmail({ to, subject, html }: EmailData) {
+/**
+ * Sends the contact or sponsorship form to the society inbox. The API chooses the
+ * recipient and builds the email; the browser only supplies what the visitor typed.
+ */
+export async function sendContactMessage(message: ContactMessage): Promise<void> {
   try {
-    const { data, error } = await supabase.functions.invoke("send-email", {
-      body: { to, subject, html },
-    });
-
-    if (error) {
-      console.error("Error sending email:", error);
-      throw new Error(`Failed to send email: ${error.message}`);
-    }
-
-    return data;
+    await api("/api/contact", { method: "POST", body: message });
   } catch (error) {
     console.error("Email controller error:", error);
     throw error;

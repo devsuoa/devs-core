@@ -27,7 +27,8 @@ Flyway keeps a record of applied migrations in `flyway.flyway_schema_history` an
 Rules:
 
 - **Never edit, rename or delete a migration once it is merged.** Databases have already run it, and Flyway rejects files whose checksum changed. To fix a mistake, add a new migration. CI blocks PRs that change merged migrations.
-- **New tables need RLS.** Supabase grants `anon` and `authenticated` full access to new tables in `public`, so `alter table ... enable row level security` and write policies in the same migration.
+- **Only the API touches tables.** Since `V20261026_0320`, the browser roles (`anon`, `authenticated`) have no access to anything in `public`, and new tables start closed too. For a new table, `enable row level security`, then grant it to `api_app` and add an `api_app access` policy, like `V20261026_0310__api_role.sql` does.
+- **Never grant to `anon` or `authenticated`.** Anything they can read, anyone with the website's public key can read.
 - **No secrets.** Keys, webhook URLs and passwords don't belong in migrations.
 
 ### Testing locally (optional, needs Docker)
@@ -49,6 +50,7 @@ docker rm -f devs-db
 | `db/migrations/`                             | Migrations, applied in version order.                                                              |
 | `db/migrations/V20261016_0000__baseline.sql` | The production schema when Flyway was introduced. Production is marked as already at this version. |
 | `db/callbacks/beforeEachMigrate.sql`         | Resets `search_path` to `public` before each migration.                                            |
+| `db/seed/dev_seed.sql`                       | Fake people and events for local Docker and the API's tests. Never run it against a real project.  |
 | `db/flyway.toml`                             | Shared Flyway settings. Connection details come from environment variables.                        |
 | `.github/workflows/database.yml`             | The CI pipeline above.                                                                             |
 
@@ -56,7 +58,7 @@ docker rm -f devs-db
 
 These live only in the Supabase dashboard of each project:
 
-- Storage buckets and their policies
+- Storage buckets. Their browser-facing policies for `event-payments`, `event-images` and `Links` are removed by `V20261026_0320`; the API uses the service role key.
 - Cron jobs (`pg_cron`)
 - Auth settings and edge function secrets
 - The `marketing_webhook` database webhook on `public.marketing_requests`. It was left out of the baseline because it has a Supabase key and the prod URL inlined.
@@ -85,3 +87,5 @@ These live only in the Supabase dashboard of each project:
    The production job refuses to run until this is done.
 
 3. **Dev database.** A new, empty dev project needs no baseline. The first merge to main builds the whole schema on it.
+
+4. **API role password.** After `V20261026_0310` has run on a project, give `api_app` a password once in the SQL editor (`alter role api_app with password '...'`) and give it to the API's deployment. See [apps/api/README.md](../apps/api/README.md).

@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { api } from "./api";
 
 export type MemberRow = {
   student_id: number;
@@ -49,15 +49,10 @@ export function groupBy(
 }
 
 export async function fetchMemberRegistry(): Promise<MemberRow[]> {
-  const { data, error } = await supabase
-    .from("member_registry")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
+  try {
+    return await api<MemberRow[]>("/api/admin/members");
+  } catch (error) {
     console.error("fetchMemberRegistry failed:", error);
     throw error;
   }
-
-  return data ?? [];
 }

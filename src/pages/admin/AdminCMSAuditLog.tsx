@@ -113,7 +113,7 @@ const AuditLog: React.FC = () => {
   const [filterAction, setFilterAction] = useState("all");
   const [filterSource, setFilterSource] = useState<AuditSource | "all">("all");
   const [filterActor, setFilterActor] = useState("all");
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showStats, setShowStats] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);

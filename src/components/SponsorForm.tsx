@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PixelatedButton from "./PixelatedButton";
-import { sendEmail } from "../lib/emailController";
+import { sendContactMessage } from "../lib/emailController";
 import { showSiteToast } from "./SiteToast";
 
 type FormType = "sponsor" | "contact";
@@ -21,29 +21,13 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Configuration based on form type
+  // Configuration based on form type. The email itself is built by the API.
   const config = {
     sponsor: {
       nameLabel: "COMPANY NAME",
-      emailSubject: (name: string) => `Sponsorship Inquiry from ${name}`,
-      emailBody: (name: string, email: string, message: string) => `
-        <h2>New Sponsorship Inquiry</h2>
-        <p><strong>Company:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
     },
     contact: {
       nameLabel: "NAME",
-      emailSubject: (name: string) => `Contact Form Submission from ${name}`,
-      emailBody: (name: string, email: string, message: string) => `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
     },
   };
 
@@ -62,10 +46,11 @@ const SponsorForm: React.FC<SponsorFormProps> = ({ formType = "sponsor" }) => {
 
     try {
       // Send email to team
-      await sendEmail({
-        to: "contact@devsuoa.com",
-        subject: currentConfig.emailSubject(formData.name),
-        html: currentConfig.emailBody(formData.name, formData.email, formData.message),
+      await sendContactMessage({
+        kind: formType,
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
       });
 
       showSiteToast("Thank you! We'll get back to you soon.", {

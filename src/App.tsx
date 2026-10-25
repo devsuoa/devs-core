@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import CookieDisclaimer from "./components/CookiesDisclaimer";
 // import Construction from "./pages/Construction";
 import Links from "./pages/Links";
-import AdminSignup from "./pages/admin/AdminSignup";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminResetPassword from "./pages/admin/AdminResetPassword";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -90,7 +89,6 @@ function App() {
           <Route path="/sponsors" element={<Sponsors />} />
 
           {/* Admin pages */}
-          <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin/reset-password"

@@ -1,8 +1,9 @@
 import { supabase } from "./supabase";
+import { fetchMe } from "./api";
 
+/** True if someone is logged in and the API says they're an exec. Logs out anyone else. */
 export async function checkAdminAuthorization(): Promise<boolean> {
   try {
-    // Check if user has active session
     const {
       data: { session },
       error: sessionError,
@@ -12,14 +13,8 @@ export async function checkAdminAuthorization(): Promise<boolean> {
       return false;
     }
 
-    // Check if user has access
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    if (profileError || !profile || profile.role !== "admin") {
+    const me = await fetchMe();
+    if (me.role !== "admin") {
       await supabase.auth.signOut();
       return false;
     }
