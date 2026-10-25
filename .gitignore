@@ -30,3 +30,5 @@ yarn.lock
 
 #Template for landing page slideshow
 public/home/slideshow/template.psd
+# Firebase CLI cache
+.firebase/
