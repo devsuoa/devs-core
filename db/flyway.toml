@@ -1,0 +1,14 @@
+[flyway]
+locations = ["filesystem:migrations", "filesystem:callbacks"]
+
+validateMigrationNaming = true
+cleanDisabled = true
+# Branches merge in any order, so a migration can be older than one already applied.
+outOfOrder = true
+
+baselineVersion = "20261016.0000"
+baselineDescription = "baseline"
+
+[environments.default]
+# Not public: everything in public is exposed through Supabase's REST API.
+schemas = ["flyway"]
