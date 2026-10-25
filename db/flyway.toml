@@ -1,23 +1,14 @@
-# Shared Flyway settings. Connection details (FLYWAY_URL, FLYWAY_USER,
-# FLYWAY_PASSWORD) come from environment variables, never this file.
-# See kb/database_migrations.md.
-
 [flyway]
 locations = ["filesystem:migrations", "filesystem:callbacks"]
 
 validateMigrationNaming = true
 cleanDisabled = true
-
-# Branches merge in any order, so a migration can arrive with an older
-# timestamp than one already applied.
+# Branches merge in any order, so a migration can be older than one already applied.
 outOfOrder = true
 
-# Production already had this schema before Flyway; `flyway baseline` marks it
-# as applied there.
 baselineVersion = "20261016.0000"
 baselineDescription = "baseline"
 
 [environments.default]
-# Keep Flyway's history table in its own schema. Anything in `public` is
-# exposed through Supabase's REST API.
+# Not public: everything in public is exposed through Supabase's REST API.
 schemas = ["flyway"]

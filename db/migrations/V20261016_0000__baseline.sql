@@ -1,11 +1,4 @@
--- Baseline: the production schema as of 2026-10-16 (supabase db dump).
--- Production is already at this version, so it is never run there; it only
--- builds fresh databases (CI, dev). See kb/database_migrations.md.
---
--- Removed from the dump: the "marketing_webhook" trigger on
--- public.marketing_requests. It calls the prod edge function URL with a
--- Supabase key inlined, so it cannot live in git or point at the right
--- project in other environments. It still exists in prod.
+-- Production schema on 2026-10-16, minus the marketing_webhook trigger (it inlines a key).
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;

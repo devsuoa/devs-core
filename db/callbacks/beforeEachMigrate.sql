@@ -1,4 +1,2 @@
--- Flyway points search_path at its own "flyway" schema while migrating. Reset
--- it so unqualified names in migrations mean public, like in the Supabase SQL
--- editor.
+-- Flyway switches search_path to its own schema; unqualified names in migrations mean public.
 set search_path = public, extensions;

@@ -1,9 +1,3 @@
-# Applies db/migrations with Flyway. See kb/database_migrations.md.
-#
-#   pull request -> test: run every migration on a throwaway Supabase Postgres
-#   merge to main -> test, then migrate the dev database
-#   tag v*        -> test, then migrate production (needs approval)
-
 name: Database
 
 on:
@@ -12,7 +6,6 @@ on:
   push:
     branches: [main]
     paths: ["db/**", ".github/workflows/database.yml"]
-    # Path filters don't apply to tag pushes, so every release tag runs this.
     tags: ["v*"]
 
 env:
@@ -24,8 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        # Must match production's Postgres version (Supabase dashboard >
-        # Settings > Infrastructure).
+        # Must match production's Postgres version.
         image: supabase/postgres:17.6.1.062
         env:
           POSTGRES_PASSWORD: postgres
@@ -90,7 +82,6 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: ubuntu-latest
-    # Required reviewers are set on this environment in the repo settings.
     environment: production
     concurrency: { group: migrate-prod, cancel-in-progress: false }
     env:
