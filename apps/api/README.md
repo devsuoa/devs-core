@@ -45,19 +45,19 @@ anonymous callers get 401 and non-admins get 403, so a new endpoint is covered a
 
 ## Configuration
 
-| Variable | What it is |
-| --- | --- |
-| `DB_URL`, `DB_USER`, `DB_PASSWORD` | Postgres connection. Connect as `api_app` (see below), never `postgres`. |
-| `SUPABASE_URL` | The project's URL, e.g. `https://<ref>.supabase.co`. Tokens must be issued by `<url>/auth/v1`. |
-| `SUPABASE_JWT_SECRET` | Legacy HS256 JWT secret. Leave empty if the project uses signing keys (JWKS). |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only key for Storage and inviting execs. Never put it in the website's env. |
-| `SITE_URL` | The website's address, used for Stripe and invite redirects. |
-| `CORS_ALLOWED_ORIGINS` | Comma-separated origins allowed to call the API. |
-| `STORAGE_MODE` | `supabase` (default) or `local` (Docker dev). |
-| `EMAIL_MODE`, `RESEND_API_KEY`, `CONTACT_EMAIL_TO` | `resend` sends mail; `log` only logs it. |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Card payments. The webhook endpoint is `/api/webhooks/stripe`. |
-| `MARKETING_APPS_SCRIPT_URL` | The Google Apps Script that writes marketing requests to the sheet. |
-| `FORWARD_HEADERS_STRATEGY` | `native` behind a proxy that sets `X-Forwarded-For`, so rate limits see real IPs. |
+| Variable                                           | What it is                                                                                     |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `DB_URL`, `DB_USER`, `DB_PASSWORD`                 | Postgres connection. Connect as `api_app` (see below), never `postgres`.                       |
+| `SUPABASE_URL`                                     | The project's URL, e.g. `https://<ref>.supabase.co`. Tokens must be issued by `<url>/auth/v1`. |
+| `SUPABASE_JWT_SECRET`                              | Legacy HS256 JWT secret. Leave empty if the project uses signing keys (JWKS).                  |
+| `SUPABASE_SERVICE_ROLE_KEY`                        | Server-only key for Storage and inviting execs. Never put it in the website's env.             |
+| `SITE_URL`                                         | The website's address, used for Stripe and invite redirects.                                   |
+| `CORS_ALLOWED_ORIGINS`                             | Comma-separated origins allowed to call the API.                                               |
+| `STORAGE_MODE`                                     | `supabase` (default) or `local` (Docker dev).                                                  |
+| `EMAIL_MODE`, `RESEND_API_KEY`, `CONTACT_EMAIL_TO` | `resend` sends mail; `log` only logs it.                                                       |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`       | Card payments. The webhook endpoint is `/api/webhooks/stripe`.                                 |
+| `MARKETING_APPS_SCRIPT_URL`                        | The Google Apps Script that writes marketing requests to the sheet.                            |
+| `FORWARD_HEADERS_STRATEGY`                         | `native` behind a proxy that sets `X-Forwarded-For`, so rate limits see real IPs.              |
 
 ### The `api_app` database role
 
