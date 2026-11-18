@@ -1,0 +1,13 @@
+# Pushes are made by people: block AI agents (Claude Code, Cursor, Codex, Gemini, Copilot…) from
+# pushing on their own. Env vars are the ones @vercel/detect-agent checks. When a person has
+# explicitly approved a push, the agent reruns it as: ALLOW_AGENT_PUSH=1 git push
+[ "$ALLOW_AGENT_PUSH" = "1" ] && exit 0
+
+for v in AI_AGENT CLAUDECODE CLAUDE_CODE CURSOR_AGENT CODEX_SANDBOX CODEX_THREAD_ID CODEX_CI \
+  GEMINI_CLI OPENCODE OPENCODE_CLIENT AUGMENT_AGENT ANTIGRAVITY_AGENT COPILOT_MODEL; do
+  if [ -n "$(printenv "$v")" ]; then
+    echo "Push blocked: AI agents can't push without explicit permission ($v is set)." >&2
+    echo "Ask the user first. If they approve, rerun as: ALLOW_AGENT_PUSH=1 git push ..." >&2
+    exit 1
+  fi
+done

@@ -85,7 +85,8 @@ Run `pnpm` scripts from the repo root. They forward to the right app.
 These hooks run automatically when you commit:
 
 - **pre-commit**: runs ESLint and Prettier on your staged files (auto-fixing what it can), then regenerates `kb/assets/dependency-graph.svg`
-- **commit-msg**: checks your message follows the [commit guidelines](commit_guidelines.md), e.g. `feat: add construction page`
+- **commit-msg**: checks your message follows the [commit guidelines](commit_guidelines.md), e.g. `feat: add construction page`, and rejects AI co-author lines
+- **pre-push**: blocks AI agents (Claude Code, Cursor, Codex, Gemini, Copilot…) from pushing on their own. If you've told your agent to push, it reruns as `ALLOW_AGENT_PUSH=1 git push`
 
 | Script           | What it does                                      |
 | ---------------- | ------------------------------------------------- |
