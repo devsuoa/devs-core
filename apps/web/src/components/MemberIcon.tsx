@@ -1,5 +1,6 @@
 import React from "react";
 
+// eslint-disable-next-line react-refresh/only-export-components -- Team enum is shared with callers; move to its own file later
 export enum Team {
   Presidents = "Presidents",
   SeniorAdvisor = "Senior Advisor",
@@ -14,7 +15,7 @@ export enum Team {
 type MemberIconProps = {
   /**
    * Image of exec
-   * @example "/team/execs/alanna.png"
+   * @example "/team/execs/2026/alanna.jpg"
    */
   image?: string | undefined;
 

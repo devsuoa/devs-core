@@ -169,6 +169,7 @@ Business logic and data fetching are concentrated under **`src/lib/`** rather th
 - **`cookieConsentController.ts`** – consent persistence used with cookies UI
 - **`pageNotFoundController.ts`** – centralised navigation for 404 behaviour
 - **`featureFlags.ts`** – JSON feature flags
+- **`teamController.ts`** – team page year selection, per-year photo preloading and year dropdown behaviour
 - **`slideShowController.ts`**, **`aboutController.ts`**, etc. – page-specific data or UI helpers
 
 Naming is not uniform (`*Controller.ts` vs `use*` hooks in the same file); when extending the app, match the nearest existing feature.

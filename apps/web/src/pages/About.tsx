@@ -168,7 +168,7 @@ const About = () => {
             <div className="flex flex-row items-center justify-center gap-x-16 mt-24">
               <div className="flex flex-col items-center justify-center">
                 <img
-                  src="/team/execs/team.png"
+                  src="/team/execs/2026/team.png"
                   alt="2025/26 DEVS Exec Photo"
                   className="w-[70%] h-auto"
                 />
@@ -341,7 +341,7 @@ const About = () => {
           <section className="my-12 px-4">
             <div className="flex flex-col items-center justify-center gap-4">
               <img
-                src="/team/execs/team.png"
+                src="/team/execs/2026/team.png"
                 alt="2025/26 DEVS Exec Photo"
                 className="w-full h-auto"
               />

@@ -8,6 +8,36 @@ import { MemberIcon } from "../components/MemberIcon";
 import { Team as TeamEnum } from "../components/MemberIcon";
 import BinaryBackground from "../components/BinaryBackground";
 import { motion } from "framer-motion";
+import { Section, useTeamController } from "../lib/teamController";
+
+// Full class names are spelled out so Tailwind can detect them.
+const MOBILE_LAYOUT: Record<number, string[]> = {
+  2: ["w-[calc(50%-1rem)]", "max-w-sm"],
+  3: ["w-[calc(33.333%-1.334rem)]", "max-w-xl"],
+  4: ["w-[calc(25%-1.5rem)]", "max-w-3xl"],
+  5: ["w-[calc(20%-1.6rem)]", "max-w-4xl"],
+  6: ["w-[calc(16.666%-1.667rem)]", "max-w-6xl"],
+};
+
+const DESKTOP_LAYOUT: Record<number, string[]> = {
+  2: ["md:w-[calc(50%-1rem)]", "md:max-w-sm"],
+  3: ["md:w-[calc(33.333%-1.334rem)]", "md:max-w-xl"],
+  4: ["md:w-[calc(25%-1.5rem)]", "md:max-w-3xl"],
+  5: ["md:w-[calc(20%-1.6rem)]", "md:max-w-4xl"],
+  6: ["md:w-[calc(16.666%-1.667rem)]", "md:max-w-6xl"],
+};
+
+const sectionLayout = ({ mobileColumns, desktopColumns }: Section) => {
+  const [mobileItem, mobileMax] = MOBILE_LAYOUT[mobileColumns] ?? MOBILE_LAYOUT[3];
+  const [desktopItem, desktopMax] = DESKTOP_LAYOUT[desktopColumns] ?? DESKTOP_LAYOUT[4];
+  return {
+    itemClass: `${mobileItem} ${desktopItem}`,
+    maxWidthClass: `${mobileMax} ${desktopMax}`,
+  };
+};
+
+const isTeam = (value: string): value is TeamEnum =>
+  (Object.values(TeamEnum) as string[]).includes(value);
 
 const cardVariants = {
   hidden: { opacity: 0, y: 10, scale: 0.9 },
@@ -83,13 +113,27 @@ const TeamSection: React.FC<SectionProps> = ({
 };
 
 const Team: React.FC = () => {
-  React.useEffect(() => {
-    if (!isFeatureEnabled("team_page_is_enabled")) {
-      onPageNotFound();
-    }
-  }, []);
+  const enabled = isFeatureEnabled("team_page_is_enabled");
+  const {
+    year,
+    years,
+    title,
+    sections,
+    teamPhoto,
+    ready,
+    selectYear,
+    yearMenuOpen,
+    toggleYearMenu,
+    yearMenuPlacement,
+    yearMenuRef,
+    yearListRef,
+  } = useTeamController(enabled);
 
-  if (!isFeatureEnabled("team_page_is_enabled")) {
+  React.useEffect(() => {
+    if (!enabled) onPageNotFound();
+  }, [enabled]);
+
+  if (!enabled) {
     return null;
   }
 
@@ -98,451 +142,121 @@ const Team: React.FC = () => {
       <BinaryBackground />
       <Header />
       <main className="min-h-screen">
-        <PageTitle title="Meet Our Team" className="p-0" />
+        <PageTitle title={title} className="p-0" />
 
-        {/* Presidents */}
-        <TeamSection title="Co-Presidents" itemClass="w-[calc(50%-1rem)]" maxWidthClass="max-w-sm">
-          <a
-            href="https://www.linkedin.com/in/alannasantoso/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
+        {!ready && (
+          <p
+            role="status"
+            className="px-10 py-24 text-center text-white text-xl font-pixelify animate-pulse"
           >
-            <MemberIcon
-              image="/team/execs/alanna.jpg"
-              name="Alanna Santoso"
-              team={TeamEnum.Presidents}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/baljot-t-779a76264/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/baljot.jpg"
-              name="Baljot Toor"
-              team={TeamEnum.Presidents}
-            />
-          </a>
-        </TeamSection>
+            Loading...
+          </p>
+        )}
 
-        {/* Senior Advisors */}
-        <TeamSection
-          title="Senior Advisors"
-          itemClass="w-[calc(50%-1rem)]"
-          maxWidthClass="max-w-sm"
-        >
-          <a
-            href="https://www.linkedin.com/in/kartik-malik-285681221/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/kartik.jpg"
-              name="Kartik Mailk"
-              team={TeamEnum.SeniorAdvisor}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/phoebe-fung-/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/pb.jpg"
-              name="Phoebe Fung"
-              team={TeamEnum.SeniorAdvisor}
-            />
-          </a>
-        </TeamSection>
+        {ready && sections.length === 0 && (
+          <p className="px-10 py-24 text-center text-white text-xl font-pixelify">
+            The {year} team will be added soon.
+          </p>
+        )}
 
-        {/* Admin */}
-        <TeamSection title="Admin" itemClass="w-[calc(25%-1.5rem)]" maxWidthClass="max-w-3xl">
-          <a
-            href="https://www.linkedin.com/in/julia-venice-escoto-23a166328/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/julia.jpg"
-              name="Julia Escoto"
-              role="Secretary"
-              team={TeamEnum.Admin}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/emmanuel-araba77/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/emmanuel.jpg"
-              name="Emmanuel Araba"
-              role="Sponsorship Manager"
-              team={TeamEnum.Admin}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/koutaroyumiba/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/kot.jpg"
-              name="Koutaro Yumiba"
-              role="Treasurer"
-              team={TeamEnum.Admin}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/terrence-wu-5657a0376/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/terrence.jpg"
-              name="Terrence Wu"
-              role="Admin Exec"
-              team={TeamEnum.Admin}
-            />
-          </a>
-        </TeamSection>
+        {ready &&
+          sections.map((section) => {
+            const team = isTeam(section.team) ? section.team : undefined;
 
-        {/* Tech */}
-        <TeamSection
-          title="Tech"
-          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(25%-1.5rem)]"
-          maxWidthClass="max-w-xl md:max-w-3xl"
-        >
-          <a
-            href="https://www.linkedin.com/in/kim-ngor/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/kim.jpg" name="Kim Ngor" lead team={TeamEnum.Tech} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/anurag-bobbili-b3167534a/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/anurag.jpg" name="Anurag Bobbili" team={TeamEnum.Tech} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/hazik-chaudhry-5123432aa/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/hazik.jpg" name="Hazik Chaudhry" team={TeamEnum.Tech} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/joseph-wilson-a665332a4/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/joseph.jpg" name="Joseph Wilson" team={TeamEnum.Tech} />
-          </a>
-        </TeamSection>
+            return (
+              <TeamSection
+                key={`${year}-${section.title}`}
+                title={section.title}
+                {...sectionLayout(section)}
+              >
+                {section.members.map((member) => {
+                  const icon = (
+                    <MemberIcon
+                      image={member.image}
+                      name={member.name}
+                      role={member.role}
+                      lead={member.lead}
+                      team={team}
+                    />
+                  );
 
-        {/* Comps */}
-        <TeamSection title="Comps" itemClass="w-[calc(25%-1.5rem)]" maxWidthClass="max-w-3xl">
-          <a
-            href="https://www.linkedin.com/in/victor-qiu-dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/victor.jpg"
-              name="Victor Qiu"
-              lead
-              team={TeamEnum.Comps}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/anatol-coen/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/anatol.jpg" name="Anatol Coen" team={TeamEnum.Comps} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/tushar-shaji-33b77b178/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/tushar.jpeg" name="Tushar Shaji" team={TeamEnum.Comps} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/williamhuangg/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/william.png"
-              name="William Huang"
-              team={TeamEnum.Comps}
-            />
-          </a>
-        </TeamSection>
-
-        {/* Industry */}
-        <TeamSection title="Industry" itemClass="w-[calc(20%-1.6rem)]" maxWidthClass="max-w-4xl">
-          <a
-            href="https://www.linkedin.com/in/eric-zheng-nz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/eric.jpeg"
-              name="Eric Zheng"
-              lead
-              team={TeamEnum.Industry}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/annlowe7/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/ann.jpg" name="Ann Lowe" team={TeamEnum.Industry} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/youyang-fu/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/frank.jpg" name="Frank Fu" team={TeamEnum.Industry} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/jackyzchen/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/jacky.png" name="Jacky Chen" team={TeamEnum.Industry} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/joyce-liu-265920357"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/joyce.jpg" name="Joyce Liu" team={TeamEnum.Industry} />
-          </a>
-        </TeamSection>
-
-        {/* Social */}
-        <TeamSection
-          title="Social"
-          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(25%-1.5rem)]"
-          maxWidthClass="max-w-xl md:max-w-3xl"
-        >
-          <a
-            href="https://www.linkedin.com/in/marcus-chan-nz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/marcus.jpg"
-              name="Marcus Chan"
-              lead
-              team={TeamEnum.Social}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/ayemyatthu04/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/aye.jpg" name="Aye Thu" team={TeamEnum.Social} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/eileen-qiu-7b0009287/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/eileen.jpg" name="Eileen Qiu" team={TeamEnum.Social} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/kelly-hunt-98a521358/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon image="/team/execs/kelly.jpg" name="Kelly Hunt" team={TeamEnum.Social} />
-          </a>
-        </TeamSection>
-
-        {/* Marketing */}
-        <TeamSection
-          title="Marketing"
-          itemClass="w-[calc(33.333%-1.334rem)] md:w-[calc(16.666%-1.667rem)]"
-          maxWidthClass="max-w-xl md:max-w-6xl"
-        >
-          <a
-            href="https://www.linkedin.com/in/john-andrei-vergara-3b9921285/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/andrei.jpg"
-              name="Andrei Vergara"
-              lead
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/avishai-narsey/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/avishai.jpg"
-              name="Avishai Narsey"
-              role="Content Manager"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/jacob-gray-87888a332/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/jacob.jpg"
-              name="Jacob Gray"
-              role="Content Manager"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/nicholaswww/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/nick.jpg"
-              name="Nicholas Wilson"
-              role="Content Manager"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/tylerhyoung/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/tyler.jpg"
-              name="Tyler Young"
-              role="Content Manager"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/aeryn-lao/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/aeryn.jpeg"
-              name="Aeryn Elizabeth Lao"
-              role="Designer"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/amy-yan-936111320/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/amy.jpg"
-              name="Amy Yan"
-              role="Designer"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/chaeeunlee0215/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/ava.jpg"
-              name="Ava Lee"
-              role="Designer"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/bryanna-y/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/bryanna.jpg"
-              name="Bryanna Yeo"
-              role="Designer"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/nicole-lai-in/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="scale-90 md:scale-100"
-          >
-            <MemberIcon
-              image="/team/execs/nicole.png"
-              name="Nicole Lai"
-              role="Photographer"
-              team={TeamEnum.Marketing}
-            />
-          </a>
-        </TeamSection>
+                  return member.linkedin ? (
+                    <a
+                      key={member.name}
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="scale-90 md:scale-100"
+                    >
+                      {icon}
+                    </a>
+                  ) : (
+                    <div key={member.name} className="scale-90 md:scale-100">
+                      {icon}
+                    </div>
+                  );
+                })}
+              </TeamSection>
+            );
+          })}
 
         {/* Team photo */}
-        <motion.section
-          className="px-4 py-6 my-12 flex justify-center"
-          variants={headingVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
-        >
-          <img src="/team/execs/team.png" alt="Team Photo" className="w-full h-auto md:w-[70%]" />
-        </motion.section>
+        {ready && teamPhoto && (
+          <motion.section
+            key={year}
+            className="px-4 mt-4 mb-2 flex justify-center"
+            variants={headingVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.2 }}
+          >
+            <img src={teamPhoto} alt={`${year} Team Photo`} className="w-full h-auto md:w-[70%]" />
+          </motion.section>
+        )}
+
+        {/* Year selector */}
+        <div className="flex justify-center mb-12">
+          <div ref={yearMenuRef} className="relative">
+            <button
+              type="button"
+              onClick={toggleYearMenu}
+              aria-haspopup="listbox"
+              aria-expanded={yearMenuOpen}
+              className="text-white text-lg font-pixelify underline underline-offset-4 cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              {year} Team
+            </button>
+
+            {yearMenuOpen && (
+              <ul
+                ref={yearListRef}
+                role="listbox"
+                aria-label="Select team year"
+                style={{
+                  maxHeight: yearMenuPlacement?.maxHeight,
+                  visibility: yearMenuPlacement ? "visible" : "hidden",
+                }}
+                className={`absolute left-1/2 z-20 min-w-40 -translate-x-1/2 overflow-y-auto border border-white/40 bg-black/90 py-1 text-center rounded-xl ${
+                  yearMenuPlacement?.openUp ? "bottom-full mb-2" : "top-full mt-2"
+                }`}
+              >
+                {years.map((y) => (
+                  <li key={y} role="option" aria-selected={y === year}>
+                    <button
+                      type="button"
+                      onClick={() => selectYear(y)}
+                      className={`w-full px-6 py-2 text-lg font-pixelify cursor-pointer hover:bg-white/15 ${
+                        y === year ? "text-white underline underline-offset-4" : "text-white/70"
+                      }`}
+                    >
+                      {y} Team
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       </main>
       <Footer />
     </>
