@@ -40,3 +40,6 @@ supabase/seed.sql
 # Supabase CLI local state
 supabase/.branches
 supabase/.temp
+
+# Personal Claude Code settings
+.claude/

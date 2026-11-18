@@ -14,7 +14,9 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @devsuoa/web dev",
+    "dev": "docker compose up -d --build --wait api && pnpm --filter @devsuoa/web dev",
+    "dev:web": "pnpm --filter @devsuoa/web dev",
+    "dev:stop": "docker compose down",
     "build": "pnpm --filter @devsuoa/web build",
     "preview": "pnpm --filter @devsuoa/web preview",
     "lint": "pnpm -r lint",
