@@ -20,6 +20,7 @@ Make sure you have the following installed:
 - **Node.js** 22 or 24
 - **pnpm** (`corepack enable` sets up the right version automatically). Don't use npm: it ignores `pnpm-lock.yaml`
 - **Git**
+- **Docker** (runs the local database and API; only needed for `pnpm dev`, not `pnpm dev:web`)
 
 Check versions:
 
@@ -46,14 +47,18 @@ pnpm install
 
 This installs all dependencies and sets up the Git hooks.
 
+If you use an AI coding agent (Claude Code, Cursor, Copilot…), also run `npx skills install`. It installs the Supabase and Postgres skills pinned in `skills-lock.json` into `.agents/skills/` and links them for your agent.
+
 ### 3. Start the Development Server
 
 ```bash
 pnpm dev
 ```
 
-The app will be available at:
+This starts the local database and Java API in Docker, then the website at:
 http://localhost:5173
+
+`pnpm dev:web` starts only the website (pages that load data won't work), and `pnpm dev:stop` stops the Docker containers.
 
 ### Project Structure (High level)
 
