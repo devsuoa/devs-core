@@ -11,7 +11,9 @@ insert into public.profiles (id, role, username, team, is_superuser) values
   ('00000000-0000-4000-8000-000000000001', 'admin', 'Ada Admin', 'tech', false),
   ('00000000-0000-4000-8000-000000000002', 'admin', 'Sam Super', 'president', true),
   ('00000000-0000-4000-8000-000000000003', 'user', 'Una User', null, false)
-on conflict (id) do nothing;
+-- on_auth_user_created has already made a plain 'user' profile for each, as on a real project.
+on conflict (id) do update set
+  role = excluded.role, username = excluded.username, team = excluded.team, is_superuser = excluded.is_superuser;
 
 insert into public.degrees (id, name) values
   ('10000000-0000-4000-8000-000000000001', 'Bachelor of Science'),
