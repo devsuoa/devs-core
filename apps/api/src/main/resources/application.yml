@@ -1,0 +1,76 @@
+# Every value that differs between machines comes from an environment variable.
+# See apps/api/README.md for the full list.
+
+spring:
+  application:
+    name: devs-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:54322/postgres}
+    username: ${DB_USER:api_app}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:5}
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: always
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 7MB
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  # Behind Fly/Railway/Cloudflare the client IP arrives in X-Forwarded-For.
+  forward-headers-strategy: ${FORWARD_HEADERS_STRATEGY:none}
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /internal
+  endpoint:
+    health:
+      show-details: never
+
+devs:
+  site-url: ${SITE_URL:http://localhost:5173}
+  cors-allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  schema:
+    # The API refuses to start against a database older than this migration.
+    required-version: "20261026.0310"
+    check-on-startup: ${SCHEMA_CHECK:true}
+  supabase:
+    url: ${SUPABASE_URL:}
+    # HS256 secret for projects still on the legacy JWT secret. Leave empty to
+    # verify tokens with the project's JWKS (asymmetric signing keys) instead.
+    jwt-secret: ${SUPABASE_JWT_SECRET:}
+    # Server-only key for Storage and Auth admin calls. Never ship it to a browser.
+    service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:}
+  storage:
+    # "supabase" in deployed environments, "local" writes to local-dir for Docker dev.
+    mode: ${STORAGE_MODE:supabase}
+    local-dir: ${STORAGE_LOCAL_DIR:/data/storage}
+    public-base-url: ${STORAGE_PUBLIC_BASE_URL:}
+  email:
+    # "resend" sends real mail, "log" only logs it.
+    mode: ${EMAIL_MODE:log}
+    resend-api-key: ${RESEND_API_KEY:}
+    from: ${EMAIL_FROM:DEVS Website <noreply@devsuoa.com>}
+    contact-to: ${CONTACT_EMAIL_TO:contact@devsuoa.com}
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    card-fee-percent: ${STRIPE_CARD_FEE_PERCENT:0.029}
+    card-fee-fixed: ${STRIPE_CARD_FEE_FIXED:0.30}
+  marketing:
+    apps-script-url: ${MARKETING_APPS_SCRIPT_URL:}
+  rate-limit:
+    public-writes-per-minute: ${RATE_LIMIT_PUBLIC_WRITES:10}

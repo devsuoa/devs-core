@@ -30,3 +30,16 @@ yarn.lock
 
 #Template for landing page slideshow
 public/home/slideshow/template.psd
+# Firebase CLI cache
+.firebase/
+
+# Local DB dump / anonymised seed (contains prod schema incl. secrets)
+dump/
+supabase/seed.sql
+
+# Supabase CLI local state
+supabase/.branches
+supabase/.temp
+
+# Personal Claude Code settings
+.claude/

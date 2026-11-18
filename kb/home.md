@@ -20,6 +20,7 @@ This is to help understand components and guidelines to ensure everyone is on th
 - [Universal Design Guidelines](universal_design_guidelines.md)
 - [Setup Guidelines](setup.md)
 - [Database Migrations](database_migrations.md)
+- [DEVS API](../apps/api/README.md)
 - [Feature Flags](feature_flags.md)
 
 ### Components

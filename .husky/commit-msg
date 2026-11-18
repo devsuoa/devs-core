@@ -1,0 +1,7 @@
+# Commits are authored by people: reject AI co-author trailers (Claude, ChatGPT, Codex).
+if grep -v '^#' "$1" | grep -Eiq '^co-authored-by:.*(claude|anthropic|chatgpt|codex|openai)'; then
+  echo "Remove the AI Co-Authored-By line from the commit message." >&2
+  exit 1
+fi
+
+pnpm exec commitlint --edit "$1"

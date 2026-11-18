@@ -1,0 +1,3 @@
+pnpm exec lint-staged
+pnpm graph
+git add kb/assets/dependency-graph.svg

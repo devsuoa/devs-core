@@ -1,0 +1,1566 @@
+{
+  "defaultYear": "2026",
+  "teams": {
+    "2019": {
+      "teamPhoto": null,
+      "sections": [
+        {
+          "title": "President",
+          "team": "Presidents",
+          "mobileColumns": 1,
+          "desktopColumns": 1,
+          "members": [
+            {
+              "name": "Sukhans Asrani",
+              "image": "/team/execs/2019/sukhans.jpg",
+              "linkedin": "https://www.linkedin.com/in/sukhans/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Clayton Lan",
+              "image": "/team/execs/2019/clayton.png",
+              "role": "Secretary"
+            },
+            {
+              "name": "Michelle Tan",
+              "image": "/team/execs/2019/michelle.png",
+              "role": "Treasurer",
+              "linkedin": "https://www.linkedin.com/in/msmichelletan/"
+            },
+            {
+              "name": "Casey Wong",
+              "image": "team/execs/2019/casey.jpg",
+              "role": "Logistics",
+              "linkedin": "https://www.linkedin.com/in/casey-wong-nz/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Vee Ciputra",
+              "image": "/team/execs/2019/vee.png",
+              "linkedin": "https://www.linkedin.com/in/vanessa-ciputra/"
+            },
+            {
+              "name": "Dinith Wannigama",
+              "image": "/team/execs/grey.png"
+            },
+            {
+              "name": "Allen Nian",
+              "image": "/team/execs/2019/allen.jpg",
+              "linkedin": "https://www.linkedin.com/in/anian100/"
+            },
+            {
+              "name": "Ryan Lim",
+              "image": "/team/execs/grey.png"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Andrew Hu",
+              "image": "/team/execs/2019/andrew.jpg",
+              "linkedin": "https://www.linkedin.com/in/andrewhu-nz/"
+            },
+            {
+              "name": "Ben Payne",
+              "image": "/team/execs/2019/ben.jpg",
+              "linkedin": "https://www.linkedin.com/in/benjaminfrancispayne/"
+            },
+            {
+              "name": "Jordan Sim-Smith",
+              "image": "/team/execs/2019/jordan.jpg",
+              "linkedin": "https://www.linkedin.com/in/jordansimsmith/"
+            },
+            {
+              "name": "Nik Howe",
+              "image": "/team/execs/grey.png"
+            },
+            {
+              "name": "Sean Spires",
+              "image": "/team/execs/grey.png"
+            }
+          ]
+        }
+      ]
+    },
+    "2020": {
+      "teamPhoto": "/team/execs/2020/2020team.png",
+      "sections": [
+        {
+          "title": "Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Andrew Hu",
+              "image": "/team/execs/2019/andrew.jpg",
+              "role": "President",
+              "linkedin": "https://www.linkedin.com/in/andrewhu-nz/"
+            },
+            {
+              "name": "Vee Ciputra",
+              "image": "/team/execs/2019/vee.png",
+              "role": "Vice President",
+              "linkedin": "https://www.linkedin.com/in/vanessa-ciputra/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Clayton Lan",
+              "image": "/team/execs/2019/clayton.png",
+              "role": "Secretary"
+            },
+            {
+              "name": "Michelle Tan",
+              "image": "/team/execs/2019/michelle.png",
+              "role": "Treasurer",
+              "linkedin": "https://www.linkedin.com/in/msmichelletan/"
+            },
+            {
+              "name": "Casey Wong",
+              "image": "team/execs/2019/casey.jpg",
+              "role": "Logistics",
+              "linkedin": "https://www.linkedin.com/in/casey-wong-nz/"
+            },
+            {
+              "name": "Sukhans Asrani",
+              "image": "/team/execs/2019/sukhans.jpg",
+              "role": "Sponsorship Manager",
+              "linkedin": "https://www.linkedin.com/in/sukhans/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Dinith Wannigama",
+              "lead": true,
+              "image": "/team/execs/grey.png"
+            },
+            {
+              "name": "Allen Nian",
+              "image": "/team/execs/2019/allen.jpg",
+              "linkedin": "https://www.linkedin.com/in/anian100/"
+            },
+            {
+              "name": "Raina Song",
+              "image": "/team/execs/2022/raina.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Jordan Sim-Smith",
+              "image": "/team/execs/2019/jordan.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/jordansimsmith/"
+            },
+            {
+              "name": "Ben Payne",
+              "image": "/team/execs/2019/ben.jpg",
+              "linkedin": "https://www.linkedin.com/in/benjaminfrancispayne/"
+            },
+            {
+              "name": "Sannan Hafeez",
+              "image": "/team/execs/2020/sannan.jpg",
+              "linkedin": "https://www.linkedin.com/in/sannan-hafeez/"
+            },
+            {
+              "name": "Alan Thomas",
+              "image": "/team/execs/2020/alan.jpg",
+              "linkedin": "https://www.linkedin.com/in/alan-t/"
+            },
+            {
+              "name": "Omkar Kaul",
+              "image": "team/execs/2020/omkar.jpg",
+              "linkedin": "https://www.linkedin.com/in/omkar-kaul/"
+            },
+            {
+              "name": "Steve Quindo",
+              "image": "/team/execs/2020/steve.jpg",
+              "linkedin": "https://www.linkedin.com/in/steve-quindo-11702a151/"
+            },
+            {
+              "name": "Lucy Chen",
+              "image": "/team/execs/2020/lucy.jpg",
+              "linkedin": "https://www.linkedin.com/in/lucy-chen-nz/"
+            }
+          ]
+        }
+      ]
+    },
+    "2021": {
+      "teamPhoto": "/team/execs/2021/2021team.png",
+      "sections": [
+        {
+          "title": "Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Sannan Hafeez",
+              "image": "/team/execs/2020/sannan.jpg",
+              "role": "President",
+              "linkedin": "https://www.linkedin.com/in/sannan-hafeez/"
+            },
+            {
+              "name": "Adam Sinclair",
+              "image": "/team/execs/2021/adam.jpg",
+              "role": "Vice President",
+              "linkedin": "https://www.linkedin.com/in/adam-sinclair-kiwi/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Yuwei Shen",
+              "image": "/team/execs/2021/yuwei.jpg",
+              "role": "Secretary",
+              "linkedin": "https://www.linkedin.com/in/yuwei-shen-1119aa12a/"
+            },
+            {
+              "name": "Tanya Everitt",
+              "image": "/team/execs/2021/tanya.png",
+              "role": "Treasurer",
+              "linkedin": "https://www.linkedin.com/in/tanya-everitt/"
+            },
+            {
+              "name": "Casey Wong",
+              "image": "team/execs/2019/casey.jpg",
+              "role": "Logistics & Sponsorships Lead",
+              "linkedin": "https://www.linkedin.com/in/casey-wong-nz/"
+            },
+            {
+              "name": "Eungi Lee",
+              "image": "/team/execs/2021/eungi.jpg",
+              "role": "Logistics & Sponsorship Coordinator",
+              "linkedin": "https://www.linkedin.com/in/eungi-lee/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Michelle Tan",
+              "image": "/team/execs/2019/michelle.png",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/msmichelletan/"
+            },
+            {
+              "name": "Bill Song",
+              "image": "/team/execs/2021/bill.jpg",
+              "linkedin": "https://www.linkedin.com/in/bill-song-812500113/"
+            },
+            {
+              "name": "Lance Zhang",
+              "image": "/team/execs/2021/lance.jpg",
+              "linkedin": "https://www.linkedin.com/in/lancelancezhang/"
+            },
+            {
+              "name": "Jae-Min Seo",
+              "image": "/team/execs/2021/jaemin.jpg",
+              "linkedin": "https://www.linkedin.com/in/seojaemin/"
+            },
+            {
+              "name": "Lily Huang",
+              "image": "/team/execs/2021/lily.png",
+              "linkedin": "https://www.linkedin.com/in/lily-h-2892a01b0/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Alan Thomas",
+              "image": "/team/execs/2020/alan.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/alan-t/"
+            },
+            {
+              "name": "Liam Scott-Russell",
+              "image": "/team/execs/2021/liam.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/liam-scott-russell/"
+            },
+            {
+              "name": "Ben Payne",
+              "image": "/team/execs/2019/ben.jpg",
+              "linkedin": "https://www.linkedin.com/in/benjaminfrancispayne/"
+            },
+            {
+              "name": "Ben Halstead",
+              "image": "/team/execs/2021/benh.jpg",
+              "linkedin": "https://www.linkedin.com/in/ben-halstead-ml/"
+            },
+            {
+              "name": "Ben Chen",
+              "image": "/team/execs/grey.png",
+              "linkedin": "https://www.linkedin.com/in/benchennyson/"
+            },
+            {
+              "name": "Cheng-Zhen (CZ) Yang",
+              "image": "/team/execs/2021/cz.jpg",
+              "linkedin": "https://www.linkedin.com/in/chengzhenyang/"
+            },
+            {
+              "name": "Raina Song",
+              "image": "/team/execs/2022/raina.jpg"
+            },
+            {
+              "name": "Shrey Tailor",
+              "image": "/team/execs/2021/shrey.png",
+              "linkedin": "https://www.linkedin.com/in/shreytailor/"
+            }
+          ]
+        }
+      ]
+    },
+    "2022": {
+      "teamPhoto": "/team/execs/2022/2022team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 1,
+          "desktopColumns": 1,
+          "members": [
+            {
+              "name": "Lance Zhang",
+              "image": "/team/execs/2021/lance.jpg",
+              "linkedin": "https://www.linkedin.com/in/lancelancezhang/"
+            },
+            {
+              "name": "Yuwei Shen",
+              "image": "/team/execs/2021/yuwei.jpg",
+              "linkedin": "https://www.linkedin.com/in/yuwei-shen-1119aa12a/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Yeni Shin",
+              "image": "/team/execs/2022/yeni.jpg",
+              "role": "Secretary",
+              "linkedin": "https://www.linkedin.com/in/yeni-shin/"
+            },
+            {
+              "name": "Donovan Rea",
+              "image": "/team/execs/2022/donovan.jpg",
+              "role": "Treasurer",
+              "linkedin": "https://www.linkedin.com/in/donovanrea/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Bill Song",
+              "image": "/team/execs/2021/bill.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/bill-song-812500113/"
+            },
+            {
+              "name": "Lily Huang",
+              "image": "/team/execs/2021/lily.png",
+              "linkedin": "https://www.linkedin.com/in/lily-h-2892a01b0/"
+            },
+            {
+              "name": "Keitel Añana",
+              "image": "/team/execs/2022/keitel.jpg",
+              "linkedin": "https://www.linkedin.com/in/keitelanana/"
+            },
+            {
+              "name": "Salma Young",
+              "image": "/team/execs/2022/salma.jpg",
+              "linkedin": "https://www.linkedin.com/in/salma-young-00141a208/"
+            }
+          ]
+        },
+        {
+          "title": "Education",
+          "team": "Education",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Adam Sinclair",
+              "image": "/team/execs/2021/adam.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/adam-sinclair-kiwi/"
+            },
+            {
+              "name": "Matthew Ouyang",
+              "image": "/team/execs/2022/matthew.jpg",
+              "linkedin": "https://www.linkedin.com/in/matthew-ouyang/"
+            },
+            {
+              "name": "Raymond Zhang",
+              "image": "/team/execs/2022/raymond.jpg",
+              "linkedin": "https://www.linkedin.com/in/raymondxyz/"
+            },
+            {
+              "name": "Jessica Villegas",
+              "image": "/team/execs/2022/jessica.png",
+              "linkedin": "https://www.linkedin.com/in/jessica-villegas-0618/"
+            },
+            {
+              "name": "Julia Shan",
+              "image": "/team/execs/2022/julia.png",
+              "linkedin": "https://www.linkedin.com/in/juliashan111/"
+            },
+            {
+              "name": "Nancy Wu",
+              "image": "/team/execs/2022/nancy.jpg",
+              "linkedin": "https://www.linkedin.com/in/nancywu45/"
+            },
+            {
+              "name": "Lilly Zhang",
+              "image": "/team/execs/2022/lilly.jpg",
+              "linkedin": "https://www.linkedin.com/in/lillyzhangnz/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Alan Thomas",
+              "image": "/team/execs/2020/alan.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/alan-t/"
+            },
+            {
+              "name": "Cheng-Zhen (CZ) Yang",
+              "image": "/team/execs/2021/cz.jpg",
+              "linkedin": "https://www.linkedin.com/in/chengzhenyang/"
+            },
+            {
+              "name": "Raina Song",
+              "image": "/team/execs/2022/raina.jpg"
+            },
+            {
+              "name": "Ishaan Bhide",
+              "image": "/team/execs/2022/ishaan.png",
+              "linkedin": "https://www.linkedin.com/in/ishaanbhide/"
+            },
+            {
+              "name": "Simon Cheng",
+              "image": "/team/execs/2022/simon.jpg",
+              "linkedin": "https://www.linkedin.com/in/simon-cheng-io/"
+            },
+            {
+              "name": "Akaash Ashok",
+              "image": "/team/execs/grey.png",
+              "linkedin": "https://www.linkedin.com/in/akashashok1/"
+            },
+            {
+              "name": "Keisuke Hara",
+              "image": "/team/execs/2022/keisuke.jpg",
+              "linkedin": "https://www.linkedin.com/in/keisuke-hara/"
+            },
+            {
+              "name": "Krithik Ramesh",
+              "image": "/team/execs/2023/krithik.jpg",
+              "linkedin": "https://www.linkedin.com/in/krithik-ramesh-083128175/"
+            }
+          ]
+        }
+      ]
+    },
+    "2023": {
+      "teamPhoto": "/team/execs/2023/2023team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Raymond Zhang",
+              "image": "/team/execs/2022/raymond.jpg",
+              "linkedin": "https://www.linkedin.com/in/raymondxyz/"
+            },
+            {
+              "name": "Jessica Villegas",
+              "image": "/team/execs/2022/jessica.png",
+              "linkedin": "https://www.linkedin.com/in/jessica-villegas-0618/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Brendan Zhou",
+              "image": "/team/execs/2023/brendan.png",
+              "role": "Secretary",
+              "linkedin": "https://www.linkedin.com/in/brendan-zhou/"
+            },
+            {
+              "name": "Nancy Wu",
+              "image": "/team/execs/2022/nancy.jpg",
+              "role": "Treasurer",
+              "linkedin": "https://www.linkedin.com/in/nancywu45/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Keisuke Hara",
+              "image": "/team/execs/2022/keisuke.jpg",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/keisuke-hara/"
+            },
+            {
+              "name": "Raina Song",
+              "lead": true,
+              "image": "/team/execs/2022/raina.jpg"
+            },
+            {
+              "name": "Akaash Ashok",
+              "image": "/team/execs/grey.png",
+              "linkedin": "https://www.linkedin.com/in/akashashok1/"
+            },
+            {
+              "name": "Krithik Ramesh",
+              "image": "/team/execs/2023/krithik.jpg",
+              "linkedin": "https://www.linkedin.com/in/krithik-ramesh-083128175/"
+            },
+            {
+              "name": "Kevin Wang",
+              "image": "/team/execs/2023/kevin.jpg",
+              "linkedin": "https://www.linkedin.com/in/kevin-wang-835572209/"
+            },
+            {
+              "name": "Dhruvkanth Puli",
+              "image": "/team/execs/2024/dhruv.jpg"
+            },
+            {
+              "name": "Jacob Tan",
+              "image": "/team/execs/2023/jacob.jpg",
+              "linkedin": "https://www.linkedin.com/in/jacob-a-tan/"
+            }
+          ]
+        },
+        {
+          "title": "Education",
+          "team": "Education",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Craig Lim",
+              "image": "/team/execs/grey.png",
+              "lead": true
+            },
+            {
+              "name": "Matthew Ouyang",
+              "image": "/team/execs/2022/matthew.jpg",
+              "linkedin": "https://www.linkedin.com/in/matthew-ouyang/"
+            },
+            {
+              "name": "Ishaan Bhide",
+              "image": "/team/execs/2022/ishaan.png",
+              "linkedin": "https://www.linkedin.com/in/ishaanbhide/"
+            },
+            {
+              "name": "Tanishq Ranjith",
+              "image": "/team/execs/2023/tanishq.jpg",
+              "linkedin": "https://www.linkedin.com/in/tanishqranjith/"
+            },
+            {
+              "name": "Tony Yin",
+              "image": "/team/execs/2023/tony.jpg",
+              "linkedin": "https://www.linkedin.com/in/tyin363/"
+            },
+            {
+              "name": "Yunge Yu",
+              "image": "/team/execs/2024/yunge.jpg",
+              "linkedin": "https://www.linkedin.com/in/yunge-yu/"
+            },
+            {
+              "name": "Janna Rutor",
+              "image": "/team/execs/2024/janna.jpg"
+            },
+            {
+              "name": "Moeka Nakane",
+              "image": "/team/execs/2023/moeka.jpg",
+              "linkedin": "https://www.linkedin.com/in/moeka-nakane/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Catherine Ma",
+              "image": "/team/execs/2023/catherine.png",
+              "lead": true,
+              "linkedin": "https://www.linkedin.com/in/catherine-ma-531595245/"
+            },
+            {
+              "name": "Emily Liu",
+              "image": "/team/execs/grey.png",
+              "linkedin": "https://www.linkedin.com/in/emily-liu-b8a813217/"
+            },
+            {
+              "name": "Jasmine Villegas",
+              "image": "/team/execs/grey.png",
+              "linkedin": "https://www.linkedin.com/in/jasmine-villegas-76494433a/"
+            },
+            {
+              "name": "Rishi Shukla",
+              "image": "/team/execs/2023/rishi.png",
+              "linkedin": "https://www.linkedin.com/in/rish-shuk/"
+            },
+            {
+              "name": "Harry Qu",
+              "image": "/team/execs/grey.png"
+            }
+          ]
+        }
+      ]
+    },
+    "2024": {
+      "teamPhoto": "/team/execs/2024/2024team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Tanishq Ranjith",
+              "image": "/team/execs/2024/tanishq.jpg",
+              "linkedin": "https://www.linkedin.com/in/tanishqranjith/"
+            },
+            {
+              "name": "Yunge Yu",
+              "image": "/team/execs/2024/yunge.jpg",
+              "linkedin": "https://www.linkedin.com/in/jessica-villegas-0618/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Catherine Ma",
+              "image": "/team/execs/2024/catherine.jpg",
+              "role": "Secretary"
+            },
+            {
+              "name": "Dhruvkanth Puli",
+              "image": "/team/execs/2024/dhruv.jpg",
+              "role": "Treasurer"
+            },
+            {
+              "name": "Nancy Wu",
+              "role": "Sponsorship Manager",
+              "image": "/team/execs/2024/nancy.JPG",
+              "linkedin": "https://www.linkedin.com/in/nancywu45/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Kathleen Shi",
+              "image": "/team/execs/2024/kathleen.png",
+              "lead": true
+            },
+            {
+              "name": "Manny Mann",
+              "image": "/team/execs/2024/manny.JPG",
+              "linkedin": "https://www.linkedin.com/in/manjot-mann-34a5b6232/"
+            },
+            {
+              "name": "Rishi Shukla",
+              "image": "/team/execs/2024/rishi.png",
+              "linkedin": "https://www.linkedin.com/in/rish-shuk/"
+            },
+            {
+              "name": "Kimberly Zhu",
+              "image": "/team/execs/2024/kimberly.jpg",
+              "linkedin": "https://www.linkedin.com/in/kimberleyzhu/"
+            },
+            {
+              "name": "Ann Lowe",
+              "image": "/team/execs/2026/ann.jpg",
+              "linkedin": "https://www.linkedin.com/in/annlowe7/"
+            }
+          ]
+        },
+        {
+          "title": "Social",
+          "team": "Social",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Jacob Tan",
+              "lead": true,
+              "image": "/team/execs/2023/jacob.jpg",
+              "linkedin": "https://www.linkedin.com/in/jacob-a-tan/"
+            },
+            {
+              "name": "Don Lin",
+              "image": "/team/execs/2024/don.jpg",
+              "linkedin": "https://www.linkedin.com/in/donsqlin/"
+            },
+            {
+              "name": "Phoebe Fung",
+              "image": "/team/execs/2026/pb.jpg",
+              "linkedin": "https://www.linkedin.com/in/phoebe-fung-/"
+            },
+            {
+              "name": "Eric Jiang",
+              "image": "/team/execs/2024/eric.jpeg",
+              "linkedin": "https://www.linkedin.com/in/ejiang25/"
+            },
+            {
+              "name": "Laiba Batool",
+              "image": "/team/execs/2024/laiba.jpg",
+              "linkedin": "https://www.linkedin.com/in/laiba-batoolcs/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Emma Chen",
+              "lead": true,
+              "image": "/team/execs/2024/emma.jpeg",
+              "linkedin": "https://www.linkedin.com/in/emmachen1/"
+            },
+            {
+              "name": "Aditya Sohani",
+              "image": "/team/execs/2024/aditya.jpg",
+              "linkedin": "https://www.linkedin.com/in/aditya-adi-sohani-31759322b/"
+            },
+            {
+              "name": "Alex McLeod",
+              "image": "/team/execs/2024/alex.jpg"
+            },
+            {
+              "name": "Eason Jin",
+              "image": "/team/execs/2024/eason.jpeg",
+              "linkedin": "https://www.linkedin.com/in/eason-jin/"
+            },
+            {
+              "name": "Vandan Bhatt",
+              "image": "/team/execs/2024/vandan.png",
+              "linkedin": "https://www.linkedin.com/in/vandan-bhatt/"
+            }
+          ]
+        },
+        {
+          "title": "Education",
+          "team": "Education",
+          "mobileColumns": 3,
+          "desktopColumns": 3,
+          "members": [
+            {
+              "name": "Janna Rutor",
+              "lead": true,
+              "image": "/team/execs/2024/janna.jpg"
+            },
+            {
+              "name": "Jamie Lee",
+              "image": "/team/execs/2024/jamie.jpg"
+            },
+            {
+              "name": "Kevin Jin",
+              "image": "/team/execs/2024/kevin.png",
+              "linkedin": "https://www.linkedin.com/in/kevin-jin-055037233/"
+            },
+            {
+              "name": "Tisha Naicker",
+              "image": "/team/execs/2024/tisha.jpeg",
+              "linkedin": "https://www.linkedin.com/in/tishanaicker/"
+            },
+            {
+              "name": "Soham Kulkarni",
+              "image": "/team/execs/2024/soham.jpeg",
+              "linkedin": "https://www.linkedin.com/in/soham-kulkarni-nz/"
+            }
+          ]
+        }
+      ]
+    },
+    "2025": {
+      "teamPhoto": "/team/execs/2026/team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Phoebe Fung",
+              "image": "/team/execs/2026/pb.jpg",
+              "linkedin": "https://www.linkedin.com/in/phoebe-fung-/"
+            },
+            {
+              "name": "Kartik Mailk",
+              "image": "/team/execs/2026/kartik.jpg",
+              "linkedin": "https://www.linkedin.com/in/kartik-malik-285681221/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 2,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Yunge Yu",
+              "image": "/team/execs/2024/yunge.jpg",
+              "role": "Operations Consultant",
+              "linkedin": "https://www.linkedin.com/in/yunge-yu/"
+            },
+            {
+              "name": "Janna Buaya",
+              "image": "/team/execs/2025/janna.jpg",
+              "role": "Secretary",
+              "linkedin": "https://www.linkedin.com/in/janna-quah/"
+            },
+            {
+              "name": "Ann Lowe",
+              "role": "Treasurer",
+              "image": "/team/execs/2026/ann.jpg",
+              "linkedin": "https://www.linkedin.com/in/annlowe7/"
+            },
+            {
+              "name": "Yuan Tsai",
+              "role": "Sponsorship Manager",
+              "image": "/team/execs/2025/yuan.jpg",
+              "linkedin": "https://www.linkedin.com/in/yuan-tsai-aa14a11a4/"
+            }
+          ]
+        },
+        {
+          "title": "Social",
+          "team": "Social",
+          "mobileColumns": 2,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Nicholas Wilson",
+              "image": "/team/execs/2026/nick.jpg",
+              "linkedin": "https://www.linkedin.com/in/nicholaswww/"
+            },
+            {
+              "name": "Aye Thu",
+              "image": "/team/execs/2026/aye.jpg",
+              "linkedin": "https://www.linkedin.com/in/ayemyatthu04/"
+            },
+            {
+              "name": "Don Lin",
+              "image": "/team/execs/2024/don.jpg",
+              "linkedin": "https://www.linkedin.com/in/donsqlin/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 2,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Eason Jin",
+              "lead": true,
+              "image": "/team/execs/2024/eason.jpeg",
+              "linkedin": "https://www.linkedin.com/in/eason-jin/"
+            },
+            {
+              "name": "Baljot Toor",
+              "image": "/team/execs/2026/baljot.jpg",
+              "linkedin": "https://www.linkedin.com/in/baljot-t-779a76264/"
+            },
+            {
+              "name": "Emma Chen",
+              "image": "/team/execs/2024/emma.jpeg",
+              "linkedin": "https://www.linkedin.com/in/emmachen1/"
+            },
+            {
+              "name": "Kim Ngor",
+              "image": "/team/execs/2026/kim.jpg",
+              "linkedin": "https://www.linkedin.com/in/kim-ngor/"
+            }
+          ]
+        },
+        {
+          "title": "Comps",
+          "team": "Comps",
+          "mobileColumns": 2,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Victor Qiu",
+              "lead": true,
+              "image": "/team/execs/2026/victor.jpg",
+              "linkedin": "https://www.linkedin.com/in/victor-qiu-dev/"
+            },
+            {
+              "name": "Koutaro Yumiba",
+              "image": "/team/execs/2026/kot.jpg",
+              "linkedin": "https://www.linkedin.com/in/koutaroyumiba/"
+            },
+            {
+              "name": "Alex Liang",
+              "image": "/team/execs/2025/alex.jpg",
+              "linkedin": "https://www.linkedin.com/in/alexliang1/"
+            },
+            {
+              "name": "Anatol Coen",
+              "image": "/team/execs/2026/anatol.jpg",
+              "linkedin": "https://www.linkedin.com/in/anatol-coen/"
+            }
+          ]
+        },
+        {
+          "title": "Industry",
+          "team": "Industry",
+          "mobileColumns": 2,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Liam Parker",
+              "lead": true,
+              "image": "/team/execs/2025/liam.jpg",
+              "linkedin": "https://www.linkedin.com/in/liam-parker161/"
+            },
+            {
+              "name": "Belinda Mov",
+              "image": "/team/execs/2025/belinda.jpg",
+              "linkedin": "https://www.linkedin.com/in/belinda-mov/"
+            },
+            {
+              "name": "Shihoo Park",
+              "image": "/team/execs/2025/shihoo.png",
+              "linkedin": "https://www.linkedin.com/in/shihoopark/"
+            },
+            {
+              "name": "Subeen Ban",
+              "image": "/team/execs/2025/subeen.jpg",
+              "linkedin": "https://www.linkedin.com/in/subeen-ban/"
+            },
+            {
+              "name": "Frank Fu",
+              "image": "/team/execs/2026/frank.jpg",
+              "linkedin": "https://www.linkedin.com/in/youyang-fu/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 2,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Tyler Young",
+              "lead": true,
+              "image": "/team/execs/2026/tyler.jpg",
+              "linkedin": "https://www.linkedin.com/in/tylerhyoung/"
+            },
+            {
+              "name": "Eileen Qiu",
+              "image": "/team/execs/2026/eileen.jpg",
+              "linkedin": "https://www.linkedin.com/in/eileen-qiu-7b0009287/"
+            },
+            {
+              "name": "Ava Lee",
+              "image": "/team/execs/2026/ava.jpg",
+              "linkedin": "https://www.linkedin.com/in/chaeeunlee0215/"
+            },
+            {
+              "name": "Alanna Santoso",
+              "image": "/team/execs/2026/alanna.jpg",
+              "linkedin": "https://www.linkedin.com/in/alannasantoso/"
+            },
+            {
+              "name": "Reian Dunning",
+              "image": "/team/execs/2025/reian.png",
+              "linkedin": "https://www.linkedin.com/in/reiandunning/"
+            },
+            {
+              "name": "Andrei Vergara",
+              "image": "/team/execs/2026/andrei.jpg",
+              "linkedin": "https://www.linkedin.com/in/john-andrei-vergara-3b9921285/"
+            }
+          ]
+        }
+      ]
+    },
+    "2026": {
+      "teamPhoto": "/team/execs/2026/2026team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Alanna Santoso",
+              "image": "/team/execs/2026/alanna.jpg",
+              "linkedin": "https://www.linkedin.com/in/alannasantoso/"
+            },
+            {
+              "name": "Baljot Toor",
+              "image": "/team/execs/2026/baljot.jpg",
+              "linkedin": "https://www.linkedin.com/in/baljot-t-779a76264/"
+            }
+          ]
+        },
+        {
+          "title": "Senior Advisors",
+          "team": "Senior Advisor",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Kartik Mailk",
+              "image": "/team/execs/2026/kartik.jpg",
+              "linkedin": "https://www.linkedin.com/in/kartik-malik-285681221/"
+            },
+            {
+              "name": "Phoebe Fung",
+              "image": "/team/execs/2026/pb.jpg",
+              "linkedin": "https://www.linkedin.com/in/phoebe-fung-/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Julia Escoto",
+              "role": "Secretary",
+              "image": "/team/execs/2026/julia.jpg",
+              "linkedin": "https://www.linkedin.com/in/julia-venice-escoto-23a166328/"
+            },
+            {
+              "name": "Emmanuel Araba",
+              "role": "Sponsorship Manager",
+              "image": "/team/execs/2026/emmanuel.jpg",
+              "linkedin": "https://www.linkedin.com/in/emmanuel-araba77/"
+            },
+            {
+              "name": "Koutaro Yumiba",
+              "role": "Treasurer",
+              "image": "/team/execs/2026/kot.jpg",
+              "linkedin": "https://www.linkedin.com/in/koutaroyumiba/"
+            },
+            {
+              "name": "Terrence Wu",
+              "role": "Admin Exec",
+              "image": "/team/execs/2026/terrence.jpg",
+              "linkedin": "https://www.linkedin.com/in/terrence-wu-5657a0376/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Kim Ngor",
+              "lead": true,
+              "image": "/team/execs/2026/kim.jpg",
+              "linkedin": "https://www.linkedin.com/in/kim-ngor/"
+            },
+            {
+              "name": "Anurag Bobbili",
+              "image": "/team/execs/2026/anurag.jpg",
+              "linkedin": "https://www.linkedin.com/in/anurag-bobbili-b3167534a/"
+            },
+            {
+              "name": "Hazik Chaudhry",
+              "image": "/team/execs/2026/hazik.jpg",
+              "linkedin": "https://www.linkedin.com/in/hazik-chaudhry-5123432aa/"
+            },
+            {
+              "name": "Joseph Wilson",
+              "image": "/team/execs/2026/joseph.jpg",
+              "linkedin": "https://www.linkedin.com/in/joseph-wilson-a665332a4/"
+            }
+          ]
+        },
+        {
+          "title": "Comps",
+          "team": "Comps",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Victor Qiu",
+              "lead": true,
+              "image": "/team/execs/2026/victor.jpg",
+              "linkedin": "https://www.linkedin.com/in/victor-qiu-dev/"
+            },
+            {
+              "name": "Anatol Coen",
+              "image": "/team/execs/2026/anatol.jpg",
+              "linkedin": "https://www.linkedin.com/in/anatol-coen/"
+            },
+            {
+              "name": "Tushar Shaji",
+              "image": "/team/execs/2026/tushar.jpeg",
+              "linkedin": "https://www.linkedin.com/in/tushar-shaji-33b77b178/"
+            },
+            {
+              "name": "William Huang",
+              "image": "/team/execs/2026/william.png",
+              "linkedin": "https://www.linkedin.com/in/williamhuangg/"
+            }
+          ]
+        },
+        {
+          "title": "Industry",
+          "team": "Industry",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Eric Zheng",
+              "lead": true,
+              "image": "/team/execs/2026/eric.jpeg",
+              "linkedin": "https://www.linkedin.com/in/eric-zheng-nz/"
+            },
+            {
+              "name": "Ann Lowe",
+              "image": "/team/execs/2026/ann.jpg",
+              "linkedin": "https://www.linkedin.com/in/annlowe7/"
+            },
+            {
+              "name": "Frank Fu",
+              "image": "/team/execs/2026/frank.jpg",
+              "linkedin": "https://www.linkedin.com/in/youyang-fu/"
+            },
+            {
+              "name": "Jacky Chen",
+              "image": "/team/execs/2026/jacky.png",
+              "linkedin": "https://www.linkedin.com/in/jackyzchen/"
+            },
+            {
+              "name": "Joyce Liu",
+              "image": "/team/execs/2026/joyce.jpg",
+              "linkedin": "https://www.linkedin.com/in/joyce-liu-265920357"
+            }
+          ]
+        },
+        {
+          "title": "Social",
+          "team": "Social",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Marcus Chan",
+              "lead": true,
+              "image": "/team/execs/2026/marcus.jpg",
+              "linkedin": "https://www.linkedin.com/in/marcus-chan-nz/"
+            },
+            {
+              "name": "Aye Thu",
+              "image": "/team/execs/2026/aye.jpg",
+              "linkedin": "https://www.linkedin.com/in/ayemyatthu04/"
+            },
+            {
+              "name": "Eileen Qiu",
+              "image": "/team/execs/2026/eileen.jpg",
+              "linkedin": "https://www.linkedin.com/in/eileen-qiu-7b0009287/"
+            },
+            {
+              "name": "Kelly Hunt",
+              "image": "/team/execs/2026/kelly.jpg",
+              "linkedin": "https://www.linkedin.com/in/kelly-hunt-98a521358/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Andrei Vergara",
+              "lead": true,
+              "image": "/team/execs/2026/andrei.jpg",
+              "linkedin": "https://www.linkedin.com/in/john-andrei-vergara-3b9921285/"
+            },
+            {
+              "name": "Avishai Narsey",
+              "role": "Content Manager",
+              "image": "/team/execs/2026/avishai.jpg",
+              "linkedin": "https://www.linkedin.com/in/avishai-narsey/"
+            },
+            {
+              "name": "Jacob Gray",
+              "role": "Content Manager",
+              "image": "/team/execs/2026/jacob.jpg",
+              "linkedin": "https://www.linkedin.com/in/jacob-gray-87888a332/"
+            },
+            {
+              "name": "Nicholas Wilson",
+              "role": "Content Manager",
+              "image": "/team/execs/2026/nick.jpg",
+              "linkedin": "https://www.linkedin.com/in/nicholaswww/"
+            },
+            {
+              "name": "Tyler Young",
+              "role": "Content Manager",
+              "image": "/team/execs/2026/tyler.jpg",
+              "linkedin": "https://www.linkedin.com/in/tylerhyoung/"
+            },
+            {
+              "name": "Aeryn Elizabeth Lao",
+              "role": "Designer",
+              "image": "/team/execs/2026/aeryn.jpeg",
+              "linkedin": "https://www.linkedin.com/in/aeryn-lao/"
+            },
+            {
+              "name": "Amy Yan",
+              "role": "Designer",
+              "image": "/team/execs/2026/amy.jpg",
+              "linkedin": "https://www.linkedin.com/in/amy-yan-936111320/"
+            },
+            {
+              "name": "Ava Lee",
+              "role": "Designer",
+              "image": "/team/execs/2026/ava.jpg",
+              "linkedin": "https://www.linkedin.com/in/chaeeunlee0215/"
+            },
+            {
+              "name": "Bryanna Yeo",
+              "role": "Designer",
+              "image": "/team/execs/2026/bryanna.jpg",
+              "linkedin": "https://www.linkedin.com/in/bryanna-y/"
+            },
+            {
+              "name": "Nicole Lai",
+              "role": "Photographer",
+              "image": "/team/execs/2026/nicole.png",
+              "linkedin": "https://www.linkedin.com/in/nicole-lai-in/"
+            }
+          ]
+        }
+      ]
+    },
+    "2027": {
+      "teamPhoto": "/team/execs/2027/2027team.png",
+      "sections": [
+        {
+          "title": "Co-Presidents",
+          "team": "Presidents",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Marcus Chan",
+              "image": "/team/execs/2026/marcus.jpg",
+              "linkedin": "https://www.linkedin.com/in/marcus-chan-nz/"
+            },
+            {
+              "name": "Julia Escoto",
+              "image": "/team/execs/2026/julia.jpg",
+              "linkedin": "https://www.linkedin.com/in/julia-venice-escoto-23a166328/"
+            }
+          ]
+        },
+        {
+          "title": "Senior Advisors",
+          "team": "Senior Advisor",
+          "mobileColumns": 2,
+          "desktopColumns": 2,
+          "members": [
+            {
+              "name": "Alanna Santoso",
+              "image": "/team/execs/2026/alanna.jpg",
+              "linkedin": "https://www.linkedin.com/in/alannasantoso/"
+            },
+            {
+              "name": "Emmanuel Araba",
+              "image": "/team/execs/2026/emmanuel.jpg",
+              "linkedin": "https://www.linkedin.com/in/emmanuel-araba77/"
+            }
+          ]
+        },
+        {
+          "title": "Admin",
+          "team": "Admin",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Diya Sitikond",
+              "role": "Secretary",
+              "image": "/team/execs/2027/diya.png",
+              "linkedin": "https://www.linkedin.com/in/diya-s-051b762ab/"
+            },
+            {
+              "name": "Mark Tommy",
+              "role": "Sponsorship Manager",
+              "image": "/team/execs/2027/mark.png",
+              "linkedin": "https://www.linkedin.com/in/mark-tommy-5a2029257/"
+            },
+            {
+              "name": "Terrence Wu",
+              "role": "Treasurer",
+              "image": "/team/execs/2026/terrence.jpg",
+              "linkedin": "https://www.linkedin.com/in/terrence-wu-5657a0376/"
+            }
+          ]
+        },
+        {
+          "title": "Tech",
+          "team": "Tech",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Hazik Chaudhry",
+              "lead": true,
+              "image": "/team/execs/2026/hazik.jpg",
+              "linkedin": "https://www.linkedin.com/in/hazik-chaudhry-5123432aa/"
+            },
+            {
+              "name": "Joseph Wilson",
+              "lead": true,
+              "image": "/team/execs/2026/joseph.jpg",
+              "linkedin": "https://www.linkedin.com/in/joseph-wilson-a665332a4/"
+            },
+            {
+              "name": "Kim Ngor",
+              "image": "/team/execs/2026/kim.jpg",
+              "linkedin": "https://www.linkedin.com/in/kim-ngor/"
+            }
+          ]
+        },
+        {
+          "title": "Comps",
+          "team": "Comps",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "William Huang",
+              "lead": true,
+              "image": "/team/execs/2026/william.png",
+              "linkedin": "https://www.linkedin.com/in/williamhuangg/"
+            },
+            {
+              "name": "Anatol Coen",
+              "image": "/team/execs/2026/anatol.jpg",
+              "linkedin": "https://www.linkedin.com/in/anatol-coen/"
+            },
+            {
+              "name": "Tushar Shaji",
+              "image": "/team/execs/2026/tushar.jpeg",
+              "linkedin": "https://www.linkedin.com/in/tushar-shaji-33b77b178/"
+            },
+            {
+              "name": "Jacob Gray",
+              "image": "/team/execs/2026/jacob.jpg",
+              "linkedin": "https://www.linkedin.com/in/jacob-gray-87888a332/"
+            }
+          ]
+        },
+        {
+          "title": "Industry",
+          "team": "Industry",
+          "mobileColumns": 3,
+          "desktopColumns": 5,
+          "members": [
+            {
+              "name": "Jacky Chen",
+              "lead": true,
+              "image": "/team/execs/2026/jacky.png",
+              "linkedin": "https://www.linkedin.com/in/jackyzchen/"
+            },
+            {
+              "name": "Jedh Racho",
+              "image": "/team/execs/2027/jedh.jpg",
+              "linkedin": "https://www.linkedin.com/in/jedh-mairielle-racho/"
+            },
+            {
+              "name": "Kobe Bayliss",
+              "image": "/team/execs/2027/kobe.jpg",
+              "linkedin": "https://www.linkedin.com/in/kobebayliss/"
+            }
+          ]
+        },
+        {
+          "title": "Social",
+          "team": "Social",
+          "mobileColumns": 3,
+          "desktopColumns": 4,
+          "members": [
+            {
+              "name": "Kelly Hunt",
+              "lead": true,
+              "image": "/team/execs/2026/kelly.jpg",
+              "linkedin": "https://www.linkedin.com/in/kelly-hunt-98a521358/"
+            },
+            {
+              "name": "Kartik Mailk",
+              "image": "/team/execs/2026/kartik.jpg",
+              "linkedin": "https://www.linkedin.com/in/kartik-malik-285681221/"
+            },
+            {
+              "name": "Anurag Bobbili",
+              "image": "/team/execs/2026/anurag.jpg",
+              "linkedin": "https://www.linkedin.com/in/anurag-bobbili-b3167534a/"
+            },
+            {
+              "name": "Jimin Lee",
+              "image": "/team/execs/2027/jimin.jpg",
+              "linkedin": "https://www.linkedin.com/in/jimin-lee-72a1213b0/"
+            }
+          ]
+        },
+        {
+          "title": "Marketing",
+          "team": "Marketing",
+          "mobileColumns": 3,
+          "desktopColumns": 6,
+          "members": [
+            {
+              "name": "Nicole Lai",
+              "lead": true,
+              "image": "/team/execs/2026/nicole.png",
+              "linkedin": "https://www.linkedin.com/in/nicole-lai-in/"
+            },
+            {
+              "name": "Avishai Narsey",
+              "role": "Content Manager",
+              "image": "/team/execs/2026/avishai.jpg",
+              "linkedin": "https://www.linkedin.com/in/avishai-narsey/"
+            },
+            {
+              "name": "Hayden Law",
+              "role": "Content Manager",
+              "image": "/team/execs/2027/hayden.jpg",
+              "linkedin": "https://www.linkedin.com/in/hayden-law/"
+            },
+
+            {
+              "name": "Aeryn Elizabeth Lao",
+              "role": "Designer",
+              "image": "/team/execs/2026/aeryn.jpeg",
+              "linkedin": "https://www.linkedin.com/in/aeryn-lao/"
+            },
+            {
+              "name": "Catherine Wei",
+              "role": "Designer",
+              "image": "/team/execs/2027/catherine.png",
+              "linkedin": "https://www.linkedin.com/in/catherine-wei-xyz122/"
+            },
+            {
+              "name": "Pruna Lee",
+              "role": "Designer",
+              "image": "/team/execs/2027/pruna.jpg",
+              "linkedin": "https://www.linkedin.com/in/pruna-lee-58114a292/"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

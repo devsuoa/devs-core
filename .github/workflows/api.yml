@@ -1,0 +1,36 @@
+# Builds and tests the Java API (apps/api). The tests start a Supabase Postgres with
+# Testcontainers, apply db/migrations, and check every endpoint's access rules.
+
+name: API
+
+on:
+  pull_request:
+    paths: ["apps/api/**", "db/**", ".github/workflows/api.yml"]
+  push:
+    branches: [main]
+    paths: ["apps/api/**", "db/**", ".github/workflows/api.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+
+      - name: Test
+        run: ./mvnw -B verify
+
+      - name: Build the Docker image
+        run: docker build -t devs-api .

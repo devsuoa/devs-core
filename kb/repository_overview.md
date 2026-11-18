@@ -32,6 +32,21 @@ As declared in `package.json` and used in practice:
 
 ## Top-level layout
 
+The repo is a pnpm workspace (monorepo). Each app lives in its own folder, and repo-wide tooling (Prettier, git hooks, commit rules, docs) stays at the root.
+
+| Path              | Role                                                                 |
+| ----------------- | -------------------------------------------------------------------- |
+| `apps/web/`       | This website (Vite + React). Paths below starting `src/` are in here |
+| `apps/api/`       | Java / Spring Boot API                                               |
+| `apps/mobile/`    | _Planned:_ Expo / React Native app                                   |
+| `db/`             | Flyway database migrations                                           |
+| `services/audit/` | _Planned:_ separate audit log service                                |
+| `packages/`       | _Planned:_ shared code, e.g. the API client generated from OpenAPI   |
+| `kb/`             | Knowledge base (this documentation)                                  |
+| `scripts/`        | Repo tooling, e.g. the dependency graph generator                    |
+
+### Website (`apps/web/`)
+
 | Path                | Role                                                               |
 | ------------------- | ------------------------------------------------------------------ |
 | `src/main.tsx`      | React root, `BrowserRouter`, global CSS import                     |
@@ -44,8 +59,8 @@ As declared in `package.json` and used in practice:
 | `src/config/`       | Static config (e.g. `feature-flags.json`)                          |
 | `src/data/`         | Bundled JSON (e.g. sponsor data mirror)                            |
 | `public/`           | Static assets served as-is; includes sponsor JSON used by the site |
-| `kb/`               | Knowledge base (this documentation)                                |
 | `vercel.json`       | SPA rewrite: all paths → `index.html`                              |
+| `.env`              | Local environment variables (not committed)                        |
 
 The README at the repo root links to [Home](home.md) for documentation entry.
 
@@ -154,6 +169,7 @@ Business logic and data fetching are concentrated under **`src/lib/`** rather th
 - **`cookieConsentController.ts`** – consent persistence used with cookies UI
 - **`pageNotFoundController.ts`** – centralised navigation for 404 behaviour
 - **`featureFlags.ts`** – JSON feature flags
+- **`teamController.ts`** – team page year selection, per-year photo preloading and year dropdown behaviour
 - **`slideShowController.ts`**, **`aboutController.ts`**, etc. – page-specific data or UI helpers
 
 Naming is not uniform (`*Controller.ts` vs `use*` hooks in the same file); when extending the app, match the nearest existing feature.
@@ -184,10 +200,12 @@ Both paths must succeed for the handler to complete without throwing; see the co
 
 ## Build, preview, deploy
 
-- **Develop:** `npm run dev` (Vite default port, commonly `5173`).
-- **Production build:** `npm run build` runs `tsc` then `vite build`.
-- **Preview:** `npm run preview` serves the production build locally.
-- **Vercel:** `vercel.json` rewrites all routes to `index.html` for SPA hosting.
+Run these from the repo root; they forward to `apps/web`.
+
+- **Develop:** `pnpm dev` (Vite default port, commonly `5173`).
+- **Production build:** `pnpm build` runs `tsc` then `vite build`, output in `apps/web/dist`.
+- **Preview:** `pnpm preview` serves the production build locally.
+- **Vercel:** the project's Root Directory is `apps/web`; `apps/web/vercel.json` rewrites all routes to `index.html` for SPA hosting.
 
 ## Environment variables (summary)
 

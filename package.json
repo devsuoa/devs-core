@@ -3,63 +3,42 @@
   "version": "0.0.0",
   "private": true,
   "description": "This repository contains the source code for the **DEVS (Developers Society) website**, built with **React, TypeScript, Tailwind CSS, and Vite**.",
-  "homepage": "https://github.com/Gh05stt/devsuoa#readme",
+  "homepage": "https://github.com/devsuoa/devs-core#readme",
   "bugs": {
-    "url": "https://github.com/Gh05stt/devsuoa/issues"
+    "url": "https://github.com/devsuoa/devs-core/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gh05stt/devsuoa.git"
+    "url": "git+https://github.com/devsuoa/devs-core.git"
   },
   "license": "ISC",
-  "author": "",
   "type": "module",
-  "main": "eslint.config.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.6",
-    "@mui/material": "^7.3.6",
-    "@supabase/supabase-js": "^2.88.0",
-    "@tiptap/extension-underline": "^3.29.2",
-    "@tiptap/react": "^3.26.0",
-    "@tiptap/starter-kit": "^3.26.0",
-    "framer-motion": "^12.23.26",
-    "gsap": "^3.14.2",
-    "posthog-js": "^1.309.1",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-paginate": "^8.3.0",
-    "react-router-dom": "^7.10.1",
-    "react-swipeable": "^7.0.2",
-    "react-toastify": "^11.0.5",
-    "recharts": "^3.6.0",
-    "resend": "^6.9.2"
+    "dev": "docker compose up -d --build --wait api && pnpm --filter @devsuoa/web dev",
+    "dev:web": "pnpm --filter @devsuoa/web dev",
+    "dev:stop": "docker compose down",
+    "build": "pnpm --filter @devsuoa/web build",
+    "preview": "pnpm --filter @devsuoa/web preview",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "graph": "node scripts/dependency-graph.mjs",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "@tailwindcss/postcss": "^4.1.14",
-    "@types/react": "^19.1.16",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^5.0.4",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.36.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.22",
-    "globals": "^16.4.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
-    "typescript": "^5.7.3",
-    "vite": "^7.3.2"
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@viz-js/viz": "^3.31.0",
+    "dependency-cruiser": "^18.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.7.3"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,json,md,css,html,yml,yaml}": "prettier --write"
   },
   "packageManager": "pnpm@11.21.0"
 }

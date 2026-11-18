@@ -29,6 +29,7 @@ All commit messages **must** follow this format:
 - Use **lowercase** for the type
 - Keep descriptions **short and clear**
 - Do not end commit messages with a period
+- No AI co-author lines (Claude, ChatGPT, Codex). A git hook (`.husky/commit-msg`) rejects them.
 
 ---
 
