@@ -58,7 +58,7 @@ docker rm -f devs-db
 
 These live only in the Supabase dashboard of each project:
 
-- Storage buckets. Their browser-facing policies for `event-payments`, `event-images` and `Links` are removed by `V20261026_0320`; the API uses the service role key.
+- Storage bucket settings beyond creation. `V20261119_1035` creates `event-images`, `event-payments` and `Links` if missing (it skips databases without Supabase Storage, like CI's); their browser-facing policies are removed by `V20261026_0320`, and the API uses the service role key.
 - Cron jobs (`pg_cron`)
 - Auth settings and edge function secrets
 - The `marketing_webhook` database webhook on `public.marketing_requests`. It was left out of the baseline because it has a Supabase key and the prod URL inlined.
