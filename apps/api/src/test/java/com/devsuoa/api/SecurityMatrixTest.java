@@ -104,20 +104,20 @@ class SecurityMatrixTest extends IntegrationTest {
         String wrongKey = token(ADMIN, issuer, "authenticated", later, "some-other-secret-that-is-also-long-enough");
 
         for (String t : List.of(anonRole, wrongIssuer, expired, wrongKey, "not-a-jwt")) {
-            mvc.perform(get("/api/admin/events").header("Authorization", "Bearer " + t)).andExpect(status().isUnauthorized());
+            mvc.perform(get("/api/admin/links").header("Authorization", "Bearer " + t)).andExpect(status().isUnauthorized());
         }
-        mvc.perform(get("/api/admin/events").header("Authorization", bearer(ADMIN))).andExpect(status().isOk());
+        mvc.perform(get("/api/admin/links").header("Authorization", bearer(ADMIN))).andExpect(status().isOk());
     }
 
     @Test
     void adminRoleIsReadFromTheDatabaseOnEveryRequest() throws Exception {
         UUID demoted = ADMIN;
         String token = token(demoted);
-        mvc.perform(get("/api/admin/members").header("Authorization", "Bearer " + token)).andExpect(status().isOk());
+        mvc.perform(get("/api/admin/links").header("Authorization", "Bearer " + token)).andExpect(status().isOk());
         sql("update public.profiles set role = 'user' where id = '" + demoted + "' returning 1", Integer.class);
         try {
             // Same, still-valid token: access ends as soon as the role is removed.
-            mvc.perform(get("/api/admin/members").header("Authorization", "Bearer " + token)).andExpect(status().isForbidden());
+            mvc.perform(get("/api/admin/links").header("Authorization", "Bearer " + token)).andExpect(status().isForbidden());
         } finally {
             sql("update public.profiles set role = 'admin' where id = '" + demoted + "' returning 1", Integer.class);
         }

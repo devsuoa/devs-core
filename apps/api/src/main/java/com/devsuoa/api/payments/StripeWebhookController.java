@@ -4,8 +4,6 @@ import com.devsuoa.api.auth.ActorContext;
 import com.devsuoa.api.common.ApiException;
 import com.devsuoa.api.common.Json;
 import com.devsuoa.api.config.DevsProperties;
-import com.devsuoa.api.rsvp.RsvpRequest;
-import com.devsuoa.api.rsvp.RsvpService;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +35,14 @@ public class StripeWebhookController {
     private final JdbcClient jdbc;
     private final TransactionTemplate tx;
     private final ActorContext actor;
-    private final RsvpService rsvps;
     private final Json json;
 
     public StripeWebhookController(DevsProperties props, JdbcClient jdbc, TransactionTemplate tx, ActorContext actor,
-            RsvpService rsvps, Json json) {
+            Json json) {
         this.props = props;
         this.jdbc = jdbc;
         this.tx = tx;
         this.actor = actor;
-        this.rsvps = rsvps;
         this.json = json;
     }
 
@@ -77,22 +73,10 @@ public class StripeWebhookController {
             Optional<Pending> pending = lockPending(pendingId);
             if (pending.isEmpty()) return Optional.<String>empty(); // already handled
 
-            Pending p = pending.get();
-            List<String> group = new ArrayList<>(p.groupEmails());
-            group.remove(p.leaderEmail());
-            @SuppressWarnings("unchecked")
-            Map<String, Object> answers = json.mapper().convertValue(p.answers(), Map.class);
-            try {
-                RsvpService.Checked c = rsvps.check(p.eventId(), new RsvpRequest(p.leaderEmail(), group, p.dietary(), answers), true);
-                rsvps.insert(c, "stripe", null);
-                mark(pendingId, "completed", null, sessionId);
-                return Optional.<String>empty();
-            } catch (ApiException e) {
-                // Paid, but the RSVP can't be saved (event filled up meanwhile, already RSVP'd...).
-                // Keep the record so an admin can refund.
-                mark(pendingId, "failed", e.code(), sessionId);
-                return Optional.of(e.code());
-            }
+            // RSVP pod: re-check the saved answers, save the RSVP, then mark(pendingId, "completed", null, sessionId).
+            // Until that's built, a paid checkout is kept as failed so an admin can refund it.
+            mark(pendingId, "failed", "rsvp_not_built", sessionId);
+            return Optional.of("rsvp_not_built");
         });
         problem.ifPresent(code -> log.warn("Paid checkout {} could not become an RSVP ({}); needs a refund", pendingId, code));
     }
