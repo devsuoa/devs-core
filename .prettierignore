@@ -4,5 +4,3 @@ build
 pnpm-lock.yaml
 package-lock.json
 package-lock 2.json
-.agents/
-skills-lock.json
