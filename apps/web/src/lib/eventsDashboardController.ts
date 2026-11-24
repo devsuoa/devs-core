@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { api, apiFileUrl } from "./api";
+import { supabase } from "./supabase";
 import { emailsFromStoredRsvp } from "./eventsRSVPController";
 
 export type AttendeeRow = {
@@ -34,6 +34,7 @@ type MemberProfile = {
 };
 
 function buildAttendeeRowsFromRsvp(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy code, rewritten by the pod
   raw: any,
   memberByEmail: Map<string, MemberProfile>,
 ): AttendeeRow[] {
@@ -100,23 +101,68 @@ export function useEventAttendees(eventIdFilter?: string | null) {
     setLoading(true);
     setError(null);
 
-    let rawRows: any[];
-    const memberByEmail = new Map<string, MemberProfile>();
-    try {
-      const query = eventIdFilter ? `?event_id=${encodeURIComponent(eventIdFilter)}` : "";
-      const data = await api<{ rsvps: any[]; members: MemberProfile[] }>(
-        `/api/admin/rsvps${query}`,
-      );
-      rawRows = data.rsvps;
-      for (const m of data.members) {
-        memberByEmail.set(String(m.email).trim().toLowerCase(), m);
-      }
-    } catch (err) {
-      console.error("Event Attendees load failed:", err);
-      setError(err instanceof Error ? err.message : "Failed to load attendees");
+    let query = supabase.from("events_rsvp").select(
+      `
+        id,
+        created_at,
+        event_id,
+        email,
+        dietary_requirements,
+        group_emails,
+        rsvp_answers,
+        present,
+        events (
+          id,
+          title,
+          event_date
+        ),
+        members (
+          email,
+          first_name,
+          last_name,
+          student_id,
+          upi
+        )
+      `,
+    );
+
+    if (eventIdFilter) {
+      query = query.eq("event_id", eventIdFilter);
+    }
+
+    const { data, error: qErr } = await query.order("created_at", {
+      ascending: false,
+    });
+
+    if (qErr) {
+      console.error("Event Attendees load failed:", qErr);
+      setError(qErr.message ?? "Failed to load attendees");
       setRows([]);
       setLoading(false);
       return;
+    }
+
+    const rawRows = data ?? [];
+    const emailsToFetch = new Set<string>();
+    for (const raw of rawRows) {
+      for (const em of emailsFromStoredRsvp(raw.email, raw.group_emails)) {
+        emailsToFetch.add(em);
+      }
+    }
+
+    const memberByEmail = new Map<string, MemberProfile>();
+    if (emailsToFetch.size > 0) {
+      const { data: membersData, error: memErr } = await supabase
+        .from("members")
+        .select("email, first_name, last_name, student_id, upi")
+        .in("email", Array.from(emailsToFetch));
+
+      if (memErr) {
+        console.error("Event Attendees members lookup failed:", memErr);
+      }
+      for (const m of membersData ?? []) {
+        memberByEmail.set(String(m.email).trim().toLowerCase(), m as MemberProfile);
+      }
     }
 
     const expanded: AttendeeRow[] = [];
@@ -215,18 +261,34 @@ export async function updateAttendeePresentStatus(input: {
   memberEmail: string;
   present: boolean;
 }) {
-  if (!input.rsvpId) {
-    throw new Error("Attendance update needs the RSVP id.");
-  }
-  await api(`/api/admin/rsvps/${encodeURIComponent(input.rsvpId)}/present`, {
-    method: "PATCH",
-    body: { present: input.present },
-  });
-}
+  if (input.rsvpId) {
+    const { data, error } = await supabase
+      .from("events_rsvp")
+      .update({ present: input.present })
+      .eq("id", input.rsvpId)
+      .select("id");
 
-/** Opens the bank transfer screenshot for an RSVP. Returns a temporary object URL. */
-export function fetchPaymentProofUrl(rsvpId: string): Promise<string> {
-  return apiFileUrl(`/api/admin/rsvps/${encodeURIComponent(rsvpId)}/payment-proof`);
+    if (error) {
+      throw error;
+    }
+    if ((data ?? []).length > 0) {
+      return;
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("events_rsvp")
+    .update({ present: input.present })
+    .eq("event_id", input.eventId)
+    .eq("email", input.memberEmail)
+    .select("id");
+
+  if (error) {
+    throw error;
+  }
+  if ((data ?? []).length === 0) {
+    throw new Error("Attendance update did not persist. Check events_rsvp update policy.");
+  }
 }
 
 export function downloadEventAttendeesCSV(

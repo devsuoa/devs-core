@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { supabase } from "./supabase";
 
 export type DegreeOrMajor = {
   id: string;
@@ -6,14 +6,38 @@ export type DegreeOrMajor = {
 };
 
 export async function fetchDegrees(excludeIds: string[] = []): Promise<DegreeOrMajor[]> {
-  const degrees = await api<DegreeOrMajor[]>("/api/degrees");
-  return degrees.filter((d) => !excludeIds.includes(d.id));
+  const { data, error } = await supabase.from("degrees").select("id, name").order("name");
+
+  if (error) {
+    throw error;
+  }
+
+  return data?.filter((d) => !excludeIds.includes(d.id)) ?? [];
 }
 
 export async function fetchMajorsForDegree(
   degreeId: string,
   excludeIds: string[] = [],
 ): Promise<DegreeOrMajor[]> {
-  const majors = await api<DegreeOrMajor[]>(`/api/degrees/${encodeURIComponent(degreeId)}/majors`);
-  return majors.filter((m) => !excludeIds.includes(m.id));
+  const { data, error } = await supabase
+    .from("degree_major")
+    .select(
+      `
+        majors!degree_major_major_id_fkey (
+          id,
+          name
+        )
+      `,
+    )
+    .eq("degree_id", degreeId);
+
+  if (error) throw error;
+
+  return (
+    data
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy code, rewritten by the pod
+      ?.map((row: any) => row.majors)
+      .filter((m): m is DegreeOrMajor => Boolean(m) && !excludeIds.includes(m.id))
+      .sort((a, b) => a.name.localeCompare(b.name)) ?? []
+  );
 }

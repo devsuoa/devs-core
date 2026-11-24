@@ -1,4 +1,4 @@
-import { api, ApiError, jsonPart } from "./api";
+import { supabase } from "./supabase";
 
 export class NotMemberError extends Error {
   constructor() {
@@ -38,17 +38,21 @@ export class GroupRSVPSizeExceededError extends Error {
 export type RSVPAnswerValue = string | string[];
 export type RSVPAnswers = Record<string, RSVPAnswerValue>;
 
-/**
- * What the visitor fills in. Payment method, proof and attendance are not here:
- * the API sets them based on which endpoint is called and what the payment provider confirms.
- */
 export interface RSVPSubmissionPayload {
   eventId: string;
   leaderEmail: string;
   dietaryRequirements: string | null;
   groupEmails: string[];
   answers: RSVPAnswers;
+  paymentMethod?: "bank_transfer";
+  bankPaymentProofPath?: string | null;
 }
+
+type EventRSVPConfig = {
+  max_attendees: number | null;
+  group_rsvp_enabled: boolean;
+  group_rsvp_max_emails: number | null;
+};
 
 function normalizeEmails(leaderEmail: string, groupEmails: string[]): string[] {
   const cleaned = [leaderEmail, ...groupEmails]
@@ -69,6 +73,11 @@ export function attendeeSeatCount(
   return normalizeEmails(leaderEmail, groupEmails).length;
 }
 
+function seatCountForGroup(raw: unknown): number {
+  if (!Array.isArray(raw)) return 1;
+  return Math.max(1, raw.length);
+}
+
 /**
  * All attendee emails for a stored RSVP row (leader + group, deduped as persisted).
  * Use this when expanding RSVPs to per-person rows in dashboards.
@@ -83,81 +92,169 @@ export function emailsFromStoredRsvp(leaderEmail: string, groupEmails: unknown):
   return [leaderEmail.trim().toLowerCase()];
 }
 
-function requestBody(payload: RSVPSubmissionPayload) {
-  const leader = payload.leaderEmail.trim().toLowerCase();
-  return {
-    leader_email: leader,
-    group_emails: normalizeEmails(leader, payload.groupEmails).filter((e) => e !== leader),
-    dietary_requirements: payload.dietaryRequirements || null,
+async function fetchEventRSVPConfig(eventId: string): Promise<EventRSVPConfig> {
+  const { data, error } = await supabase
+    .from("events")
+    .select("max_attendees, group_rsvp_enabled, group_rsvp_max_emails")
+    .eq("id", eventId)
+    .single();
+
+  if (error || !data) {
+    throw error ?? new Error("Could not load event RSVP settings.");
+  }
+
+  return data;
+}
+
+async function isEventAtCapacity(
+  eventId: string,
+  requestedSeats: number,
+  maxAttendees: number | null,
+) {
+  if (maxAttendees == null) return false;
+
+  const { data, error } = await supabase
+    .from("events_rsvp")
+    .select("group_emails")
+    .eq("event_id", eventId);
+
+  if (error) {
+    throw error;
+  }
+
+  const currentSeats = (data ?? []).reduce(
+    (total, row) => total + seatCountForGroup(row.group_emails),
+    0,
+  );
+  return currentSeats + requestedSeats > maxAttendees;
+}
+
+async function assertLeaderIsMember(leaderEmail: string) {
+  const normalizedEmail = leaderEmail.trim().toLowerCase();
+  const { data, error: memberError } = await supabase.functions.invoke("member-exists", {
+    body: { email: normalizedEmail },
+  });
+
+  if (memberError) {
+    throw memberError;
+  }
+
+  if (!data.exists) {
+    throw new NotMemberError();
+  }
+}
+
+async function assertLeaderHasNotRSVPed(eventId: string, leaderEmail: string) {
+  const normalizedLeaderEmail = leaderEmail.trim().toLowerCase();
+  const { data, error } = await supabase
+    .from("events_rsvp")
+    .select("id")
+    .eq("event_id", eventId)
+    .eq("email", normalizedLeaderEmail)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (data) {
+    throw new AlreadyRSVPedError();
+  }
+}
+
+async function validateRsvpRules(payload: RSVPSubmissionPayload, config: EventRSVPConfig) {
+  const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
+  const requestedSeats = normalizedGroupEmails.length;
+
+  if (!config.group_rsvp_enabled && requestedSeats > 1) {
+    throw new GroupRSVPDisabledError();
+  }
+
+  if (
+    config.group_rsvp_enabled &&
+    config.group_rsvp_max_emails != null &&
+    requestedSeats > config.group_rsvp_max_emails
+  ) {
+    throw new GroupRSVPSizeExceededError();
+  }
+
+  await assertLeaderIsMember(payload.leaderEmail);
+  await assertLeaderHasNotRSVPed(payload.eventId, payload.leaderEmail);
+
+  if (await isEventAtCapacity(payload.eventId, requestedSeats, config.max_attendees)) {
+    throw new EventFullError();
+  }
+}
+
+export async function assertCanSubmitRSVP(payload: RSVPSubmissionPayload) {
+  const config = await fetchEventRSVPConfig(payload.eventId);
+  await validateRsvpRules(payload, config);
+}
+
+export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
+  await assertCanSubmitRSVP(payload);
+
+  const normalizedPayload: RSVPSubmissionPayload = {
+    ...payload,
+    leaderEmail: payload.leaderEmail.trim().toLowerCase(),
+    groupEmails: normalizeEmails(payload.leaderEmail, payload.groupEmails),
+    dietaryRequirements: payload.dietaryRequirements || null,
     answers: payload.answers ?? {},
   };
-}
 
-/** Turns the API's error codes into the error classes the RSVP dialog already handles. */
-function toRsvpError(err: unknown): unknown {
-  if (!(err instanceof ApiError)) return err;
-  switch (err.code) {
-    case "not_member":
-      return new NotMemberError();
-    case "already_rsvped":
-      return new AlreadyRSVPedError();
-    case "event_full":
-      return new EventFullError();
-    case "group_rsvp_disabled":
-      return new GroupRSVPDisabledError();
-    case "group_too_large":
-      return new GroupRSVPSizeExceededError();
-    default:
-      return new Error(err.message);
-  }
-}
+  const successUrl = `${window.location.origin}/events?rsvp_paid=1#${payload.eventId}`;
+  const cancelUrl = `${window.location.origin}/events#${payload.eventId}`;
+  const { data, error } = await supabase.functions.invoke("create-event-checkout-session", {
+    body: {
+      ...normalizedPayload,
+      successUrl,
+      cancelUrl,
+    },
+  });
 
-/** RSVP to a free event. */
-export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
-  try {
-    await api(`/api/events/${encodeURIComponent(payload.eventId)}/rsvps`, {
-      method: "POST",
-      body: requestBody(payload),
-    });
-  } catch (err) {
-    throw toRsvpError(err);
-  }
-}
-
-/** RSVP to a paid event with a bank transfer screenshot. One request: the API checks, stores and saves. */
-export async function rsvpWithBankTransfer(payload: RSVPSubmissionPayload, proof: File) {
-  const form = new FormData();
-  form.append("rsvp", jsonPart(requestBody(payload)));
-  form.append("proof", proof);
-  try {
-    await api(`/api/events/${encodeURIComponent(payload.eventId)}/rsvps/bank-transfer`, {
-      method: "POST",
-      form,
-    });
-  } catch (err) {
-    throw toRsvpError(err);
-  }
-}
-
-/**
- * Starts a card payment and sends the browser to Stripe. The RSVP is created once Stripe
- * confirms the payment. The API sets the price and the return URLs.
- */
-export async function startPaidEventCheckout(payload: RSVPSubmissionPayload) {
-  let checkoutUrl: string | undefined;
-  try {
-    const data = await api<{ checkout_url: string }>(
-      `/api/events/${encodeURIComponent(payload.eventId)}/rsvps/checkout`,
-      { method: "POST", body: requestBody(payload) },
-    );
-    checkoutUrl = data?.checkout_url;
-  } catch (err) {
-    throw toRsvpError(err);
+  if (error) {
+    throw error;
   }
 
+  const checkoutUrl = data?.checkoutUrl as string | undefined;
   if (!checkoutUrl) {
     throw new Error("Could not create checkout session.");
   }
 
   window.location.assign(checkoutUrl);
+}
+
+export async function rsvpToEvent(payload: RSVPSubmissionPayload) {
+  await assertCanSubmitRSVP(payload);
+  const normalizedGroupEmails = normalizeEmails(payload.leaderEmail, payload.groupEmails);
+
+  const { error } = await supabase.from("events_rsvp").insert({
+    event_id: payload.eventId,
+    email: payload.leaderEmail.trim().toLowerCase(),
+    dietary_requirements: payload.dietaryRequirements || null,
+    group_emails: normalizedGroupEmails,
+    rsvp_answers: payload.answers ?? {},
+    payment_method: payload.paymentMethod ?? null,
+    bank_payment_proof_path: payload.bankPaymentProofPath ?? null,
+  });
+
+  if (error) {
+    // Prevent duplicate RSVPs
+    if (error.code === "23505") {
+      throw new AlreadyRSVPedError();
+    }
+
+    const message = error.message?.toLowerCase() ?? "";
+    if (message.includes("event is full")) {
+      throw new EventFullError();
+    }
+    if (message.includes("group rsvp is not enabled")) {
+      throw new GroupRSVPDisabledError();
+    }
+    if (message.includes("group rsvp size exceeds configured max")) {
+      throw new GroupRSVPSizeExceededError();
+    }
+
+    throw error;
+  }
 }

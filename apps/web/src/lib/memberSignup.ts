@@ -1,4 +1,4 @@
-import { api, ApiError } from "./api";
+import { supabase } from "./supabase";
 
 export type Gender = "male" | "female" | "non-binary" | "prefer-not-to-say";
 export type University = "UOA" | "AUT" | "Other";
@@ -19,35 +19,88 @@ export type SignupPayload = {
   }[];
 };
 
-/**
- * Joins the society. The API saves the member and their degrees in one transaction.
- * An existing member comes back as `{ status: false, error: { code: "23505" } }`, the shape
- * callers already handle as "already signed up".
- */
 export async function signupMember(payload: SignupPayload) {
-  if (!payload.degrees || payload.degrees.length === 0) {
+  const {
+    email,
+    firstName,
+    lastName,
+    gender,
+    university,
+    universityYear,
+    upi,
+    studentId,
+    degrees,
+  } = payload;
+
+  if (!degrees || degrees.length === 0) {
     throw new Error("No degrees provided");
   }
 
+  const { error: memberError } = await supabase.from("members").insert({
+    email: email.trim().toLowerCase(),
+    first_name: firstName,
+    last_name: lastName,
+    gender,
+    university,
+    university_year: universityYear,
+    upi: upi || null,
+    student_id: studentId,
+  });
+
+  const alreadyExists = (memberError as { code?: string })?.code === "23505";
+
+  if (memberError && !alreadyExists) {
+    return { status: false, error: memberError };
+  }
+
   try {
-    await api("/api/members", {
-      method: "POST",
-      body: {
-        email: payload.email.trim().toLowerCase(),
-        first_name: payload.firstName,
-        last_name: payload.lastName,
-        gender: payload.gender,
-        university: payload.university,
-        university_year: payload.universityYear,
-        upi: payload.upi || null,
-        student_id: payload.studentId,
-        degrees: payload.degrees.map((d) => ({ degree_id: d.degreeId, major_ids: d.majorIds })),
-      },
-    });
+    const uniqueDegreeIds = Array.from(new Set(degrees.map((d) => d.degreeId)));
+
+    const studentDegreeRows = uniqueDegreeIds.map((degreeId) => ({
+      student_id: studentId,
+      degree_id: degreeId,
+    }));
+
+    const { error: degreeError } = await supabase.from("student_degree").insert(studentDegreeRows);
+
+    const degreeIsDuplicate = (degreeError as { code?: string })?.code === "23505";
+    if (degreeError && !degreeIsDuplicate) {
+      return { status: false, error: degreeError };
+    }
+
+    const seen = new Set<string>();
+
+    const studentMajorRows = degrees.flatMap((d) =>
+      d.majorIds
+        .filter((majorId) => {
+          const key = `${d.degreeId}:${majorId}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .map((majorId) => ({
+          student_id: studentId,
+          degree_id: d.degreeId,
+          major_id: majorId,
+        })),
+    );
+
+    if (studentMajorRows.length > 0) {
+      const { error: majorError } = await supabase.from("student_major").insert(studentMajorRows);
+
+      const majorIsDuplicate = (majorError as { code?: string })?.code === "23505";
+      if (majorError && !majorIsDuplicate) {
+        return { status: false, error: majorError };
+      }
+    }
+
+    if (alreadyExists) {
+      return { status: false, error: memberError };
+    }
     return { status: true, error: null };
   } catch (err) {
-    if (err instanceof ApiError && err.code === "already_member") {
-      return { status: false, error: { code: "23505", message: err.message } };
+    if (!alreadyExists) {
+      await supabase.from("members").delete().eq("student_id", studentId);
     }
     return { status: false, error: err };
   }
