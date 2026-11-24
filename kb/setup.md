@@ -20,6 +20,7 @@ Make sure you have the following installed:
 - **Node.js** 22 or 24
 - **pnpm** (`corepack enable` sets up the right version automatically). Don't use npm: it ignores `pnpm-lock.yaml`
 - **Git**
+- **Docker** (runs the local database and API; only needed for `pnpm dev`, not `pnpm dev:web`)
 
 Check versions:
 
@@ -52,8 +53,10 @@ This installs all dependencies and sets up the Git hooks.
 pnpm dev
 ```
 
-The app will be available at:
+This starts the local database and Java API in Docker, then the website at:
 http://localhost:5173
+
+`pnpm dev:web` starts only the website (pages that load data won't work), and `pnpm dev:stop` stops the Docker containers.
 
 ### Project Structure (High level)
 
@@ -80,7 +83,8 @@ Run `pnpm` scripts from the repo root. They forward to the right app.
 These hooks run automatically when you commit:
 
 - **pre-commit**: runs ESLint and Prettier on your staged files (auto-fixing what it can), then regenerates `kb/assets/dependency-graph.svg`
-- **commit-msg**: checks your message follows the [commit guidelines](commit_guidelines.md), e.g. `feat: add construction page`
+- **commit-msg**: checks your message follows the [commit guidelines](commit_guidelines.md), e.g. `feat: add construction page`, and rejects AI co-author lines
+- **pre-push**: blocks AI agents (Claude Code, Cursor, Codex, Gemini, Copilot…) from pushing on their own. If you've told your agent to push, it reruns as `ALLOW_AGENT_PUSH=1 git push`
 
 | Script           | What it does                                      |
 | ---------------- | ------------------------------------------------- |

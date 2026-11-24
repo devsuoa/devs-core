@@ -3,10 +3,11 @@ import PixelatedButton from "./PixelatedButton";
 import CachedImage from "./CachedImage";
 import GenericRSVPDialog from "./GenericRSVPDialog";
 import {
+  assertCanSubmitRSVP,
   rsvpToEvent,
-  rsvpWithBankTransfer,
   startPaidEventCheckout,
 } from "../lib/eventsRSVPController";
+import { uploadBankPaymentProofScreenshot } from "../lib/manageEventsController";
 import { showSiteToast } from "./SiteToast";
 import { formatEventDate } from "../lib/eventsController";
 import { RSVPQuestion } from "../lib/eventRsvpTypes";
@@ -486,7 +487,17 @@ const EventsCard = ({
               if (!bankPaymentProofFile) {
                 throw new Error("Payment confirmation screenshot is required.");
               }
-              await rsvpWithBankTransfer(basePayload, bankPaymentProofFile);
+              await assertCanSubmitRSVP(basePayload);
+              const proofPath = await uploadBankPaymentProofScreenshot(
+                title,
+                bankPaymentProofFile,
+                leaderEmail,
+              );
+              await rsvpToEvent({
+                ...basePayload,
+                paymentMethod: "bank_transfer",
+                bankPaymentProofPath: proofPath,
+              });
               return;
             }
             await startPaidEventCheckout(basePayload);

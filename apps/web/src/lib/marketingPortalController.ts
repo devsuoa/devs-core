@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { api, ApiError } from "./api";
+import { supabase } from "./supabase";
+
+// Apps Script URL which handles the form submission to Google Sheets
+// Google sheets handles email automations, everything else goes to tasks
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbz2__ivp8VWFCQZg5WaB-b3QDmxO5fWavFvmodkk7kstYzmKaCEymmIhzlKXF_ofxM3/exec";
 
 export interface MarketingFormData {
   postType: "event" | "sponsorship" | "";
@@ -63,34 +68,92 @@ export interface MarketingFormSetters {
   setPreWrittenCaptions: (value: string) => void;
 }
 
-/**
- * Sends the request to the API, which saves it, adds a task for the marketing team and
- * forwards it to the Google Sheet (whose Apps Script handles the emails).
- */
-async function submitRequest(formData: MarketingFormData): Promise<void> {
-  if (!formData.postType) {
-    throw new Error("postType is required");
+async function submitToGoogle(formData: MarketingFormData): Promise<void> {
+  try {
+    console.log("Submitting to Google Spreadsheet:", formData);
+
+    // use the Apps Script to handle sheets manipulation
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    console.log("Form submitted to Google Spreadsheet successfully");
+  } catch (error) {
+    console.error("Error submitting to Google Spreadsheet:", error);
+    throw error;
   }
-  await api("/api/admin/marketing-requests", {
-    method: "POST",
-    body: {
+}
+
+async function submitToSupabase(formData: MarketingFormData): Promise<void> {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError) throw authError;
+    if (!user) throw new Error("Not authenticated");
+
+    if (!formData.postType) {
+      throw new Error("postType is required");
+    }
+
+    const { error } = await supabase.from("marketing_requests").insert({
       post_type: formData.postType,
-      event_name: formData.eventName,
-      event_date: formData.eventDate,
-      event_time: formData.eventTime,
-      event_location: formData.eventLocation,
-      event_description: formData.eventDescription,
-      event_suggestions: formData.eventSuggestions,
-      sponsor_name: formData.sponsorName,
-      sponsorship_email_date: formData.sponsorshipEmailDate,
-      sponsorship_post_date: formData.sponsorshipPostDate,
-      sponsorship_event_name: formData.sponsorshipEventName,
-      sponsorship_links: formData.sponsorshipLinks,
-      sponsorship_description: formData.sponsorshipDescription,
-      marketing_description: formData.marketingDescription,
-      pre_written_captions: formData.preWrittenCaptions,
-    },
-  });
+
+      // Event fields
+      event_name: formData.eventName ?? null,
+      event_date: formData.eventDate ? formData.eventDate : null,
+      event_time: formData.eventTime ?? null,
+      event_location: formData.eventLocation ?? null,
+      event_description: formData.eventDescription ?? null,
+      event_suggestions: formData.eventSuggestions ?? null,
+
+      // Sponsorship fields
+      sponsor_name: formData.sponsorName ?? null,
+      sponsorship_email_date: formData.sponsorshipEmailDate ? formData.sponsorshipEmailDate : null,
+      sponsorship_post_date: formData.sponsorshipPostDate ? formData.sponsorshipPostDate : null,
+      sponsorship_event_name: formData.sponsorshipEventName ?? null,
+      sponsorship_links: formData.sponsorshipLinks ?? null,
+      sponsorship_description: formData.sponsorshipDescription ?? null,
+
+      // Common fields
+      marketing_description: formData.marketingDescription ?? null,
+      pre_written_captions: formData.preWrittenCaptions ?? null,
+
+      // Metadata
+      created_by: user.id,
+    });
+
+    if (error) throw error;
+
+    console.log("Form submitted to Supabase successfully");
+
+    const functionResponse = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-marketing-task`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+        body: JSON.stringify(formData),
+      },
+    );
+
+    if (!functionResponse.ok) {
+      const errorText = await functionResponse.text();
+      throw new Error(`Failed to create task: ${errorText}`);
+    }
+  } catch (error) {
+    console.error("Error submitting to Supabase:", error);
+    throw error;
+  }
 }
 
 export async function handleMarketingSubmit(
@@ -125,7 +188,8 @@ export async function handleMarketingSubmit(
   console.log("Marketing Request Data:", formData);
 
   try {
-    await submitRequest(formData);
+    // Submit to both supabase and google sheets
+    await Promise.all([submitToGoogle(formData), submitToSupabase(formData)]);
 
     // Show dialog and reset form on submit
     setters.setShowDialog(true);
@@ -144,11 +208,12 @@ export async function handleMarketingSubmit(
     setters.setSponsorshipDescription("");
     setters.setMarketingDescription("");
     setters.setPreWrittenCaptions("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy code, rewritten by the pod
   } catch (error: any) {
     console.error("Failed to submit form:", error);
 
     // If user somehow reaches page without admin role
-    if (error instanceof ApiError && error.status === 403) {
+    if (error?.code === "42501") {
       alert("You do not have permission to submit marketing requests.");
       return;
     }
