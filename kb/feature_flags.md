@@ -1,6 +1,6 @@
 # Feature Flags
 
-Everything merged into `main` is **automatically deployed to production**.
+Everything merged into `main` is **automatically deployed to [dev.devsuoa.org](https://dev.devsuoa.org)**.
 Sometimes we need to merge work that **isn’t ready to be public yet**.
 
 Feature flags let us safely ship code without exposing unfinished features.
@@ -10,7 +10,7 @@ Feature flags let us safely ship code without exposing unfinished features.
 Feature flags are defined in:
 
 ```
-src/config/feature-flags.json
+apps/web/src/config/feature-flags.json
 ```
 
 Each flag controls whether a feature, page, or section of the site is accessible at runtime.

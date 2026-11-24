@@ -1,5 +1,7 @@
 # Marketing Portal
 
+> **Status (November 2026):** this feature is being rebuilt on the Java API. Its code still uses the direct Supabase calls described below, and the database now refuses them (migration `V20261026_0320`), so it won't work until the rebuild is merged. The rebuilt version gets its data through `api()` in `apps/web/src/lib/api.ts`.
+
 The **Marketing Portal** provides a form-based interface for Execs to submit marketing requests for events or sponsorship posts. It integrates with Google Sheets via Google Apps Script and automatically creates Asana tasks through Zapier automation.
 
 ## Purpose

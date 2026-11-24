@@ -1,178 +1,82 @@
 # Auth Service
 
-The **Auth Service** provides authentication functionality for admin users through Supabase Auth. It handles user signup and login with role-based access control, ensuring only users with the `admin` role can access protected admin areas.
+Execs log in with **Supabase Auth**. Whether someone is an exec is decided by the **DEVS API** from the database on every request, never by the browser. There is no public admin signup: superusers invite new execs.
 
 ## Purpose
 
-- Admin user registration with email verification
-- Secure admin login with role validation
-- Email domain validation during signup
-- Profile management integration with Supabase
+- Exec login and logout
+- Password reset by email
+- Admin-only pages for execs, and superuser-only tools (audit log, inviting execs)
 
-## Supabase Setup Requirements
+## Environment variables
 
-### 1. Environment Variables
-
-Create a `.env` file in the project root with the following variables:
+The website's `apps/web/.env` needs:
 
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-**Where to find these values:**
+Find them in the Supabase dashboard under **Settings** → **API**. The anon key is public by design: it can log people in, but it can't read or write any table.
 
-- Go to your Supabase project dashboard
-- Navigate to **Settings** → **API**
-- Copy the **Project URL** (for `VITE_SUPABASE_URL`)
-- Copy the **anon/public** key (for `VITE_SUPABASE_ANON_KEY`)
+> **Note:** `.env` is in `.gitignore`. Never commit it.
 
-> **Note:** The `.env` file is already in `.gitignore` to prevent committing sensitive credentials.
+## How login works
 
-## How Signup Works
+`handleLoginSubmit` in `apps/web/src/lib/login.ts`:
 
-The signup flow (`handleSignupSubmit` in `src/lib/signup.ts`) follows these steps:
-
-### 1. Client-Side Validation
-
-- **Username validation:** Ensures username is provided and not empty
-- **Password matching:** Verifies password and confirm password match
-- **Password length:** Requires minimum 6 characters
-- **Email format:** Validates email format using regex
-
-### 2. Email Domain Verification
-
-- Extracts domain from email address
-- Queries Google DNS API to verify the domain has MX records
-- Prevents signup with invalid or non-existent email domains
-
-### 3. Supabase Account Creation
-
-- Calls `supabase.auth.signUp()` with email and password
-- Includes username in user metadata (`options.data.username`)
-- Handles Supabase-specific errors (e.g., email already exists)
-
-### 4. Profile Creation
-
-- After successful signup, updates the `profiles` table
-- Sets the `username` field from the signup form
-- Links profile to the authenticated user via `id`
-
-### 5. Success Handling
-
-- Displays success message prompting user to check email
-- Clears all form fields
-- User must confirm email before logging in (if email confirmation is enabled)
-
-### Signup Flow Diagram
-
-```
-User submits form
-    ↓
-Client-side validation (username, password, email format)
-    ↓
-Email domain verification (DNS check)
-    ↓
-Supabase auth.signUp()
-    ↓
-Update profiles table with username
-    ↓
-Success: Clear form, show success message
-```
-
-## How Login Works
-
-The login flow (`handleLoginSubmit` in `src/lib/login.ts`) follows these steps:
-
-### 1. Authentication
-
-- Calls `supabase.auth.signInWithPassword()` with email and password
-- Validates credentials against Supabase Auth
-
-### 2. Role Verification
-
-- Queries the `profiles` table to fetch user's role
-- Verifies the role is `'admin'`
-- If role is not `'admin'`, signs out the user and shows error
-
-### 3. Success Handling
-
-- Clears form fields
-- Currently logs success
-- User is now authenticated and can access protected routes
-
-### Login Flow Diagram
+1. Calls `supabase.auth.signInWithPassword()` with the email and password.
+2. Calls `GET /api/me` through `fetchMe()` in `apps/web/src/lib/api.ts`. The API reads the caller's role from `public.profiles`.
+3. If the role isn't `admin`, signs the user out and shows "You do not have access".
+4. Otherwise clears the form and goes to `/admin/dashboard`.
 
 ```
 User submits form
     ↓
 supabase.auth.signInWithPassword()
     ↓
-Query profiles table for user role
+GET /api/me  (API reads the role from profiles)
     ↓
-Verify role === 'admin'
-    ↓
-Success: Clear form, redirect to dashboard (TODO)
+role === 'admin' ? → /admin/dashboard
+                 : → sign out, "You do not have access"
 ```
+
+Admin pages call `checkAdminAuthorization()` in `apps/web/src/lib/auth.ts`, which repeats the same `/api/me` check for an existing session.
+
+Every API call sends the Supabase access token as a `Bearer` header (`api.ts` adds it). The API checks the token and reads the role again on every request, so removing someone's `admin` role ends their access straight away.
+
+## Password reset
+
+- `handlePasswordReset(email)` sends a Supabase reset email that links to `/admin/reset-password`.
+- `handlePasswordUpdate(newPassword)` sets the new password (minimum 6 characters).
+
+## Adding execs
+
+Superusers invite execs with `POST /api/admin/users/invite`. The API creates the login through Supabase Auth and sends the invite email. There is no page for this yet.
 
 ## Pages
 
-### Admin Signup Page
+| Route                   | Component                                         | What it does                           |
+| ----------------------- | ------------------------------------------------- | -------------------------------------- |
+| `/admin/login`          | `apps/web/src/pages/admin/AdminLogin.tsx`         | Login and "forgot password"            |
+| `/admin/reset-password` | `apps/web/src/pages/admin/AdminResetPassword.tsx` | Set a new password from the email link |
 
-**Route:** `/admin/signup`
+## Error messages
 
-**Component:** `src/pages/admin/AdminSignup.tsx`
+- `"Invalid email or password"`: Supabase rejected the login.
+- `"You do not have access"`: logged in, but not an exec.
+- `"Please enter a valid email address"`: reset form email is malformed.
+- `"Password must be at least 6 characters long"`: new password too short.
 
-**Features:**
+## Security
 
-- Two-column form layout (name/email, password/confirm password)
-- Real-time password matching validation
-- Email domain verification
-- Success message after signup
-- Error handling with user-friendly messages
+1. **Roles live in the database.** Only the API reads `profiles.role` and `profiles.is_superuser`. The browser can't change them (migration `V20261026_0300` closed that hole).
+2. **Never commit `.env`**, and never put the Supabase service role key in the website's env. Only the API has it.
+3. **Email confirmation** should stay enabled in the Supabase Auth settings.
+4. **Rate limiting:** Supabase limits auth endpoints; the API limits public writes per IP.
 
-### Admin Login Page
+## Future enhancements
 
-**Route:** `/admin/login`
-
-**Component:** `src/pages/admin/AdminLogin.tsx`
-
-**Features:**
-
-- Role-based access control (admin only)
-- Error handling for invalid credentials
-- Loading states during authentication
-
-## Error Handling
-
-Both signup and login handlers provide error messages:
-
-**Common Signup Errors:**
-
-- `"Please enter your name"` - Username validation failed
-- `"Passwords do not match"` - Password confirmation mismatch
-- `"Password must be at least 6 characters long"` - Password too short
-- `"Please enter a valid email address"` - Invalid email format
-- `"This email domain does not exist or cannot receive emails"` - DNS verification failed
-- Supabase-specific errors (e.g., email already exists)
-
-**Common Login Errors:**
-
-- `"Invalid email or password"` - Authentication failed
-- `"Failed to verify user role"` - Profile lookup failed
-- `"You do not have access"` - User does not have admin role
-
-## Security Considerations
-
-1. **Environment Variables:** Never commit `.env` file to version control
-2. **Role Verification:** Always verify user roles server-side for sensitive operations
-3. **Email Confirmation:** Enable email confirmation in Supabase for production
-4. **Password Requirements:** Currently minimum 6 characters; need to consider implementing stronger requirements
-5. **Rate Limiting:** Supabase provides built-in rate limiting for auth endpoints
-
-## Future Enhancements
-
-- [ ] Password reset functionality
+- [ ] A page for superusers to invite execs
 - [ ] Two-factor authentication (2FA)
-- [ ] Stronger password requirements (uppercase, numbers, special characters)
-- [ ] Account lockout after failed login attempts
+- [ ] Stronger password requirements

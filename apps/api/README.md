@@ -1,8 +1,13 @@
 # DEVS API
 
 The only service that reads and writes the DEVS database and file storage. The website calls
-this API; it no longer talks to Supabase tables, storage or edge functions directly. Supabase
-is still used for logging in (Auth), Postgres and Storage.
+this API instead of talking to Supabase tables, storage or edge functions. Supabase is still
+used for logging in (Auth), Postgres and Storage.
+
+**Status (November 2026):** the feature endpoints (members, contact, marketing, events, RSVP,
+tasks, to-dos) were removed so club members can rebuild them, one page at a time. What's left
+is the shared groundwork (auth, config, errors, storage, payments, audit log, invites) and
+**links**, kept as the worked example to copy.
 
 Java 25, Spring Boot 4, plain SQL through `JdbcClient`. Database changes live in
 [`db/migrations`](../../db/migrations) and are applied by Flyway in CI, never by the API.
@@ -22,8 +27,8 @@ from [`db/seed/dev_seed.sql`](../../db/seed/dev_seed.sql), and runs the API on
 There's no Supabase Auth in the local stack, so mint a token for one of the seeded users:
 
 ```sh
-curl localhost:8080/api/events
-curl -H "Authorization: Bearer $(apps/api/scripts/dev-token.sh admin)" localhost:8080/api/admin/members
+curl localhost:8080/api/links
+curl -H "Authorization: Bearer $(apps/api/scripts/dev-token.sh admin)" localhost:8080/api/admin/links
 ```
 
 `pnpm dev` proxies `/api` to `localhost:8080`, so the website's public pages work against the
@@ -85,13 +90,17 @@ Then connect through the session pooler as `api_app.<project ref>`.
 
 ## Endpoints
 
-Public: `GET /api/events`, `GET /api/links`, `GET /api/degrees`, `GET /api/degrees/{id}/majors`,
-`POST /api/members`, `POST /api/events/{id}/rsvps`, `POST /api/events/{id}/rsvps/bank-transfer`,
-`POST /api/events/{id}/rsvps/checkout`, `POST /api/contact`, `POST /api/webhooks/stripe` (Stripe-signed).
+Public: `GET /api/health`, `GET /api/links`, `POST /api/webhooks/stripe` (Stripe-signed).
 
 Logged in: `GET /api/me`.
 
-Execs (`/api/admin/**`): events, uploads, attendees and payment proofs, members, links, event
-to-dos/notes/doc links, tasks and comments, marketing requests.
+Execs (`/api/admin/**`): links (`GET`, `POST`, `PUT /{id}`, `DELETE /{id}`, `PUT /order`) and
+uploads (`POST /api/admin/uploads/event-image`, `POST /api/admin/uploads/link-icon`).
 
 Superusers: `/api/admin/audit-log/**` (view and restore) and `/api/admin/users/invite`.
+
+Until the RSVP endpoints are rebuilt, the Stripe webhook doesn't create RSVPs: a paid checkout is
+marked `failed` with reason `rsvp_not_built`, so an admin can refund it.
+
+New endpoints go on the public list in `SecurityConfig` or under `/api/admin/`. `SecurityMatrixTest`
+fails for anything else.

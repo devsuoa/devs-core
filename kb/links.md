@@ -11,6 +11,8 @@ The **Links Management** system provides a way to manage and display active link
 
 ## Database Setup
 
+The `links` table is defined in `db/migrations`. Only the API reads and writes it.
+
 ### Table Fields
 
 - **id** (UUID): Primary key, auto-generated
@@ -21,6 +23,7 @@ The **Links Management** system provides a way to manage and display active link
 - **active_to** (TIMESTAMPTZ): Optional end date for when link becomes inactive
 - **display_order** (INTEGER): Order in which links are displayed (lower numbers appear first)
 - **is_spacer** (BOOLEAN): Whether this is a spacer/divider (not a clickable link)
+- **custom_icon** (TEXT): Optional uploaded icon, used instead of the favicon
 - **created_at** (TIMESTAMPTZ): Timestamp when link was created
 - **updated_at** (TIMESTAMPTZ): Timestamp when link was last updated
 
@@ -62,7 +65,8 @@ The **Links Management** system provides a way to manage and display active link
 - Add spacers/dividers between links (with optional title)
 - Edit existing links and spacers
 - Delete links and spacers with confirmation
-- Reorder links and spacers using up/down buttons
+- Reorder links and spacers by dragging them
+- Upload a custom icon for a link
 - View all links with their current status (ACTIVE/INACTIVE)
 - See date ranges for each link
 - Toggle active status for links and spacers
@@ -85,12 +89,13 @@ Located at `src/lib/linksController.ts`, provides:
 
 **Functions:**
 
-- `fetchActiveLinks()`: Fetches and filters currently active links (ordered by display_order)
-- `fetchAllLinks()`: Fetches all links (for admin, ordered by display_order)
-- `createLink()`: Creates a new link (auto-assigns display_order if not provided)
-- `updateLink()`: Updates an existing link
-- `deleteLink()`: Deletes a link
-- `reorderLinks()`: Swaps display_order of two links
+- `fetchActiveLinks()`: `GET /api/links`, then keeps the currently active ones (ordered by display_order)
+- `fetchAllLinks()`: `GET /api/admin/links`, every link for the admin page
+- `createLink()`: `POST /api/admin/links` (display_order is auto-assigned if not provided)
+- `updateLink()`: `PUT /api/admin/links/{id}`
+- `deleteLink()`: `DELETE /api/admin/links/{id}`
+- `updateLinkOrder()` / `reorderLinks()`: save the new order with `PUT /api/admin/links/order`
+- `uploadLinkIcon()`: `POST /api/admin/uploads/link-icon`, returns the icon URL
 - `getFaviconUrl()`: Generates favicon URL from domain
 - `isLinkCurrentlyActive()`: Checks if a link is currently active
 
@@ -111,10 +116,10 @@ Favicons are fetched based on the domain extracted from the link URL.
 
 ## Security
 
-- **Row Level Security (RLS)** is enabled on the `links` table
-- Public read access for displaying links
-- Admin-only write access (insert, update, delete)
-- Admin authentication verified through `profiles.role = 'admin'`
+- Anyone can read links through `GET /api/links`.
+- Adding, editing, reordering and deleting go through `/api/admin/links`, which needs an exec login. The API checks `profiles.role = 'admin'` on every request.
+- The API rejects unsafe URLs (for example `javascript:`) and checks field lengths.
+- The browser can't touch the `links` table directly.
 
 ## Usage Examples
 
@@ -148,13 +153,11 @@ Spacers allow you to add visual breaks or section headers between links:
 
 ## Reordering Links
 
-Links and spacers can be reordered using the up/down arrow buttons on the Manage Links page:
+Drag links and spacers on the Manage Links page to reorder them:
 
-- Click the ↑ button to move a link/spacer up in the list
-- Click the ↓ button to move a link/spacer down in the list
-- The first item cannot be moved up, and the last item cannot be moved down
-- Reordering updates the `display_order` field in the database
-- Items are displayed in order on both the public Links page and the Manage Links page
+- Grab an item and drop it where it should go.
+- The new order is saved in one request (`PUT /api/admin/links/order`), which updates `display_order` for every link.
+- The order is the same on the public Links page and the Manage Links page.
 
 ## Future Enhancements
 

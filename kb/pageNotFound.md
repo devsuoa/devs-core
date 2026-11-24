@@ -30,7 +30,7 @@ The Page Not Found system consists of two parts:
 ### Component
 
 ```
-src/pages/PageNotFound.tsx
+apps/web/src/pages/PageNotFound.tsx
 ```
 
 ### Responsibilities
@@ -58,7 +58,7 @@ This ensures that **any unknown route** automatically resolves to the Page Not F
 ### Location
 
 ```
-src/lib/pageNotFoundController.tsx
+apps/web/src/lib/pageNotFoundController.ts
 ```
 
 ### Purpose

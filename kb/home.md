@@ -1,6 +1,6 @@
 # Home
 
-Welcome to the Knowledge Base (KB) for the DEVS Website.
+Welcome to the Knowledge Base (KB) for the DEVS website and its Java API.
 This is to help understand components and guidelines to ensure everyone is on the same page.
 
 > **AI documentation notice:** Some KB material (including repository-wide docs) was **generated or assisted by AI** and **may contain errors**. Always verify against the codebase. Full wording: [Documentation disclaimer](disclaimer.md).
@@ -25,7 +25,6 @@ This is to help understand components and guidelines to ensure everyone is on th
 
 ### Components
 
-- [Binary Background Component](binaryBackground.md)
 - [Cookie Disclaimer Component](cookiesDisclaimer.md)
 - [Events Card Component](eventsCard.md)
 - [Footer Component](footer.md)
@@ -35,6 +34,7 @@ This is to help understand components and guidelines to ensure everyone is on th
 - [Page Title Component](pagetitle.md)
 - [Pagination Component](pagination.md)
 - [Pixelated Button Component](pixelatedButton.md)
+- [Site Toast Component](siteToast.md)
 - [Social Links Component](socialLinks.md)
 - [Sponsor Card Component](sponsorCard.md)
 - [Sponsor Form Component](sponsorForm.md)
@@ -45,6 +45,7 @@ This is to help understand components and guidelines to ensure everyone is on th
 ### Pages
 
 - [Auth](auth.md)
+- [Links](links.md)
 - [Marketing Portal](marketingPortal.md)
 - [Page Not Found](pageNotFound.md)
 
