@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { devToken } from "./devLogin";
 
 /**
  * Client for the DEVS API (apps/api). All data goes through it; Supabase is only used to log in.
@@ -29,6 +30,10 @@ type RequestOptions = {
 };
 
 async function authHeader(): Promise<Record<string, string>> {
+  if (import.meta.env.DEV) {
+    const local = devToken();
+    if (local) return { Authorization: `Bearer ${local}` };
+  }
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
   return token ? { Authorization: `Bearer ${token}` } : {};
