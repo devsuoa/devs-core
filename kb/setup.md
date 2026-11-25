@@ -1,6 +1,6 @@
 # Project Setup
 
-This project is a **React + TypeScript + Tailwind CSS** web application built using **Vite**.  
+This repo holds the DEVS website (**React + TypeScript + Tailwind CSS**, built with **Vite**) and the **Java API** it gets its data from.  
 This document explains how to set up the project locally and get it running for development.
 
 ## Tech Stack
@@ -35,8 +35,8 @@ git --version
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/devsuoa/devsuoa-website.git
-cd devsuoa-website
+git clone https://github.com/devsuoa/devs-core.git
+cd devs-core
 ```
 
 ### 2. Install Dependencies
@@ -66,10 +66,12 @@ apps/
     src/
       components/   Reusable UI components
       pages/        Page-level components
-      lib/          Data access and feature logic
+      lib/          API calls and feature logic
       main.tsx      App entry point
     public/         Static assets
     .env            Your local environment variables (ask an exec for the values)
+  api/              Java API (see apps/api/README.md)
+db/                 Database migrations
 kb/                 Documentation (you are here)
 scripts/            Repo tooling
 ```

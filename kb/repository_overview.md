@@ -2,23 +2,23 @@
 
 > **AI documentation notice:** This page was created with AI assistance and **may contain errors**. See [Documentation disclaimer](disclaimer.md).
 
-This document summarises the **DEVS website** codebase: layout, routing, major dependencies, and how data and admin tools fit together. Use it alongside [Project Setup](setup.md) and feature-specific KB pages.
+This document summarises the **DEVS website** and the **Java API** behind it: layout, routing, major dependencies, and how data and admin tools fit together. Use it alongside [Project Setup](setup.md) and feature-specific KB pages.
 
 ## Purpose
 
 - Give new contributors a **map of the repository** without opening every folder.
 - List **public and admin routes** as wired in the app.
-- Describe **Supabase-backed features** and **client-side integrations** at a high level.
+- Describe how pages get their data (through the Java API) and the **client-side integrations** at a high level.
 
 ## Tech stack
 
-As declared in `package.json` and used in practice:
+Website, as declared in `apps/web/package.json`:
 
 - **React** (19) and **TypeScript**
 - **Vite** – dev server and production build
 - **React Router** – client-side routing
 - **Tailwind CSS** – utility-first styling (`src/main.css` entry)
-- **Supabase** – auth, Postgres data, storage, and Edge Function invocation (`@supabase/supabase-js`)
+- **Supabase** – login (`@supabase/supabase-js`). Data is moving to the Java API; see [Data access](#data-access)
 - **MUI** (`@mui/material`, icons) and **Emotion** – component library usage where adopted
 - **Framer Motion**, **GSAP** – motion and animation
 - **@dnd-kit** – drag-and-drop (e.g. task UI)
@@ -26,9 +26,11 @@ As declared in `package.json` and used in practice:
 - **react-paginate** – pagination primitives (see also the custom [Pagination](pagination.md) component)
 - **recharts** – charts where used
 - **posthog-js** – product analytics (optional; gated by env and cookie consent)
-- **resend** – present as a dependency; outbound mail from the **browser** goes through Supabase (see [Email](#email-and-edge-functions))
+- **resend** – present as a dependency but unused; email is sent by the API (see [Email](#email))
 
 **Linting:** ESLint with React hooks and refresh plugins.
+
+API (`apps/api`): **Java 25**, **Spring Boot 4**, plain SQL through `JdbcClient`, Spring Security checking Supabase login tokens. See [the API README](../apps/api/README.md).
 
 ## Top-level layout
 
@@ -39,7 +41,7 @@ The repo is a pnpm workspace (monorepo). Each app lives in its own folder, and r
 | `apps/web/`       | This website (Vite + React). Paths below starting `src/` are in here |
 | `apps/api/`       | Java / Spring Boot API                                               |
 | `apps/mobile/`    | _Planned:_ Expo / React Native app                                   |
-| `db/`             | Flyway database migrations                                           |
+| `db/`             | Flyway database migrations (schema, RLS policies, grants)            |
 | `services/audit/` | _Planned:_ separate audit log service                                |
 | `packages/`       | _Planned:_ shared code, e.g. the API client generated from OpenAPI   |
 | `kb/`             | Knowledge base (this documentation)                                  |
@@ -55,11 +57,10 @@ The repo is a pnpm workspace (monorepo). Each app lives in its own folder, and r
 | `src/pages/`        | Route-level screens (public, admin, legal, utility)                |
 | `src/pages/admin/`  | Admin-only flows (dashboard, CMS-style tools)                      |
 | `src/pages/hidden/` | Non-marketed routes (e.g. easter-egg page)                         |
-| `src/lib/`          | Data access, auth helpers, hooks, feature logic (“controllers”)    |
+| `src/lib/`          | API calls, auth helpers, hooks, feature logic (“controllers”)      |
 | `src/config/`       | Static config (e.g. `feature-flags.json`)                          |
 | `src/data/`         | Bundled JSON (e.g. sponsor data mirror)                            |
 | `public/`           | Static assets served as-is; includes sponsor JSON used by the site |
-| `vercel.json`       | SPA rewrite: all paths → `index.html`                              |
 | `.env`              | Local environment variables (not committed)                        |
 
 The README at the repo root links to [Home](home.md) for documentation entry.
@@ -99,11 +100,10 @@ Routes are defined in `src/App.tsx`. Approximate grouping:
 | `/qr-code`        | `QRCode`             |
 | `/404` and `*`    | `PageNotFound`       |
 
-### Admin (Supabase `admin` role)
+### Admin (`admin` role in `profiles`, checked by the API)
 
 | Path                       | Page component               |
 | -------------------------- | ---------------------------- |
-| `/admin/signup`            | `AdminSignup`                |
 | `/admin/login`             | `AdminLogin`                 |
 | `/admin/reset-password`    | `AdminResetPassword`         |
 | `/admin/dashboard`         | `AdminDashboard`             |
@@ -114,13 +114,15 @@ Routes are defined in `src/App.tsx`. Approximate grouping:
 | `/admin/tasks`             | `TaskTracker`                |
 | `/admin/event-attendees`   | `EventsDashboard`            |
 | `/admin/audit-log`         | `AdminCMSAuditLog`           |
+| `/admin/event-todo`        | `EventTodo`                  |
 | `/admin/*`                 | Fallback to `AdminDashboard` |
 
 ### Hidden
 
-| Path       | Notes                              |
-| ---------- | ---------------------------------- |
-| `/p/b/6/7` | `Pb` – intentionally obscure route |
+| Path        | Notes                              |
+| ----------- | ---------------------------------- |
+| `/p/b/6/7`  | `Pb` – intentionally obscure route |
+| `/p/kartik` | `KartikGlazer`                     |
 
 Admin layout: many admin screens use shared chrome (`Header`, `PageTitle`, `Footer`) and **`useAdminDashboard`** or equivalent checks (`checkAdminAuthorization` in `auth.ts`) before showing content.
 
@@ -128,43 +130,56 @@ Admin layout: many admin screens use shared chrome (`Header`, `PageTitle`, `Foot
 
 Flags live in `src/config/feature-flags.json` and are read through **`isFeatureEnabled`** in `src/lib/featureFlags.ts`. Pages and navigation should consult flags before exposing routes or links. Details: [Feature Flags](feature_flags.md).
 
-## Supabase and data model (client usage)
+## Data access
 
-The Supabase client is created in `src/lib/supabase.ts` from **`VITE_SUPABASE_URL`** and **`VITE_SUPABASE_ANON_KEY`**. If either is missing, the client throws at import time with a pointer to the KB.
+Pages get their data from the **Java API** through `api()` in `src/lib/api.ts`, which adds the logged-in user's token. In dev, Vite proxies `/api` to the local API; on Firebase Hosting, `/api/**` is routed to the API on Cloud Run (`firebase.json`).
 
-Tables and resources referenced from `src/lib` (names as in code; RLS and schemas live in Supabase, not in this repo):
+**Status (November 2026):** most features are being rebuilt on the API, one page at a time.
 
-| Name                              | Typical use                                                                      |
-| --------------------------------- | -------------------------------------------------------------------------------- |
-| `profiles`                        | Auth-linked profiles; `role` (e.g. `admin`), `is_superuser` for audit log access |
-| `events`                          | Event listings, RSVP settings, active flag                                       |
-| `events_rsvp`                     | RSVP rows (email, group, answers, attendance, links to members/events)           |
-| `members`                         | Member signup inserts                                                            |
-| `student_degree`, `student_major` | Degree/major relations after signup                                              |
-| `degrees`, `degree_major`         | Reference data for signup (`degreeData.ts`)                                      |
-| `links`                           | Manageable links CRUD                                                            |
-| `member_registry`                 | Read model for admin member registry                                             |
-| `tasks`, `task_comments`          | Task tracker                                                                     |
-| `marketing_requests`              | Marketing portal persistence (alongside external Google Sheet flow)              |
-| `admin_audit_log`                 | CMS audit entries; superuser-gated UI                                            |
+| Feature                                                                  | Where its data comes from today                             |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Login, links, audit log, image uploads, exec invites                     | The Java API                                                |
+| Member signup, events, RSVP, attendees, members, tasks, todos, marketing | Old direct Supabase calls (tables, storage, Edge Functions) |
+| Contact and sponsor forms                                                | The Supabase Edge Function `send-email`                     |
 
-**Storage buckets (from code):** `event-images` (public URLs for event images), and link-related uploads as implemented in `linksController` (bucket naming in code should be treated as the source of truth).
+Since migration `V20261026_0320`, the browser's database roles can't read or write any table, so the pages in the second row don't work until they're rebuilt on the API. The Supabase client in `src/lib/supabase.ts` (from **`VITE_SUPABASE_URL`** and **`VITE_SUPABASE_ANON_KEY`**) is meant only for logging in.
+
+The schema, RLS policies and grants live in `db/migrations` (see [Database Migrations](database_migrations.md)). Main tables:
+
+| Name                                                                        | Typical use                                                                       |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `profiles`                                                                  | Login-linked profiles; `role` (e.g. `admin`), `is_superuser` for audit log access |
+| `events`                                                                    | Event listings, RSVP settings, active flag                                        |
+| `events_rsvp`                                                               | RSVP rows (email, group, answers, attendance, links to members/events)            |
+| `event_rsvp_pending_payments`                                               | Card checkouts waiting for Stripe to confirm payment                              |
+| `members`                                                                   | Member signups                                                                    |
+| `student_degree`, `student_major`                                           | Degree/major choices per member                                                   |
+| `degrees`, `majors`, `degree_major`                                         | Reference data for signup                                                         |
+| `member_registry`                                                           | View used by the admin member registry                                            |
+| `links`                                                                     | Links page content                                                                |
+| `tasks`, `task_comments`                                                    | Task tracker                                                                      |
+| `event_todo_items`, `event_todo_comments`, `event_notes`, `event_doc_links` | Event to-do lists                                                                 |
+| `marketing_requests`                                                        | Marketing portal requests                                                         |
+| `admin_audit_log`                                                           | Audit trail written by database triggers; superuser-only page                     |
+
+**Storage buckets:** `event-images`, `event-payments` (bank transfer screenshots) and `Links` (link icons). The API uploads to them through `/api/admin/uploads/*`, using the server-only service role key. The browser can't write to them directly any more.
 
 ## Lib layer (“controllers”)
 
 Business logic and data fetching are concentrated under **`src/lib/`** rather than inside large page files. Examples:
 
 - **`auth.ts`** – session check, admin role verification, password reset/update helpers
-- **`login.ts`**, **`signup.ts`** – admin auth forms and profile updates
+- **`api.ts`** – the API client every page uses (`api()`, `ApiError`, `fetchMe()`)
+- **`login.ts`** – exec login form
 - **`eventsController.ts`** – public active events and date helpers
 - **`manageEventsController.ts`**, **`eventsRSVPController.ts`**, **`eventsDashboardController.ts`** – admin CRUD, RSVP submission rules, attendee reporting
 - **`memberSignup.ts`**, **`signupController.ts`** – public member registration pipeline
 - **`memberRegistryController.ts`** – registry fetch and chart helpers
 - **`linksController.ts`** – links management and uploads
 - **`taskTrackerController.ts`** – tasks and comments
-- **`marketingPortalController.ts`** – marketing requests (Supabase + external POST)
+- **`marketingPortalController.ts`** – marketing requests (old Supabase calls, being rebuilt)
 - **`auditLogController.ts`** – superuser check and audit log fetch
-- **`emailController.ts`** – invokes Supabase Edge Function `send-email`
+- **`emailController.ts`** – contact and sponsor form (Edge Function `send-email`, being rebuilt)
 - **`posthog.ts`** – analytics init, opt-in/out vs cookie consent
 - **`cookieConsentController.ts`** – consent persistence used with cookies UI
 - **`pageNotFoundController.ts`** – centralised navigation for 404 behaviour
@@ -174,16 +189,9 @@ Business logic and data fetching are concentrated under **`src/lib/`** rather th
 
 Naming is not uniform (`*Controller.ts` vs `use*` hooks in the same file); when extending the app, match the nearest existing feature.
 
-## Email and Edge Functions
+## Email
 
-The client invokes Supabase Edge Functions by name or URL. Examples referenced in this repo:
-
-| Function                | Invoked from                                                                                                                 |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `send-email`            | `src/lib/emailController.ts` via `supabase.functions.invoke`                                                                 |
-| `create-marketing-task` | `src/lib/marketingPortalController.ts` via authenticated `fetch` to `{VITE_SUPABASE_URL}/functions/v1/create-marketing-task` |
-
-Implementation and secrets (e.g. email provider such as Resend) live in the **Supabase project**, not necessarily in this repository.
+Today the contact and sponsor forms call the Supabase Edge Function `send-email` (`src/lib/emailController.ts`). The rebuild moves this to an API endpoint, where the API builds the email and sends it through **Resend** (the API already has `EMAIL_MODE`, `RESEND_API_KEY` and `CONTACT_EMAIL_TO` settings). The browser should never choose the recipient.
 
 ## Analytics
 
@@ -191,12 +199,7 @@ PostHog is initialised in `src/lib/posthog.ts` with **`VITE_PUBLIC_POSTHOG_KEY`*
 
 ## Marketing portal
 
-On submit, `handleMarketingSubmit` in `src/lib/marketingPortalController.ts` runs **in parallel**:
-
-1. **`submitToGoogle`** – POST to the configured **Google Apps Script** URL (`no-cors`) for Sheets automation (see [Marketing Portal](marketingPortal.md)).
-2. **`submitToSupabase`** – inserts into **`marketing_requests`** with `created_by` set to the current user, then calls the Supabase Edge Function **`create-marketing-task`** with the session access token.
-
-Both paths must succeed for the handler to complete without throwing; see the controller for error handling and field mapping.
+Today `handleMarketingSubmit` in `src/lib/marketingPortalController.ts` still uses the old flow: it posts to the Google Apps Script, inserts into **`marketing_requests`** and calls the Edge Function **`create-marketing-task`**. The insert is refused since `V20261026_0320`, so the portal is being rebuilt on the API. See [Marketing Portal](marketingPortal.md).
 
 ## Build, preview, deploy
 
@@ -205,18 +208,19 @@ Run these from the repo root; they forward to `apps/web`.
 - **Develop:** `pnpm dev` (Vite default port, commonly `5173`).
 - **Production build:** `pnpm build` runs `tsc` then `vite build`, output in `apps/web/dist`.
 - **Preview:** `pnpm preview` serves the production build locally.
-- **Vercel:** the project's Root Directory is `apps/web`; `apps/web/vercel.json` rewrites all routes to `index.html` for SPA hosting.
+- **Hosting:** everything merged into `main` goes live on [dev.devsuoa.org](https://dev.devsuoa.org), served by **Firebase Hosting** (project `devs-dev-2027`, config in `firebase.json`). It serves `apps/web/dist`, sends every other path to `index.html`, and routes `/api/**` to the `devs-api` service on Cloud Run (`australia-southeast1`).
 
 ## Environment variables (summary)
 
-| Variable                   | Used for                       |
-| -------------------------- | ------------------------------ |
-| `VITE_SUPABASE_URL`        | Supabase project URL           |
-| `VITE_SUPABASE_ANON_KEY`   | Supabase anon client key       |
-| `VITE_PUBLIC_POSTHOG_KEY`  | PostHog project key (optional) |
-| `VITE_PUBLIC_POSTHOG_HOST` | PostHog API host (optional)    |
+| Variable                   | Used for                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `VITE_API_URL`             | API address; leave empty when `/api` is on the same site (dev proxy, Firebase) |
+| `VITE_SUPABASE_URL`        | Supabase project URL                                                           |
+| `VITE_SUPABASE_ANON_KEY`   | Supabase anon key (login only)                                                 |
+| `VITE_PUBLIC_POSTHOG_KEY`  | PostHog project key (optional)                                                 |
+| `VITE_PUBLIC_POSTHOG_HOST` | PostHog API host (optional)                                                    |
 
-Admin signup/login and any serverless pieces may require additional configuration in Supabase (Auth URLs, email templates, Edge Function secrets). Those settings are **not** stored in this repo.
+The API has its own settings (database, Supabase, Stripe, Resend): see [the API README](../apps/api/README.md). Supabase Auth settings (redirect URLs, email templates) are set in the Supabase dashboard, not in this repo.
 
 ## Related KB entries
 
@@ -227,10 +231,10 @@ Admin signup/login and any serverless pieces may require additional configuratio
 - [Events & RSVP](events_and_rsvp.md)
 - [Marketing Portal](marketingPortal.md)
 - [Feature Flags](feature_flags.md)
+- [Database Migrations](database_migrations.md)
 - [Analytics](analytics.md)
 - [Commit & Branching Guidelines](commit_guidelines.md)
 
 ## Future enhancements
 
 - [ ] Auto-generate route tables from a single source of truth if the app grows further
-- [ ] Document Supabase RLS policies and Edge Functions in a secure internal wiki if not open-sourced

@@ -1,5 +1,7 @@
 # Task Tracker UI Components
 
+> **Status (November 2026):** this feature is being rebuilt on the Java API. Its code still uses the direct Supabase calls described below, and the database now refuses them (migration `V20261026_0320`), so it won't work until the rebuild is merged. The rebuilt version gets its data through `api()` in `apps/web/src/lib/api.ts`.
+
 These components power **`/admin/tasks`** together with **`taskTrackerController`**. They share the **`Task`** and **`Comment`** types exported from **`TaskCard.tsx`**.
 
 ## Shared types (`TaskCard.tsx`)

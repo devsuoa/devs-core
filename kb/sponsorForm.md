@@ -1,5 +1,7 @@
 # Sponsor Form Component
 
+> **Status (November 2026):** this feature is being rebuilt on the Java API. Its code still calls the Supabase Edge Function `send-email` directly, as described below. Whether that still works depends on the function still being deployed in Supabase; the rebuild moves it to `POST /api/contact`. The rebuilt version gets its data through `api()` in `apps/web/src/lib/api.ts`.
+
 The **SponsorForm** is a **contact-style form** that emails **`contact@devsuoa.com`** via the **`sendEmail`** helper (Supabase Edge Function **`send-email`**). It supports two modes: **sponsorship inquiry** and **general contact**, selected with the **`formType`** prop.
 
 ## Purpose

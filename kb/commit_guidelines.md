@@ -1,7 +1,7 @@
 # DEVS Commit & Branching Guidelines
 
 These guidelines define how to write commit messages and name branches for DEVS projects.
-They exist to keep our Git history **clean, readable, and consistent**. As well as to avoid any breaking changes from being deployed into production
+They exist to keep our Git history **clean, readable, and consistent**. As well as to avoid any breaking changes from being deployed
 
 > **Important:**  
 > Always open a Pull Request  
@@ -65,3 +65,9 @@ All branches **must** follow this format:
   - Reference the task ID
   - Be small and focused where possible
 - Do not self-merge unless explicitly approved
+
+`main` enforces this with a GitHub ruleset:
+
+- Changes reach `main` only through a PR. Direct pushes, force pushes and deleting `main` are blocked.
+- Each PR needs 1 approval from the `devscore-approvals` team. A new push after approval needs approving again.
+- PRs are squash merged. After yours merges, start your next branch from the latest `main`.

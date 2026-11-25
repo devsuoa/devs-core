@@ -1,5 +1,7 @@
 # Generic RSVP Dialog Component
 
+> **Status (November 2026):** this feature is being rebuilt on the Java API. Its code still uses the direct Supabase calls described below, and the database now refuses them (migration `V20261026_0320`), so it won't work until the rebuild is merged. The rebuilt version gets its data through `api()` in `apps/web/src/lib/api.ts`.
+
 The **GenericRSVPDialog** is a modal used to collect **event RSVPs**: leader email, optional **group emails** (when the event allows group RSVP), dietary requirements, and **per-event custom questions** (text, single select, or multi select). When the leader's email does not belong to an existing DEVS member, the dialog **reveals an inline signup step** so the user can register and RSVP without leaving the page.
 
 ## Purpose
@@ -81,7 +83,6 @@ import { rsvpToEvent } from "./lib/eventsRSVPController";
 
 ## Related
 
-- `src/components/MemberSignupFields.tsx` – shared signup form fields (also used by `/join`)
 - `src/lib/eventsRSVPController.ts` – server-side rules and Supabase writes; throws `NotMemberError`
 - `src/lib/signupController.ts` – creates the member record from `signupInfo`
 - `src/lib/eventRsvpTypes.ts` – question shapes

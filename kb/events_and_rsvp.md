@@ -1,5 +1,7 @@
 # Events & RSVP
 
+> **Status (November 2026):** this feature is being rebuilt on the Java API. Its code still uses the direct Supabase calls described below, and the database now refuses them (migration `V20261026_0320`), so it won't work until the rebuild is merged. The rebuilt version gets its data through `api()` in `apps/web/src/lib/api.ts`.
+
 > **AI documentation notice:** This page was created with AI assistance and **may contain errors**. See [Documentation disclaimer](disclaimer.md).
 
 This document describes how **public events**, **RSVP**, **admin event management**, and the **event attendees dashboard** work in the codebase. It complements [Repository overview](repository_overview.md) and [Auth Service](auth.md).

@@ -1,6 +1,12 @@
 # DEVS Website
 
-This repository contains the source code for the **DEVS (Developers Society) website**, built with **React, TypeScript, Tailwind CSS, and Vite**.
+This repository contains the source code for the **DEVS (Developers Society) website** and the API behind it:
+
+- `apps/web`: the website, built with **React, TypeScript, Tailwind CSS, and Vite**
+- `apps/api`: the **Java / Spring Boot** API, the only thing that reads and writes the database
+- `db`: database migrations, applied by Flyway in CI
+
+Everything merged into `main` goes live on [dev.devsuoa.org](https://dev.devsuoa.org).
 
 The project follows a component-first approach with shared design and development guidelines to ensure consistency across the site.
 

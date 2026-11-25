@@ -10,8 +10,71 @@ All notable changes to this project are recorded here from **commit messages on 
 - **Chore** / deployment-only commits are included for a complete history; skim as needed.
 - For full diffs, follow the commit link.
 
+## November 2026
+
+- [#0] Feature Rollback (#3): removes the feature endpoints so club members can rebuild them; feature pages go back to their pre-API code — [a48f7b2](https://github.com/devsuoa/devs-core/commit/a48f7b2) (2026-11-25)
+- Proof of concept (#2): adds the Java API and moves all data access behind it — [ea65c84](https://github.com/devsuoa/devs-core/commit/ea65c84) (2026-11-19)
+
+## October 2026
+
+- Chore/FlywaySetup (#1): database migrations with Flyway — [298d43e](https://github.com/devsuoa/devs-core/commit/298d43e) (2026-10-26)
+
+## September 2026
+
+- chore: deploy loading screen (#152) — [5e40d2a](https://github.com/devsuoa/devs-core/commit/5e40d2a) (2026-09-29)
+- feat: added loading screen (#151) — [422e3aa](https://github.com/devsuoa/devs-core/commit/422e3aa) (2026-09-18)
+
+## August 2026
+
+- feat: new execs on team page (#150) — [87876ef](https://github.com/devsuoa/devs-core/commit/87876ef) (2026-08-28)
+- chore: deploy changes (#149) — [ac3aa24](https://github.com/devsuoa/devs-core/commit/ac3aa24) (2026-08-14)
+- fix: improve pagination, filtering, event image cleanup (#148) — [b24b05b](https://github.com/devsuoa/devs-core/commit/b24b05b) (2026-08-14)
+- feat: add smooth scrolling (#147) — [801680a](https://github.com/devsuoa/devs-core/commit/801680a) (2026-08-14)
+- chore: update pnpm-lock.yaml to fix vercel build (#146) — [ea18226](https://github.com/devsuoa/devs-core/commit/ea18226) (2026-08-07)
+- chore: deploy changes — [80de96c](https://github.com/devsuoa/devs-core/commit/80de96c) (2026-08-07)
+- fix: event rsvp disappearing on day of event (#145) — [297c449](https://github.com/devsuoa/devs-core/commit/297c449) (2026-08-07)
+- improve: Change fonts and make things look better (#142) — [b0249b5](https://github.com/devsuoa/devs-core/commit/b0249b5) (2026-08-02)
+- feat: add auto linking when creating events (#143) — [fdf4f1e](https://github.com/devsuoa/devs-core/commit/fdf4f1e) (2026-08-02)
+- chore: reformatting entire repo with prettier (#136) — [016c2d5](https://github.com/devsuoa/devs-core/commit/016c2d5) (2026-08-02)
+
+## July 2026
+
+- fix: change qr code url (#144) — [bbdce2f](https://github.com/devsuoa/devs-core/commit/bbdce2f) (2026-07-20)
+
+## May 2026
+
+- fix: rsvp is case insensitive (#141) — [42f072a](https://github.com/devsuoa/devs-core/commit/42f072a) (2026-05-15)
+- fix: past events order reversed to descending dates (#140) — [c013193](https://github.com/devsuoa/devs-core/commit/c013193) (2026-05-14)
+- feat: add rsvp for non members in rsvp dialog (#139) — [f0b4947](https://github.com/devsuoa/devs-core/commit/f0b4947) (2026-05-11)
+- fix: filtering on the events page and allow for inactive events (#138) — [d1e6398](https://github.com/devsuoa/devs-core/commit/d1e6398) (2026-05-11)
+- fix: added active/inactive events (#130) — [37ecac3](https://github.com/devsuoa/devs-core/commit/37ecac3) (2026-05-08)
+
+## April 2026
+
+- chore: reroute qr code for imc tech race (#137) — [11a82b2](https://github.com/devsuoa/devs-core/commit/11a82b2) (2026-04-21)
+- feat: visual indicator of completed task and current day (#128) — [4857c84](https://github.com/devsuoa/devs-core/commit/4857c84) (2026-04-17)
+- fix: prevent duplicated submissions by disabling submit button (#133) — [798d87d](https://github.com/devsuoa/devs-core/commit/798d87d) (2026-04-17)
+- chore: updated audit row limit (#134) — [a7ed1b2](https://github.com/devsuoa/devs-core/commit/a7ed1b2) (2026-04-17)
+- fix: prevent bank transfers submission from non members (#129) — [8bede84](https://github.com/devsuoa/devs-core/commit/8bede84) (2026-04-16)
+- chore: deploy drag and drop for links (#127) — [314de3b](https://github.com/devsuoa/devs-core/commit/314de3b) (2026-04-14)
+- feat: implemented drag and drop to manage links (#126) — [f755975](https://github.com/devsuoa/devs-core/commit/f755975) (2026-04-14)
+- feat: added graphs and undo to audit log (#125) — [ac20269](https://github.com/devsuoa/devs-core/commit/ac20269) (2026-04-13)
+- chore: deploy rsvp fix (#124) — [253f8b0](https://github.com/devsuoa/devs-core/commit/253f8b0) (2026-04-11)
+- fix: adjust for moible resize on rsvp (#123) — [5d41ac2](https://github.com/devsuoa/devs-core/commit/5d41ac2) (2026-04-11)
+- fix: prevent unexpected rsvp close on mobile (#122) — [aaf7d5c](https://github.com/devsuoa/devs-core/commit/aaf7d5c) (2026-04-10)
+- fix: prevent unwanted rsvp close (#121) — [d530246](https://github.com/devsuoa/devs-core/commit/d530246) (2026-04-10)
+- fix: stop ghost clicks from closing rsvp dialog (#120) — [e37a5e6](https://github.com/devsuoa/devs-core/commit/e37a5e6) (2026-04-10)
+- fix: group attendee count is accurate (#119) — [73d6484](https://github.com/devsuoa/devs-core/commit/73d6484) (2026-04-10)
+- fix: add payment disclaimers (#118) — [9463d6f](https://github.com/devsuoa/devs-core/commit/9463d6f) (2026-04-10)
+- feat: introduce payments (#116) — [8cc7c31](https://github.com/devsuoa/devs-core/commit/8cc7c31) (2026-04-10)
+- feat: introduce event to do lists (#115) — [c9e48d1](https://github.com/devsuoa/devs-core/commit/c9e48d1) (2026-04-06)
+- feat: posthog user failure tracking (#114) — [b47614f](https://github.com/devsuoa/devs-core/commit/b47614f) (2026-04-06)
+
 ## March 2026
 
+- feat: introduce kartik glazer page (#113) — [e8309af](https://github.com/devsuoa/devs-core/commit/e8309af) (2026-03-27)
+- feat: autofill on events rsvp to join redirect (#112) — [9defbfd](https://github.com/devsuoa/devs-core/commit/9defbfd) (2026-03-27)
+- fix: improve rsvp grammar discrepencies (#111) — [301dba4](https://github.com/devsuoa/devs-core/commit/301dba4) (2026-03-27)
 - feat: extend rsvp capability (#109) — [e699834](https://github.com/Gh05stt/devsuoa/commit/e699834) (2026-03-26)
 - fix: event card register button and desc adujustments (#104) — [ef4366f](https://github.com/Gh05stt/devsuoa/commit/ef4366f) (2026-03-25)
 - fix: adjust sponsor card font (#108) — [5a73e7f](https://github.com/Gh05stt/devsuoa/commit/5a73e7f) (2026-03-25)
