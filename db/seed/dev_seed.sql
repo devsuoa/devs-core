@@ -1,16 +1,19 @@
 -- Fake data for local Docker and the API's tests. Never run against a real project:
 -- every person here is made up, and the ids are fixed so tests can mint tokens for them.
 
+-- Local logins (pnpm dev only, password "development"): techexec, pres and superuser @example.test.
 insert into auth.users (id, email, aud, role) values
-  ('00000000-0000-4000-8000-000000000001', 'admin@example.test', 'authenticated', 'authenticated'),
-  ('00000000-0000-4000-8000-000000000002', 'super@example.test', 'authenticated', 'authenticated'),
-  ('00000000-0000-4000-8000-000000000003', 'user@example.test', 'authenticated', 'authenticated')
-on conflict (id) do nothing;
+  ('00000000-0000-4000-8000-000000000001', 'techexec@example.test', 'authenticated', 'authenticated'),
+  ('00000000-0000-4000-8000-000000000002', 'superuser@example.test', 'authenticated', 'authenticated'),
+  ('00000000-0000-4000-8000-000000000003', 'user@example.test', 'authenticated', 'authenticated'),
+  ('00000000-0000-4000-8000-000000000004', 'pres@example.test', 'authenticated', 'authenticated')
+on conflict (id) do update set email = excluded.email;
 
 insert into public.profiles (id, role, username, team, is_superuser) values
-  ('00000000-0000-4000-8000-000000000001', 'admin', 'Ada Admin', 'tech', false),
-  ('00000000-0000-4000-8000-000000000002', 'admin', 'Sam Super', 'president', true),
-  ('00000000-0000-4000-8000-000000000003', 'user', 'Una User', null, false)
+  ('00000000-0000-4000-8000-000000000001', 'admin', 'techexec', 'tech', false),
+  ('00000000-0000-4000-8000-000000000002', 'admin', 'superuser', 'president', true),
+  ('00000000-0000-4000-8000-000000000003', 'user', 'Una User', null, false),
+  ('00000000-0000-4000-8000-000000000004', 'admin', 'pres', 'president', false)
 -- on_auth_user_created has already made a plain 'user' profile for each, as on a real project.
 on conflict (id) do update set
   role = excluded.role, username = excluded.username, team = excluded.team, is_superuser = excluded.is_superuser;

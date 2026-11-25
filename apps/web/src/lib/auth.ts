@@ -1,21 +1,25 @@
 import { supabase } from "./supabase";
 import { fetchMe } from "./api";
+import { devSignOut, devToken } from "./devLogin";
 
 /** True if someone is logged in and the API says they're an exec. Logs out anyone else. */
 export async function checkAdminAuthorization(): Promise<boolean> {
   try {
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+    const devSession = import.meta.env.DEV && devToken() !== null;
+    if (!devSession) {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
-    if (sessionError || !session) {
-      return false;
+      if (sessionError || !session) {
+        return false;
+      }
     }
 
     const me = await fetchMe();
     if (me.role !== "admin") {
-      await supabase.auth.signOut();
+      await handleLogout();
       return false;
     }
 
@@ -28,6 +32,7 @@ export async function checkAdminAuthorization(): Promise<boolean> {
 
 export async function handleLogout(): Promise<void> {
   try {
+    if (import.meta.env.DEV) devSignOut();
     await supabase.auth.signOut();
   } catch (err) {
     console.error("Logout failed:", err);

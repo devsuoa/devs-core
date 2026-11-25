@@ -1,5 +1,7 @@
 import { supabase } from "./supabase";
 import { fetchMe } from "./api";
+import { devSignIn } from "./devLogin";
+import { handleLogout } from "./auth";
 
 type LoginParams = {
   email: string;
@@ -20,19 +22,23 @@ export async function handleLoginSubmit(
   setLoading(true);
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Under pnpm dev, the seeded local accounts log in without Supabase (see devLogin.ts).
+    const devAccount = import.meta.env.DEV && (await devSignIn(email, password));
+    if (!devAccount) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error || !data.user) {
-      throw new Error("Invalid email or password");
+      if (error || !data.user) {
+        throw new Error("Invalid email or password");
+      }
     }
 
     // Exec access is decided by the API from the database, not by anything the browser can set.
     const me = await fetchMe();
     if (me.role !== "admin") {
-      await supabase.auth.signOut();
+      await handleLogout();
       throw new Error("You do not have access");
     }
 
